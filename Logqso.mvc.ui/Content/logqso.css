@@ -1,0 +1,36 @@
+﻿fieldset {
+    border:0;
+}
+
+.overflow-contest-select {
+    height:150px;
+}
+
+
+fieldset {
+    border:0;
+}
+
+label {
+    display:block;
+    margin: 30px,0,0,0;
+}
+
+.lq-dropdwn{
+    font-size: 70%;
+    line-height: 10px;
+}
+
+.ui-menu-divider {
+    color: green;
+    margin: 5px 0;
+	height: 0;
+	font-size: 0;
+	line-height: 0;
+	border-width: 1px 0 0 0;
+    text-align:center
+}
+
+.test {
+    color: pink;
+}

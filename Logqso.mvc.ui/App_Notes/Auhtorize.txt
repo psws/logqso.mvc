@@ -1,0 +1,19 @@
+﻿http://stackoverflow.com/questions/7013511/asp-net-authorize-attribute-and-admin-user-role
+
+Using Authorize attribute i may specify roles which is allowed to access the resources.
+[Authorize(Roles="User")]
+
+But if i have admin user which is allowed to go to any resource i need specify this one as well
+[Authorize(Roles="User, Administrator")]
+
+//Authorize entire class
+[Authorize]
+    public class AccountController : Controller
+    {
+	}
+//single action restrictedted to specific role
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public ActionResult AdminRoll(FormCollection collection)
+        {
+		}

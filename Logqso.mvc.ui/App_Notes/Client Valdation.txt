@@ -1,0 +1,132 @@
+﻿http://forums.asp.net/t/1926186.aspx?What+does+EnableClientValidation+and+EnableUnobtrusiveJavaScript+actually+do+
+Aug 02, 2013 08:27 AM|LINK 
+
+
+Hi damon2012,
+
+Thanks for your post. In my view, there are two key words in your question, Client Validation and Unobtrusive.
+
+Client Validation
+
+We expect the web application to verify the data users input and give an instant feedback if needed before the data posted to the server. This is named client validation, differs from server validation. For example, if we enter an invalid password that the length is less than 6, we will see an error message to indicate where the error source is.
+
+Client validation is enabled in the ASP .NET MVC3 and MVC4 application by default. The behavior is defined in Web.config settings in MVC4. Open the Web.config file among the MVC4 project, we will see:
+<appSettings>
+    <add key="ClientValidationEnabled" value="true" />
+    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+  </appSettings>
+
+We can turn off the validation in the application by changing the value to false in MVC4.
+
+Another way is often used by means of Html Helper both in MVC3 or MVC4 application.
+@{
+       Html.EnableClientValidation(false);
+       Html.EnableUnobtrusiveJavaScript(false);
+}
+
+ 
+
+If the client validation is enabled, it is simple for us to validate username and password in application. First of all, a model class named LogOnModel with data annotation attributes should be created.
+
+If the client validation is disabled, we will not receive the error message without delay.
+
+Look at the UserName and Password properties of the LogOnModel class:
+        [Required]
+        [Display(Name = "User name")]
+        public string UserName { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+The rules of properties are defined with attributes, such as [Required].
+
+Moreover, the client-side validation is implemented by  jQuery validation plugin.
+
+There are 3 JavaScript files we need.
+
+    jquery-1.7.1.min.js         
+
+    It was the mini file version of JavaScript library jQuery.
+
+    jquery.validate.min.js
+
+    It provides lots of validation rules within jQuery.
+
+    jquery.validate.unobtrusive.min.js
+
+    To collect the client side data and transform the data to the way jQuery validation could accept. The role of this file here is as a translator or adapter. 
+
+In MVC 4, there is a convenient way, script bundles, for us to add these JavaScript files to a view.
+@Scripts.Render("~/bundles/jqueryval")
+
+In MVC3, we can import JavaScript files like this:
+<script src="@Url.Content("~/Scripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+In the view, we use EditorForModel to get client side data and render the data dash attributes into the page. The  ValidationMessageFor method returns the html markup for a validation-error message for each data field that is represented by the specified expression.
+<fieldset>
+        <legend>Log in Form</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.UserName)
+                @Html.TextBoxFor(m => m.UserName)
+                @Html.ValidationMessageFor(m => m.UserName)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </li>
+            <li>
+                @Html.CheckBoxFor(m => m.RememberMe)
+                @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
+            </li>
+        </ol>
+        <input type="submit" value="Log in" />
+</fieldset>
+
+Unobtrusive
+
+The term unobtrusive means that validation rules are wrapped as a series of attributes into the html element.
+
+With the Client Validation enabled and disabled, compare the source code of the Html, we will find the html elements within the enabled one contains rich of data dash attributes (also named as custom data attribute)such as data-val="true".
+
+The source code client validation enabled:
+            <div class="editor-label">
+                <label for="UserName">User name</label>
+            </div>
+            <div class="editor-field">
+                <input data-val="true" data-val-required="The User name field is required." id="UserName" name="UserName" type="text" value="" />
+                <span class="field-validation-valid" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
+            </div>
+
+            <div class="editor-label">
+                <label for="Password">Password</label>
+            </div>
+            <div class="editor-field">
+                <input data-val="true" data-val-required="The Password field is required." id="Password" name="Password" type="password" />
+                <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+            </div>
+
+The source code client validation disabled:
+            <div class="editor-label">
+                <label for="UserName">User name</label>
+            </div>
+            <div class="editor-field">
+                <input id="UserName" name="UserName" type="text" value="" />
+            </div>
+            <div class="editor-label">
+                <label for="Password">Password</label>
+            </div>
+            <div class="editor-field">
+                <input id="Password" name="Password" type="password" />
+            </div>
+
+The W3C specification says that:
+
+Custom data attributes are intended to store custom data private to the page or application, for which there are no more appropriate attributes or elements.
+
+Data dash attributes can help the jquery.validate.unobtrusive plugin to retrieve validation information of elements so that  the jquery.validate plugin will execute validation after converting.

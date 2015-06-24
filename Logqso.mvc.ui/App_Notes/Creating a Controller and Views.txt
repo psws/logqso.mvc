@@ -1,0 +1,33 @@
+﻿Creating a Student Controller and Views
+
+Now you'll create a web page to display data, and the process of requesting the data will automatically trigger
+the creation of the database. You'll begin by creating a new controller. But before you do that, build the project to make the model and context classes available to MVC controller scaffolding.
+
+1.Right-click the Controllers folder in Solution Explorer, select Add, and then click New Scaffolded Item.
+
+
+2.In the Add Scaffold dialog box, select MVC 5 Controller with views, using Entity Framework.
+
+
+Add Scaffold
+
+3.In the Add Controller dialog box, make the following selections and then click Add:
+•Model class: Student (ContosoUniversity.Models). (If you don't see this option in the drop-down list, build the project and try again.) 
+•Data context class: SchoolContext (ContosoUniversity.DAL). 
+•Controller name: StudentController (not StudentsController).
+•Leave the default values for the other fields.    
+
+Add_Controller_dialog_box_for_Student_controller
+
+When you click Add, the scaffolder creates a StudentController.cs file and a set of views (.cshtml files) that work with the controller. In the future when you create projects that use Entity Framework you can also take advantage of some additional functionality of the scaffolder:  just create your first model class, don't create a connection string, and then in the Add Controller box specify new context class.  The scaffolder will create your  DbContext class and your connection string as well as the controller and views.
+
+
+4.Visual Studio opens the Controllers\StudentController.cs file. You see a class variable has been created that instantiates a database context object:
+private SchoolContext db = new SchoolContext();
+
+The Index action method gets a list of students from the  Students entity set by reading the Students property of the database context instance:
+ public ViewResult Index()
+{
+    return View(db.Students.ToList());
+}
+

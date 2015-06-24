@@ -1,0 +1,24 @@
+﻿http://www.dotnet-tricks.com/Tutorial/mvc/XcX9021112-Inline-CSS-and-Styles-with-Html-Helpers-in-MVC3-Razor.html
+in Asp.net, we can custom the look and feel of a server controls by using CSS class,id and inline css. Similarly, we can change the style of Html Helpers in MVC razor. I this article, I am going to explain how can change the style of a Html Helpers by using CSS.
+
+CSS Class
+01. .inputclass
+02.{
+03. width:100px;
+04. height:25px;
+05.} 
+
+
+Apply CSS Class to Html Helpers
+
+Suppose above css class is defined in the external style sheet. Now you want to apply this class to html helpers then we need to add class name by using @class like as :
+01. @Html.TextBox("Name", new { @class="inputclass" })
+02.@Html.TextBoxFor(model => model.Name, new { @class="inputclass" }) 
+
+
+Apply Inline CSS to Html Helpers
+
+We can also add inline css to html helpers by using style like as :
+01. @Html.TextBoxFor(model => model.Name, new { style="width:100px;height:25px" })
+02.@Html.TextBox("Name", new { style="width:100px;height:25px" }) 
+

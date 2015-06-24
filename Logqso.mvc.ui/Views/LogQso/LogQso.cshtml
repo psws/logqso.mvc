@@ -1,0 +1,168 @@
+﻿@{
+    ViewBag.Title = "LogQso";
+}
+
+
+
+<script>
+    $(function () {
+        //$("select[name^='Contest']").selectmenu();
+        //$("select[name^='Contest']").selectmenu('menuWidget').addClass('lq-dropdwn');
+
+        var widget = $("select[name^='Contest']").selectmenu();
+        $.each(widget, function (indexInArray, valueOfElement) {
+            //console.log(indexInArray + ": " + valueOfElement);
+            $(this).selectmenu('menuWidget').addClass('lq-dropdwn');
+            $(this).selectmenu('widget').addClass('lq-dropdwn');
+
+            //$(this).selectmenu('widget').on("click", { foo: "jim" }, function (event) {
+
+            //    alert("were here" + event.data.foo);
+
+            //});
+
+   //sets all li to pink except selected
+            //var sm_inst = $(this).data('ui-selectmenu'),
+            //old_renderMenu = sm_inst._renderMenu;
+
+            //sm_inst._renderMenu = function (ul, items) {
+
+            //    $(ul).addClass('test');
+
+            //    old_renderMenu.call(this, ul, items)
+            //};
+
+            var sm_inst = $(this).data('ui-selectmenu'),
+            old_renderItem = sm_inst._renderMenu._renderItem;
+
+            sm_inst._renderItem = function (li, items) {
+
+                $(li).addClass('test');
+
+                old_renderItem.call(this, li, items)
+            };
+
+
+            //var options = $(this).selectmenu('menuWidget').selectmenu().selectmenu("option")
+            //$.each(options, function (indexInArray, valueOfElement) {
+            //    console.log(indexInArray + ": " + valueOfElement);
+            //    //$(this).css("background-color", "green");
+            //});
+
+        });
+        var widget = $("select[name^='Call']").selectmenu();
+        $.each(widget, function (indexInArray, valueOfElement) {
+            //console.log(indexInArray + ": " + valueOfElement);
+            $(this).selectmenu('menuWidget').addClass('lq-dropdwn');;
+            $(this).selectmenu('widget').addClass('lq-dropdwn');;
+        });
+
+
+
+        //$("[name^='Contest']").selectmenu('menuWidget').addClass('lq-dropdwn');
+        //$("[name^='Contest']").selectmenu('widget').addClass('lq-dropdwn');
+        //$("[name^='Contest']").selectmenu();
+        //$("[name^='Contest']").selectmenu('menuWidget').addClass('lq-dropdwn');
+        //$("[name^='Contest']").selectmenu('widget').addClass('lq-dropdwn');
+        $('#Call1').selectmenu();
+        $('#Call1').selectmenu('menuWidget').addClass('lq-dropdwn');
+        $('#Call1').selectmenu('widget').addClass('lq-dropdwn');
+        //$(selector).addClass(className);
+        $('#test').tooltip();
+        $('#Call3').selectmenu();
+        $('#Call3').selectmenu('menuWidget').addClass('overflow-contest-select');
+    });
+
+</script>
+
+<h2>LogQso</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Getting started</h2>
+        <p>
+            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+            enables a clean separation of concerns and gives you full control over markup
+            for enjoyable, agile development.
+        </p>
+        <input id="test" title="hello test" />
+        <p><a class="btn btn-default " href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-2 ui" id="callPanel1">
+        <fieldset>
+            <label for="Contest1" id="test2">Contest</label>
+            <select name="Contest1" id="Contest1">
+                <optgroup label="CQWW">
+                    <option selected="selected"> CqwwSSB2010</option>
+                    <option> CqwwCW2010</option>
+                </optgroup>
+            </select>
+            <label for="Call1">Callsign</label>
+            <select name="Call1" id="Call1">
+                <optgroup label="CQWW">
+                    <option selected="selected"> CqwwSSB2010</option>
+                    <option> CqwwCW2010</option>
+                </optgroup>
+            </select>
+        </fieldset>
+
+    </div>
+    <div class="col-md-2" id="callPanel2">
+        @*<div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Dropdown
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+            </div>*@
+        <fieldset>
+            <label for="Contest2">Contest</label>
+            <select name="Contest2" id="Contest2">
+                <optgroup label="CQWW">
+                    <option selected="selected"> CqwwSSB2010</option>
+                    <option> CqwwCW2010</option>
+                </optgroup>
+            </select>
+            <label for="Call2">Callsign</label>
+            <select name="Call2" id="Call2">
+                <optgroup label="CQWW">
+                    <option selected="selected"> CqwwSSB2010</option>
+                    <option> CqwwCW2010</option>
+                </optgroup>
+            </select>
+        </fieldset>
+
+    </div>
+    <div class="col-md-2" id="call3">
+        <label for="number">Call3</label>
+        <select name="Call3" id="Call3">
+            <option>1</option>
+            <option selected="selected">2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+            <option>11</option>
+            <option>12</option>
+            <option>13</option>
+            <option>14</option>
+            <option>15</option>
+            <option>16</option>
+            <option>17</option>
+            <option>18</option>
+            <option>19</option>
+        </select>
+    </div>
+</div>
+<div class="col-sm-6 col-lg-12" id="graph">
+    <img src="~/image/ChartImg.png">
+</div>

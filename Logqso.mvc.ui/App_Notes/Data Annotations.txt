@@ -1,0 +1,140 @@
+﻿http://www.dotnet-tricks.com/Tutorial/mvc/D8I4270712-MVC-Data-Annotations-for-Model-Validation.html
+Data Annotation Validator Attributes
+
+01.DataType
+
+Specify the datatype of a property
+
+
+02.DisplayName 
+
+specify the display name for a property.
+
+
+03.DisplayFormat 
+
+specify the display format for a property like different format for Date proerty.
+
+
+04.Required 
+
+Specify a property as required.
+
+
+05.ReqularExpression 
+
+validate the value of a property by specified regular expression pattern.
+
+
+06.Range 
+
+validate the value of a property with in a specified range of values.
+
+
+07.StringLength 
+
+specify min and max length for a string property.
+
+
+08.MaxLength 
+
+specify max length for a string property.
+
+
+09.Bind
+
+specify fields to include or exclude when adding parameter or form values to model properties.
+
+
+10.ScaffoldColumn
+
+specify fields for hiding from editor forms.
+
+
+Designing the model with Data Annotations
+01. 
+02.using System.ComponentModel;
+03.using System.ComponentModel.DataAnnotations;
+04.using System.Web.Mvc;
+05.namespace Employee.Models
+06.{
+07. [Bind(Exclude = "EmpId")]
+08. public class Employee
+09. {
+10. [ScaffoldColumn(false)]
+11. public int EmpId { get; set; }
+12. 
+13. [DisplayName("Employee Name")]
+14. [Required(ErrorMessage = "Employee Name is required")]
+15. [StringLength(100,MinimumLength=3)]
+16. public String EmpName { get; set; } 
+17. 
+18. [Required(ErrorMessage = "Employee Address is required")] 
+19. [StringLength(300)]
+20. public string Address { get; set; } 
+21. 
+22. [Required(ErrorMessage = "Salary is required")] 
+23. [Range(3000, 10000000,ErrorMessage = "Salary must be between 3000 and 10000000")]
+24. public int Salary{ get; set; } 
+25. 
+26. [Required(ErrorMessage = "Please enter your email address")] 
+27. [DataType(DataType.EmailAddress)]
+28. [Display(Name = "Email address")]
+29. [MaxLength(50)]
+30. [RegularExpression(@"[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}", ErrorMessage = "Please enter correct email")]
+31. public string Email { get; set; }
+32. }
+
+[Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "New password")]
+        public string NewPassword { get; set; }
+33.}
+
+
+Once we have define validation to the model by using data annotations, these are automatically used by Html Helpers in views. For client side validation to work, please ensure that below two <SCRIPT> tag references are in the view.
+01. <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script> 
+02.<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script> 
+
+
+Presenting the model in the view
+01. @model Employee.Models
+02.@{ 
+03. ViewBag.Title = "Employee Details"; 
+04. Layout = "~/Views/Shared/_Layout.cshtml";
+05. }
+06. @using (Html.BeginForm())
+07. {
+08. <div class="editor-label">
+09. @Html.LabelFor(m => m.EmpName)
+10. </div>
+11. <div class="editor-field"> 
+12. @Html.TextBoxFor(m => m.EmpName) 
+13. @Html.ValidationMessageFor(m => m.EmpName)
+14. </div> 
+15. <div class="editor-label">
+16. @Html.LabelFor(m => m.Address)
+17. </div> 
+18. <div class="editor-field">
+19. @Html.TextBoxFor(m => m.Address) 
+20. @Html.ValidationMessageFor(m => m.Address)
+21. </div> 
+22. <div class="editor-label"> 
+23. @Html.LabelFor(m => m.Salary)
+24. </div> 
+25. <div class="editor-field"> 
+26. @Html.TextBoxFor(m => m.Salary) 
+27. @Html.ValidationMessageFor(m => m.Salary)
+28. </div> 
+29. <div class="editor-label">
+30. @Html.LabelFor(m => m.Email)
+31. </div> 
+32. <div class="editor-field"> 
+33. @Html.TextBoxFor(m => m.Email) 
+34. @Html.ValidationMessageFor(m => m.Email)
+35. </div> 
+36. <p> <input type="submit" value="Save" />
+37. </p>
+38.} 
+

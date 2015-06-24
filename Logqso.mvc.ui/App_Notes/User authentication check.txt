@@ -1,0 +1,6 @@
+﻿            if(User.Identity.IsAuthenticated == true)
+            {
+                bool bAdministrator = this.User.IsInRole("Administrator");
+                bool bAdmin = this.User.IsInRole("Admin");
+
+            }

@@ -1,0 +1,14 @@
+﻿These are invoked with Tab Tab after selecting jq????
+source on nuget
+https://github.com/kspearrin/Visual-Studio-jQuery-Code-Snippets/wiki/Snippet-Listing
+
+articles
+https://github.com/kspearrin/Visual-Studio-jQuery-Code-Snippets
+
+
+Installation1.Open Visual Studio 2012/2013/2015.
+2.Navigate to Tools > Extensions and Updates.
+3.Search Online for "jquery code snippets".
+4.Select the "jQuery Code Snippets" extension and click Install.
+5.Restart Visual Studio.
+6.Start using the code snippets.

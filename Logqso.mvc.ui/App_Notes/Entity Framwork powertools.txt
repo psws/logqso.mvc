@@ -1,0 +1,16 @@
+﻿Install beta 4 to generate an edmx model view from you code first DBContext.
+
+You van go to the models folder in the Customerorders project
+right click on any file with DbContext in it like 'CustomerOrderDB.cs'
+	Select the EntityFramework->View Entity Data Model
+
+	You will see an edmx window open with the DB schema
+
+	INSTALL:
+	Installation1.Open Visual Studio 2012/2013/2015.
+2.Navigate to Tools > Extensions and Updates.
+3.Search Online for "Entity framework Power tools".
+4.Select the "Entity framework Power tools" extension and click Install.
+5.Restart Visual Studio.
+6.Start using the code snippets.
+
