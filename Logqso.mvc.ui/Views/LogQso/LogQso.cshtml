@@ -32,15 +32,17 @@
             //    old_renderMenu.call(this, ul, items)
             //};
 
-            var sm_inst = $(this).data('ui-selectmenu'),
-            old_renderItem = sm_inst._renderMenu._renderItem;
+            //var sm_inst = $(this).data('ui-selectmenu'),
+            //var _li = $(this).d.selectmenu(options).data("ui-selectmenu")._renderItem;
 
-            sm_inst._renderItem = function (li, items) {
+            //old_renderItem = sm_inst._renderMenu._renderItem;
 
-                $(li).addClass('test');
+            //sm_inst._renderItem = function (li, items) {
 
-                old_renderItem.call(this, li, items)
-            };
+            //    $(li).addClass('test');
+
+            //    old_renderItem.call(this, li, items)
+            //};
 
 
             //var options = $(this).selectmenu('menuWidget').selectmenu().selectmenu("option")
@@ -71,6 +73,7 @@
         $('#test').tooltip();
         $('#Call3').selectmenu();
         $('#Call3').selectmenu('menuWidget').addClass('overflow-contest-select');
+
     });
 
 </script>
