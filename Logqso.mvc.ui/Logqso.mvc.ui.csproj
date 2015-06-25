@@ -191,6 +191,7 @@
     <Content Include="App_Notes\CSS classes for helpers.txt" />
     <Content Include="App_Notes\Data Annotations.txt" />
     <Content Include="App_Notes\Entity Framwork powertools.txt" />
+    <Content Include="App_Notes\Jquery Selectors AND_OR.txt" />
     <Content Include="App_Notes\jQuery-Code-Snippets.txt" />
     <Content Include="App_Notes\Migration setup for multiple contexts.txt" />
     <Content Include="App_Notes\MVC vs MVP vs MVVM.txt" />
@@ -266,6 +267,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\logqso.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />

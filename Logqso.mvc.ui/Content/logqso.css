@@ -21,7 +21,7 @@ label {
     line-height: 10px;
 }
 
-.ui-menu-divider {
+/*.ui-menu-divider {
     color: green;
     margin: 5px 0;
 	height: 0;
@@ -29,7 +29,12 @@ label {
 	line-height: 0;
 	border-width: 1px 0 0 0;
     text-align:center
+}*/
+.ui-menu-divider-lq {
+    color: green;
+    text-align:center
 }
+
 
 .test {
     color: pink;

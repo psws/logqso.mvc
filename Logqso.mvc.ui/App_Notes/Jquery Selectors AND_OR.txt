@@ -1,0 +1,21 @@
+﻿        $.widget( "ui.selectmenu", $.ui.selectmenu, {
+            open: function() {
+                console.log("open");
+                //ok
+                //$("li:contains(CQ).ui-menu-divider").css("border", "3px solid red");
+                //ok slower
+                //$("li:contains(CQ)").filter(".ui-menu-divider").css("border", "3px solid red");
+                //has 2 classes on one object
+                //$(".ui-selectmenu-optgroup.ui-menu-divider").css("border", "3px solid red");
+                //OR operator with comma
+                //$(".ui-menu ,.ui-menu-divider").css("border", "3px solid red");
+                //or with AND
+                $(".ui-menu ,li:contains(CQ).ui-menu-divider").css("border", "3px solid red");
+                //$("[li:contains(CQ)] [.ui-menu-divider]").css("border", "3px solid red");
+                $(".ui-menu-divider").css("color", "brown");
+                //$(".ui-menu-divider").fadeIn("slow");
+                //$(".ui-menu-divider").fadeOut("slow");
+
+                return this._super();
+            }
+        });
