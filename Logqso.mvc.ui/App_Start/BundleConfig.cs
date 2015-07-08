@@ -31,8 +31,8 @@ namespace Logqso.mvc.ui
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       //"~/Content/jquery-ui.css",
-                      "~/Content/logqso.css",
-                      "~/Content/site.css"));
+                        "~/Content/site.css",
+                        "~/Content/logqso.css"));
 
             
             var theme =  Themes.CurrentTheme;
@@ -46,8 +46,8 @@ namespace Logqso.mvc.ui
                      bundles.Add(new StyleBundle(Logqso.mvc.ui.Helpers.JQueryUI.Bundle(theme)).Include(
                                "~/Content/bootstrap.css",
                                stylePath,
-                              "~/Content/logqso.css",
-                              "~/Content/site.css"));
+                              "~/Content/site.css",
+                              "~/Content/logqso.css"));
                    break;
                 case JQueryUI.eTheme.Flick:
                    //https://www.nuget.org/packages/Microsoft.AspNet.WebHelpers/
@@ -56,8 +56,8 @@ namespace Logqso.mvc.ui
                                "~/Content/bootstrap.css",
                                 "~/Content/themes/Stock/jquery-ui.css",
                               stylePath,
-                              "~/Content/logqso.css",
-                              "~/Content/site.css"));
+                              "~/Content/site.css",
+                              "~/Content/logqso.css"));
                   break;
                 default:
                      stylePath = string.Format("~/Content/Themes/{0}/jquery-ui.css", theme);

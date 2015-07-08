@@ -1,0 +1,28 @@
+﻿Github
+	Git clone repository url
+	Git status
+	Git add filename or  for all   git add . or git add -A
+Git commit –m “added  filename”
+Git push
+Git pull
+Git   help
+.gitignore  files https://github.com/github/gitignore
+
+git remote set-url origin https://github.com/psws/logqso.mvc.git
+
+…or create a new repository on the command line
+echo # logqso.mvc >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/psws/logqso.mvc.git
+git push -u origin master
+
+…or push an existing repository from the command line
+git remote add origin https://github.com/psws/logqso.mvc.git
+git push -u origin master
+
+
+<esc>:wq  to exit git message screen
+git config –list  for username
+

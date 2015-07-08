@@ -15,7 +15,7 @@
     <AssemblyName>Logqso.mvc.ui</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -191,6 +191,7 @@
     <Content Include="App_Notes\CSS classes for helpers.txt" />
     <Content Include="App_Notes\Data Annotations.txt" />
     <Content Include="App_Notes\Entity Framwork powertools.txt" />
+    <Content Include="App_Notes\git github.txt" />
     <Content Include="App_Notes\Jquery Selectors AND_OR.txt" />
     <Content Include="App_Notes\jQuery-Code-Snippets.txt" />
     <Content Include="App_Notes\Migration setup for multiple contexts.txt" />
@@ -340,7 +341,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>63914</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:63914/</IISUrl>
+          <IISUrl>http://localhost:8086/logqso</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

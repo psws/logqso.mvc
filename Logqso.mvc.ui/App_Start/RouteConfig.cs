@@ -13,16 +13,26 @@ namespace Logqso.mvc.ui
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+#if original
+            routes.MapRoute(
+              name: "LogQso",
+              url: "LogQso",
+              defaults: new { controller = "LogQso", action = "LogQso", id = UrlParameter.Optional }
+
+          );
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+#endif
             routes.MapRoute(
-               name: "LogQso",
-               url: "{controller}/{action}/{id}",
-               defaults: new { controller = "LogQso", action = "LogQso", id = UrlParameter.Optional }
-           );
+                name: "Default",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "logqso", action = "logqso", id = UrlParameter.Optional }
+);
+
+
         }
     }
 }

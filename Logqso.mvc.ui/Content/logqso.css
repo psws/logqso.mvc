@@ -3,7 +3,7 @@
 }
 
 .overflow-contest-select {
-    height:150px;
+    height:200px;
 }
 
 
@@ -15,11 +15,105 @@ label {
     display:block;
     margin: 30px,0,0,0;
 }
+#wrapper{
+    margin-top:5px;
+}
+
+
+div[id^='hdgPnl']{
+    height:20px;
+    padding:2px 2px 2px 2px;
+}
+div[id^='Pnl']{
+    height:70px;
+    max-width:90%;
+    min-width:390px;
+}
+div[id^='bdyPnl']{
+    height:50px;
+    padding:2px 2px 2px 2px;
+
+}
+.lq-panel-heading {
+    height:20px;
+    text-align:center;
+}
+.lq-panel-title {
+    color:white;
+}
+.lq-call1-bkgnd {
+   background-color:blue;
+}
+.lq-call2-bkgnd {
+   background-color:red;
+}
+.lq-call3-bkgnd {
+   background-color:green;
+}
 
 .lq-dropdwn{
     font-size: 70%;
     line-height: 10px;
 }
+
+.lq-call-selector{
+    /*width: 140px;*/
+    min-width:140px;
+    max-width:140px;
+    border-radius:4px;
+}
+.lq-call-text{
+    min-width:90px;
+    max-width:115px;
+}
+.lq-call-input{
+    min-width:70px;
+    max-width:90px;
+}
+.lq-checkbox{
+    line-height: 10px;
+}
+span[id^='enb_dis']{
+    font-size:inherit;
+    font-weight:lighter;
+    float:right;
+    color:#a4a3a3;
+}
+.lq-button{
+    font-size:60%;
+   height:18px;
+   margin-left:10%;
+
+}
+
+.lq-graph {
+    width:100%;
+}
+
+#warning-message { display: none; }
+@media only screen and (max-width:400px)  {
+    #wrapper { display:none; }
+    #warning-message { display:block; }
+}
+@media only screen and (orientation:landscape){
+    #warning-message { display:none; }
+}
+
+
+/*@media only screen and (orientation:portrait)  {
+    #wrapper { display:none; }
+    #warning-message { display:block; }
+}
+@media only screen and (orientation:landscape){
+    #warning-message { display:none; }
+}*/
+/*@media screen and (orientation:landscape) 
+{
+   body
+   {
+      background: red;
+   }
+}*/
 
 /*.ui-menu-divider {
     color: green;
