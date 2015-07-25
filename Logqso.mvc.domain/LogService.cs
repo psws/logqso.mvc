@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Logqso.mvc.common.Dto;
-using Logqso.mvc.common.Interfaces;
+using Logqso.mvc.Entities.Dto;
+using Logqso.mvc.Entities.Interfaces;
 using Logqso.mvc.Exceptions;
+using Logqso.mvc.DataModel;
+
 //using Logqso.mvc.persistance;
 
 namespace Logqso.mvc.domain
@@ -20,15 +22,15 @@ namespace Logqso.mvc.domain
 
         }
 
-        public Log GetByID(Guid LogID)
+        public LogEntity GetByID(Guid LogID)
         {
-            LogDto LogDto = null;
-            Log  log = null;
+            LogEntity LogEntity = null;
+            Log Log = null;
             //LogRepository LogRepository1 = new LogRepository();
             //LogDto  LogDto = LogRepository1.GetByID(LogCallsignID);
            // dependency injection
 
-            LogDto = _logRepository.GetByID(LogID);
+            Log = _logRepository.GetByID(LogID);
 
 #if noautomap
             var log = new Log();
@@ -37,31 +39,31 @@ namespace Logqso.mvc.domain
             log.ContestYear = LogDto.ContestYear;
             log.ContestID = LogDto.ContestID;
 #else
-            if (LogDto == null)
+            if (Log == null)
             {
                 LogNotFoundException LogNotFoundException = new LogNotFoundException("Log does not exist for ");
                 LogNotFoundException.LogID = LogID; 
                 throw LogNotFoundException;
             }else {
-                log  = AutoMapper.Mapper.Map<LogDto, Log>(LogDto);
+                LogEntity = AutoMapper.Mapper.Map<Log, LogEntity>(Log);
             }
 #endif
-            return log;
+            return LogEntity;
         }
 
 
-        public  IReadOnlyList<Log> GetByYear(DateTime Year)
+        public  IReadOnlyList<LogEntity> GetByYear(DateTime Year)
         {
             //Todo Stub for DB
             //IReadOnlyList<Log> Logs = new List<Log> {
             //    new Log() {   };
             //    ;
-            IReadOnlyList<Log> Logs = new List<Log> {
-            new Log() {LogID = Guid.NewGuid(), CallsignID = 1, ContestID = 1, ContestYear = Year    },
-            new Log() {LogID = Guid.NewGuid(), CallsignID = 2, ContestID = 1, ContestYear = Year    },
+            IReadOnlyList<LogEntity> LogEntitiess = new List<LogEntity> {
+            new LogEntity() {LogID = Guid.NewGuid(), CallsignID = 1, ContestID = 1, ContestYear = Year    },
+            new LogEntity() {LogID = Guid.NewGuid(), CallsignID = 2, ContestID = 1, ContestYear = Year    },
             };
 
-            return Logs;
+            return LogEntitiess;
         }
     }
 }

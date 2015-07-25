@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Logqso.mvc.common.Enum;
 
-namespace Logqso.mvc.common.Dto
+namespace Logqso.mvc.Entities.Dto
 {
-    public class CallSignDto
+    public class CallSignEntity
     {
         public int CallSignID;
         public string Call;

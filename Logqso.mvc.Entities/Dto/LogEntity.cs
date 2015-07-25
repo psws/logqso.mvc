@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logqso.mvc.common.Dto
+namespace Logqso.mvc.Entities.Dto
 {
-    public class LogDto
+    public class LogEntity
     {
         public Guid LogID { get; set; }
         public int? CallsignID { get; set; }

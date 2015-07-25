@@ -1,51 +1,70 @@
 ﻿fieldset {
     border:0;
 }
+body{
+    background-color:#77bbff ;
+}
+a.navbar-brand {
+    color:yellow !important;
+    background-color:red;
+}
 
 .overflow-contest-select {
     height:200px;
 }
 
 
-fieldset {
-    border:0;
-}
 
 label {
     display:block;
     margin: 30px,0,0,0;
 }
-#wrapper{
+div.row{
     margin-top:5px;
 }
 
-
-div[id^='hdgPnl']{
+.clear {
+    clear:both;
+}
+div[id^='hdgPnl'], div[id^='hdgAxis']{
     height:20px;
     padding:2px 2px 2px 2px;
+    border:0;
 }
-div[id^='Pnl']{
+div[id^='Pnl'], div[id^='AxisPnl']{
     height:70px;
     max-width:90%;
-    min-width:390px;
+    min-width:470px;
 }
-div[id^='bdyPnl']{
-    height:50px;
+div[id^='AxisPnl']{
+    height:70px;
+    max-width:90%;
+    min-width:360px;
+}
+
+div[id^='bdyPnlSel'], div[id^='bdyAxis']{
+    height:60px;
     padding:2px 2px 2px 2px;
+    /*line-height:1.0;*/
+    clear:both;
 
 }
 .lq-panel-heading {
     height:20px;
     text-align:center;
+        padding:0;
+
 }
 .lq-panel-title {
     color:white;
 }
+
+
 .lq-call1-bkgnd {
    background-color:blue;
 }
 .lq-call2-bkgnd {
-   background-color:red;
+   background-color:#ff6a00;
 }
 .lq-call3-bkgnd {
    background-color:green;
@@ -53,7 +72,18 @@ div[id^='bdyPnl']{
 
 .lq-dropdwn{
     font-size: 70%;
-    line-height: 10px;
+    /*line-height: 30px;*/
+}
+.lq-dropdwn-larger{
+    font-size: 80%;
+    /*line-height: 30px;*/
+}
+
+.lq-contest-selector {
+    font-size: 80%;
+    width: 110px;
+    height:25px;
+    display: inline;
 }
 
 .lq-call-selector{
@@ -78,20 +108,33 @@ span[id^='enb_dis']{
     font-weight:lighter;
     float:right;
     color:#a4a3a3;
+    /*width:auto;*/
 }
+
 .lq-button{
     font-size:60%;
    height:18px;
-   margin-left:10%;
+   margin-right:5px;
+    float:right;
 
 }
+.lq-inline {
+    display: inline;
+}
 
+.lq-inline-block {
+    display: inline-block;
+}
+
+.lq-top-margin{
+    margin-top: 5px;
+}
 .lq-graph {
     width:100%;
 }
 
 #warning-message { display: none; }
-@media only screen and (max-width:400px)  {
+@media only screen and (max-width:480px)  {
     #wrapper { display:none; }
     #warning-message { display:block; }
 }
@@ -129,6 +172,135 @@ span[id^='enb_dis']{
     text-align:center
 }
 
+/*jquery-ui menu support*/
+.ui-menu { 
+    position: absolute; width: 100px;
+
+}
+
+.lq-popup-hdr {
+    color: green;
+    text-align: center;
+}
+.lq-popup-subhdr {
+    color: red;
+    height: 20px;
+    text-align: center;
+    margin:0;
+    font-weight:bold;
+}
+.lq-popup-list {
+    width: 217px;
+    display:inline-block ;
+    margin-top:5px;
+    vertical-align: top;  /* required to ush second lisy to top in chrome */
+}
+
+/*2 column list*/
+.two-col-list {
+    border: 1px solid green;
+    overflow: auto;
+    margin-bottom:10px;
+    padding-left: 10px;
+    padding-right:5px;
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+    -webkit-column-count: 2;
+    -webkit-column-gap: 20px;
+    column-count: 2;
+    column-gap: 20px;
+        /*vertical-align: top;*/
+
+}
+
+.two-col-list li {
+    display: inline;
+    /*width: 45%;*/
+    margin: 0;
+    padding: 0;
+    font-size:85%;
+    line-height:12px;
+    /*vertical-align: top; /* In case multi-word categories form two lines */*/
+}
+
+.two-col-list li:hover {
+    cursor: pointer; 
+    background-color: #0073ea; 
+    color:white
+}
+
+
+/*modal support*/
+.modal-box {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  /*width: 98%;*/
+  width:440px;
+  background: white;
+  border-bottom: 1px solid #aaa;
+  border-radius: 4px;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-clip: padding-box;
+  /*-webkit-transition: opacity 400ms ease-in;
+	-moz-transition: opacity 400ms ease-in;
+	transition: opacity 4000ms ease-in;*/
+
+}
+
+.modal-box header,
+.modal-box .modal-header {
+  padding: .25em .25em;
+  border-bottom: 1px solid #ddd;
+}
+
+.modal-box header h3,
+.modal-box header h4,
+.modal-box .modal-header h3,
+.modal-box .modal-header h4 { margin: 0; }
+
+.modal-box .modal-body { padding: .1em .1em; }
+
+.modal-box footer,
+.modal-box .modal-footer {
+  padding: 1em;
+  border-top: 1px solid #ddd;
+  background: rgba(0, 0, 0, 0.02);
+  text-align: right;
+}
+
+.modal-overlay {
+  opacity: 0;
+  filter: alpha(opacity=0);
+  position: fixed; /*too fill all client window*/
+  top: 0;
+  left: 0;
+  /*right:0;
+  bottom: 0;*/
+  z-index: 900;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3)  !important;
+  /*background-size: cover;*/
+}
+
+a.close {
+  line-height: 1;
+  font-size: 1.5em;
+  position: absolute;
+  top: 5%;
+  right: 2%;
+  text-decoration: none;
+  color: black;
+}
+
+a.close:hover {
+  color: red;
+  -webkit-transition: color .5s ease;
+  -moz-transition: color .5s ease;
+  transition: color .5s ease;
+}
 
 .test {
     color: pink;

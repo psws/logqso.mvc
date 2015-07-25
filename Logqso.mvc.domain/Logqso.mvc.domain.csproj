@@ -42,18 +42,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CallSign.cs" />
     <Compile Include="CallSignService.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="ICallSignService.cs" />
     <Compile Include="LogService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Qso.cs" />
     <Compile Include="QsoService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\logqso.mvc.common\Logqso.mvc.common.csproj">
       <Project>{7d8dad53-fc2e-4812-a636-be213a28fb0f}</Project>
       <Name>Logqso.mvc.common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logqso.mvc.DataModel\Logqso.mvc.DataModel.csproj">
+      <Project>{816aa619-9ac6-441f-80ba-d155904bcb1d}</Project>
+      <Name>Logqso.mvc.DataModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logqso.mvc.Entities\Logqso.mvc.Entities.csproj">
+      <Project>{c6e19eb6-8334-4d08-811a-2742701628e7}</Project>
+      <Name>Logqso.mvc.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Logqso.mvc.Exceptions\Logqso.mvc.Exceptions.csproj">
       <Project>{02def490-76f3-445d-bd43-85ac13d0e9d9}</Project>

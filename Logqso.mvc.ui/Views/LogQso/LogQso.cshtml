@@ -2,52 +2,101 @@
     ViewBag.Title = "LogQso";
 }
 
-<script type="text/javascript" src="~/Scripts/logqso.js"></script>
-
 @*@Html.Label("Window size:", new { id = "size" });
     @Html.Label("Screen size2:", new { id = "size2" });*@
 @*<h2>LogQso</h2>*@
+
+<script type="text/javascript">
+    document.getElementById("body").style.visibility = "hidden";
+</script>
 <div id="wrapper">
+
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-10 col-xs-10">
 
             <div class="panel panel-default" id="Pnl1">
-                <div class="panel-heading" id="hdgPnl1">
-                    <label class="panel-title ">
+                <div class="panel-heading " id="hdgPnl1">
+                    <label class="panel-title lq-inline">
                         Contest Category Selection
                     </label>
-                    <span class="span">
-                        <button id="CatDft" class=" btn-group-xs btn-default">
-                            Defaults
-                        </button>
-                        <span id="enb_dis1">
-                            Disable
-                            <input type="checkbox" id="filtercatchk" aria-label="..." />
-                        </span>
-
+                    <span id="enb_dis1">
+                        <label for="filtercatchk" class="lq-inline">Disable </label>
+                        <input type="checkbox" id="filtercatchk" aria-label="..." />
                     </span>
+                    <button id="CatDft" class=" btn-group-xs btn-default">
+                        Defaults
+                    </button>
+
                 </div>
-                <div class="panel-body" id="bdyPnl1">
-                    <fieldset></fieldset>
+                <div class="panel-body " id="bdyPnlSell1">
+                    <fieldset>
+                        <div class="lq-inline-block">
+                            <label for="Operator">Operator</label>
+                            <select name="CatOp" id="CatOp">
+                                <option selected="selected"> ALL</option>
+                                <option> SINGLE-OP</option>
+                                <option> MULTI-OP</option>
+                                <option> CHECKLOG</option>
+                            </select>
+                        </div>
+                        <div class="lq-inline-block">
+                            <label for="Operator">Band</label>
+                            <select name="CatBnd" id="CatBnd">
+                                <option selected="selected"> ALL</option>
+                                <option> 160M</option>
+                                <option> 80M</option>
+                                <option> 40M</option>
+                                <option> 20M</option>
+                                <option> 15M</option>
+                                <option> 10M</option>
+                            </select>
+                        </div>
+                        <div class="lq-inline-block">
+                            <label for="Operator">Power</label>
+                            <select name="CatPower" id="CatPower">
+                                <option selected="selected"> ALL</option>
+                                <option> HIGH</option>
+                                <option>LOW</option>
+                                <option>QRP</option>
+                            </select>
+                        </div>
+                        <div class="lq-inline-block">
+                            <label for="Operator">Assisted</label>
+                            <select name="CatAssist" id="CatAssist">
+                                <option selected="selected"> ALL</option>
+                                <option> ASSISTED</option>
+                                <option>NON-ASSISTED</option>
+                            </select>
+                        </div>
+                        <div class="lq-inline-block">
+                            <label for="Operator"># of TX</label>
+                            <select name="CatTX" id="CatTX">
+                                <option selected="selected"> ALL</option>
+                                <option> ONE</option>
+                                <option>TWO</option>
+                                <option>UNLIMITED</option>
+                            </select>
+                        </div>
+
+                    </fieldset>
                 </div>
             </div>
             <div class="panel panel-default" id="Pnl2">
                 <div class="panel-heading" id="hdgPnl2">
-                    <label class="panel-title ">
+                    <label class="panel-title lq-inline">
                         Log QSO Filter Selection
                     </label>
-                    <span>
-                        <button id="QsoDft" class=" btn-group-xs btn-default">
-                            Defaults
-                        </button>
-                        <span id="enb_dis2">
-                            Disable
-                            <input type="checkbox" id="filterQsochk" aria-label="...">
-                        </span>
 
+                    <span id="enb_dis2">
+                        Disable
+                        <input type="checkbox" id="filterQsochk" aria-label="...">
                     </span>
+                    <button id="QsoDft" class=" btn-group-xs btn-default">
+                        Defaults
+                    </button>
+
                 </div>
-                <div class="panel-body" id="bdyPnl2">
+                <div class="panel-body" id="bdyPnlSel2">
                     <fieldset></fieldset>
                 </div>
             </div>
@@ -58,93 +107,93 @@
 
         <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id="callPanel1">
             <div class="panel panel-default lq-call-selector">
-                <div class="panel-heading lq-panel-heading ">
-                    <h3 class="panel-title ">Call1 </h3>
+                <div class="panel-heading lq-panel-heading " id="hdgPn13">
+                    <h3 class=" panel-title ">
+                    Call1 </h3>
                 </div>
-                <div class="panel-body">
+                <div id="bdyPnl3" class=" panel-body ">
                     <fieldset>
-                        <label for="Contest1" id="test2">Contest</label>
-                        <select name="Contest1" id="Contest1">
-                            <optgroup label="CQWW">
-                                <option selected="selected"> CqwwSSB2010</option>
-                                <option> CqwwSSB209</option>
-                                <option> CqwwSSB2010</option>
-                                <option> CqwwSSB2011</option>
-                                <option> CqwwSSB2012</option>
-                                <option> CqwwSSB2013</option>
-                                <option> CqwwSSB2014</option>
-                                <option> CqwwCW2015</option>
+                        <label for=" contest1" id="test2">
+                    Contest
+                    </label>
+                    @*<select name="Contest1" id="Contest1">
+                <optgroup label="CQWW">
+                    <option selected="selected"> CqwwSSB2010</option>
+                    <option> CqwwSSB209</option>
+                    <option> CqwwSSB2010</option>
+                    <option> CqwwSSB2011</option>
+                    <option> CqwwSSB2012</option>
+                    <option> CqwwSSB2013</option>
+                    <option> CqwwSSB2014</option>
+                    <option> CqwwCW2015</option>
 
-                                <option> CqwwSSB209</option>
-                                <option> CqwwSSB2010</option>
-                                <option> CqwwSSB2011</option>
-                                <option> CqwwSSB2012</option>
-                                <option> CqwwSSB2013</option>
-                                <option> CqwwSSB2014</option>
-                                <option> CqwwCW2010</option>
+                    <option> CqwwSSB209</option>
+                    <option> CqwwSSB2010</option>
+                    <option> CqwwSSB2011</option>
+                    <option> CqwwSSB2012</option>
+                    <option> CqwwSSB2013</option>
+                    <option> CqwwSSB2014</option>
+                    <option> CqwwCW2010</option>
 
-                                <option> CqwwSSB209</option>
-                                <option> CqwwSSB2010</option>
-                                <option> CqwwSSB2011</option>
-                                <option> CqwwSSB2012</option>
-                                <option> CqwwSSB2013</option>
-                                <option> CqwwSSB2014</option>
-                                <option> CqwwCW2010</option>
+                    <option> CqwwSSB209</option>
+                    <option> CqwwSSB2010</option>
+                    <option> CqwwSSB2011</option>
+                    <option> CqwwSSB2012</option>
+                    <option> CqwwSSB2013</option>
+                    <option> CqwwSSB2014</option>
+                    <option> CqwwCW2010</option>
 
-                                <option> CqwwSSB209</option>
-                                <option> CqwwSSB2010</option>
-                                <option> CqwwSSB2011</option>
-                                <option> CqwwSSB2012</option>
-                                <option> CqwwSSB2013</option>
-                                <option> CqwwSSB2014</option>
-                                <option> CqwwCW2010</option>
+                    <option> CqwwSSB209</option>
+                    <option> CqwwSSB2010</option>
+                    <option> CqwwSSB2011</option>
+                    <option> CqwwSSB2012</option>
+                    <option> CqwwSSB2013</option>
+                    <option> CqwwSSB2014</option>
+                    <option> CqwwCW2010</option>
 
-                                <option> CqwwSSB209</option>
-                                <option> CqwwSSB2010</option>
-                                <option> CqwwSSB2011</option>
-                                <option> CqwwSSB2012</option>
-                                <option> CqwwSSB2013</option>
-                                <option> CqwwSSB2014</option>
-                            </optgroup>
-                            <optgroup label="CQWPX">
-                                <option> CqwpxSSB209</option>
-                                <option> CqwpxSSB2010</option>
-                                <option> CqwpxSSB2011</option>
-                                <option> CqwpxSSB2012</option>
-                                <option> CqwpxSSB2013</option>
-                                <option> CqwpxSSB2014</option>
-                            </optgroup>
-                        </select>
-                        <span>
-                            Call
-                            <span id="enb_dis3">
-                                Disable
-                                <input type="checkbox" id="chk1" aria-label="...">
-                            </span>
+                    <option> CqwwSSB209</option>
+                    <option> CqwwSSB2010</option>
+                    <option> CqwwSSB2011</option>
+                    <option> CqwwSSB2012</option>
+                    <option> CqwwSSB2013</option>
+                    <option> CqwwSSB2014</option>
+                </optgroup>
+                <optgroup label="CQWPX">
+                    <option> CqwpxSSB209</option>
+                    <option> CqwpxSSB2010</option>
+                    <option> CqwpxSSB2011</option>
+                    <option> CqwpxSSB2012</option>
+                    <option> CqwpxSSB2013</option>
+                    <option> CqwpxSSB2014</option>
+                </optgroup>
+            </select>*@
+                    <div>
+                        <button id="Contest1" data-modal-id="popup">CqwwSsb2010</button>
+                    </div>
+                    <span>
+                        Call
+                        <span id="enb_dis3">
+                            Disable
+                            <input type="checkbox" id="chk1" aria-label="...">
                         </span>
-                        <input type="text" id="Call1" aria-label="...">
+                    </span>
+                    <input type="text" id="Call1" aria-label="...">
                     </fieldset>
+
                 </div>
             </div>
-
         </div>
         <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id="callPanel2">
             <div class="panel panel-default lq-call-selector">
-                <div class="panel-heading lq-panel-heading">
+                <div class="panel-heading lq-panel-heading" id="hdgPnl4">
                     <h3 class="panel-title">Call2 </h3>
                 </div>
-                <div class="panel-body">
+                <div id="bdyPnl4" class="panel-body">
                     <fieldset>
                         <label for="Contest2">Contest</label>
-                        <select name="Contest2" id="Contest2">
-                            <optgroup label="CQWW">
-                                <option selected="selected"> CqwwSSB2010</option>
-                                <option> CqwwCW2010</option>
-                            </optgroup>
-                            <optgroup label="CQWPX">
-                                <option> CqwpxSSB2010</option>
-                            </optgroup>
-                        </select>
+                        <div>
+                            <button id="Contest2" data-modal-id="popup">CqwwSsb2010</button>
+                        </div>
                         <span>
                             Call
                             <span id="enb_dis4">
@@ -159,21 +208,15 @@
         </div>
         <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id="callPanel3">
             <div class="panel panel-default lq-call-selector">
-                <div class="panel-heading lq-panel-heading">
+                <div class="panel-heading lq-panel-heading" id="hdgPnl5">
                     <h3 class="panel-title">Call3 </h3>
                 </div>
-                <div class="panel-body">
+                <div id="bdyPnl5" class="panel-body">
                     <fieldset>
                         <label for="Contest3">Contest</label>
-                        <select name="Contest3" id="Contest3">
-                            <optgroup label="CQWW">
-                                <option selected="selected"> CqwwSSB2010</option>
-                                <option> CqwwCW2010</option>
-                            </optgroup>
-                            <optgroup label="CQWPX">
-                                <option> CqwpxSSB2010</option>
-                            </optgroup>
-                        </select>
+                        <div>
+                            <button id="Contest3" data-modal-id="popup">CqwwSsb2010</button>
+                        </div>
                         <span>
                             Call
                             <span id="enb_dis5">
@@ -185,6 +228,7 @@
                     </fieldset>
                 </div>
             </div>
+
         </div>
 
     </div>
@@ -195,10 +239,149 @@
                 <img src="~/image/ChartImg.png" class="img-responsive lq-graph" alt="Missimg">
             </div>
         </div>
+    </div>
+
+
+    <div class="row">
+        <div class="container">
+            <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2" id="Counter">
+                Counter
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-10 col-xs-10">
+                    <div class="panel panel-default" id="AxisPnl1">
+                        <div class="panel-heading" id="hdgAxisPnl1">
+                            <label class="panel-title lq-inline">
+                                View Axis Selection
+                            </label>
+
+                            <button id="AxisDft" class=" btn-group-xs btn-default">
+                                Defaults
+                            </button>
+
+                        </div>
+                        <div class="panel-body" id="bdyAxisPnl1">
+                            <fieldset>
+                                <div class="lq-inline-block">
+                                    <label for="AxisFunction">Function</label>
+                                    <select name="AxisFunction" id="AxisFunction">
+                                        <option selected="selected"> QSO Rate</option>
+                                        <option> QSO Sum</option>
+                                        <option> Score Rate</option>
+                                        <option> Score Sum</option>
+                                    </select>
+                                </div>
+                                <div class="lq-inline-block">
+                                    <label for="AxisInterval">Interval</label>
+                                    <select name="AxisInterval" id="AxisInterval">
+                                        <option selected="selected"> 60</option>
+                                        <option> 30</option>
+                                        <option> 15</option>
+                                        <option> 10</option>
+                                        <option> 5</option>
+                                        <option> 10</option>
+                                    </select>
+                                </div>
+                                <div class="lq-inline-block">
+                                    <label for="AxisViewType">View Type</label>
+                                    <select name="AxisViewType" id="AxisViewType">
+                                        <option selected="selected"> Column</option>
+                                        <option>Line</option>
+                                        <option>Spline</option>
+                                        <option>Stacked Column</option>
+                                    </select>
+                                </div>
+
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="container">
+            <a class="js-open-modal " href="#" data-modal-id="popup2"> Click me </a>
+            <div>
+                <div>
+                    <button id="ContestName1">Select an action</button>
+                    <button id="Contest1select">Select an action</button>
+                    @*<button id="ContestNa" class="ui-icon ui-icon-triangle-1-s">></button>
+                        <span class="ui-icon ui-icon-triangle-1-s"></span>*@
+                </div>
+                <ul>
+                    <li>Open...</li>
+                    <li>Save</li>
+                    <li>Delete</li>
+                </ul>
+
+
+
+            </div>
+        </div>
 
     </div>
+
+
+    <div id="popup" class="modal-box clear ">
+        <header>
+            <a href="#" class="js-modal-close close" title="Cancel selection">X</a>
+            <h4> Title</h4>
+        </header>
+        <div id="WWlist" class=" modal-body">
+            <h5 class="lq-popup-subhdr">
+                CQ WorldWide
+            </h5>
+            <ol class="two-col-list">
+                <li>CqwwSsb2005</li>
+                <li>CqwwSsb2006</li>
+                <li>CqwwSsb2007</li>
+                <li>CqwwSsb2008</li>
+                <li>CqwwSsb2009</li>
+                <li>CqwwSsb2010</li>
+                <li>CqwwSsb2011</li>
+                <li>CqwwSsb2012</li>
+                <li>CqwwSsb2013</li>
+                <li>CqwwSsb2014</li>
+                <li>CqwwSsb2015</li>
+           </ol>
+        </div>
+        <div id="WPXlist" class=" modal-body">
+            <h5 class="lq-popup-subhdr">
+                CQ Wpx
+            </h5>
+            <ol class="two-col-list">
+                <li>CqwpxSsb2010</li>
+                <li>CqwpxSsb2011</li>
+                <li>CqwpxSsb2012</li>
+                <li>CqwpxSsb2013</li>
+                <li>CqwpxSsb2014</li>
+            </ol>
+        </div>
+        @*<footer>
+                <a href="#" class="js-modal-close">Close Button</a>
+            </footer>*@
+    </div>
+
+
+
+    <div id="popup2" class="modal-box">
+        <header>
+            <a href="#" class="js-modal-close close">×</a>
+            <h3><a href="http://www.jqueryscript.net/tags.php?/Modal/">Modal</a> Title</h3>
+        </header>
+        <div class="modal-body">
+            <p>Modal Body</p>
+        </div>
+        <footer>
+            <a href="#" class="js-modal-close">Close Button</a>
+        </footer>
+    </div>
+
 </div>
 
-<div id="warning-message">
-    this website is only viewable in landscape mode
-</div>
+        <div id="warning-message">
+            this website is only viewable in landscape mode
+        </div>

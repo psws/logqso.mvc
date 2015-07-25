@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Logqso.mvc.common.Dto;
+using Logqso.mvc.DataModel;
 
 
-namespace Logqso.mvc.common.Interfaces
+namespace Logqso.mvc.Entities.Interfaces
 {
     public interface IQsoRepository 
     {
-        QsoDto  CreateQso(Guid LogID);
+        Qso  CreateQso(Guid LogID);
     }
 }

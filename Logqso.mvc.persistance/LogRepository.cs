@@ -3,34 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Logqso.mvc.common.Dto;
-using Logqso.mvc.common.Interfaces;
+using Logqso.mvc.DataModel;
+using Logqso.mvc.Entities.Interfaces;
 
 namespace Logqso.mvc.persistance
 {
     public class LogRepository : ILogRepository, IDisposable
     {
-        public LogDto GetByID(Guid LogID)
+        public Log GetByID(Guid LogID)
         {
-            LogDto LogDto = new LogDto();
+            Log Log = new Log();
 
             //stubed out. replace by DB call
-            LogDto.LogID = LogID;
-            LogDto.CallsignID = 1;
-            LogDto.ContestYear = DateTime.Now;
-            LogDto.ContestID = 1;
+            Log.LogID = LogID;
+            Log.CallsignID = 1;
+            Log.ContestYear = DateTime.Now;
+            Log.ContestID = 1;
 
-            return LogDto;
+            return Log;
         }
 
-        public IReadOnlyList<LogDto> GetByYear(DateTime Year)
+        public IReadOnlyList<Log> GetByYear(DateTime Year)
         {
-            LogDto LogDto = new LogDto();
 
             //stubed out. replace by DB call
-            IReadOnlyList<LogDto> Logs = new List<LogDto> {
-            new LogDto() {LogID = Guid.NewGuid(), CallsignID = 1, ContestID = 1, ContestYear = Year    },
-            new LogDto() {LogID = Guid.NewGuid(), CallsignID = 2, ContestID = 1, ContestYear = Year    },
+            IReadOnlyList<Log> Logs = new List<Log> {
+            new Log() {LogID = Guid.NewGuid(), CallsignID = 1, ContestID = 1, ContestYear = Year    },
+            new Log() {LogID = Guid.NewGuid(), CallsignID = 2, ContestID = 1, ContestYear = Year    },
             };
 
             return Logs;

@@ -4,9 +4,9 @@ using Logqso.mvc.domain;
 #if nofake
 using Logqso.mvc.persistance;
 #endif
-using Logqso.mvc.common.Interfaces;
-using Logqso.mvc.common.Dto;
-
+using Logqso.mvc.Entities.Interfaces;
+using Logqso.mvc.Entities.Dto;
+using Logqso.mvc.DataModel;
 using FakeItEasy;
 
 namespace logqso.mvc.domain.test
@@ -25,7 +25,7 @@ namespace logqso.mvc.domain.test
             guid = Guid.NewGuid();
             _logRepository = A.Fake<ILogRepository>();
             A.CallTo(() => _logRepository.GetByID(guid))
-                .Returns(new LogDto
+                .Returns(new Log
                 {
                     LogID = guid,
                     CallsignID = 1,
@@ -34,7 +34,7 @@ namespace logqso.mvc.domain.test
                 });
 
             //automapper
-            AutoMapper.Mapper.CreateMap<LogDto, Log>();
+            AutoMapper.Mapper.CreateMap<Log, LogEntity>();
 
         }
 
@@ -57,11 +57,11 @@ namespace logqso.mvc.domain.test
            var logService = new LogService(_logRepository);
 #endif
 
-            Log log = logService.GetByID(guid);
-            Assert.IsInstanceOfType(log, typeof(Log));
-            Assert.AreEqual(log.LogID, guid);
-            Assert.IsInstanceOfType(log.ContestYear, typeof(DateTime));
-            Assert.AreEqual(log.ContestYear.Year, DateTime.Now.Year);
+           LogEntity LogEntity = logService.GetByID(guid);
+           Assert.IsInstanceOfType(LogEntity, typeof(LogEntity));
+           Assert.AreEqual(LogEntity.LogID, guid);
+           Assert.IsInstanceOfType(LogEntity.ContestYear, typeof(DateTime));
+           Assert.AreEqual(LogEntity.ContestYear.Year, DateTime.Now.Year);
 
         }
 

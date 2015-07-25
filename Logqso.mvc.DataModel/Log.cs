@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logqso.mvc.domain
+namespace Logqso.mvc.DataModel
 {
     public class Log
     {

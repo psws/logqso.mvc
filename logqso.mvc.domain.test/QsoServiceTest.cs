@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Logqso.mvc.domain;
-using Logqso.mvc.common.Interfaces;
+using Logqso.mvc.Entities.Interfaces;
 using Logqso.mvc.persistance;
-using Logqso.mvc.common.Dto;
+using Logqso.mvc.Entities.Dto;
+using Logqso.mvc.DataModel;
 using FakeItEasy;
 
 namespace logqso.mvc.domain.test
@@ -27,7 +28,7 @@ namespace logqso.mvc.domain.test
             guid = Guid.NewGuid();
             _logRepository = A.Fake<ILogRepository>();
             A.CallTo(() => _logRepository.GetByID(guid))
-                .Returns(new LogDto
+                .Returns(new Log
                 {
                     LogID = guid,
                     CallsignID = 1,
@@ -44,10 +45,10 @@ namespace logqso.mvc.domain.test
 #if true
             _QsoRepository = A.Fake<IQsoRepository>();
             A.CallTo(() => _QsoRepository.CreateQso(guid))
-                .Returns(new QsoDto
+                .Returns(new Qso
                     {
                         LogID = guid,
-                        CallsignID = null,
+                        CallsignID = 2,
                         QsoID = 1,
                         QsoDateEime = DateTime.Now,
                         RxRst = 59,
@@ -61,10 +62,10 @@ namespace logqso.mvc.domain.test
 
 
             //automapper
-            AutoMapper.Mapper.CreateMap<LogDto, Log>();
+            AutoMapper.Mapper.CreateMap<Log, LogEntity>();
            _logService = new LogService(_logRepository);
 
-           AutoMapper.Mapper.CreateMap<QsoDto, Qso>();
+           AutoMapper.Mapper.CreateMap<Qso, QsoEntity>();
            _qsoService = new QsoService(_QsoRepository);
 
         }
@@ -74,12 +75,12 @@ namespace logqso.mvc.domain.test
         public void QsoService_CreaeQso_ValidLog_CreateNewQso()
         {
             //arrange
-            Log Log = _logService.GetByID(guid);
+            LogEntity LogEntity = _logService.GetByID(guid);
             //act
-            Qso newQso = _qsoService.CreateQso(Log.LogID);
+            QsoEntity newQso = _qsoService.CreateQso(LogEntity.LogID);
             //assert
-            Assert.IsInstanceOfType(newQso, typeof(Qso));
-            Assert.AreEqual(newQso.LogID, Log.LogID);
+            Assert.IsInstanceOfType(newQso, typeof(QsoEntity));
+            Assert.AreEqual(newQso.LogID, LogEntity.LogID);
         }
     }
 }

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Logqso.mvc.common.Dto;
-using Logqso.mvc.common.Interfaces;
+using Logqso.mvc.Entities.Interfaces;
+using Logqso.mvc.DataModel;
+
 
 namespace Logqso.mvc.persistance
 {
@@ -12,19 +13,19 @@ namespace Logqso.mvc.persistance
     {
         //TODO stubed out. replace by DB call
 
-        public QsoDto CreateQso(Guid LogID) 
+        public Qso CreateQso(Guid LogID) 
         {
-            QsoDto QsoDto = new QsoDto
+            Qso Qso = new Qso
             {
                 LogID = LogID,
-                CallsignID = null,
+                CallsignID = 2,
                 QsoID = 1,
                 QsoDateEime = DateTime.Now,
                 RxRst = 59,
                 TxRst = 59
 
             };
-            return QsoDto;
+            return Qso;
         }
 
     }

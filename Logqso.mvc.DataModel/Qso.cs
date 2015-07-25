@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Logqso.mvc.common.Dto
+namespace Logqso.mvc.DataModel
 {
-    public class QsoDto
+    public class Qso
     {
         public int QsoID;
         public Guid LogID;
-        public int? CallsignID;
+        public int CallsignID;
         public DateTime QsoDateEime;
         public byte RxRst;
         public byte TxRst;

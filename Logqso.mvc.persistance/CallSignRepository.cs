@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Logqso.mvc.common.Dto;
+using Logqso.mvc.DataModel;
 
 namespace Logqso.mvc.persistance
 {
     class CallSignRepository
     {
-        public CallSignDto GetCallSignID(string Call)
+        public CallSign GetCallSignID(string Call)
         {
            //TODO Stubbed out
-            CallSignDto CallSignDto = new CallSignDto
+            CallSign CallSign = new CallSign
             {
                 Call = Call,
                 CallSignID = 1,
             };
-            return CallSignDto;
+
+            return CallSign;
         }
     }
 }

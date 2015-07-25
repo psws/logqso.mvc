@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Logqso.mvc.common.Interfaces;
-using Logqso.mvc.common.Dto;
+using AutoMapper;
+using Logqso.mvc.Entities.Interfaces;
+using Logqso.mvc.Entities.Dto;
+using Logqso.mvc.DataModel;
+
 using Logqso.mvc.Exceptions;
 
 namespace Logqso.mvc.domain
 {
-    public class CallSignService
+    public class CallSignService : Logqso.mvc.domain.ICallSignService
     {
          private readonly ICallSignRepository _CallRepository;
 
@@ -20,16 +23,18 @@ namespace Logqso.mvc.domain
         }
 
         
-        public CallSign GetCallSignID(string Call)
+        public CallSignEntity GetCallSignID(string Call)
         {
-            CallSignDto CallSignDto = null;
+            CallSignEntity CallSignEntity = null;
             CallSign CallSign = null;
             // dependency injection
 
-            CallSignDto = _CallRepository.GetCallSignID(Call);
+            CallSign = _CallRepository.GetCallSignID(Call);
+            Mapper.CreateMap<CallSign, CallSignEntity>();
+            CallSignEntity = AutoMapper.Mapper.Map<CallSign, CallSignEntity>(CallSign);
 
             //call exists
-            if (CallSignDto == null)
+             if (CallSignEntity == null)
             {
                 CallNotFoundException CallNotFoundException = new CallNotFoundException("Log does not exist for ");
                 CallNotFoundException.Call = Call;
@@ -37,9 +42,8 @@ namespace Logqso.mvc.domain
             }
             else
             {
-                CallSign = AutoMapper.Mapper.Map<CallSignDto, CallSign>(CallSignDto);
             }
-            return CallSign;
+             return CallSignEntity;
         }
     }
 }

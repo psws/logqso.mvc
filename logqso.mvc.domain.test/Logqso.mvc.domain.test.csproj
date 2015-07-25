@@ -72,9 +72,17 @@
       <Project>{7d8dad53-fc2e-4812-a636-be213a28fb0f}</Project>
       <Name>Logqso.mvc.common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Logqso.mvc.DataModel\Logqso.mvc.DataModel.csproj">
+      <Project>{816aa619-9ac6-441f-80ba-d155904bcb1d}</Project>
+      <Name>Logqso.mvc.DataModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Logqso.Mvc.domain\Logqso.mvc.domain.csproj">
       <Project>{f04adb7b-8297-4e4a-a2b8-146c89e0c91e}</Project>
       <Name>Logqso.mvc.domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logqso.mvc.Entities\Logqso.mvc.Entities.csproj">
+      <Project>{c6e19eb6-8334-4d08-811a-2742701628e7}</Project>
+      <Name>Logqso.mvc.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Logqso.mvc.Exceptions\Logqso.mvc.Exceptions.csproj">
       <Project>{02def490-76f3-445d-bd43-85ac13d0e9d9}</Project>
@@ -109,6 +117,8 @@
     <Content Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />

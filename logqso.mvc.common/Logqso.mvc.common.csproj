@@ -39,14 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dto\CallSignDto.cs" />
-    <Compile Include="Dto\LogDto.cs" />
-    <Compile Include="Dto\QsoDto.cs" />
     <Compile Include="Enum\Continent.cs" />
     <Compile Include="Enum\QsoExchangeType.cs" />
-    <Compile Include="Interfaces\ICallSignRepository.cs" />
-    <Compile Include="Interfaces\ILogRepository.cs" />
-    <Compile Include="Interfaces\IQsoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringOps.cs" />
   </ItemGroup>

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Logqso.mvc.common.Enum;
 
-namespace Logqso.mvc.domain
+namespace Logqso.mvc.DataModel
 {
     public class CallSign
     {

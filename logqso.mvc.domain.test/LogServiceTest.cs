@@ -5,8 +5,10 @@ using System.Collections.Generic;
 
 using System.IO;
 using Logqso.mvc.domain;
-using Logqso.mvc.common.Interfaces;
-using Logqso.mvc.common.Dto;
+using Logqso.mvc.Entities.Interfaces;
+using Logqso.mvc.Entities.Dto;
+using Logqso.mvc.DataModel;
+
 using Logqso.mvc.Exceptions;
 using MSTestExtensions;
 using FakeItEasy;
@@ -30,7 +32,7 @@ namespace logqso.mvc.domain.test
             guid = Guid.NewGuid();
             _logRepository = A.Fake<ILogRepository>();
             A.CallTo(() => _logRepository.GetByID(guid))
-                .Returns(new LogDto
+                .Returns(new Log
                 {
                     LogID = guid,
                     CallsignID = 1,
@@ -45,15 +47,15 @@ namespace logqso.mvc.domain.test
             //.Throws(new LogNotFoundException("hello"));
 
             A.CallTo(() => _logRepository.GetByYear(Year))
-                .Returns( new List<LogDto> {
-                new LogDto() {LogID = Guid.NewGuid(), CallsignID = 1, ContestID = 1, ContestYear = Year    },
-                new LogDto() {LogID = Guid.NewGuid(), CallsignID = 2, ContestID = 1, ContestYear = Year    },
+                .Returns( new List<Log> {
+                new Log() {LogID = Guid.NewGuid(), CallsignID = 1, ContestID = 1, ContestYear = Year    },
+                new Log() {LogID = Guid.NewGuid(), CallsignID = 2, ContestID = 1, ContestYear = Year    },
                 } );
 
 
 
             //automapper
-            AutoMapper.Mapper.CreateMap<LogDto, Log>();
+            AutoMapper.Mapper.CreateMap<Log, LogEntity>();
 
             _logService = new LogService(_logRepository);
         }
@@ -66,13 +68,13 @@ namespace logqso.mvc.domain.test
 
             //Axt
             //Log log = logService.GetByID(guid);
-            Log log = _logService.GetByID(guid);
+            LogEntity LogEntity = _logService.GetByID(guid);
 
             //Assert
-            Assert.IsInstanceOfType(log, typeof(Log));
-            Assert.AreEqual(log.LogID, guid);
-            Assert.IsInstanceOfType(log.ContestYear, typeof(DateTime));
-            Assert.AreEqual(log.ContestYear.Year, DateTime.Now.Year);
+            Assert.IsInstanceOfType(LogEntity, typeof(LogEntity));
+            Assert.AreEqual(LogEntity.LogID, guid);
+            Assert.IsInstanceOfType(LogEntity.ContestYear, typeof(DateTime));
+            Assert.AreEqual(LogEntity.ContestYear.Year, DateTime.Now.Year);
         }
 
         //[TestMethod,ExpectedException(typeof(LogNotFoundException))]
@@ -92,11 +94,11 @@ namespace logqso.mvc.domain.test
         {
             //act => assert
 
-            Log Log = null;
+            LogEntity LogEntity = null;
 
             try
             {
-                Log = _logService.GetByID(Badguid);
+                LogEntity = _logService.GetByID(Badguid);
             }
             catch (LogNotFoundException ex)
             {
@@ -109,7 +111,7 @@ namespace logqso.mvc.domain.test
                 Assert.IsTrue(ex.Message.Contains("Log does not exist for"));
             }
             //FakeItEasy generated null for Badguid
-            if (Log != null)
+            if (LogEntity != null)
             {
                 Assert.Fail("The Invalid LogID {0} does exist", Badguid);
             }
@@ -119,9 +121,9 @@ namespace logqso.mvc.domain.test
         public void LogService_GetByYear_ValidYear_ReturnsListOfLogs()
         {
 
-            IReadOnlyList<Log> Logs = _logService.GetByYear(Year);
+            IReadOnlyList<LogEntity> Logs = _logService.GetByYear(Year);
 
-            Assert.IsInstanceOfType(Logs, typeof(IReadOnlyList<Log>));
+            Assert.IsInstanceOfType(Logs, typeof(IReadOnlyList<LogEntity>));
             Assert.AreEqual(Logs.Count, 2);
             foreach (var item in Logs)
             {

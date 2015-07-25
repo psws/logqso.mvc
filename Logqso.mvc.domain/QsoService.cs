@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Logqso.mvc.common.Dto;
-using Logqso.mvc.common.Interfaces;
+using Logqso.mvc.Entities.Dto;
+using Logqso.mvc.Entities.Interfaces;
+using Logqso.mvc.DataModel;
+
 
 namespace Logqso.mvc.domain
 {
@@ -18,15 +20,15 @@ namespace Logqso.mvc.domain
 
         }
 
-       public Qso CreateQso(Guid LogID)
+        public QsoEntity CreateQso(Guid LogID)
         {
-            QsoDto QsoDto = null;
+            QsoEntity QsoEntity = null;
             Qso Qso = null;
             // dependency injection
 
-            QsoDto = _QsoRepository.CreateQso( LogID);
+            Qso = _QsoRepository.CreateQso( LogID);
 
-            if (QsoDto == null)
+            if (Qso == null)
             {
                 //LogNotFoundException LogNotFoundException = new LogNotFoundException("Log does not exist for ");
                 //LogNotFoundException.LogID = LogID;
@@ -34,9 +36,9 @@ namespace Logqso.mvc.domain
             }
             else
             {
-                Qso = AutoMapper.Mapper.Map<QsoDto, Qso>(QsoDto);
+                QsoEntity = AutoMapper.Mapper.Map<Qso, QsoEntity>(Qso);
             }
-            return Qso;
+            return QsoEntity;
 
         }
     }
