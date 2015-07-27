@@ -30,8 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,16 +47,70 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CallSign.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="Interfaces\ICallSignRepository.cs" />
+    <Compile Include="Interfaces\ILogRepository.cs" />
+    <Compile Include="Interfaces\IQsoRepository.cs" />
+    <Compile Include="LogControl\CateforyModels\CarAssisted.cs" />
+    <Compile Include="LogControl\CateforyModels\CatBand.cs" />
+    <Compile Include="LogControl\CateforyModels\CatNoOfTx.cs" />
+    <Compile Include="LogControl\CateforyModels\CatOperator.cs" />
+    <Compile Include="LogControl\CategorySeeds.cs" />
+    <Compile Include="LogControl\CateforyModels\CatPower.cs" />
+    <Compile Include="LogControl\LogControlDB.cs" />
+    <Compile Include="LogControl\Migrations\LogControlDB\201507271947144_InitialDatabaseCreation.cs" />
+    <Compile Include="LogControl\Migrations\LogControlDB\201507271947144_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201507271947144_InitialDatabaseCreation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogControl\Migrations\LogControlDB\Configuration.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201507270650382_InitialDatabaseCreation.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201507270650382_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201507270650382_InitialDatabaseCreation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogData\Migrations\LogDataDB\201507270703431_InitialDatabaseCreation1.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201507270703431_InitialDatabaseCreation1.Designer.cs">
+      <DependentUpon>201507270703431_InitialDatabaseCreation1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogData\Migrations\LogDataDB\Configuration.cs" />
+    <Compile Include="Repository\CallSignRepository.cs" />
+    <Compile Include="LogData\CallSign.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogData\Contest.cs" />
+    <Compile Include="LogData\Log.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogData\LogDataDB.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogData\Qso.cs" />
+    <Compile Include="Repository\LogRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Qso.cs" />
+    <Compile Include="Repository\QsoRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\logqso.mvc.common\Logqso.mvc.common.csproj">
       <Project>{7d8dad53-fc2e-4812-a636-be213a28fb0f}</Project>
       <Name>Logqso.mvc.common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201507271947144_InitialDatabaseCreation.resx">
+      <DependentUpon>201507271947144_InitialDatabaseCreation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201507270650382_InitialDatabaseCreation.resx">
+      <DependentUpon>201507270650382_InitialDatabaseCreation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201507270703431_InitialDatabaseCreation1.resx">
+      <DependentUpon>201507270703431_InitialDatabaseCreation1.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Notes\DataModel LogControl code first database setup .txt" />
+    <Content Include="App_Notes\DataModel LogData code first database setup.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

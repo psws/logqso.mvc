@@ -6,6 +6,8 @@
 NamespaceOfContext.ContextA -ProjectName ProjectContextIsInIfNotMainOne
 -StartupProjectName NameOfMainProject  -ConnectionStringName ContextA */
 _____________________________
+PM>Enable-Migrations -Force -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ContextTypeName Logqso.mvc.DataModel.LogqsoDB -MigrationsDirectory Migrations\LogqsoDB
+
 PM>Enable-Migrations -ContextTypeName CustomerOrder.Models.CustomerOrderDB -MigrationsDirectory Migrations\CustomerOrderDB
 
 PM>Enable-Migrations -ContextTypeName CustomerOrder.Models.ApplicationDbContext -MigrationsDirectory Migrations\ApplicationDbContext
@@ -21,6 +23,8 @@ ConfigurationB -ProjectName ProjectContextIsInIfNotMainOne
 //use to update migration model.
 _____________________________________
 //1st context
+PM>Add-Migration -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.Migrations.LogqsoDB.Configuration "InitialDatabaseCreation" 
+
 PM>Add-Migration -ConfigurationTypeName CustomerOrder.Migrations.ApplicationDbContext.Configuration "InitialDatabaseCreation" 
 or
 Add-Migration -ConfigurationTypeName CustomerOrder.Migrations.ApplicationDbContext.Configuration "InitialDatabaseCreation" 
@@ -40,6 +44,7 @@ Add-Migration  -ConfigurationTypeName CustomerOrder.Migrations.CustomerOrderDB.C
 ProjectContextIsInIfNotMainOne -StartupProjectName NameOfMainProject
 -ConnectionStringName ContextA */
 __________________________________
+PM Update-Database -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.Migrations.LogqsoDB.Configuration -Verbose -ConnectionStringName "LogqsoDB"
 
 Update-Database -ConfigurationTypeName CustomerOrder.Migrations.CustomerOrderDB.Configuration -Verbose -ConnectionStringName "CustomerOrderDB"
 PM Output:

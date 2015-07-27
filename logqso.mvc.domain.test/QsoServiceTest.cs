@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Logqso.mvc.domain;
-using Logqso.mvc.Entities.Interfaces;
-using Logqso.mvc.persistance;
+using Logqso.mvc.DataModel.Interfaces;
 using Logqso.mvc.Entities.Dto;
-using Logqso.mvc.DataModel;
+using Logqso.mvc.DataModel.LogData;
 using FakeItEasy;
 
 namespace logqso.mvc.domain.test
@@ -17,44 +16,47 @@ namespace logqso.mvc.domain.test
         private LogService _logService;
         private IQsoRepository _QsoRepository;
         private QsoService _qsoService;
-        
-        private Guid guid;
-        private Guid Badguid;
+
+        //private Guid guid;
+        //private Guid Badguid;
+        private int LogId;
+        private int badLogId;
 
         [TestInitialize]
         public void initialize()
         {
             //initialixe serves as the composition root
-            guid = Guid.NewGuid();
+            //guid = Guid.NewGuid();
+            LogId = 5;
             _logRepository = A.Fake<ILogRepository>();
-            A.CallTo(() => _logRepository.GetByID(guid))
+            A.CallTo(() => _logRepository.GetByID(LogId))
                 .Returns(new Log
                 {
-                    LogID = guid,
-                    CallsignID = 1,
+                    LogId = LogId,
                     ContestYear = DateTime.Now,
-                    ContestID = 1,
+                    ContestId = 1,
                 });
 
-            Badguid = Guid.NewGuid();
-            A.CallTo(() => _logRepository.GetByID(Badguid))
+            //Badguid = Guid.NewGuid();
+            badLogId = -1;
+            A.CallTo(() => _logRepository.GetByID(badLogId))
                .Returns(null);
             //.Throws<LogNotFoundException>();
             //.Throws(new LogNotFoundException("hello"));
 
 #if true
             _QsoRepository = A.Fake<IQsoRepository>();
-            A.CallTo(() => _QsoRepository.CreateQso(guid))
+            A.CallTo(() => _QsoRepository.CreateQso(LogId))
                 .Returns(new Qso
                     {
-                        LogID = guid,
-                        CallsignID = 2,
-                        QsoID = 1,
+                        LogId = LogId,
+                        CallsignId = 2,
+                        QsoId = 1,
                         QsoDateEime = DateTime.Now,
                         RxRst = 59,
                         TxRst = 59,
 
-                    } );
+                    });
 #else
             _QsoRepository = new QsoRepository();
 
@@ -63,19 +65,19 @@ namespace logqso.mvc.domain.test
 
             //automapper
             AutoMapper.Mapper.CreateMap<Log, LogEntity>();
-           _logService = new LogService(_logRepository);
+            _logService = new LogService(_logRepository);
 
-           AutoMapper.Mapper.CreateMap<Qso, QsoEntity>();
-           _qsoService = new QsoService(_QsoRepository);
+            AutoMapper.Mapper.CreateMap<Qso, QsoEntity>();
+            _qsoService = new QsoService(_QsoRepository);
 
         }
 
 
-       [TestMethod]
+        [TestMethod]
         public void QsoService_CreaeQso_ValidLog_CreateNewQso()
         {
             //arrange
-            LogEntity LogEntity = _logService.GetByID(guid);
+            LogEntity LogEntity = _logService.GetByID(LogId);
             //act
             QsoEntity newQso = _qsoService.CreateQso(LogEntity.LogID);
             //assert

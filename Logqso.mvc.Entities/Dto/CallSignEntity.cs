@@ -9,7 +9,7 @@ namespace Logqso.mvc.Entities.Dto
 {
     public class CallSignEntity
     {
-        public int CallSignID;
+        public int CallSignId;
         public string Call;
         public Continent Continent;
     }

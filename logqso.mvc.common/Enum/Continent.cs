@@ -12,6 +12,7 @@ namespace Logqso.mvc.common.Enum
         SA,
         EU,
         AS,
+        AF,
         OC
     }
 }

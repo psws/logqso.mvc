@@ -8,7 +8,7 @@ namespace Logqso.mvc.Entities.Dto
 {
     public class LogEntity
     {
-        public Guid LogID { get; set; }
+        public int LogID { get; set; }
         public int? CallsignID { get; set; }
         public string Callsign { get; set; }
         public DateTime ContestYear { get; set; }

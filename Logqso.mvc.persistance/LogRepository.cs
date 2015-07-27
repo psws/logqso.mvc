@@ -10,15 +10,14 @@ namespace Logqso.mvc.persistance
 {
     public class LogRepository : ILogRepository, IDisposable
     {
-        public Log GetByID(Guid LogID)
+        public Log GetByID(int LogID)
         {
             Log Log = new Log();
 
             //stubed out. replace by DB call
-            Log.LogID = LogID;
-            Log.CallsignID = 1;
+            Log.LogId = LogID;
             Log.ContestYear = DateTime.Now;
-            Log.ContestID = 1;
+            Log.ContestId = 1;
 
             return Log;
         }
@@ -28,8 +27,8 @@ namespace Logqso.mvc.persistance
 
             //stubed out. replace by DB call
             IReadOnlyList<Log> Logs = new List<Log> {
-            new Log() {LogID = Guid.NewGuid(), CallsignID = 1, ContestID = 1, ContestYear = Year    },
-            new Log() {LogID = Guid.NewGuid(), CallsignID = 2, ContestID = 1, ContestYear = Year    },
+            new Log() {LogId = 1,  ContestId = 1, ContestYear = Year    },
+            new Log() {LogId = 1,  ContestId = 1, ContestYear = Year    },
             };
 
             return Logs;

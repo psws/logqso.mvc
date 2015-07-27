@@ -9,7 +9,7 @@ namespace Logqso.mvc.Entities.Dto
     public class QsoEntity
     {
         public int QsoID;
-        public Guid LogID;
+        public int LogID;
         public int? CallsignID;
         public DateTime QsoDateEime;
         public byte RxRst;

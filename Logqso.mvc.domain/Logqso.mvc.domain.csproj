@@ -65,10 +65,6 @@
       <Project>{02def490-76f3-445d-bd43-85ac13d0e9d9}</Project>
       <Name>Logqso.mvc.Exceptions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Logqso.mvc.persistance\Logqso.mvc.persistance.csproj">
-      <Project>{b60cd6e6-d6a6-4dbc-87c1-b04cd5e5f942}</Project>
-      <Name>Logqso.mvc.persistance</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

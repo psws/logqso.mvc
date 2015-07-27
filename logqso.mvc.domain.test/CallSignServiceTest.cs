@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Logqso.mvc.domain;
-using Logqso.mvc.Entities.Interfaces;
+using Logqso.mvc.DataModel.Interfaces;
 using Logqso.mvc.Entities.Dto;
-using Logqso.mvc.DataModel;
+using Logqso.mvc.DataModel.LogData;
 using FakeItEasy;
 
 namespace Logqso.mvc.domain.test
@@ -22,9 +22,9 @@ namespace Logqso.mvc.domain.test
             _CallSignRepository = A.Fake<ICallSignRepository>();
             string Call = "W7EJ";
             A.CallTo(() => _CallSignRepository.GetCallSignID(Call))
-                .Returns(new Logqso.mvc.DataModel.CallSign
+                .Returns(new Logqso.mvc.DataModel.LogData.CallSign
                 {
-                    CallSignID = 1,
+                    CallSignId = 1,
                     Call = Call,
                 });
 
@@ -41,7 +41,7 @@ namespace Logqso.mvc.domain.test
 
             //Assert
             Assert.AreEqual(CallSign.Call, Call);
-            Assert.AreEqual(CallSign.CallSignID, 1);
+            Assert.AreEqual(CallSign.CallSignId, 1);
         }
     }
 }

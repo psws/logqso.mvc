@@ -11,7 +11,7 @@ namespace Logqso.mvc.Exceptions
     [Serializable]
     public class LogNotFoundException : System.Exception, ISerializable
     {
-        public Guid LogID { get; set; }
+        public int LogID { get; set; }
 
         public LogNotFoundException() : base() { }
 
@@ -24,7 +24,7 @@ namespace Logqso.mvc.Exceptions
         public LogNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) {
             if (info != null)
             {
-                this.LogID = (Guid)info.GetValue("LogID", typeof(Guid));
+                this.LogID = (int)info.GetValue("LogID", typeof(int));
             }
         }
         //for serialization

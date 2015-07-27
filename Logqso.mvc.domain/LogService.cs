@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Logqso.mvc.Entities.Dto;
-using Logqso.mvc.Entities.Interfaces;
+using Logqso.mvc.DataModel.Interfaces;
 using Logqso.mvc.Exceptions;
-using Logqso.mvc.DataModel;
+using Logqso.mvc.DataModel.LogData;
 
 //using Logqso.mvc.persistance;
 
@@ -22,7 +22,7 @@ namespace Logqso.mvc.domain
 
         }
 
-        public LogEntity GetByID(Guid LogID)
+        public LogEntity GetByID(int LogID)
         {
             LogEntity LogEntity = null;
             Log Log = null;
@@ -59,8 +59,8 @@ namespace Logqso.mvc.domain
             //    new Log() {   };
             //    ;
             IReadOnlyList<LogEntity> LogEntitiess = new List<LogEntity> {
-            new LogEntity() {LogID = Guid.NewGuid(), CallsignID = 1, ContestID = 1, ContestYear = Year    },
-            new LogEntity() {LogID = Guid.NewGuid(), CallsignID = 2, ContestID = 1, ContestYear = Year    },
+            new LogEntity() {LogID = 1, CallsignID = 1, ContestID = 1, ContestYear = Year    },
+            new LogEntity() {LogID = 1, CallsignID = 2, ContestID = 1, ContestYear = Year    },
             };
 
             return LogEntitiess;

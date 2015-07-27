@@ -10,13 +10,15 @@ namespace logqso.mvc.domain.test
     [TestClass]
     public class LogNotFoundExceptionTest
     {
-         private Guid guid;
+         //private Guid guid;
+         private int LogId;
 
          [TestInitialize]
          public void initialize()
          {
              //initialixe serves as the composition root
-             guid = Guid.NewGuid();
+             //guid = Guid.NewGuid();
+             LogId = 1;
          }
 
          [TestMethod]
@@ -26,7 +28,7 @@ namespace logqso.mvc.domain.test
              //arrange
              bool caught = false;
              LogNotFoundException e = new LogNotFoundException();
-             e.LogID = guid;
+             e.LogID = LogId;
 
              try
              {
@@ -34,7 +36,7 @@ namespace logqso.mvc.domain.test
              }
              catch (LogNotFoundException ex)
              {
-                 Assert.IsTrue(ex.LogID == guid);
+                 Assert.IsTrue(ex.LogID == LogId);
                  Assert.IsTrue(ex.InnerException == null);
                  Assert.IsTrue(ex.Message.Length > 0);
                  Assert.IsTrue(ex.Source.Length > 0);
@@ -55,7 +57,7 @@ namespace logqso.mvc.domain.test
              bool caught = false;
              var message1 = StringOps.GetRandomString(60);
              LogNotFoundException e = new LogNotFoundException(message1);
-             e.LogID = guid;
+             e.LogID = LogId;
 
              try
              {
@@ -64,7 +66,7 @@ namespace logqso.mvc.domain.test
              catch (LogNotFoundException ex)
              {
                  Assert.IsTrue(ex.Message.Contains(message1));
-                 Assert.IsTrue(ex.LogID == guid);
+                 Assert.IsTrue(ex.LogID == LogId);
                  Assert.IsTrue(ex.InnerException == null);
                  Assert.IsTrue(ex.Message.Length > 0);
                  Assert.IsTrue(ex.Source.Length > 0);
@@ -85,9 +87,9 @@ namespace logqso.mvc.domain.test
              var message1 = StringOps.GetRandomString(60);
              var message2 = StringOps.GetRandomString(60);
              LogNotFoundException e2 = new LogNotFoundException(message2);
-               e2.LogID = guid;
+             e2.LogID = LogId;
             LogNotFoundException e = new LogNotFoundException(message1,e2);
-             e.LogID = guid;
+            e.LogID = LogId;
 
              try
             {
@@ -96,10 +98,10 @@ namespace logqso.mvc.domain.test
             catch (LogNotFoundException ex)
             {
                 Assert.IsTrue(ex.Message.Contains(message1));
-                Assert.IsTrue(ex.LogID == guid);
+                Assert.IsTrue(ex.LogID == LogId);
                 Assert.IsTrue(ex.InnerException != null);
                 Assert.IsTrue(ex.InnerException.Message.Contains(message2));
-                Assert.IsTrue(((LogNotFoundException)(ex.InnerException)).LogID == guid);
+                Assert.IsTrue(((LogNotFoundException)(ex.InnerException)).LogID == LogId);
                 Assert.IsTrue(((LogNotFoundException)(ex.InnerException)).InnerException == null);
 
                 Assert.IsTrue(ex.Message.Length > 0);
@@ -120,7 +122,7 @@ namespace logqso.mvc.domain.test
         {
             //http://blog.gurock.com/articles/creating-custom-exceptions-in-dotnet/
             LogNotFoundException e = new LogNotFoundException();
-            e.LogID = guid;
+            e.LogID = LogId;
 
             using (Stream s = new MemoryStream())
             {
@@ -130,7 +132,7 @@ namespace logqso.mvc.domain.test
                 e = (LogNotFoundException)formatter.Deserialize(s);
             }
 
-            Assert.AreEqual<Guid>(e.LogID, guid);
+            Assert.AreEqual<int>(e.LogID, LogId);
         }
 
 

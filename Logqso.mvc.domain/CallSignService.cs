@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using Logqso.mvc.Entities.Interfaces;
+using Logqso.mvc.DataModel.Interfaces;
 using Logqso.mvc.Entities.Dto;
-using Logqso.mvc.DataModel;
+using Logqso.mvc.DataModel.LogData;
 
 using Logqso.mvc.Exceptions;
 

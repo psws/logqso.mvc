@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 using System.IO;
 using Logqso.mvc.domain;
-using Logqso.mvc.Entities.Interfaces;
+using Logqso.mvc.DataModel.Interfaces;
 using Logqso.mvc.Entities.Dto;
-using Logqso.mvc.DataModel;
+using Logqso.mvc.DataModel.LogData;
 
 using Logqso.mvc.Exceptions;
 using MSTestExtensions;
@@ -20,8 +20,10 @@ namespace logqso.mvc.domain.test
     {
         private ILogRepository _logRepository;
         private LogService _logService;
-        private Guid guid;
-        private Guid Badguid;
+        //private Guid guid;
+        //private Guid Badguid;
+        private int LogId;
+        private int badLogId;
         private DateTime Year = new DateTime(2015, 10, 28);
 
 
@@ -29,27 +31,28 @@ namespace logqso.mvc.domain.test
         public void initialize()
         {
             //initialixe serves as the composition root
-            guid = Guid.NewGuid();
+            //guid = Guid.NewGuid();
+            LogId = 5;
             _logRepository = A.Fake<ILogRepository>();
-            A.CallTo(() => _logRepository.GetByID(guid))
+            A.CallTo(() => _logRepository.GetByID(LogId))
                 .Returns(new Log
                 {
-                    LogID = guid,
-                    CallsignID = 1,
+                    LogId = LogId,
                     ContestYear = DateTime.Now,
-                    ContestID = 1,
+                    ContestId = 1,
                 });
 
-            Badguid = Guid.NewGuid();
-            A.CallTo(() => _logRepository.GetByID(Badguid))
+            //Badguid = Guid.NewGuid();
+            badLogId = -1;
+            A.CallTo(() => _logRepository.GetByID(badLogId))
                .Returns(null);
             //.Throws<LogNotFoundException>();
             //.Throws(new LogNotFoundException("hello"));
 
             A.CallTo(() => _logRepository.GetByYear(Year))
                 .Returns( new List<Log> {
-                new Log() {LogID = Guid.NewGuid(), CallsignID = 1, ContestID = 1, ContestYear = Year    },
-                new Log() {LogID = Guid.NewGuid(), CallsignID = 2, ContestID = 1, ContestYear = Year    },
+                new Log() {LogId = 1,  ContestId = 1, ContestYear = Year    },
+                new Log() {LogId = 2,  ContestId = 1, ContestYear = Year    },
                 } );
 
 
@@ -68,11 +71,11 @@ namespace logqso.mvc.domain.test
 
             //Axt
             //Log log = logService.GetByID(guid);
-            LogEntity LogEntity = _logService.GetByID(guid);
+            LogEntity LogEntity = _logService.GetByID(LogId);
 
             //Assert
             Assert.IsInstanceOfType(LogEntity, typeof(LogEntity));
-            Assert.AreEqual(LogEntity.LogID, guid);
+            Assert.AreEqual(LogEntity.LogID, LogId);
             Assert.IsInstanceOfType(LogEntity.ContestYear, typeof(DateTime));
             Assert.AreEqual(LogEntity.ContestYear.Year, DateTime.Now.Year);
         }
@@ -98,12 +101,12 @@ namespace logqso.mvc.domain.test
 
             try
             {
-                LogEntity = _logService.GetByID(Badguid);
+                LogEntity = _logService.GetByID(badLogId);
             }
             catch (LogNotFoundException ex)
             {
                 // service generated exception
-                Assert.AreEqual<Guid>(Badguid, ex.LogID);
+                Assert.AreEqual<int>(badLogId, ex.LogID);
                 //if (ex.Message.Contains("Log does not exist for")   )
                 //{
                 //    throw ex;
@@ -113,7 +116,7 @@ namespace logqso.mvc.domain.test
             //FakeItEasy generated null for Badguid
             if (LogEntity != null)
             {
-                Assert.Fail("The Invalid LogID {0} does exist", Badguid);
+                Assert.Fail("The Invalid LogID {0} does exist", badLogId);
             }
 
         }

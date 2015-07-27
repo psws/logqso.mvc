@@ -15,7 +15,7 @@ namespace Logqso.mvc.persistance
             CallSign CallSign = new CallSign
             {
                 Call = Call,
-                CallSignID = 1,
+                CallSignId = 1,
             };
 
             return CallSign;
