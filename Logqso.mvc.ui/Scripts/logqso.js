@@ -53,6 +53,10 @@ $(function () {
 
     });
 
+    //if (isDebug == 0) {
+    //    //remove menu API
+    //    $("ul.navbar-nav li:contains(API)").remove();
+    // }
 
     $(".panel-heading h3:contains(Call1).panel-title").addClass("lq-call1-bkgnd");
     $(".panel-heading h3:contains(Call2).panel-title").addClass("lq-call2-bkgnd");

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Logqso.mvc.Entities</RootNamespace>
     <AssemblyName>Logqso.mvc.Entities</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,7 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -39,10 +48,64 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dto\CallSignEntity.cs" />
-    <Compile Include="Dto\ContestCategoryEntity.cs" />
-    <Compile Include="Dto\LogEntity.cs" />
-    <Compile Include="Dto\QsoEntity.cs" />
+    <Compile Include="LogControlEntity\CatAssisted.cs" />
+    <Compile Include="LogControlEntity\CatBand.cs" />
+    <Compile Include="LogControlEntity\CatNoOfTx.cs" />
+    <Compile Include="LogControlEntity\CatOperator.cs" />
+    <Compile Include="LogControlEntity\CatPower.cs" />
+    <Compile Include="LogControlEntity\FiltBand.cs" />
+    <Compile Include="LogControlEntity\FiltContinent.cs" />
+    <Compile Include="LogControlEntity\FiltCountry.cs" />
+    <Compile Include="LogControlEntity\FiltCQZone.cs" />
+    <Compile Include="LogControlEntity\LogControlContext.cs" />
+    <Compile Include="LogControlEntity\Mapping\CatAssistedMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\CatBandMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\CatNoOfTxMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\CatOperatorMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\CatPowerMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\FiltBandMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\FiltContinentMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\FiltCountryMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\FiltCQZoneMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\XaxisDurationMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\XaxisStartTimeMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\YaxisFunctionMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\YaxisIntervalMap.cs" />
+    <Compile Include="LogControlEntity\Mapping\YaxisViewTypeMap.cs" />
+    <Compile Include="LogControlEntity\XaxisDuration.cs" />
+    <Compile Include="LogControlEntity\XaxisStartTime.cs" />
+    <Compile Include="LogControlEntity\YaxisFunction.cs" />
+    <Compile Include="LogControlEntity\YaxisInterval.cs" />
+    <Compile Include="LogControlEntity\YaxisViewType.cs" />
+    <Compile Include="LogDataEntity\CallSign.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogDataEntity\CallSignEntity.cs" />
+    <Compile Include="LogDataEntity\Contest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogDataEntity\ContestEntity.cs" />
+    <Compile Include="LogDataEntity\Log.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogDataEntity\LogDataContext.cs" />
+    <Compile Include="LogDataEntity\LogEntity.cs" />
+    <Compile Include="LogDataEntity\Mapping\CallSignMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogDataEntity\Mapping\ContestMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogDataEntity\Mapping\LogMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogDataEntity\Mapping\QsoMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogDataEntity\Qso.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LogDataEntity\QsoEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -50,12 +113,19 @@
       <Project>{7d8dad53-fc2e-4812-a636-be213a28fb0f}</Project>
       <Name>Logqso.mvc.common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Logqso.mvc.DataModel\Logqso.mvc.DataModel.csproj">
-      <Project>{816aa619-9ac6-441f-80ba-d155904bcb1d}</Project>
-      <Name>Logqso.mvc.DataModel</Name>
+    <ProjectReference Include="..\Source\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
+      <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
+      <Name>Repository.Pattern.Ef6</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Source\Repository.Pattern\Repository.Pattern.csproj">
+      <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
+      <Name>Repository.Pattern</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

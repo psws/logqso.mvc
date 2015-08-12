@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Logqso.mvc.Entities.Dto;
-using Logqso.mvc.DataModel.Interfaces;
+using Logqso.mvc.Entities.LogDataEntity;
+using Logqso.Repository.Repository.Interfaces;
 using Logqso.mvc.Exceptions;
-using Logqso.mvc.DataModel.LogData;
 
 //using Logqso.mvc.persistance;
 
@@ -59,8 +58,8 @@ namespace Logqso.mvc.domain
             //    new Log() {   };
             //    ;
             IReadOnlyList<LogEntity> LogEntitiess = new List<LogEntity> {
-            new LogEntity() {LogID = 1, CallsignID = 1, ContestID = 1, ContestYear = Year    },
-            new LogEntity() {LogID = 1, CallsignID = 2, ContestID = 1, ContestYear = Year    },
+            new LogEntity() {LogId = 1, ContestId = 1,  ContestYear = Year    },
+            new LogEntity() {LogId = 1, ContestId = 2,  ContestYear = Year    },
             };
 
             return LogEntitiess;

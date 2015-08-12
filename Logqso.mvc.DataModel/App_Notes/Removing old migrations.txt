@@ -1,0 +1,26 @@
+﻿Ope SSMS
+Right click on Logqso database =>delete
+In the dialog  select checkbox to close all connections.
+select ok
+
+Create empty Logqso db
+right click on database => select New Database.
+fill in name Logqso
+selet OK
+
+Add permissions
+Goto  database=>Logqso=>Security=>Users
+right click on Ysers select New User
+In the Username  box fill in jims9m8r
+In the Login box fill in  jims9m8r
+in the schems box fill in dbo
+In the left pane select Membership.
+check all boxes except the 2 deny items
+
+In the VS prokect 
+Delete the migration directory under LogControl and Data Control.
+Run the Package manager scripts descibed in 
+	DataModel LogControl code first database setup .txt and
+	DataModel LogData code first database setup.tx
+
+	See App note Removing old migrations.txt if you need to recreate Logqso when deleting migrations

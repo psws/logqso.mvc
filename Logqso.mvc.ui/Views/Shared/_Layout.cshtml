@@ -7,7 +7,8 @@
     @*@Styles.Render("~/Content/css")*@
     @{
         var theme = Themes.CurrentTheme;
-        }
+       }
+
     @Styles.Render(Logqso.mvc.ui.Helpers.JQueryUI.Bundle(theme))
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
@@ -35,7 +36,11 @@
                     @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
+                      @if (Logqso.mvc.ui.MvcApplication.IsDebug == true)
+                      {
+                        <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
+                      }
+               </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

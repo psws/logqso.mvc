@@ -1,0 +1,10 @@
+﻿http://stackoverflow.com/questions/22344248/join-multiple-table-using-generic-repository-patten-with-entity-framework-with-u
+var items = from c in customerRepository.AsQueryable()
+            join l in libraryRepository.AsQueryable() on c.SomeProperty equals l.SomeOtherProperty
+            select new { CustomerName = c.FirstName, LibraryName = l.Name };
+
+var customer = (
+    from cus in _customer.Query()
+    join lib in _library.Query()
+    on cus.LId equals lib.Id select cus
+).ToList();

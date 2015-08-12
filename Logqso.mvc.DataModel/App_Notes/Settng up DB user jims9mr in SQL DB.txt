@@ -1,0 +1,37 @@
+﻿Go to SQL Server management Studio
+Create empty Logqso database:
+right click on Database and select New Database
+In the Database name box fill in LogQso
+selct OK
+
+Next we need to create the SQL User account
+select Server security directory.
+right click on Logins. select New Login
+
+In the Login name box enter jims9m8r
+select radio  Sql Server Authentication
+fill in jims0m8r for password
+fill in Confirm Password  jims9m8r
+
+Uncheck the  3 checkboxes
+select Logqso as the default database
+select OK
+
+Next we need to give user jims9m8r enough permissions to Alter databases and to creat a new data base
+This is used for Integration tests.
+Under Security/Logins double click jims9m8r
+In the left pane select Server Roles
+check dbcreator, public, sysadmin ( needed to drop databases)
+
+In the Left pane select Securables
+check Alter any database, Connect SQL 
+Select OK
+
+Next go to Database/Logqso/Security
+right click on Users and select New User.
+Fill in User Name jims9m8r
+fill in Login name jims9m8r
+set Schema to dbo
+In  the Left pane select  Member ship
+Check all check boxes accept the 2 with deny.
+select OK

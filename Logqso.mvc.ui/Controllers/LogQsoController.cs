@@ -9,9 +9,18 @@ namespace Logqso.mvc.ui.Controllers
     public class LogQsoController : Controller
     {
         // GET: LogQso
+        //[ValidateAntiForgeryToken]
         public ActionResult LogQso()
         {
             return View();
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create([Bind(Include = "CourseID,Title,Credits,DepartmentID")]Course course)
+        //{
+
+        //}
+
     }
 }

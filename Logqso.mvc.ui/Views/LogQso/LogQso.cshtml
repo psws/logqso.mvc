@@ -5,6 +5,10 @@
 @*@Html.Label("Window size:", new { id = "size" });
     @Html.Label("Screen size2:", new { id = "size2" });*@
 @*<h2>LogQso</h2>*@
+        
+
+@Html.AntiForgeryToken()
+
 
 <script type="text/javascript">
     document.getElementById("body").style.visibility = "hidden";

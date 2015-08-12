@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity.Migrations;
 
 namespace Logqso.mvc.ui.Controllers
 {
@@ -15,6 +16,12 @@ namespace Logqso.mvc.ui.Controllers
 
         public ActionResult About()
         {
+            //var configuration = new Configuration();
+            //var migrator = new DbMigrator(configuration);
+            //migrator.Update();
+
+            ViewBag.Message = "Your app description page.";
+
             ViewBag.Message = "Your application description page.";
 
             return View();

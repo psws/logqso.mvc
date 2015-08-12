@@ -7,6 +7,9 @@ using System.Data.Entity;
 using System.Data.Linq.Mapping;
 using System.Web;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using Repository.Pattern.Ef6;
+using Repository.Pattern;
+
 
 namespace Logqso.mvc.DataModel.LogControl
 {
@@ -15,7 +18,7 @@ namespace Logqso.mvc.DataModel.LogControl
     {
 
         public LogControlDB()
-            : base("name=LogDataDB")
+            : base("name=LogControlDB")
         {
         }
 
@@ -24,6 +27,23 @@ namespace Logqso.mvc.DataModel.LogControl
         public DbSet<Logqso.mvc.DataModel.LogControl.CategoryModels.CatPower> CatPower { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogControl.CategoryModels.CatAssisted> CatAssisted { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogControl.CategoryModels.CatNoOfTx> CatNoOfTx { get; set; }
+
+        //Filters
+        public DbSet<Logqso.mvc.DataModel.LogControl.FilterModels.FiltBand> FiltBand { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogControl.FilterModels.FiltContinent> FiltContinent { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogControl.FilterModels.FiltCountry> FiltCountry { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogControl.FilterModels.FiltCQZone> FiltCQZone { get; set; }
+
+        //Yaxis
+        public DbSet<Logqso.mvc.DataModel.LogControl.YaxisModels.YaxisFunction> YaxisFunction { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogControl.YaxisModels.YaxisInterval> YaxisInterval { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogControl.YaxisModels.YaxisViewType> YaxisViewType { get; set; }
+
+        //Xaxis
+        public DbSet<Logqso.mvc.DataModel.LogControl.XaxisModels.XaxisStartTime> XaxisStartTime { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogControl.XaxisModels.XaxisDuration> XaxisDuration { get; set; }
+
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

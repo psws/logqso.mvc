@@ -1,0 +1,15 @@
+﻿You need to run on the Local IIS Express server to debug
+	global.asax  (Application_Start)
+	WebActivatorEx  UnityWebActivator.Start()
+http://stackoverflow.com/questions/641148/application-start-not-firing
+
+	If this is in IIS, the app can get started before the debugger has attached.
+	 If so, I am not sure if you can thread sleep long enough to get attached.
+
+
+In Visual Studio, you can attach the debugger to a process. 
+You do this by clicking Debug >> Attach to process. Attach to the browser and then hit your application.
+ To be safe, then restart IIS and hit the site. I am not 100% convinced this will solve the problem, 
+ but it will do much better than firing off a thread sleep in App_Start.
+
+Another option is temporarily host in the built in web server until you finish debugging application start.

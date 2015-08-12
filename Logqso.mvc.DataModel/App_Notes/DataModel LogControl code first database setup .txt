@@ -14,6 +14,8 @@
 setup configuration string in web.config
     <add name="LogqsoDB" connectionString="Data Source=PSS60\SQL2014; Initial Catalog=Logqso; persist security info=True;user id=jims9m8r;password=jims9m8r;MultipleActiveResultSets=True;App=EntityFramework"
 
+
+NOTE: Make sure your class derives from LogControlDB : DbContext
 create this file in the same namespace as the model classes (Logqso.mvc.DataModel):
 namespace Logqso.mvc.DataModel.LogControl
 {
@@ -53,12 +55,37 @@ Code First Migrations enabled for project Logqso.mvc.DataModel.
 Next do the Add-Migration
 
 PM> Add-Migration -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB.Configuration "InitialDatabaseCreation" 
+PM> Add-Migration -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB.Configuration "FilterYaxisXaxisUpdate" 
 
 Package Model Console output
 PM> Add-Migration -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB.Configuration "InitialDatabaseCreation" 
 Scaffolding migration 'InitialDatabaseCreation'.
 The Designer Code for this migration file includes a snapshot of your current Code First model. This snapshot is used to calculate the changes to your model when you scaffold the next migration. If you make additional changes to your model that you want to include in this migration, then you can re-scaffold it by running 'Add-Migration InitialDatabaseCreation' again.
 next create tables in DB
+
+
+NEXT:
+Go to generated configuration.cs model and add the Control Seed methods
+        protected override void Seed(Logqso.mvc.DataModel.LogControl.LogControlDB context)
+        {
+            //  This method will be called after migrating to the latest version.
+
+            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
+            //  to avoid creating duplicate seed data. E.g.
+            //
+            //    context.People.AddOrUpdate(
+            //      p => p.FullName,
+            //      new Person { FullName = "Andrew Peters" },
+            //      new Person { FullName = "Brice Lambson" },
+            //      new Person { FullName = "Rowan Miller" }
+            //    );
+            //
+            CategorySeeds.SeedCategory(context);
+            FiltersSeeds.SeedFilters(context);
+            YaxisSeeds.SeedYaxis(context);
+            XAxisSeeds.SeedXaxis(context);
+
+        }
 
 
 PM>Update-Database -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB.Configuration -Verbose -ConnectionStringName "LogControlDB"

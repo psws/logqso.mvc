@@ -1,0 +1,18 @@
+﻿Integrtion Tests rely on a clean DB cloe of Logqso.mdf DB
+
+open SSMS
+go to Database=>Logqso=>Task=>backup
+accepy all defsaults
+select OK
+
+Next
+creaate a LogqsoTest DB that is clone of Logqso.
+used for integration testing.
+in SSMS
+database=> restore
+select Logqso as the source DB
+enter LogQsoTest as the DestineationDB.
+Select OK
+
+NEXT go to the Generate LogqsoTest SQL DB script for integreation testing.txt document
+Follow the procedure to creat the .sql file for the Integration tessts to use.

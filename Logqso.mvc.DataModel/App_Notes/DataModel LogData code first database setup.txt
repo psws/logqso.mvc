@@ -15,6 +15,8 @@
 setup configuration string in web.config
     <add name="LogqsoDB" connectionString="Data Source=PSS60\SQL2014; Initial Catalog=Logqso; persist security info=True;user id=jims9m8r;password=jims9m8r;MultipleActiveResultSets=True;App=EntityFramework"
 
+
+	NOTE: Make sure your class derives from LogDataDB : DbContext
 create this file in the same namespace as the model classes (Logqso.mvc.DataModel):
 	 namespace Logqso.mvc.DataModel
 	{
@@ -49,16 +51,19 @@ Package Model Console output
 PM> Enable-Migrations -Force -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ContextTypeName Logqso.mvc.DataModel.LogData.LogDataDB -MigrationsDirectory LogData\Migrations\LogDataDB
 Checking if the context targets an existing database...
 Code First Migrations enabled for project Logqso.mvc.DataModel.
+Next do the Add-Migration Seed dasta in the configuration.cs filel.LogData.Migrations.LogDataDB.Configuration "InitialDatabaseCreation" 
+
+
 Next do the Add-Migration
 
 PM> Add-Migration -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogData.Migrations.LogDataDB.Configuration "InitialDatabaseCreation" 
 
-Package Model Console output
-PM> Add-Migration -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogData.Migrations.LogDataDB.Configuration "InitialDatabaseCreation" 
-Scaffolding migration 'InitialDatabaseCreation'.
-The Designer Code for this migration file includes a snapshot of your current Code First model. This snapshot is used to calculate the changes to your model when you scaffold the next migration. If you make additional changes to your model that you want to include in this migration, then you can re-scaffold it by running 'Add-Migration InitialDatabaseCreation' again.
+The Designer Code for this migration file includes a snapshot of your current Code First model. This snapshot is used to calculate the changes to your model when you scaffold the next migration. 
+If you make additional changes to your model that you want to include in this migration, then you can re-scaffold it by running 'Add-Migration InitialDatabaseCreation' again.
 next create tables in DB
 
+NEXT:
+Add any seed data in the configuration.cs file
 
 PM>Update-Database -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogData.Migrations.LogDataDB.Configuration -Verbose -ConnectionStringName "LogDataDB"
 

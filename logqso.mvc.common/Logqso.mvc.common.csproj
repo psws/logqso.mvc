@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Logqso.mvc.common</RootNamespace>
     <AssemblyName>Logqso.mvc.common</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enum\CategoryEnums.cs" />
-    <Compile Include="Enum\Continent.cs" />
+    <Compile Include="Enum\ContinentEnum.cs" />
     <Compile Include="Enum\QsoExchangeType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringOps.cs" />

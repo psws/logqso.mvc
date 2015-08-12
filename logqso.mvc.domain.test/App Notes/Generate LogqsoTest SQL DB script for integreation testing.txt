@@ -1,0 +1,21 @@
+﻿Open SQLServeerManagementStudio
+Select  database  logqsoTest->right click tasks-> right click generate scriptsd
+
+The Generate and publish scripts dialog appears
+click next
+select script entire database
+click next
+Set filename to D:\vwd projects mvc\Logqso.mvc\logqso.mvc.domain.test\Sql\logqsoTest.sql
+Click Advanced
+In Beneral section
+	Check for object existance = true
+	Script Drop and Create = Script Drop and Create
+	script Logins = true
+	script object Level permissions = true
+	Type of Data to Script  = Schema and data
+Accept renaining shown defaults
+click OK
+click Next
+clcik Next
+clcik finish
+
