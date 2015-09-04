@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Repository.Pattern.DataContext;
 using Repository.Pattern.Repositories;
 using Repository.Pattern.UnitOfWork;
 using Repository.Pattern.Infrastructure;
 using Repository.Pattern.Ef6;
+using Repository.Pattern;
 using Logqso.mvc.Entities.LogControlEntity;
+using Logqso.mvc.domain.Interfaces;
 using Logqso.mvc.common.Enum;
 
 
@@ -69,7 +72,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests
         [TestMethod]
         public void Integration_LogControlContext_CreateControlCatOperator_ValidIndex_Exception_Duplicate_Key()
         {
-            
+
             // Create new customer
             // context object LogControlContext matches the same name used for Logqso DB
             using (IDataContextAsync context = new LogControlContext())
@@ -79,7 +82,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests
                 IRepositoryAsync<CatOperator> CatOperatorRepository = new Repository<CatOperator>(context, unitOfWork);
                 var CatOperator = new CatOperator
                 {
-                    CatOpr= (int)CatOperatorEnum.SINGLE_OP,
+                    CatOpr = (int)CatOperatorEnum.SINGLE_OP,
                     CatOprName = CatOprName,
                     Index = 2,
                     ObjectState = ObjectState.Added,
@@ -90,15 +93,15 @@ namespace Logqso.mvc.domain.test.IntegrationTests
                     CatOperatorRepository.Insert(CatOperator);
                     unitOfWork.SaveChanges();
                 }
-                catch (System.Data.Entity.Validation.DbEntityValidationException )
+                catch (System.Data.Entity.Validation.DbEntityValidationException)
                 {
 
                 }
-                catch (System.Data.Entity.Core.UpdateException )
+                catch (System.Data.Entity.Core.UpdateException)
                 {
                     //caught = true;
                 }
-                catch (System.Data.Entity.Infrastructure.DbUpdateException )
+                catch (System.Data.Entity.Infrastructure.DbUpdateException)
                 {
                     caught = true;
                 }
@@ -125,6 +128,65 @@ namespace Logqso.mvc.domain.test.IntegrationTests
             //    //}
             //    //Assert.AreEqual(CatOperator1.CatOprName, CatOprName); 
             //}
-        }   
+
+        }
+
+        [TestMethod]
+        public void Integration_ControlService_GetContestControlNamesAsync()
+        {
+            using (IDataContextAsync context = new LogControlContext())
+            using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
+            {
+                IRepositoryAsync<CatOperator> CatOperatorRepository = new Repository<CatOperator>(context, unitOfWork);
+                IControlService ContolService = new ControlService(CatOperatorRepository);
+
+                var asyncTask = ContolService.GetContestControlNames();
+                var ContestControl = asyncTask.Result;
+
+                Assert.IsTrue(ContestControl.ControlCategoryEntity.CatOperator.Count > 1);
+                Assert.IsTrue(ContestControl.ControlCategoryEntity.CatAssisted.Count > 1);
+                Assert.IsTrue(ContestControl.ControlCategoryEntity.CatBand.Count > 1);
+                Assert.IsTrue(ContestControl.ControlCategoryEntity.CatNoOfTx.Count > 1);
+                Assert.IsTrue(ContestControl.ControlCategoryEntity.CatPower.Count > 1);
+                Assert.IsTrue(ContestControl.ControlCategoryEntity.CatOperator.Contains("SINGLE-OP"));
+                
+                Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltBand.Count > 1);
+                Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltContinent.Count > 1);
+                Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltCountry.Count > 1);
+                Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltCQZone.Count > 1);
+
+                Assert.IsTrue(ContestControl.ControlXaxisEntity.XaxisDuration.Count > 1);
+                Assert.IsTrue(ContestControl.ControlXaxisEntity.XaxisStarttime.Count > 1);
+
+                Assert.IsTrue(ContestControl.ControlYaxisEntity.YaxisFunction.Count > 1);
+                Assert.IsTrue(ContestControl.ControlYaxisEntity.YaxisInterval.Count > 1);
+                Assert.IsTrue(ContestControl.ControlYaxisEntity.YaxisViewType.Count > 1);
+            }
+        }
+        public void Integration_ControlService_GetsAsync()
+        {
+            using (IDataContextAsync context = new LogControlContext())
+            using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
+            {
+                IRepositoryAsync<FiltPrefix> FiltCountryRepository = new Repository<FiltPrefix>(context, unitOfWork);
+                //Service.Pattern.IService<FiltCountry> CountryService = new Service.Pattern.Service<FiltCountry>(CatOperatorRepository);
+
+                //var asyncTask = ContolService
+                //    .Query(x => x.Country == "United States")
+                //    .Include(x => x
+                //        .Orders
+                //        .Select(y => y.OrderDetails))
+                //    .OrderBy(x => x
+                //        .OrderBy(y => y.CompanyName)
+                //        .ThenBy(z => z.ContactName))
+                //    .SelectAsync();
+
+                // var customers = asyncTask.Result;
+
+                //Assert.IsTrue(customers.Count() > 1);
+                //Assert.IsFalse(customers.Count(x => x.Country == "USA") == 0);
+            }
+        }
+
     }
 }

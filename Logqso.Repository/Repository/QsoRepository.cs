@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Logqso.Repository.Repository.Interfaces;
+using Logqso.Repository.Interfaces;
 using Logqso.mvc.Entities.LogDataEntity;
 
 
-namespace Logqso.Repository.Repository
+namespace Logqso.Repository
 {
     public class QsoRepository : IQsoRepository
     {

@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Repository.Pattern.Ef6;
-
-namespace Logqso.Repository.Repository.Models
+using Logqso.Repository.Models.LogControl;
+namespace Logqso.Repository.Models
 {
-    public class ContestControlEntity : Entity
+    public class ContestControlEntity 
     {
-        public ContestCategoryEntity ContestCategoryEntity;
+        public ControlCategoryEntity ControlCategoryEntity;
+        public ControlFiltersEntity ControlFiltersEntity;
+        public ControlXaxisEntity ControlXaxisEntity;
+        public ControlYaxisEntity ControlYaxisEntity;
     }
 }

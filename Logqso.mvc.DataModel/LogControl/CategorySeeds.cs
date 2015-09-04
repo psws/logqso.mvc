@@ -23,9 +23,9 @@ namespace Logqso.mvc.DataModel.LogControl
                   new CatOperator { CatOpr = CatOperatorEnum.ALL, CatOprName = Enum.GetName(typeof(CatOperatorEnum), CatOperatorEnum.ALL), Index = 1 },
                    new CatOperator { CatOpr = CatOperatorEnum.SINGLE_OP, CatOprName = Enum.GetName(typeof(CatOperatorEnum), CatOperatorEnum.SINGLE_OP).Replace('_', '-'), Index = 2 },
                    new CatOperator { CatOpr = CatOperatorEnum.MULTI_OP, CatOprName = Enum.GetName(typeof(CatOperatorEnum), CatOperatorEnum.MULTI_OP).Replace('_', '-'), Index = 3 },
-                   new CatOperator { CatOpr = CatOperatorEnum.SINGLE_OP_CLASSIC, CatOprName = Enum.GetName(typeof(CatOperatorEnum), CatOperatorEnum.SINGLE_OP_CLASSIC), Index = 4 },
-                  new CatOperator { CatOpr = CatOperatorEnum.SINGLE_OP_ROOKIE, CatOprName = Enum.GetName(typeof(CatOperatorEnum), CatOperatorEnum.SINGLE_OP_ROOKIE), Index = 5 },
-                 new CatOperator { CatOpr = CatOperatorEnum.CHECKLOG, CatOprName = Enum.GetName(typeof(CatOperatorEnum), CatOperatorEnum.CHECKLOG), Index = 6 }
+                  // new CatOperator { CatOpr = CatOperatorEnum.SINGLE_OP_CLASSIC, CatOprName = Enum.GetName(typeof(CatOperatorEnum), CatOperatorEnum.SINGLE_OP_CLASSIC), Index = 4 },
+                  //new CatOperator { CatOpr = CatOperatorEnum.SINGLE_OP_ROOKIE, CatOprName = Enum.GetName(typeof(CatOperatorEnum), CatOperatorEnum.SINGLE_OP_ROOKIE), Index = 5 },
+                 new CatOperator { CatOpr = CatOperatorEnum.CHECKLOG, CatOprName = Enum.GetName(typeof(CatOperatorEnum), CatOperatorEnum.CHECKLOG), Index = 4 }
               );
 
             context.CatBand.AddOrUpdate(

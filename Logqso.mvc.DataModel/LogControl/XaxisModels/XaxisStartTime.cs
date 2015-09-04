@@ -11,11 +11,9 @@ namespace Logqso.mvc.DataModel.LogControl.XaxisModels
     public class XaxisStartTime
     {
         [Key]
-        public int Id { get; set; }
         [Column(TypeName = "varchar")]
         [MaxLength(20)]
-        [Required]
-        public  string XaxisStrtTime { get; set; }
+        public string XaxisStrtTime { get; set; }
         [Required]
         public  byte Index { get; set; }
     }

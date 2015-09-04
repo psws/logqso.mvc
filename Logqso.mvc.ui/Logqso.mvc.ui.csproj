@@ -218,7 +218,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Notes\AddEvenyListener JQuery error.txt" />
+    <Content Include="App_Notes\Adding Attribute routing for webapi.txt" />
     <Content Include="App_Notes\Dependency Injectio with Unity and MEF.txt" />
+    <Content Include="App_Notes\Hosting on IIS 7 local server settings.txt" />
     <Content Include="App_Notes\Join multiple table using generic repository patten with Entity framework with unit of work.txt" />
     <Content Include="App_Notes\WEB API Add a controller.txt" />
     <Content Include="App_Notes\DB Seed%28%29 in configuration.txt" />
@@ -352,7 +355,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Image\ChartImg.png" />
-    <Content Include="App_Notes\ASP.NET Web Helpers" />
+    <None Include="App_Notes\ASP.NET Web Helpers,txt" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -381,7 +384,7 @@
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\TestClientDialogs.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\TestClientReferences.cshtml" />
-    <Content Include="App_Notes\Global.asax, WebActivatorEx debugging" />
+    <Content Include="App_Notes\Global.asax, WebActivatorEx debugging.txt" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -453,6 +456,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\logqso.mvc.common\Logqso.mvc.common.csproj">
+      <Project>{7d8dad53-fc2e-4812-a636-be213a28fb0f}</Project>
+      <Name>Logqso.mvc.common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Logqso.Mvc.domain\Logqso.mvc.domain.csproj">
       <Project>{f04adb7b-8297-4e4a-a2b8-146c89e0c91e}</Project>
       <Name>Logqso.mvc.domain</Name>

@@ -1,0 +1,14 @@
+﻿If you check radio button  'Use loacl IIS server'  http://localhost:8086/Logqso
+
+ERROR:ASP.NET Web API application gives 404 when deployed at IIS 7
+
+if you get a 404 error,when running on local IIS7 server,  do the following
+
+In web.config of Logqso.mvc.ui file, add the folowing module option <modules runAllManagedModulesForAllRequests="true">
+  <system.webServer>
+    <modules runAllManagedModulesForAllRequests="true">
+      <remove name="FormsAuthentication" />
+    </modules>
+
+
+see: http://stackoverflow.com/questions/15389855/asp-net-web-api-application-gives-404-when-deployed-at-iis-7

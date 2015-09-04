@@ -8,12 +8,15 @@ namespace Logqso.mvc.Entities.LogControlEntity.Mapping
         public XaxisDurationMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            this.HasKey(t => t.XaxisDurationTime);
 
             // Properties
+            this.Property(t => t.XaxisDurationTime)
+                .IsRequired()
+                .HasMaxLength(4);
+
             // Table & Column Mappings
             this.ToTable("XaxisDuration");
-            this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.XaxisDurationTime).HasColumnName("XaxisDurationTime");
             this.Property(t => t.Index).HasColumnName("Index");
         }

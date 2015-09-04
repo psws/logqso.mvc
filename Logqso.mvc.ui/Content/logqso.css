@@ -9,9 +9,9 @@ a.navbar-brand {
     background-color:red;
 }
 
-.overflow-contest-select {
+/*.overflow-contest-select {
     height:200px;
-}
+}*/
 
 
 
@@ -31,7 +31,7 @@ div[id^='hdgPnl'], div[id^='hdgAxis']{
     padding:2px 2px 2px 2px;
     border:0;
 }
-div[id^='Pnl'], div[id^='AxisPnl']{
+div[id^='Pnl']{
     height:70px;
     max-width:90%;
     min-width:470px;
@@ -39,10 +39,10 @@ div[id^='Pnl'], div[id^='AxisPnl']{
 div[id^='AxisPnl']{
     height:70px;
     max-width:90%;
-    min-width:360px;
+    min-width:370px;
 }
 
-div[id^='bdyPnlSel'], div[id^='bdyAxis']{
+div[id^='bdyPnlSel'], div[id^='bdyYaxis'],  div[id^='bdyXaxis']{
     height:60px;
     padding:2px 2px 2px 2px;
     /*line-height:1.0;*/
@@ -131,7 +131,10 @@ span[id^='enb_dis']{
 }
 .lq-graph {
     width:100%;
+    margin-top:-20px;
+    vertical-align: top;  
 }
+
 
 #warning-message { display: none; }
 @media only screen and (max-width:480px)  {
@@ -174,7 +177,10 @@ span[id^='enb_dis']{
 
 /*jquery-ui menu support*/
 .ui-menu { 
-    position: absolute; width: 100px;
+    position: absolute; 
+    width: 100%;
+    /*min-width:60px;
+    max-width:155px;*/
 
 }
 
@@ -193,8 +199,9 @@ span[id^='enb_dis']{
     width: 217px;
     display:inline-block ;
     margin-top:5px;
-    vertical-align: top;  /* required to ush second lisy to top in chrome */
+    vertical-align: top;  /* required to get second list to top in chrome */
 }
+
 
 /*2 column list*/
 .two-col-list {
@@ -220,7 +227,7 @@ span[id^='enb_dis']{
     padding: 0;
     font-size:85%;
     line-height:12px;
-    /*vertical-align: top; /* In case multi-word categories form two lines */*/
+    /*vertical-align: top; /* In case multi-word categories form two lines */
 }
 
 .two-col-list li:hover {

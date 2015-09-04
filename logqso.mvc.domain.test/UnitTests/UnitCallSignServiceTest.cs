@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Logqso.mvc.domain;
-using Logqso.Repository.Repository.Interfaces;
+using Logqso.Repository.Interfaces;
 using Logqso.mvc.Entities.LogDataEntity;
 using FakeItEasy;
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Logqso.mvc.DataModel.LogData;
 
-namespace Logqso.Repository.Repository
+namespace Logqso.Repository
 {
     class CallSignRepository
     {

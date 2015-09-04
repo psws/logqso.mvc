@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using System.IO;
 using Logqso.mvc.domain;
-using Logqso.Repository.Repository.Interfaces;
+using Logqso.Repository.Interfaces;
 using Logqso.mvc.Entities.LogDataEntity;
 
 using Logqso.mvc.Exceptions;

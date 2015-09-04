@@ -1,0 +1,15 @@
+﻿VS2013 has built in attribute routong when you use WebApi libs.
+
+You can decorate api targets lie thisL
+        [Route("")]
+        [Route("GetControlNames")]
+        public async Task<IHttpActionResult> Get()
+        {
+
+You can decorate all calls with verion# like this
+    [RoutePrefix("v1/Logqso")]
+    public class ControlController : ApiController
+    {
+
+	See for more info
+	http://www.asp.net/web-api/overview/web-api-routing-and-actions/create-a-rest-api-with-attribute-routing

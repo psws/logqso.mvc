@@ -50,23 +50,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DependencyResolver.cs" />
-    <Compile Include="LogControl\CategoryModels\CarAssisted.cs" />
+    <Compile Include="LogControl\CategoryModels\CatAssisted.cs" />
     <Compile Include="LogControl\CategoryModels\CatBand.cs" />
+    <Compile Include="LogControl\CategoryModels\CatDefault.cs" />
     <Compile Include="LogControl\CategoryModels\CatNoOfTx.cs" />
     <Compile Include="LogControl\CategoryModels\CatOperator.cs" />
     <Compile Include="LogControl\CategorySeeds.cs" />
     <Compile Include="LogControl\CategoryModels\CatPower.cs" />
-    <Compile Include="LogControl\FilterModels\FiltCountry.cs" />
+    <Compile Include="LogControl\DefaultSeeds.cs" />
+    <Compile Include="LogControl\FilterModels\FiltPrefix.cs" />
     <Compile Include="LogControl\FilterModels\FiltCQZone.cs" />
+    <Compile Include="LogControl\FilterModels\FiltDefault.cs" />
     <Compile Include="LogControl\LogControlDB.cs" />
-    <Compile Include="LogControl\Migrations\LogControlDB\201508100912501_InitialDatabaseCreation.cs" />
-    <Compile Include="LogControl\Migrations\LogControlDB\201508100912501_InitialDatabaseCreation.Designer.cs">
-      <DependentUpon>201508100912501_InitialDatabaseCreation.cs</DependentUpon>
+    <Compile Include="LogControl\Migrations\LogControlDB\201508310133214_InitialDatabaseCreation.cs" />
+    <Compile Include="LogControl\Migrations\LogControlDB\201508310133214_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201508310133214_InitialDatabaseCreation.cs</DependentUpon>
     </Compile>
     <Compile Include="LogControl\Migrations\LogControlDB\Configuration.cs" />
+    <Compile Include="LogControl\XaxisModels\XaxisDefault.cs" />
     <Compile Include="LogControl\XaxisModels\XaxisDuration.cs" />
     <Compile Include="LogControl\XaxisModels\XaxisStartTime.cs" />
     <Compile Include="LogControl\XAxisSeeds.cs" />
+    <Compile Include="LogControl\YaxisModels\YaxisDefault.cs" />
     <Compile Include="LogControl\YaxisModels\YaxisFunction.cs" />
     <Compile Include="LogControl\YaxisModels\YaxisInterval.cs" />
     <Compile Include="LogControl\YaxisModels\YaxisViewType.cs" />
@@ -119,8 +124,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201508100912501_InitialDatabaseCreation.resx">
-      <DependentUpon>201508100912501_InitialDatabaseCreation.cs</DependentUpon>
+    <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201508310133214_InitialDatabaseCreation.resx">
+      <DependentUpon>201508310133214_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LogData\Migrations\LogDataDB\201508111754012_InitialDatabaseCreation.resx">
       <DependentUpon>201508111754012_InitialDatabaseCreation.cs</DependentUpon>
@@ -134,7 +139,6 @@
     <Content Include="App_Notes\Update entities in Logqso.mvc.Entities1.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\Mapping\" />
     <Folder Include="Repository\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

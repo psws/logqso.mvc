@@ -8,7 +8,7 @@ namespace Logqso.mvc.Entities.LogControlEntity.Mapping
         public YaxisFunctionMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            this.HasKey(t => t.YaxisFuncName);
 
             // Properties
             this.Property(t => t.YaxisFuncName)
@@ -17,7 +17,6 @@ namespace Logqso.mvc.Entities.LogControlEntity.Mapping
 
             // Table & Column Mappings
             this.ToTable("YaxisFunction");
-            this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.YaxisFuncName).HasColumnName("YaxisFuncName");
             this.Property(t => t.Index).HasColumnName("Index");
         }

@@ -4,7 +4,7 @@ using Logqso.mvc.domain;
 #if nofake
 using Logqso.mvc.persistance;
 #endif
-using Logqso.Repository.Repository.Interfaces;
+using Logqso.Repository.Interfaces;
 using Logqso.mvc.Entities.LogDataEntity;
 using FakeItEasy;
 

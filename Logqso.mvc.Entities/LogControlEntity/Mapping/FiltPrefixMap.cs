@@ -3,26 +3,25 @@ using System.Data.Entity.ModelConfiguration;
 
 namespace Logqso.mvc.Entities.LogControlEntity.Mapping
 {
-    public class FiltCountryMap : EntityTypeConfiguration<FiltCountry>
+    public class FiltPrefixMap : EntityTypeConfiguration<FiltPrefix>
     {
-        public FiltCountryMap()
+        public FiltPrefixMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            this.HasKey(t => t.FiltPref);
 
             // Properties
-            this.Property(t => t.Prefix)
+            this.Property(t => t.FiltPref)
                 .IsRequired()
-                .HasMaxLength(8);
+                .HasMaxLength(10);
 
             this.Property(t => t.CountryName)
                 .IsRequired()
                 .HasMaxLength(24);
 
             // Table & Column Mappings
-            this.ToTable("FiltCountry");
-            this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.Prefix).HasColumnName("Prefix");
+            this.ToTable("FiltPrefix");
+            this.Property(t => t.FiltPref).HasColumnName("FiltPref");
             this.Property(t => t.CountryName).HasColumnName("CountryName");
         }
     }

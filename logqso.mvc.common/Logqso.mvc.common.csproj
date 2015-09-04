@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="definitions.cs" />
     <Compile Include="Enum\CategoryEnums.cs" />
     <Compile Include="Enum\ContinentEnum.cs" />
     <Compile Include="Enum\QsoExchangeType.cs" />

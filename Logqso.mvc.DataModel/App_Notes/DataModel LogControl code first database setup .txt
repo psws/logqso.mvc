@@ -43,6 +43,17 @@ namespace Logqso.mvc.DataModel.LogControl
 
 	}
  
+ create seed method
+ the p => p.Prefix must select a non duplicasted property of the FillCountry class
+ if you select  then you will get a duplicte sequence error because it cannot select which duplicate
+ The prefix is unique
+          context.FiltCountry.AddOrUpdate(
+                p => p.Prefix,
+                new FiltCountry { Prefix = "-", CountryName = "ALL " },
+
+               new FiltCountry  { Prefix  = "LU",  CountryName ="Argentina"},
+	            new FiltCountry  { Prefix  = "VP5",  CountryName ="Turks & Caicos"},
+	            new FiltCountry  { Prefix  = "HI",  CountryName ="Dominican Republ"},
 
 Then run this command in the pm
  PM> Enable-Migrations -Force -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ContextTypeName Logqso.mvc.DataModel.LogControl.LogControlDB -MigrationsDirectory LogControl\Migrations\LogControlDB

@@ -5,7 +5,7 @@
 @*@Html.Label("Window size:", new { id = "size" });
     @Html.Label("Screen size2:", new { id = "size2" });*@
 @*<h2>LogQso</h2>*@
-        
+
 
 @Html.AntiForgeryToken()
 
@@ -16,7 +16,7 @@
 <div id="wrapper">
 
     <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-10 col-xs-10">
+        <div class="col-lg-6 col-md-6 col-sm-10 col-xs-12">
 
             <div class="panel panel-default" id="Pnl1">
                 <div class="panel-heading " id="hdgPnl1">
@@ -36,50 +36,23 @@
                     <fieldset>
                         <div class="lq-inline-block">
                             <label for="Operator">Operator</label>
-                            <select name="CatOp" id="CatOp">
-                                <option selected="selected"> ALL</option>
-                                <option> SINGLE-OP</option>
-                                <option> MULTI-OP</option>
-                                <option> CHECKLOG</option>
-                            </select>
+                            <select name="CatOp" id="CatOp"></select>
                         </div>
                         <div class="lq-inline-block">
-                            <label for="Operator">Band</label>
-                            <select name="CatBnd" id="CatBnd">
-                                <option selected="selected"> ALL</option>
-                                <option> 160M</option>
-                                <option> 80M</option>
-                                <option> 40M</option>
-                                <option> 20M</option>
-                                <option> 15M</option>
-                                <option> 10M</option>
-                            </select>
+                            <label for="CatBnd">Band</label>
+                            <select name="CatBnd" id="CatBnd"></select>
                         </div>
                         <div class="lq-inline-block">
-                            <label for="Operator">Power</label>
-                            <select name="CatPower" id="CatPower">
-                                <option selected="selected"> ALL</option>
-                                <option> HIGH</option>
-                                <option>LOW</option>
-                                <option>QRP</option>
-                            </select>
+                            <label for="CatPower">Power</label>
+                            <select name="CatPower" id="CatPower"></select>
                         </div>
                         <div class="lq-inline-block">
-                            <label for="Operator">Assisted</label>
-                            <select name="CatAssist" id="CatAssist">
-                                <option selected="selected"> ALL</option>
-                                <option> ASSISTED</option>
-                                <option>NON-ASSISTED</option>
-                            </select>
+                            <label for="CatAssist">Assisted</label>
+                            <select name="CatAssist" id="CatAssist"></select>
                         </div>
                         <div class="lq-inline-block">
-                            <label for="Operator"># of TX</label>
-                            <select name="CatTX" id="CatTX">
-                                <option selected="selected"> ALL</option>
-                                <option> ONE</option>
-                                <option>TWO</option>
-                                <option>UNLIMITED</option>
-                            </select>
+                            <label for="CatTX"># of TX</label>
+                            <select name="CatTX" id="CatTX"></select>
                         </div>
 
                     </fieldset>
@@ -92,7 +65,7 @@
                     </label>
 
                     <span id="enb_dis2">
-                        Disable
+                        <label for="filterQsochk" class="lq-inline">Disable </label>
                         <input type="checkbox" id="filterQsochk" aria-label="...">
                     </span>
                     <button id="QsoDft" class=" btn-group-xs btn-default">
@@ -101,7 +74,25 @@
 
                 </div>
                 <div class="panel-body" id="bdyPnlSel2">
-                    <fieldset></fieldset>
+                    <fieldset>
+                        <div class="lq-inline-block">
+                            <label for="FiltBand">Band</label>
+                            <select name="FiltBand" id="FiltBand"></select>
+                        </div>
+                        <div class="lq-inline-block">
+                            <label for="FiltContinent">Continent</label>
+                            <select name="FiltContinent" id="FiltContinent"></select>
+                        </div>
+                        <div class="lq-inline-block">
+                            <label for="FiltCountry">Country</label>
+                            <select name="FiltCountry" id="FiltCountry" style="white-space:pre"></select>
+                        </div>
+                        <div class="lq-inline-block">
+                            <label for="FiltCQZone">CQ Zone</label>
+                            <select name="FiltCQZone" id="FiltCQZone" ></select>
+                        </div>
+
+                    </fieldset>
                 </div>
             </div>
 
@@ -109,85 +100,39 @@
 
 
 
-        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id="callPanel1">
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4" id="callPanel1">
             <div class="panel panel-default lq-call-selector">
                 <div class="panel-heading lq-panel-heading " id="hdgPn13">
                     <h3 class=" panel-title ">
-                    Call1 </h3>
+                        Call1
+                    </h3>
                 </div>
                 <div id="bdyPnl3" class=" panel-body ">
                     <fieldset>
                         <label for=" contest1" id="test2">
-                    Contest
-                    </label>
-                    @*<select name="Contest1" id="Contest1">
-                <optgroup label="CQWW">
-                    <option selected="selected"> CqwwSSB2010</option>
-                    <option> CqwwSSB209</option>
-                    <option> CqwwSSB2010</option>
-                    <option> CqwwSSB2011</option>
-                    <option> CqwwSSB2012</option>
-                    <option> CqwwSSB2013</option>
-                    <option> CqwwSSB2014</option>
-                    <option> CqwwCW2015</option>
-
-                    <option> CqwwSSB209</option>
-                    <option> CqwwSSB2010</option>
-                    <option> CqwwSSB2011</option>
-                    <option> CqwwSSB2012</option>
-                    <option> CqwwSSB2013</option>
-                    <option> CqwwSSB2014</option>
-                    <option> CqwwCW2010</option>
-
-                    <option> CqwwSSB209</option>
-                    <option> CqwwSSB2010</option>
-                    <option> CqwwSSB2011</option>
-                    <option> CqwwSSB2012</option>
-                    <option> CqwwSSB2013</option>
-                    <option> CqwwSSB2014</option>
-                    <option> CqwwCW2010</option>
-
-                    <option> CqwwSSB209</option>
-                    <option> CqwwSSB2010</option>
-                    <option> CqwwSSB2011</option>
-                    <option> CqwwSSB2012</option>
-                    <option> CqwwSSB2013</option>
-                    <option> CqwwSSB2014</option>
-                    <option> CqwwCW2010</option>
-
-                    <option> CqwwSSB209</option>
-                    <option> CqwwSSB2010</option>
-                    <option> CqwwSSB2011</option>
-                    <option> CqwwSSB2012</option>
-                    <option> CqwwSSB2013</option>
-                    <option> CqwwSSB2014</option>
-                </optgroup>
-                <optgroup label="CQWPX">
-                    <option> CqwpxSSB209</option>
-                    <option> CqwpxSSB2010</option>
-                    <option> CqwpxSSB2011</option>
-                    <option> CqwpxSSB2012</option>
-                    <option> CqwpxSSB2013</option>
-                    <option> CqwpxSSB2014</option>
-                </optgroup>
-            </select>*@
-                    <div>
-                        <button id="Contest1" data-modal-id="popup">CqwwSsb2010</button>
-                    </div>
-                    <span>
-                        Call
-                        <span id="enb_dis3">
-                            Disable
-                            <input type="checkbox" id="chk1" aria-label="...">
+                            Contest
+                        </label>
+                        <div>
+                            <button id="Contest1" data-modal-id="popup">CqwwSsb2010</button>
+                        </div>
+                        <span>
+                            Call
+                            <span id="enb_dis3">
+                                Disable
+                                <input type="checkbox" id="chk1" aria-label="...">
+                            </span>
                         </span>
-                    </span>
-                    <input type="text" id="Call1" aria-label="...">
+                        <input type="text" id="Call1" aria-label="...">
+                        <span>
+                            Station
+                        </span>
+                        <input type="text" id="Station1" aria-label="...">
                     </fieldset>
 
                 </div>
             </div>
         </div>
-        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id="callPanel2">
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4" id="callPanel2">
             <div class="panel panel-default lq-call-selector">
                 <div class="panel-heading lq-panel-heading" id="hdgPnl4">
                     <h3 class="panel-title">Call2 </h3>
@@ -206,11 +151,15 @@
                             </span>
                         </span>
                         <input type="text" id="Call2" />
+                        <span>
+                            Station
+                        </span>
+                        <input type="text" id="Station2" aria-label="...">
                     </fieldset>
                 </div>
             </div>
         </div>
-        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id="callPanel3">
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4" id="callPanel3">
             <div class="panel panel-default lq-call-selector">
                 <div class="panel-heading lq-panel-heading" id="hdgPnl5">
                     <h3 class="panel-title">Call3 </h3>
@@ -229,6 +178,10 @@
                             </span>
                         </span>
                         <input type="text" id="Call3" />
+                        <span>
+                            Station
+                        </span>
+                        <input type="text" id="Station3" aria-label="...">
                     </fieldset>
                 </div>
             </div>
@@ -239,7 +192,7 @@
     <div class="row">
         <div class="container">
 
-            <div class="col-md-12" id="graph">
+            <div class="col-md-12 " id="graph">
                 <img src="~/image/ChartImg.png" class="img-responsive lq-graph" alt="Missimg">
             </div>
         </div>
@@ -248,59 +201,75 @@
 
     <div class="row">
         <div class="container">
-            <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2" id="Counter">
-                Counter
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-10 col-xs-10">
-                    <div class="panel panel-default" id="AxisPnl1">
-                        <div class="panel-heading" id="hdgAxisPnl1">
-                            <label class="panel-title lq-inline">
-                                View Axis Selection
-                            </label>
+            <div class="col-lg-4 col-md-5 col-sm-10 col-xs-10">
+                <div class="panel panel-default" id="AxisPnl1">
+                    <div class="panel-heading" id="hdgAxisPnl1">
+                        <label class="panel-title lq-inline">
+                            View Axis Selection
+                        </label>
 
-                            <button id="AxisDft" class=" btn-group-xs btn-default">
-                                Defaults
-                            </button>
+                        <button id="AxisDft" class=" btn-group-xs btn-default">
+                            Defaults
+                        </button>
 
-                        </div>
-                        <div class="panel-body" id="bdyAxisPnl1">
-                            <fieldset>
-                                <div class="lq-inline-block">
-                                    <label for="AxisFunction">Function</label>
-                                    <select name="AxisFunction" id="AxisFunction">
-                                        <option selected="selected"> QSO Rate</option>
-                                        <option> QSO Sum</option>
-                                        <option> Score Rate</option>
-                                        <option> Score Sum</option>
-                                    </select>
-                                </div>
-                                <div class="lq-inline-block">
-                                    <label for="AxisInterval">Interval</label>
-                                    <select name="AxisInterval" id="AxisInterval">
-                                        <option selected="selected"> 60</option>
-                                        <option> 30</option>
-                                        <option> 15</option>
-                                        <option> 10</option>
-                                        <option> 5</option>
-                                        <option> 10</option>
-                                    </select>
-                                </div>
-                                <div class="lq-inline-block">
-                                    <label for="AxisViewType">View Type</label>
-                                    <select name="AxisViewType" id="AxisViewType">
-                                        <option selected="selected"> Column</option>
-                                        <option>Line</option>
-                                        <option>Spline</option>
-                                        <option>Stacked Column</option>
-                                    </select>
-                                </div>
+                    </div>
+                    <div class="panel-body" id="bdyYaxisPnl1">
+                        <fieldset>
+                            <div class="lq-inline-block">
+                                <label for="YaxisFunction">Function</label>
+                                <select name="YaxisFunction" id="YaxisFunction"></select>
+                            </div>
+                            <div class="lq-inline-block">
+                                <label for="YaxisInterval">Interval</label>
+                                <select name="YaxisInterval" id="YaxisInterval"></select>
+                            </div>
+                            <div class="lq-inline-block">
+                                <label for="YaxisViewType">View Type</label>
+                                <select name="YaxisViewType" id="YaxisViewType"></select>
+                            </div>
 
-                            </fieldset>
-                        </div>
+                        </fieldset>
                     </div>
                 </div>
-
             </div>
+
+            <div class="col-lg-4 col-md-5 col-sm-10 col-xs-10">
+                <div class="panel panel-default" id="AxisPnl2">
+                    <div class="panel-heading" id="hdgAxisPnl2">
+                        <label class="panel-title lq-inline">
+                            Time Scale Selection
+                        </label>
+
+                        <button id="XAxisDft" class=" btn-group-xs btn-default">
+                            Defaults
+                        </button>
+
+                    </div>
+                    <div class="panel-body" id="bdyXaxisPnl1">
+                        <fieldset>
+                            <div class="lq-inline-block">
+                                <label for="XaxisStarttime">Start Time</label>
+                                <select name="XaxisStarttime" id="XaxisStarttime"></select>
+                            </div>
+                            <div class="lq-inline-block">
+                                <label for="XaxisHours">Hours</label>
+                                <select name="XaxisDuration" id="XaxisDuration"></select>
+                            </div>
+
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id="Counter">
+                Visitors
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-3" id="Donate">
+                Donate
+            </div>
+
+
+        </div>
     </div>
 
 
@@ -316,12 +285,15 @@
                         <span class="ui-icon ui-icon-triangle-1-s"></span>*@
                 </div>
                 <ul>
-                    <li>Open...</li>
+                    <li><span style="color:red">Open...</span></li>
                     <li>Save</li>
                     <li>Delete</li>
                 </ul>
-
-
+                <pre>
+                <select>
+                <option value="shit a    brick"> shit a    brick</option>
+                </select>
+</pre>
 
             </div>
         </div>
@@ -350,7 +322,7 @@
                 <li>CqwwSsb2013</li>
                 <li>CqwwSsb2014</li>
                 <li>CqwwSsb2015</li>
-           </ol>
+            </ol>
         </div>
         <div id="WPXlist" class=" modal-body">
             <h5 class="lq-popup-subhdr">
@@ -386,6 +358,6 @@
 
 </div>
 
-        <div id="warning-message">
-            this website is only viewable in landscape mode
-        </div>
+<div id="warning-message">
+    this website is only viewable in landscape mode
+</div>

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Repository.Pattern.Ef6;
 
 
-namespace Logqso.Repository.Repository.Models
+namespace Logqso.Repository.Models.LogControl
 {
-    public class ContestCategoryEntity : Entity
+    public class ControlCategoryEntity 
     {
         public List<string> CatOperator { get; set; }
         public List<string> CatBand { get; set; }

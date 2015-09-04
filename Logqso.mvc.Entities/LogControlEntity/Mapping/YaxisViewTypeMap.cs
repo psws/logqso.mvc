@@ -8,7 +8,7 @@ namespace Logqso.mvc.Entities.LogControlEntity.Mapping
         public YaxisViewTypeMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            this.HasKey(t => t.YaxisViewTypeName);
 
             // Properties
             this.Property(t => t.YaxisViewTypeName)
@@ -17,7 +17,6 @@ namespace Logqso.mvc.Entities.LogControlEntity.Mapping
 
             // Table & Column Mappings
             this.ToTable("YaxisViewType");
-            this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.YaxisViewTypeName).HasColumnName("YaxisViewTypeName");
             this.Property(t => t.Index).HasColumnName("Index");
         }

@@ -13,7 +13,7 @@ namespace Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB
         
         string IMigrationMetadata.Id
         {
-            get { return "201508100912501_InitialDatabaseCreation"; }
+            get { return "201508310133214_InitialDatabaseCreation"; }
         }
         
         string IMigrationMetadata.Source

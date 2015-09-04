@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Logqso.mvc.Entities.LogDataEntity;
 
 
-namespace Logqso.Repository.Repository.Interfaces
+namespace Logqso.Repository.Interfaces
 {
     public interface IQsoRepository 
     {

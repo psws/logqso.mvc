@@ -31,7 +31,7 @@ namespace Logqso.mvc.DataModel.LogControl
         //Filters
         public DbSet<Logqso.mvc.DataModel.LogControl.FilterModels.FiltBand> FiltBand { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogControl.FilterModels.FiltContinent> FiltContinent { get; set; }
-        public DbSet<Logqso.mvc.DataModel.LogControl.FilterModels.FiltCountry> FiltCountry { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogControl.FilterModels.FiltPrefix> FiltPrefix { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogControl.FilterModels.FiltCQZone> FiltCQZone { get; set; }
 
         //Yaxis
@@ -42,6 +42,12 @@ namespace Logqso.mvc.DataModel.LogControl
         //Xaxis
         public DbSet<Logqso.mvc.DataModel.LogControl.XaxisModels.XaxisStartTime> XaxisStartTime { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogControl.XaxisModels.XaxisDuration> XaxisDuration { get; set; }
+
+        //Defaults
+        public DbSet<Logqso.mvc.DataModel.LogControl.CategoryModels.CatDefault> CatDefault { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogControl.FilterModels.FiltDefaullt> FiltDefaullt { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogControl.XaxisModels.XaxisDefault> XaxisDefault { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogControl.YaxisModels.YaxisDefault> YaxisDefault { get; set; }
 
 
 

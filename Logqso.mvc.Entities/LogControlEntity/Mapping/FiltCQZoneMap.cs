@@ -8,16 +8,15 @@ namespace Logqso.mvc.Entities.LogControlEntity.Mapping
         public FiltCQZoneMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            this.HasKey(t => t.FiltCQZoneVal);
 
             // Properties
             this.Property(t => t.FiltCQZoneVal)
                 .IsRequired()
-                .HasMaxLength(4);
+                .HasMaxLength(6);
 
             // Table & Column Mappings
             this.ToTable("FiltCQZone");
-            this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.FiltCQZoneVal).HasColumnName("FiltCQZoneVal");
             this.Property(t => t.Index).HasColumnName("Index");
         }

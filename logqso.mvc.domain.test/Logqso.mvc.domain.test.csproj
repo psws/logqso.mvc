@@ -109,6 +109,10 @@
       <Project>{b3a00fcf-b6bc-4269-b75a-edd91480d7aa}</Project>
       <Name>Logqso.Repository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Service.Pattern\Service.Pattern.csproj">
+      <Project>{575dd511-e5ef-4163-bf97-d3fcfcf14a00}</Project>
+      <Name>Service.Pattern</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Source\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
       <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
       <Name>Repository.Pattern.Ef6</Name>

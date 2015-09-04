@@ -8,7 +8,7 @@ namespace Logqso.mvc.Entities.LogControlEntity.Mapping
         public XaxisStartTimeMap()
         {
             // Primary Key
-            this.HasKey(t => t.Id);
+            this.HasKey(t => t.XaxisStrtTime);
 
             // Properties
             this.Property(t => t.XaxisStrtTime)
@@ -17,7 +17,6 @@ namespace Logqso.mvc.Entities.LogControlEntity.Mapping
 
             // Table & Column Mappings
             this.ToTable("XaxisStartTime");
-            this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.XaxisStrtTime).HasColumnName("XaxisStrtTime");
             this.Property(t => t.Index).HasColumnName("Index");
         }

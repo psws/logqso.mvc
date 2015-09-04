@@ -10,7 +10,7 @@ Click Advanced
 In Beneral section
 	Check for object existance = true
 	Script Drop and Create = Script Drop and Create
-	script Logins = true
+	script Logins = false
 	script object Level permissions = true
 	Type of Data to Script  = Schema and data
 Accept renaining shown defaults
@@ -18,4 +18,6 @@ click OK
 click Next
 clcik Next
 clcik finish
+
+you may have to run script in ssms
 
