@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DependencyResolver.cs" />
+    <Compile Include="LogData\CallInfoModels\CallInfo.cs" />
     <Compile Include="LogControl\CategoryModels\CatAssisted.cs" />
     <Compile Include="LogControl\CategoryModels\CatBand.cs" />
     <Compile Include="LogControl\CategoryModels\CatDefault.cs" />
@@ -76,6 +77,8 @@
     <Compile Include="LogControl\YaxisModels\YaxisInterval.cs" />
     <Compile Include="LogControl\YaxisModels\YaxisViewType.cs" />
     <Compile Include="LogControl\YaxisSeeds.cs" />
+    <Compile Include="LogData\CallInfoModels\CallInfoDefault.cs" />
+    <Compile Include="LogData\ContestSeeds.cs" />
     <Compile Include="LogData\DataModels\CallSign.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -83,6 +86,7 @@
     <Compile Include="LogData\DataModels\Log.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LogData\DataModels\Session.cs" />
     <Compile Include="LogData\LogDataDB.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -125,6 +125,8 @@
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
@@ -136,7 +138,6 @@
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -223,6 +224,7 @@
     <Content Include="App_Notes\Dependency Injectio with Unity and MEF.txt" />
     <Content Include="App_Notes\Hosting on IIS 7 local server settings.txt" />
     <Content Include="App_Notes\Join multiple table using generic repository patten with Entity framework with unit of work.txt" />
+    <Content Include="App_Notes\Startup flow.txt" />
     <Content Include="App_Notes\WEB API Add a controller.txt" />
     <Content Include="App_Notes\DB Seed%28%29 in configuration.txt" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -262,6 +264,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DependencyResolver.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogQsoController.cs" />
     <Compile Include="Controllers\ManageController.cs" />

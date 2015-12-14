@@ -156,6 +156,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Sql\Fin_loggedin_user_kill.sql" />
     <Content Include="Sql\logqsoTest.sql" />
   </ItemGroup>
   <Choose>

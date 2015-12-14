@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Logqso.mvc.DataModel.LogData
+namespace Logqso.mvc.DataModel.LogData.DataModels
 {
     //[Table("Log")]
     public class Log

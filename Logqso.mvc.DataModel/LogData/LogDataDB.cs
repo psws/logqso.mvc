@@ -7,6 +7,8 @@ using System.Data.Entity;
 using System.Data.Linq.Mapping;
 using System.Web;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using Logqso.mvc.DataModel.LogData.DataModels;
+
 
 namespace Logqso.mvc.DataModel.LogData
 {
@@ -19,10 +21,10 @@ namespace Logqso.mvc.DataModel.LogData
         {
         }
 
-        public DbSet<Logqso.mvc.DataModel.LogData.Log> Log { get; set; }
-        public DbSet<Logqso.mvc.DataModel.LogData.Contest> Contest { get; set; }
-        public DbSet<Logqso.mvc.DataModel.LogData.CallSign> CallSign { get; set; }
-        public DbSet<Logqso.mvc.DataModel.LogData.Qso> Qso { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.Log> Log { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.Contest> Contest { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.CallSign> CallSign { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.Qso> Qso { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

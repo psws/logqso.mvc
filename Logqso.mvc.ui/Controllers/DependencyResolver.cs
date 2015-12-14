@@ -14,27 +14,16 @@ using Logqso.mvc.Entities.LogControlEntity;
 
 
 
-namespace Logqso.mvc.DataModel
+namespace Logqso.mvc.ui.Controllers
 {
     [Export(typeof(IComponent))]
     public class DependencyResolver : IComponent
     {
         public void SetUp(IRegisterComponent registerComponent)
         {
-            //regisre  DbCFpntext cuz ef lib required
-            //IDataContextAsync context = new Logqso.mvc.DataModel.LogControl.LogControlDB();
-            ////LogControlDB context = new Logqso.mvc.DataModel.LogControl.LogControlDB();
-            //var stuff = context.CatOperator.FirstOrDefault(c => c.CatOprName == "SINGLE-OP");
-
-           // not needed cuz no interface
-            //registerComponent.RegisterType<IDataContextAsync, LogControlContext>();
 
 
-
-
-
-#if false
-           //not used in datamodel
+#if true
             var contextType = typeof(LogControlContext);
             
             //registerComponent.RegisterInstance<IDataContextAsync>(context);
@@ -45,7 +34,7 @@ namespace Logqso.mvc.DataModel
 #endif
 
 
-
+            
 
         }
     }

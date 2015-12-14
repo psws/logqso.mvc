@@ -19,5 +19,8 @@ click Next
 clcik Next
 clcik finish
 
-you may have to run script in ssms
+delete logqsoTest DB
+you  have to run script logqsoTest.sql in ssms once to get rid of vs2013 connection
 
+
+Now ready to test

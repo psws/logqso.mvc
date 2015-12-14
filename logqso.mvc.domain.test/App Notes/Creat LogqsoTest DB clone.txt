@@ -1,4 +1,5 @@
 ﻿Integrtion Tests rely on a clean DB cloe of Logqso.mdf DB
+make sure jims9m8r is user
 
 open SSMS
 go to Database=>Logqso=>Task=>backup

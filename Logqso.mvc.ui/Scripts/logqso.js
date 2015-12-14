@@ -910,9 +910,9 @@ each(function (indexInArray, valueOfElement) {
     });
 
 
+//END OF $FUNCTION
 
-
-
+// encapsuleted _lq class
     (function (_lq, $, undefined) {
      _lq.controlUri = '/v1/Logqso';
 

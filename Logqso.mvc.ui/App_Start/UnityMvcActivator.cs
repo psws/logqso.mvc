@@ -25,8 +25,8 @@ namespace Logqso.mvc.ui.App_Start
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
 #else
             //Component initialization via MEF
-                //jims: no export[ ] in app so not needed, forwebapi
-            //Resolver.Resolver.ComponentLoader.LoadContainer(container, ".\\bin", "WLogqso.mvc.ui.dll");
+
+            Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "Logqso.mvc.ui.dll");
             Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "LogQso.Repository.dll");
             Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "LogQso.mvc.DataModel.dll");
             Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "LogQso.mvc.Domain.dll");

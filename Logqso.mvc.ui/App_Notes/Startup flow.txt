@@ -1,0 +1,115 @@
+﻿Logqso.mvc.ui.App_Start
+	[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Logqso.mvc.ui.App_Start.UnityWebActivator), "Start")]
+	causes the static Logqso.mvc.ui.App_Start.Start() method to be called first.
+	Start() {
+			1)var container = UnityConfig.GetConfiguredContainer();
+			function loads Unity container
+			//Resolver.Resolver.ComponentLoader.LoadContainer(container, ".\\bin", "WLogqso.mvc.ui.dll");
+           2) 
+		    Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "Logqso.mvc.ui.dll");
+		    Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "LogQso.Repository.dll");
+            //Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "LogQso.mvc.DataModel.dll");
+            Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "LogQso.mvc.Domain.dll");
+					LoadContainer() searches modules with  [Export(typeof(IComponent))] declared classes
+					public class DependencyResolver : IComponent
+					the SetUp methods are catalogged and called.
+					The Logqso.mvc.Resolver_MEF.ComponentLoader.LoadContainer() method registers the found exported module components into
+					the container by calling the module.SetUp(registerComponent) method
+						Each Export SetUp method can call different register methods
+						Logqso.Repository:
+							The MEF consrtucts a Repository with Parameters
+								class Repository<TEntity> : IRepositoryAsync<TEntity> where TEntity : class, IObjectState
+									 public Repository(IDataContextAsync context, IUnitOfWorkAsync unitOfWork)
+							The Repository needs a contextType and a uowType.
+							CODE:
+						    var contextType = typeof(LogControlContext);
+							var uowType = typeof(IUnitOfWorkAsync);
+							Object[] Parms2 = new Object[] {
+							 contextType,
+							 uowType
+							 };
+							registerComponent.RegisterTypeWithInjectionTypes<IRepositoryAsync<CatOperator>, Repository<CatOperator>>(Parms2, false);
+
+							The RegisterTypeWithInjectionTypes is a MEF support function.
+							The IRepositoryAsync<CatOperator> is the TFrom template. This is a templated interdace from the Framework
+							 Repository.Pattern.Repositories IRepositoryAsync<TEntity> : IRepository<TEntity>  interface.
+							The Repository  is a Repository.Pattern.Ef6 URF Framework interface
+
+						Logqso.mvc.DataModel:
+							The MEF consrtucts a LogControlContext with no Parameters
+							LogControlContext : DataContext, 
+							  public LogControlContext(): base("Name=LogControlDB")
+							  public DataContext(string nameOrConnectionString) : base(nameOrConnectionString)
+							The nameOrConnectionString is LogControlDB
+							CODE:
+							// not needed
+							//registerComponent.RegisterType<IDataContextAsync, LogControlContext>();
+
+						Logqso.mvc.domain:
+							The ControlService needs a IRepositoryAsync<>.
+							   public class ControlService : Service<CatOperator>, IControlService
+								{
+									private readonly IRepositoryAsync<CatOperator> _repository;
+
+									public ControlService(IRepositoryAsync<CatOperator> repository)
+										: base(repository)
+							CODE:
+							var RepoType = typeof(IRepositoryAsync<CatOperator>);
+
+							 Object[] Parms1 = new Object[] {
+							 RepoType
+							 };
+							registerComponent.RegisterTypeWithInjectionTypes<IControlService, ControlService>(Parms1, false);
+
+						Logqso.mvc.ui.Controllers:
+							The WebApi ControlController needs 2 Parms
+							 public ControlController( IUnitOfWorkAsync unitOfWorkAsync, IControlService ControlService)
+							The IControlService ia already registered from Logqso.mvc.domain
+							The IUnitOfWorkAsync ==>public UnitOfWork(IDataContextAsync dataContext)  needs a context parm
+							CODE:
+								var contextType = typeof(LogControlContext);
+            
+								 Object[] Parms = new Object[] {
+								 contextType
+								 };
+								 registerComponent.RegisterTypeWithInjectionTypes<IUnitOfWorkAsync, UnitOfWork>(Parms, false);
+
+				//jims: MVC resolver
+				System.Web.Mvc.DependencyResolver.SetResolver(new UnityDependencyResolver(container));
+			
+				// register dependency resolver for WebAPI RC
+				//jims: Webapi resolver
+				 GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);	
+			3)
+				 next the Application_Start()method in globak.asax is called
+				protected void Application_Start()
+				{
+					#if Debug
+					WebApiTestClient.WebApiTestClientHttpMessageHandler.RegisterRouteForTestClient(GlobalConfiguration.Configuration); 
+					#endif
+					AreaRegistration.RegisterAllAreas();
+					FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+					GlobalConfiguration.Configure(WebApiConfig.Register); 
+					RouteConfig.RegisterRoutes(RouteTable.Routes);
+					Themes.Initialize("~/Content/Themes/", "Flick"); 
+				   BundleConfig.RegisterBundles(BundleTable.Bundles);
+				}
+				GlobalConfiguration.Configure(WebApiConfig.Register) registers the webapi targets
+
+				RouteConfig.RegisterRoutes(RouteTable.Routes) is MVC routing from Logqso.mvc.ui route config.cs
+				CODE:
+					routes.MapRoute(
+					name: "Default",
+					url: "{controller}/{action}/{id}",
+					defaults: new { controller = "logqso", action = "logqso", id = UrlParameter.Optional }
+
+				BundleConfig.RegisterBundles(BundleTable.Bundles) REGISTER .JS ANB .CSS FILES
+
+			4)
+				Logqso.mvc.ui.Controllers public ActionResult LogQso() is called as the default MVC route
+				This calls the razor page LogQso.cshtml, which generates the page HTML and attached Javasxript like logqso.js
+				This page is sent to the client
+			5)
+				The js Ready $function ($( document ).ready(function() {} )calls into webapi GetControlNames
+					function getAllControls() {
+					_lq.ajaxHelper(_lq.controlUri + "/GetControlNames", 'GET').done(function (data) {
