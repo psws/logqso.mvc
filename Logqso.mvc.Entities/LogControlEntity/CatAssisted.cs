@@ -1,0 +1,19 @@
+using System;
+using System.Collections.Generic;
+using Repository.Pattern.Ef6;
+
+namespace Logqso.mvc.Entities.LogControlEntity
+{
+    public partial class CatAssisted : Entity
+    {
+        public CatAssisted()
+        {
+            this.CatDefaults = new List<CatDefault>();
+        }
+
+        public int CatAssist { get; set; }
+        public string CatAssistedName { get; set; }
+        public byte Index { get; set; }
+        public virtual ICollection<CatDefault> CatDefaults { get; set; }
+    }
+}

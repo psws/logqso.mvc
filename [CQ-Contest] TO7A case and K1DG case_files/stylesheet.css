@@ -1,0 +1,102 @@
+body {
+	text-align: left; color: black; background-color: rgb(221, 221, 221);
+}
+.listTitle {
+	padding: 0.25em; border: thin solid black; font-size: larger; background-color: rgb(255, 238, 204);
+}
+div.metaIdxNav {
+	text-align: center; font-size: smaller;
+}
+div.idxTitle {
+	text-align: center; margin-bottom: 0.5em;
+}
+.periodLink {
+	padding: 0.25em; border: thin solid black; background-color: rgb(204, 238, 255);
+}
+.iaText {
+	color: rgb(136, 136, 136);
+}
+table.archiveLists {
+	background: black; color: rgb(238, 238, 238);
+}
+table.archiveLists * th {
+	background: rgb(255, 238, 204); color: black;
+}
+table.archiveLists * td {
+	background: rgb(204, 238, 255); color: black;
+}
+.listName {
+	font-weight: bold;
+}
+.infoLink {
+	font-weight: normal;
+}
+div.dayGroup {
+	padding: 0.5em; border: thin solid black; margin-bottom: 0.5em; background-color: rgb(238, 238, 238);
+}
+div.dayGroup > ul {
+	margin-top: 0em; margin-bottom: 0em;
+}
+div.threadList > ul {
+	margin: 0.5em; padding-left: 1em;
+}
+div.threadGroup {
+	padding: 0.5em; border: thin solid black; margin-top: 0.25em; margin-bottom: 0.25em; background-color: rgb(238, 238, 238);
+}
+div.threadGroup > ul {
+	margin-top: 0em; margin-bottom: 0em;
+}
+div.msgTitle {
+	text-align: center; margin-bottom: 0.5em;
+}
+div.msgSubject h2 {
+	margin-top: 0.25em; margin-bottom: 0.25em;
+}
+div.msgLinks {
+	margin-right: 1em; margin-left: 1em;
+}
+div.msgLinks > table * td {
+	font-size: smaller;
+}
+div.topLinks {
+	text-align: center;
+}
+.topDateNav {
+	padding: 0.25em; border: thin solid black; background-color: rgb(204, 238, 255);
+}
+.topThreadNav {
+	padding: 0.25em; border: thin solid black; background-color: rgb(204, 238, 255);
+}
+div.msgHead {
+	margin-top: 0.5em; margin-bottom: 0.5em;
+}
+div.msgHead > table {
+	border: thin solid black; width: 100%; padding-right: 0.5em; padding-left: 0.5em; border-spacing: 0em; background-color: rgb(255, 238, 204);
+}
+div.msgBody {
+	margin-top: 0.5em; margin-bottom: 0.5em;
+}
+div.msgBody > table {
+	border: thin solid black; padding-right: 0.5em; padding-left: 0.5em; background-color: rgb(238, 238, 238);
+}
+div.tSlice {
+	margin-top: 0.5em; margin-bottom: 0.5em;
+}
+div.tSlice table {
+	background-color: black;
+}
+div.tSlice * td {
+	background-color: rgb(204, 238, 255);
+}
+div.tSlice * th {
+	background-color: rgb(255, 238, 204);
+}
+tr.tSliceList td {
+	background-color: rgb(221, 221, 221);
+}
+.sliceCur {
+	background-color: rgb(204, 204, 204);
+}
+div.botLinks > table {
+	border: thin solid black; padding-right: 0.5em; padding-left: 0.5em; border-spacing: 0em; background-color: rgb(255, 238, 204);
+}
