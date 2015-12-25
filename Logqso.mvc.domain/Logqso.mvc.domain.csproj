@@ -45,11 +45,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CallSignService.cs" />
-    <Compile Include="CatOperatorService.cs" />
+    <Compile Include="DataService.cs" />
     <Compile Include="ControlService.cs" />
     <Compile Include="DependencyResolver.cs" />
+    <Compile Include="Interfaces\IDataService.cs" />
     <Compile Include="Interfaces\ICallSignService.cs" />
-    <Compile Include="Interfaces\ICatOperatorService.cs" />
     <Compile Include="Interfaces\IControlService.cs">
       <SubType>Code</SubType>
     </Compile>

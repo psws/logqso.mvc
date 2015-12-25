@@ -5,6 +5,6 @@ namespace Logqso.mvc.domain.Interfaces
 {
     interface ICallSignService
     {
-        CallSignEntity GetCallSignID(string Call);
+        CallSign GetCallSignID(string Call);
     }
 }

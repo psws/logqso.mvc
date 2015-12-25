@@ -914,7 +914,8 @@ each(function (indexInArray, valueOfElement) {
 
 // encapsuleted _lq class
     (function (_lq, $, undefined) {
-     _lq.controlUri = '/v1/Logqso';
+    _lq.controlUri = '/v1/Control';
+       // _lq.controlUri = '/v1/Data';
 
     _lq.parent_modal_box_id;
     _lq.SessionSaveControlSelections;

@@ -1,5 +1,19 @@
 ﻿VS2013 has built in attribute routong when you use WebApi libs.
 
+// to enable  go to Logqso.mvc.ui.WebApiConfig.cs
+ass:
+//this line enables attribute routing
+            //http://weblogs.asp.net/dwahlin/new-features-in-asp-net-web-api-2-part-i
+            config.MapHttpAttributeRoutes();
+//WITH aTTRIBUTE ROUTING, NO MAPPING REQUIRED
+            //config.Routes.MapHttpRoute(
+            //    name: "DefaultApi",
+            //    routeTemplate: "api/{controller}/{id}",
+            //    defaults: new { id = RouteParameter.Optional }
+            //);
+
+
+//In Controller files
 You can decorate api targets lie thisL
         [Route("")]
         [Route("GetControlNames")]

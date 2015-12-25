@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Logqso.Repository.Interfaces;
-using Logqso.mvc.Entities.LogDataEntity;
-
+using Logqso.mvc.DataModel.LogData.DataModels;
 
 namespace Logqso.Repository
 {

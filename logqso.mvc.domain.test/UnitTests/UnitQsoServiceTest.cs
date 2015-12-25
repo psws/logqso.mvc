@@ -29,11 +29,11 @@ namespace Logqso.mvc.domain.test.UnitTests
             LogId = 5;
             _logRepository = A.Fake<ILogRepository>();
             A.CallTo(() => _logRepository.GetByID(LogId))
-                .Returns(new Log
+                .Returns(new Logqso.mvc.DataModel.LogData.DataModels.Log
                 {
                     LogId = LogId,
                     ContestYear = DateTime.Now,
-                    ContestId = 1,
+                    ContestId = "CQWWSSB2015",
                 });
 
             //Badguid = Guid.NewGuid();
@@ -46,7 +46,7 @@ namespace Logqso.mvc.domain.test.UnitTests
 #if true
             _QsoRepository = A.Fake<IQsoRepository>();
             A.CallTo(() => _QsoRepository.CreateQso(LogId))
-                .Returns(new Qso
+                .Returns(new Logqso.mvc.DataModel.LogData.DataModels.Qso
                     {
                         LogId = LogId,
                         CallsignId = 2,
@@ -63,10 +63,10 @@ namespace Logqso.mvc.domain.test.UnitTests
 
 
             //automapper
-            AutoMapper.Mapper.CreateMap<Log, LogEntity>();
+            AutoMapper.Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.Log, Log>();
             _logService = new LogService(_logRepository);
 
-            AutoMapper.Mapper.CreateMap<Qso, QsoEntity>();
+            AutoMapper.Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.Qso, Qso>();
             _qsoService = new QsoService(_QsoRepository);
 
         }
@@ -76,11 +76,11 @@ namespace Logqso.mvc.domain.test.UnitTests
         public void Unit_QsoService_CreaeQso_ValidLog_CreateNewQso()
         {
             //arrange
-            LogEntity LogEntity = _logService.GetByID(LogId);
+            Log LogEntity = _logService.GetByID(LogId);
             //act
-            QsoEntity newQso = _qsoService.CreateQso(LogEntity.LogId);
+            Qso newQso = _qsoService.CreateQso(LogEntity.LogId);
             //assert
-            Assert.IsInstanceOfType(newQso, typeof(QsoEntity));
+            Assert.IsInstanceOfType(newQso, typeof(Qso));
             Assert.AreEqual(newQso.LogId, LogEntity.LogId);
         }
     }

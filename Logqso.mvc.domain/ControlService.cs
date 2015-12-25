@@ -38,6 +38,8 @@ namespace Logqso.mvc.domain
             _repository = repository;
         }
 
+#if false
+        //old depredated method
         public Task<ContestControlsDataEntity> GetContestControlData()
         {
             ContestControlsDataEntity ContestControlsDataEntity = new ContestControlsDataEntity();
@@ -47,6 +49,7 @@ namespace Logqso.mvc.domain
 
             return Task.FromResult(ContestControlsDataEntity);
         }
+#endif
 
 
         public  Task<ContestControlEntity> GetContestControlNames()

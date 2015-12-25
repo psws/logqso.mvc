@@ -78,6 +78,15 @@
     <Compile Include="LogControl\YaxisModels\YaxisViewType.cs" />
     <Compile Include="LogControl\YaxisSeeds.cs" />
     <Compile Include="LogData\CallInfoModels\CallInfoDefault.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201512240816059_InitialDatabaseCreation.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201512240816059_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201512240816059_InitialDatabaseCreation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogData\Migrations\LogDataDB\Configuration.cs" />
+    <Compile Include="LogData\StationSeeds.cs" />
+    <Compile Include="LogData\LogSeeds.cs" />
+    <Compile Include="LogData\LogCategorySeeds.cs" />
+    <Compile Include="LogData\CallSignSeed.cs" />
     <Compile Include="LogData\ContestSeeds.cs" />
     <Compile Include="LogData\DataModels\CallSign.cs">
       <SubType>Code</SubType>
@@ -86,7 +95,9 @@
     <Compile Include="LogData\DataModels\Log.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LogData\DataModels\LogCategory.cs" />
     <Compile Include="LogData\DataModels\Session.cs" />
+    <Compile Include="LogData\DataModels\Station.cs" />
     <Compile Include="LogData\LogDataDB.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -94,11 +105,25 @@
     <Compile Include="LogControl\FilterModels\FiltContinent.cs" />
     <Compile Include="LogControl\FilterModels\FiltBand.cs" />
     <Compile Include="LogControl\FiltersSeeds.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201508111754012_InitialDatabaseCreation.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201508111754012_InitialDatabaseCreation.Designer.cs">
-      <DependentUpon>201508111754012_InitialDatabaseCreation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LogData\Migrations\LogDataDB\Configuration.cs" />
+    <Compile Include="Models\CallInfo.cs" />
+    <Compile Include="Models\CallInfoDefault.cs" />
+    <Compile Include="Models\CallSign.cs" />
+    <Compile Include="Models\Contest.cs" />
+    <Compile Include="Models\Log.cs" />
+    <Compile Include="Models\LogCategory.cs" />
+    <Compile Include="Models\LogqsoDataContext.cs" />
+    <Compile Include="Models\Mapping\CallInfoDefaultMap.cs" />
+    <Compile Include="Models\Mapping\CallInfoMap.cs" />
+    <Compile Include="Models\Mapping\CallSignMap.cs" />
+    <Compile Include="Models\Mapping\ContestMap.cs" />
+    <Compile Include="Models\Mapping\LogCategoryMap.cs" />
+    <Compile Include="Models\Mapping\LogMap.cs" />
+    <Compile Include="Models\Mapping\QsoMap.cs" />
+    <Compile Include="Models\Mapping\SessionMap.cs" />
+    <Compile Include="Models\Mapping\StationMap.cs" />
+    <Compile Include="Models\Qso.cs" />
+    <Compile Include="Models\Session.cs" />
+    <Compile Include="Models\Station.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -131,8 +156,8 @@
     <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201508310133214_InitialDatabaseCreation.resx">
       <DependentUpon>201508310133214_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201508111754012_InitialDatabaseCreation.resx">
-      <DependentUpon>201508111754012_InitialDatabaseCreation.cs</DependentUpon>
+    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201512240816059_InitialDatabaseCreation.resx">
+      <DependentUpon>201512240816059_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

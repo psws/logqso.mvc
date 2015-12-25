@@ -16,7 +16,7 @@ namespace Logqso.mvc.domain.Interfaces
         /// </summary>
         {
              Task<ContestControlEntity> GetContestControlNames();
-             Task<ContestControlsDataEntity> GetContestControlData();
+             //Task<ContestControlsDataEntity> GetContestControlData();
              Task<ContestControlSettingsEntity> GetControlSelections(string Username);
              Task<bool> SaveControlSelections(ContestControlSettingsEntity ContestControlSettingsEntity, string Username);
              Task<T> GetControlSelection<T>(string Username);

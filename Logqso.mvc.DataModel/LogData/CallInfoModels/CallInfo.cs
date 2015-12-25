@@ -20,11 +20,29 @@ namespace Logqso.mvc.DataModel.LogData.CallInfoModels
         public string ContestId { get; set; }
         [Column(TypeName = "varchar")]
         [MaxLength(25)]
-        public string Callsign { get; set; }
-        [Column(TypeName = "varchar")]
-        [MaxLength(20)]
-        [Required]
-        public string Station { get; set; }
+        public string Call { get; set; }
+        public  int CallsignId { get; set; }
+        //[Column(TypeName = "varchar")]
+        //[MaxLength(20)]
+        //public string StationName { get; set; }
+
+        //public int LogId { get; set; }
+
+        ////https://msdn.microsoft.com/en-us/data/jj591583.aspx
+        [ForeignKey("Station")]
+        [Column(Order = 1)]
+        public int StationId { get; set; }
+        [ForeignKey("Station")]
+        [Column(Order = 2)]
+        public int LogId { get; set; }
+        [ForeignKey("Station")]
+        [Column(Order = 3)]
+        public string StationName { get; set; }
+
         public virtual Contest Contest { get; set; }
+        public virtual CallSign CallSign { get; set; }
+        //public virtual Log Log { get; set; }
+
+        public  Station Station { get; set; }
     }
 }

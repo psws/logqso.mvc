@@ -13,7 +13,7 @@
 	}
 
 setup configuration string in web.config
-    <add name="LogqsoDB" connectionString="Data Source=PSS60\SQL2014; Initial Catalog=Logqso; persist security info=True;user id=jims9m8r;password=jims9m8r;MultipleActiveResultSets=True;App=EntityFramework"
+    <add name="LogqsoDB" connectionString="Data Source=PSS60\SQL2014; Initial Catalog=LogqsoData; persist security info=True;user id=jims9m8r;password=jims9m8r;MultipleActiveResultSets=True;App=EntityFramework"
 
 
 	NOTE: Make sure your class derives from LogDataDB : DbContext
@@ -21,18 +21,21 @@ create this file in the same namespace as the model classes (Logqso.mvc.DataMode
 	 namespace Logqso.mvc.DataModel
 	{
 	// https://msdn.microsoft.com/en-us/data/jj591621.aspx#model
-		public class LogqsoDB : DbContext
-		{
+		public class LogDataDB : DbContext
+    {
 
-			public LogqsoDB()
-				: base("name=LogqsoDB")
-			{
-			}
+        public LogDataDB()
+            : base("name=LogDataDB")
+        {
+        }
 
-			public DbSet<Logqso.mvc.DataModel.LogData.CallSign> CallSign { get; set; }
-			public DbSet<Logqso.mvc.DataModel.LogData.Qso> Qso { get; set; }
-			public DbSet<Logqso.mvc.DataModel.LogData.Log> Log { get; set; }
-			public DbSet<Logqso.mvc.DataModel.LogData.Contest> Contest { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.Log> Log { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.Contest> Contest { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.CallSign> CallSign { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.Qso> Qso { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.LogCategory> LogCategory { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.Station> Station { get; set; }
+
 
 			protected override void OnModelCreating(DbModelBuilder modelBuilder)
 			{

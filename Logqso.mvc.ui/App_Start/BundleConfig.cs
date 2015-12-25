@@ -66,7 +66,6 @@ namespace Logqso.mvc.ui
                      stylePath = string.Format("~/Content/Themes/{0}/jquery-ui.css", theme);
                    break;
             }
-
         }
     }
 }

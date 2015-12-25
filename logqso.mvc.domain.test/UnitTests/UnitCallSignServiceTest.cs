@@ -21,14 +21,14 @@ namespace Logqso.mvc.domain.test.UnitTests
             _CallSignRepository = A.Fake<ICallSignRepository>();
             string Call = "W7EJ";
             A.CallTo(() => _CallSignRepository.GetCallSignID(Call))
-                .Returns(new Logqso.mvc.Entities.LogDataEntity.CallSign
+                .Returns(new Logqso.mvc.DataModel.LogData.DataModels.CallSign
                 {
                     CallSignId = 1,
                     Call = Call,
                 });
 
             //automapper
-            AutoMapper.Mapper.CreateMap<CallSign,CallSignEntity >();
+            AutoMapper.Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.CallSign, Logqso.mvc.Entities.LogDataEntity.CallSign>();
             _callSignService = new CallSignService(_CallSignRepository);
         }
 
@@ -36,7 +36,7 @@ namespace Logqso.mvc.domain.test.UnitTests
         public void Unit_CallSignService_ValidCall_ReturnsCallsignID()
         {
             //Act
-            CallSignEntity CallSign = _callSignService.GetCallSignID(Call);
+            CallSign CallSign = _callSignService.GetCallSignID(Call);
 
             //Assert
             Assert.AreEqual(CallSign.Call, Call);

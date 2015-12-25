@@ -22,16 +22,16 @@ namespace Logqso.mvc.domain
         }
 
         
-        public CallSignEntity GetCallSignID(string Call)
+        public CallSign GetCallSignID(string Call)
         {
-            CallSignEntity CallSignEntity = null;
-            CallSign CallSign = null;
+            CallSign CallSignEntity = null;
+            Logqso.mvc.DataModel.LogData.DataModels.CallSign CallSign = null;
             // dependency injection
 
             CallSign = _CallRepository.GetCallSignID(Call);
 #warning  Move this mapper CreateMap<CallSign, CallSignEntity>();
-            Mapper.CreateMap<CallSign, CallSignEntity>();
-            CallSignEntity = AutoMapper.Mapper.Map<CallSign, CallSignEntity>(CallSign);
+            Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.CallSign, CallSign>();
+            CallSignEntity = AutoMapper.Mapper.Map<Logqso.mvc.DataModel.LogData.DataModels.CallSign, CallSign>(CallSign);
 
             //call exists
              if (CallSignEntity == null)

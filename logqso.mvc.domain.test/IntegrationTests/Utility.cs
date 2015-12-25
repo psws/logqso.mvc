@@ -14,12 +14,12 @@ namespace   Logqso.mvc.domain.test.IntegrationTests
 {
     public static class Utility
     {
-        public static void CreateSeededTestDatabase()
+        public static void CreateSeededTestDatabase(string connectionstring, string pathsql)
         {
             //connection string comes from  app.config
             var connectionString = ConfigurationManager.ConnectionStrings["LogControlDB"].ConnectionString;
 
-            var path = Environment.CurrentDirectory.Replace("bin\\Debug", "Sql\\logqsoTest.sql");
+            var path = Environment.CurrentDirectory.Replace("bin\\Debug", pathsql);
             var file = new FileInfo(path);
             var script = file.OpenText().ReadToEnd();
 

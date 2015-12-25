@@ -19,10 +19,10 @@ namespace Logqso.mvc.domain
 
         }
 
-        public QsoEntity CreateQso(int LogID)
+        public Qso CreateQso(int LogID)
         {
-            QsoEntity QsoEntity = null;
-            Qso Qso = null;
+            Qso QsoEntity = null;
+            Logqso.mvc.DataModel.LogData.DataModels.Qso Qso = null;
             // dependency injection
 
             Qso = _QsoRepository.CreateQso( LogID);
@@ -35,7 +35,7 @@ namespace Logqso.mvc.domain
             }
             else
             {
-                QsoEntity = AutoMapper.Mapper.Map<Qso, QsoEntity>(Qso);
+                QsoEntity = AutoMapper.Mapper.Map<Logqso.mvc.DataModel.LogData.DataModels.Qso, Qso>(Qso);
             }
             return QsoEntity;
 

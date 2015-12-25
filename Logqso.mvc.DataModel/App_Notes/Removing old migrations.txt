@@ -17,7 +17,7 @@ in the schems box fill in dbo
 In the left pane select Membership.
 check all boxes except the 2 deny items
 
-In the VS prokect 
+In the VS project 
 Delete the migration directory under LogControl and Data Control.
 Run the Package manager scripts descibed in 
 	DataModel LogControl code first database setup .txt and

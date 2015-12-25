@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logqso.mvc.domain", "Logqso.Mvc.domain\Logqso.mvc.domain.csproj", "{F04ADB7B-8297-4E4A-A2B8-146C89E0C91E}"
 EndProject
@@ -28,6 +28,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Pattern", "Service.Pattern\Service.Pattern.csproj", "{575DD511-E5EF-4163-BF97-D3FCFCF14A00}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logqso.Repository", "Logqso.Repository\Logqso.Repository.csproj", "{B3A00FCF-B6BC-4269-B75A-EDD91480D7AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logqso.WebApi", "Logqso.WebApi\Logqso.WebApi.csproj", "{C9B82E82-EC99-4E4F-A91A-030943ED87A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,6 +113,12 @@ Global
 		{B3A00FCF-B6BC-4269-B75A-EDD91480D7AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3A00FCF-B6BC-4269-B75A-EDD91480D7AA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3A00FCF-B6BC-4269-B75A-EDD91480D7AA}.Release|x86.ActiveCfg = Release|Any CPU
+		{C9B82E82-EC99-4E4F-A91A-030943ED87A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9B82E82-EC99-4E4F-A91A-030943ED87A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9B82E82-EC99-4E4F-A91A-030943ED87A9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C9B82E82-EC99-4E4F-A91A-030943ED87A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9B82E82-EC99-4E4F-A91A-030943ED87A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9B82E82-EC99-4E4F-A91A-030943ED87A9}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

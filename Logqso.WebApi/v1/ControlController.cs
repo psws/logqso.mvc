@@ -12,9 +12,9 @@ using Repository.Pattern.UnitOfWork;
 using Logqso.Repository.Models;
 using Logqso.Repository.Models.LogControl;
 
-namespace Logqso.mvc.ui.Controllers.WebApi
+namespace Logqso.WebApi
 {
-    [RoutePrefix("v1/Logqso")]
+    [RoutePrefix("v1/Control")]
     public class ControlController : ApiController
     {
         private readonly IControlService _ControlService;
@@ -146,7 +146,7 @@ namespace Logqso.mvc.ui.Controllers.WebApi
         [Route("SendControlSelections")]
         public async Task<IHttpActionResult> SendControlSelections(ContestControlSettingsEntity ContestControlSettingsEntity)
         {
-            string Username = null;
+            string Username = Logqso.mvc.common.definitions.Username;
             bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
             if (val1)
             {

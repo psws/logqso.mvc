@@ -26,6 +26,11 @@ namespace Logqso.mvc.ui
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 #endif
+
+            //routes.MapRoute(name: "Default", url: "{controller}/{action}/{id}",
+            //    namespaces: new[] { "Logqso.mvc.ui]" },
+            //   defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional });
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

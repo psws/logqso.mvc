@@ -147,6 +147,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Http.Tracing, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Tracing.5.2.3\lib\net45\System.Web.Http.Tracing.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
@@ -268,7 +272,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogQsoController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\WebApi\ControlController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -296,6 +299,7 @@
     <Content Include="App_Notes\MVC vs MVP vs MVVM.txt" />
     <Content Include="App_Notes\User authentication check.txt" />
     <Content Include="App_Notes\WEB API test client.txt" />
+    <Content Include="App_Notes\WEB API  Controllers in Separate project.txt" />
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -453,6 +457,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Controllers\WebApi\v1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -474,6 +479,10 @@
     <ProjectReference Include="..\Logqso.Repository\Logqso.Repository.csproj">
       <Project>{b3a00fcf-b6bc-4269-b75a-edd91480d7aa}</Project>
       <Name>Logqso.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logqso.WebApi\Logqso.WebApi.csproj">
+      <Project>{c9b82e82-ec99-4e4f-a91a-030943ed87a9}</Project>
+      <Name>Logqso.WebApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\Resolver MEF\Logqso.mvc.Resolver MEF.csproj">
       <Project>{be14dc55-a8f1-4db8-b009-bcc9b3599bf0}</Project>

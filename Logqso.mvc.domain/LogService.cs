@@ -21,10 +21,10 @@ namespace Logqso.mvc.domain
 
         }
 
-        public LogEntity GetByID(int LogID)
+        public Log GetByID(int LogID)
         {
-            LogEntity LogEntity = null;
-            Log Log = null;
+            Log LogEntity = null;
+            Logqso.mvc.DataModel.LogData.DataModels.Log Log = null;
             //LogRepository LogRepository1 = new LogRepository();
             //LogDto  LogDto = LogRepository1.GetByID(LogCallsignID);
            // dependency injection
@@ -44,22 +44,22 @@ namespace Logqso.mvc.domain
                 LogNotFoundException.LogID = LogID; 
                 throw LogNotFoundException;
             }else {
-                LogEntity = AutoMapper.Mapper.Map<Log, LogEntity>(Log);
+                LogEntity = AutoMapper.Mapper.Map<Logqso.mvc.DataModel.LogData.DataModels.Log, Log>(Log);
             }
 #endif
             return LogEntity;
         }
 
 
-        public  IReadOnlyList<LogEntity> GetByYear(DateTime Year)
+        public  IReadOnlyList<Log> GetByYear(DateTime Year)
         {
             //Todo Stub for DB
             //IReadOnlyList<Log> Logs = new List<Log> {
             //    new Log() {   };
             //    ;
-            IReadOnlyList<LogEntity> LogEntitiess = new List<LogEntity> {
-            new LogEntity() {LogId = 1, ContestId = 1,  ContestYear = Year    },
-            new LogEntity() {LogId = 1, ContestId = 2,  ContestYear = Year    },
+            IReadOnlyList<Log> LogEntitiess = new List<Log> {
+            new Log() {LogId = 1, ContestId = "CQWWSSB2015",  ContestYear = Year    },
+            new Log() {LogId = 2, ContestId = "CQWWSSB2015",  ContestYear = Year    },
             };
 
             return LogEntitiess;

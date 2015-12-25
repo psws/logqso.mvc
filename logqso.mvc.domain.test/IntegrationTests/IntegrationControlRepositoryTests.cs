@@ -16,7 +16,7 @@ using Logqso.mvc.common.Enum;
 namespace Logqso.mvc.domain.test.IntegrationTests
 {
     [TestClass]
-    public class IntegrationControlRepositoryTests
+    public class IntegrationDataRepositoryTests
     {
         private readonly string CatOprName = "Hello Test";
 
@@ -25,7 +25,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests
         [TestInitialize]
         public void Initialize()
         {
-            Utility.CreateSeededTestDatabase();
+            Utility.CreateSeededTestDatabase("LogControlDB", "Sql\\logqsoDataTest.sql");
         }
 
         [TestMethod]

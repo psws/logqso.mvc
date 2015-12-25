@@ -12,6 +12,8 @@ namespace Logqso.mvc.DataModel.LogData
 {
     public class ContestSeeds
     {
+        //  add to configuration.cs          ContestSeeds.SeedContest(context);
+
         public static void SeedContest(Logqso.mvc.DataModel.LogData.LogDataDB context)
         {
             context.Contest.AddOrUpdate(
@@ -74,7 +76,7 @@ namespace Logqso.mvc.DataModel.LogData
                                     ContestName = "Cqww Ssb 2015", StartDateTime = DateTime.Parse("10/23/2015 00:00:00"), EndDateTime = DateTime.Parse("10/25/2015 11:59:59 PM") },
                 new Contest { ContestId = "CQWWCW2015", ContestGroup =  ContestGroupEnum.CQWW, ContestType = ContestTypeEnum.CQ_WW_CW, 
                                     ContestName = "Cqww Cw 2015", StartDateTime = DateTime.Parse("11/28/2015 00:00:00"), EndDateTime = DateTime.Parse("11/29/2015 11:59:59 PM") },
-                 //WPX             
+                //WPX             
                 new Contest { ContestId = "CQWPXSSB2001", ContestGroup =  ContestGroupEnum.CQWPX, ContestType = ContestTypeEnum.CQ_WPX_SSB, 
                                     ContestName = "Cqwpx Ssb 2001", StartDateTime = DateTime.Parse("03/24/2001 00:00:00"), EndDateTime = DateTime.Parse("03/25/2001 11:59:59 PM") },
                 new Contest { ContestId = "CQWPXSSB2002", ContestGroup =  ContestGroupEnum.CQWPX, ContestType = ContestTypeEnum.CQ_WPX_SSB, 
@@ -99,13 +101,13 @@ namespace Logqso.mvc.DataModel.LogData
                                     ContestName = "Cqwpx Ssb 2011", StartDateTime = DateTime.Parse("03/26/2011 00:00:00"), EndDateTime = DateTime.Parse("03/27/2011 11:59:59 PM") },
                  new Contest { ContestId = "CQWPXSSB2012", ContestGroup =  ContestGroupEnum.CQWPX, ContestType = ContestTypeEnum.CQ_WPX_SSB, 
                                     ContestName = "Cqwpx Ssb 2012", StartDateTime = DateTime.Parse("03/24/2012 00:00:00"), EndDateTime = DateTime.Parse("03/25/2012 11:59:59 PM") },
-                 new Contest { ContestId = "CQWPXSSB2013", ContestGroup =  ContestGroupEnum.CQWPX, ContestType = ContestTypeEnum.CQ_WPX_SSB, 
+                new Contest { ContestId = "CQWPXSSB2013", ContestGroup =  ContestGroupEnum.CQWPX, ContestType = ContestTypeEnum.CQ_WPX_SSB, 
                                     ContestName = "Cqwpx Ssb 2013", StartDateTime = DateTime.Parse("03/30/2013 00:00:00"), EndDateTime = DateTime.Parse("03/31/2013 11:59:59 PM") },
-                 new Contest { ContestId = "CQWPXSSB2014", ContestGroup =  ContestGroupEnum.CQWPX, ContestType = ContestTypeEnum.CQ_WPX_SSB, 
-                                    ContestName = "Cqwpx Ssb 2014", StartDateTime = DateTime.Parse("03/292014 00:00:00"), EndDateTime = DateTime.Parse("03/30/2014 11:59:59 PM") },
-                 new Contest { ContestId = "CQWPXSSB2015", ContestGroup =  ContestGroupEnum.CQWPX, ContestType = ContestTypeEnum.CQ_WPX_SSB, 
+                new Contest { ContestId = "CQWPXSSB2014", ContestGroup =  ContestGroupEnum.CQWPX, ContestType = ContestTypeEnum.CQ_WPX_SSB, 
+                                    ContestName = "Cqwpx Ssb 2014", StartDateTime = DateTime.Parse("03/29/2014 00:00:00"), EndDateTime = DateTime.Parse("03/30/2014 11:59:59 PM") },
+                new Contest { ContestId = "CQWPXSSB2015", ContestGroup =  ContestGroupEnum.CQWPX, ContestType = ContestTypeEnum.CQ_WPX_SSB, 
                                     ContestName = "Cqwpx Ssb 2015", StartDateTime = DateTime.Parse("03/28/2015 00:00:00"), EndDateTime = DateTime.Parse("03/29/2015 11:59:59 PM") },
-                 new Contest { ContestId = "CQWPXSSB2016", ContestGroup =  ContestGroupEnum.CQWPX, ContestType = ContestTypeEnum.CQ_WPX_SSB, 
+                new Contest { ContestId = "CQWPXSSB2016", ContestGroup =  ContestGroupEnum.CQWPX, ContestType = ContestTypeEnum.CQ_WPX_SSB, 
                                     ContestName = "Cqwpx Ssb 2016", StartDateTime = DateTime.Parse("03/26/2016 00:00:00"), EndDateTime = DateTime.Parse("03/27/2016 11:59:59 PM") }
 
                                     

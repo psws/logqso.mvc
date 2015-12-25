@@ -27,5 +27,6 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         [DataType(DataType.DateTime)]
         public virtual DateTime EndDateTime { get; set; }
 
+
     }
 }

@@ -8,6 +8,7 @@ namespace Logqso.mvc.Entities.LogDataEntity
     {
         public int QsoId { get; set; }
         public int LogId { get; set; }
+        public string StationName { get; set; }
         public int CallsignId { get; set; }
         public System.DateTime QsoDateEime { get; set; }
         public byte RxRst { get; set; }

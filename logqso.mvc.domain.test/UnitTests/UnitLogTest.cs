@@ -26,15 +26,15 @@ namespace Logqso.mvc.domain.test.UnitTests
             LogId = 5;
             _logRepository = A.Fake<ILogRepository>();
             A.CallTo(() => _logRepository.GetByID(LogId))
-                .Returns(new Log
+                .Returns(new Logqso.mvc.DataModel.LogData.DataModels.Log
                 {
                     LogId = LogId,
                     ContestYear = DateTime.Now,
-                    ContestId = 1,
+                    ContestId = "CQWWSSB2015",
                 });
 
             //automapper
-            AutoMapper.Mapper.CreateMap<Log, LogEntity>();
+            AutoMapper.Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.Log, Log>();
 
         }
 
@@ -57,8 +57,8 @@ namespace Logqso.mvc.domain.test.UnitTests
            var logService = new LogService(_logRepository);
 #endif
 
-           LogEntity LogEntity = logService.GetByID(LogId);
-           Assert.IsInstanceOfType(LogEntity, typeof(LogEntity));
+           Log LogEntity = logService.GetByID(LogId);
+           Assert.IsInstanceOfType(LogEntity, typeof(Log));
            Assert.AreEqual(LogEntity.LogId, LogId);
            Assert.IsInstanceOfType(LogEntity.ContestYear, typeof(DateTime));
            Assert.AreEqual(LogEntity.ContestYear.Year, DateTime.Now.Year);

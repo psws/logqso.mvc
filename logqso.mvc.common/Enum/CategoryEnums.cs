@@ -16,6 +16,13 @@ namespace Logqso.mvc.common.Enum
         CHECKLOG,
     }
 
+    public enum CatOperatorOverlayEnum
+    {
+        NONE = 0,
+        SINGLE_OP_CLASSIC,
+        SINGLE_OP_ROOKIE,
+    }
+
     public enum CatBandEnum
     {
         ALL = 1,

@@ -27,7 +27,11 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+            CallSignSeeds.SeedContest(context);
             ContestSeeds.SeedContest(context);
+            LogCategorySeeds.SeedContest(context);
+            LogSeeds.SeedContest(context);
+            StationSeeds.SeedContest(context);
         }
     }
 }

@@ -4,14 +4,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Logqso.mvc.Entities.LogControlEntity;
+using Repository.Pattern.Ef6;
 using Repository.Pattern.Repositories;
 using Service.Pattern;
 using Logqso.Repository.Models.LogControl;
 using Logqso.mvc.common.Enum;
+using Repository.Pattern.DataContext;
+using Repository.Pattern.UnitOfWork;
 
 
 namespace Logqso.Repository
 {
+
+    //public class ControlRepository2<TEntity> : Repository<TEntity>
+    //{
+    //    public ControlRepository2(IDataContextAsync context, IUnitOfWorkAsync unitOfWork)
+    //     : base(repository( context, unitOfWork)
+    //    {
+    //        _repository = repository;
+    //    }
+    //}
+
+    //public class IDataControlContextAsync<TEntity> : IDataContextAsync
+    //{
+    //    public DataControlContextAsync(IDataContextAsync context, IUnitOfWorkAsync unitOfWork)
+    //     : base(repository( context, unitOfWork)
+    //    {
+    //        _repository = repository;
+    //    }
+    //}
 
     //EXTENSION METHODS for IRepository<tEntity T>
 
@@ -27,12 +48,14 @@ namespace Logqso.Repository
             //            select c.CatOprName).ToList();
             return query;
         }
+#if false
         public static List<CatOperator> GetContestCategorys(this IRepository<CatOperator> repository)
         {
             var CatOperators = repository.Queryable();
             var query = CatOperators.OrderBy(c=>c.Index).ToList();
             return query;
         }
+#endif
 
         public static List<string> GetContestAssistedNames(this IRepository<CatAssisted> repository)
         {

@@ -10,6 +10,7 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
 {
     public class Session
     {
+        [Key]
         [Column(TypeName = "varchar")]
         [MaxLength(256)]
         [Required]

@@ -85,35 +85,37 @@
     <Compile Include="LogControlEntity\YaxisFunction.cs" />
     <Compile Include="LogControlEntity\YaxisInterval.cs" />
     <Compile Include="LogControlEntity\YaxisViewType.cs" />
-    <Compile Include="LogDataEntity\CallSign.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LogDataEntity\CallSignEntity.cs" />
-    <Compile Include="LogDataEntity\Contest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LogDataEntity\ContestEntity.cs" />
+    <Compile Include="LogDataEntity\CallInfo.cs" />
+    <Compile Include="LogDataEntity\CallInfoDefault.cs" />
+    <Compile Include="LogDataEntity\CallSign.cs" />
+    <Compile Include="LogDataEntity\Contest.cs" />
     <Compile Include="LogDataEntity\Log.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LogDataEntity\LogDataContext.cs" />
-    <Compile Include="LogDataEntity\LogEntity.cs" />
+    <Compile Include="LogDataEntity\LogqsoDataContext.cs" />
+    <Compile Include="LogDataEntity\Mapping\CallInfoDefaultMap.cs" />
+    <Compile Include="LogDataEntity\Mapping\CallInfoMap.cs" />
     <Compile Include="LogDataEntity\Mapping\CallSignMap.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LogDataEntity\Mapping\ContestMap.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LogDataEntity\LogCategory.cs" />
+    <Compile Include="LogDataEntity\Mapping\LogCategoryMap.cs" />
     <Compile Include="LogDataEntity\Mapping\LogMap.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LogDataEntity\Mapping\QsoMap.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LogDataEntity\Mapping\SessionMap.cs" />
+    <Compile Include="LogDataEntity\Mapping\StationMap.cs" />
     <Compile Include="LogDataEntity\Qso.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LogDataEntity\QsoEntity.cs" />
+    <Compile Include="LogDataEntity\Session.cs" />
+    <Compile Include="LogDataEntity\Station.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
