@@ -48,12 +48,50 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
                     {
                         ContestId = c.String(nullable: false, maxLength: 25, unicode: false),
                         ContestName = c.String(nullable: false, maxLength: 30, unicode: false),
-                        ContestGroup = c.Int(nullable: false),
-                        ContestType = c.Int(nullable: false),
+                        ContestTypeEnum = c.Int(nullable: false),
+                        QsoModeTypeEnum = c.Int(nullable: false),
                         StartDateTime = c.DateTime(nullable: false),
                         EndDateTime = c.DateTime(nullable: false),
                     })
-                .PrimaryKey(t => t.ContestId);
+                .PrimaryKey(t => t.ContestId)
+                .ForeignKey("dbo.ContestType", t => t.ContestTypeEnum, cascadeDelete: true)
+                .ForeignKey("dbo.QsoModeType", t => t.QsoModeTypeEnum, cascadeDelete: true)
+                .Index(t => t.ContestTypeEnum)
+                .Index(t => t.QsoModeTypeEnum);
+            
+            CreateTable(
+                "dbo.ContestType",
+                c => new
+                    {
+                        ContestTypeEnum = c.Int(nullable: false),
+                        ContestTypeEnumName = c.String(nullable: false, maxLength: 20, unicode: false),
+                        QsoExchangeTypeEnum = c.Int(nullable: false),
+                        QsoExchangeName = c.String(nullable: false, maxLength: 20, unicode: false),
+                        QsoMultName = c.String(nullable: false, maxLength: 20, unicode: false),
+                        QsoMult2Name = c.String(maxLength: 20, unicode: false),
+                        ExtraDataName = c.String(maxLength: 20, unicode: false),
+                    })
+                .PrimaryKey(t => t.ContestTypeEnum)
+                .ForeignKey("dbo.QsoExchangeType", t => t.QsoExchangeTypeEnum, cascadeDelete: true)
+                .Index(t => t.QsoExchangeTypeEnum);
+            
+            CreateTable(
+                "dbo.QsoExchangeType",
+                c => new
+                    {
+                        QsoExchangeTypeEnum = c.Int(nullable: false),
+                        QsoExchangeTypeEnumName = c.String(maxLength: 20, unicode: false),
+                    })
+                .PrimaryKey(t => t.QsoExchangeTypeEnum);
+            
+            CreateTable(
+                "dbo.QsoModeType",
+                c => new
+                    {
+                        QsoModeTypeEnum = c.Int(nullable: false),
+                        QsoModeEnumName = c.String(nullable: false, maxLength: 20, unicode: false),
+                    })
+                .PrimaryKey(t => t.QsoModeTypeEnum);
             
             CreateTable(
                 "dbo.Station",
@@ -114,19 +152,58 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
                 "dbo.Qso",
                 c => new
                     {
-                        QsoId = c.Int(nullable: false, identity: true),
+                        QsoNo = c.Short(nullable: false),
                         LogId = c.Int(nullable: false),
                         StationName = c.String(maxLength: 20, unicode: false),
                         CallsignId = c.Int(nullable: false),
-                        QsoDateEime = c.DateTime(nullable: false),
+                        QsoDateTime = c.DateTime(nullable: false),
                         RxRst = c.Byte(nullable: false),
                         TxRst = c.Byte(nullable: false),
+                        QsoModeTypeEnum = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.QsoId)
-                .ForeignKey("dbo.CallSign", t => t.CallsignId, cascadeDelete: true)
-                .ForeignKey("dbo.Log", t => t.LogId)
+                .PrimaryKey(t => new { t.QsoNo, t.LogId })
+                .ForeignKey("dbo.CallSign", t => t.CallsignId)
+                .ForeignKey("dbo.QsoModeType", t => t.QsoModeTypeEnum, cascadeDelete: true)
+                .ForeignKey("dbo.Log", t => t.LogId, cascadeDelete: true)
                 .Index(t => t.LogId)
-                .Index(t => t.CallsignId);
+                .Index(t => t.CallsignId)
+                .Index(t => t.QsoModeTypeEnum);
+            
+            CreateTable(
+                "dbo.QsoExchangeAlpha",
+                c => new
+                    {
+                        QsoNo = c.Short(nullable: false),
+                        LogId = c.Int(nullable: false),
+                        QsoExhangeAlphaValue = c.String(nullable: false, maxLength: 20, unicode: false),
+                    })
+                .PrimaryKey(t => new { t.QsoNo, t.LogId })
+                .ForeignKey("dbo.Qso", t => new { t.QsoNo, t.LogId })
+                .Index(t => new { t.QsoNo, t.LogId });
+            
+            CreateTable(
+                "dbo.QsoExchangeNumber",
+                c => new
+                    {
+                        QsoNo = c.Short(nullable: false),
+                        LogId = c.Int(nullable: false),
+                        QsoExhangeNumberValue = c.Short(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.QsoNo, t.LogId })
+                .ForeignKey("dbo.Qso", t => new { t.QsoNo, t.LogId })
+                .Index(t => new { t.QsoNo, t.LogId });
+            
+            CreateTable(
+                "dbo.QsoExtraData",
+                c => new
+                    {
+                        QsoNo = c.Short(nullable: false),
+                        LogId = c.Int(nullable: false),
+                        QsoExtraDataValue = c.String(nullable: false, maxLength: 20, unicode: false),
+                    })
+                .PrimaryKey(t => new { t.QsoNo, t.LogId })
+                .ForeignKey("dbo.Qso", t => new { t.QsoNo, t.LogId })
+                .Index(t => new { t.QsoNo, t.LogId });
             
             CreateTable(
                 "dbo.Session",
@@ -148,16 +225,27 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
         
         public override void Down()
         {
-            DropForeignKey("dbo.Qso", "LogId", "dbo.Log");
-            DropForeignKey("dbo.Qso", "CallsignId", "dbo.CallSign");
+            DropForeignKey("dbo.QsoExtraData", new[] { "QsoNo", "LogId" }, "dbo.Qso");
+            DropForeignKey("dbo.QsoExchangeNumber", new[] { "QsoNo", "LogId" }, "dbo.Qso");
+            DropForeignKey("dbo.QsoExchangeAlpha", new[] { "QsoNo", "LogId" }, "dbo.Qso");
             DropForeignKey("dbo.Station", "LogId", "dbo.Log");
+            DropForeignKey("dbo.Qso", "LogId", "dbo.Log");
+            DropForeignKey("dbo.Qso", "QsoModeTypeEnum", "dbo.QsoModeType");
+            DropForeignKey("dbo.Qso", "CallsignId", "dbo.CallSign");
             DropForeignKey("dbo.Log", "LogCategoryId", "dbo.LogCategory");
             DropForeignKey("dbo.Log", "ContestId", "dbo.Contest");
             DropForeignKey("dbo.Log", "CallsignId", "dbo.CallSign");
             DropForeignKey("dbo.CallInfo", "CallInfoDefault_Id", "dbo.CallInfoDefault");
             DropForeignKey("dbo.CallInfo", new[] { "StationId", "LogId", "StationName" }, "dbo.Station");
             DropForeignKey("dbo.CallInfo", "ContestId", "dbo.Contest");
+            DropForeignKey("dbo.Contest", "QsoModeTypeEnum", "dbo.QsoModeType");
+            DropForeignKey("dbo.Contest", "ContestTypeEnum", "dbo.ContestType");
+            DropForeignKey("dbo.ContestType", "QsoExchangeTypeEnum", "dbo.QsoExchangeType");
             DropForeignKey("dbo.CallInfo", "CallsignId", "dbo.CallSign");
+            DropIndex("dbo.QsoExtraData", new[] { "QsoNo", "LogId" });
+            DropIndex("dbo.QsoExchangeNumber", new[] { "QsoNo", "LogId" });
+            DropIndex("dbo.QsoExchangeAlpha", new[] { "QsoNo", "LogId" });
+            DropIndex("dbo.Qso", new[] { "QsoModeTypeEnum" });
             DropIndex("dbo.Qso", new[] { "CallsignId" });
             DropIndex("dbo.Qso", new[] { "LogId" });
             DropIndex("dbo.Log", new[] { "LogCategoryId" });
@@ -165,17 +253,26 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
             DropIndex("dbo.Log", new[] { "CallsignId" });
             DropIndex("dbo.CallInfoDefault", new[] { "UserName" });
             DropIndex("dbo.Station", new[] { "LogId" });
+            DropIndex("dbo.ContestType", new[] { "QsoExchangeTypeEnum" });
+            DropIndex("dbo.Contest", new[] { "QsoModeTypeEnum" });
+            DropIndex("dbo.Contest", new[] { "ContestTypeEnum" });
             DropIndex("dbo.CallSign", new[] { "Call" });
             DropIndex("dbo.CallInfo", new[] { "CallInfoDefault_Id" });
             DropIndex("dbo.CallInfo", new[] { "CallsignId" });
             DropIndex("dbo.CallInfo", new[] { "ContestId" });
             DropIndex("dbo.CallInfo", new[] { "StationId", "LogId", "StationName" });
             DropTable("dbo.Session");
+            DropTable("dbo.QsoExtraData");
+            DropTable("dbo.QsoExchangeNumber");
+            DropTable("dbo.QsoExchangeAlpha");
             DropTable("dbo.Qso");
             DropTable("dbo.LogCategory");
             DropTable("dbo.Log");
             DropTable("dbo.CallInfoDefault");
             DropTable("dbo.Station");
+            DropTable("dbo.QsoModeType");
+            DropTable("dbo.QsoExchangeType");
+            DropTable("dbo.ContestType");
             DropTable("dbo.Contest");
             DropTable("dbo.CallSign");
             DropTable("dbo.CallInfo");

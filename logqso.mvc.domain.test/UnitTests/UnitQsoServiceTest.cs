@@ -50,8 +50,8 @@ namespace Logqso.mvc.domain.test.UnitTests
                     {
                         LogId = LogId,
                         CallsignId = 2,
-                        QsoId = 1,
-                        QsoDateEime = DateTime.Now,
+                        QsoNo = 1,
+                        QsoDateTime = DateTime.Now,
                         RxRst = 59,
                         TxRst = 59,
 

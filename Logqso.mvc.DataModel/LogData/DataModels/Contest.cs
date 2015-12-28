@@ -20,13 +20,14 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         [MaxLength(30)]
         [Required]
         public  string ContestName { get; set; }
-        public Logqso.mvc.common.Enum.ContestGroupEnum ContestGroup { get; set; }
-        public Logqso.mvc.common.Enum.ContestTypeEnum ContestType { get; set; }
+        public Logqso.mvc.common.Enum.ContestTypeEnum ContestTypeEnum { get; set; }
+        public Logqso.mvc.common.Enum.QsoModeTypeEnum QsoModeTypeEnum { get; set; }
         [DataType(DataType.DateTime)]
         public virtual DateTime StartDateTime { get; set; }
         [DataType(DataType.DateTime)]
         public virtual DateTime EndDateTime { get; set; }
 
-
+        public virtual ContestType ContestType { get; set; }
+        public virtual QsoModeType QsoModeType { get; set; }
     }
 }

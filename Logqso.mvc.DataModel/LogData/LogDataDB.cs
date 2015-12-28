@@ -28,6 +28,12 @@ namespace Logqso.mvc.DataModel.LogData
         public DbSet<Logqso.mvc.DataModel.LogData.DataModels.Qso> Qso { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogData.DataModels.Station> Station { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogData.DataModels.Session> Session { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.ContestType> ContestType { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.QsoModeType> QsoModeType { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.QsoExchangeType> QsoExchangeType { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.QsoExchangeAlpha> QsoExchangeAlpha { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.QsoExchangeNumber> QsoExchangeNumber { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.QsoExtraData> QsoExtraData { get; set; }
 
         public DbSet<Logqso.mvc.DataModel.LogData.CallInfoModels.CallInfo> CallInfo { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogData.CallInfoModels.CallInfoDefault> CallInfoDefault { get; set; }
@@ -49,10 +55,21 @@ namespace Logqso.mvc.DataModel.LogData
             //modelBuilder.Properties<string>().Configure(c => c.HasColumnType("varchar"));
            //modelBuilder.Entity<Logqso.mvc.DataModel.LogData.CallInfoModels.CallInfo>().HasMany(i => i.StationId).WillCascadeOnDelete(false);
 
-            //need to turn off CascadeOnDelete on QSO.LogId
+            //compiler complains about Logid circular
+        //marking FK the CallsignId relationship non cascade seems to 
+            //make or allow LogID to be cascade on delete
+            //DONT' KNOW WHY'
+            https://msdn.microsoft.com/en-us/data/jj591620#RequiredToRequired
+            modelBuilder.Entity<LogData.DataModels.Qso>().HasRequired(p => p.CallSign)
+            .WithMany().HasForeignKey(c => c.CallsignId).WillCascadeOnDelete(false);
+
+#if false
+        //need to turn off CascadeOnDelete on QSO.LogId if not a composit key
             https://msdn.microsoft.com/en-us/data/jj591620#RequiredToRequired
             modelBuilder.Entity<LogData.DataModels.Qso>().HasRequired(p => p.Log)
             .WithMany().HasForeignKey(c=>c.LogId).WillCascadeOnDelete(false);
+#endif
+
 
             //http://stackoverflow.com/questions/19373310/introducing-foreign-key-constraint-may-cause-cycles-or-multiple-cascade-paths
            // modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();

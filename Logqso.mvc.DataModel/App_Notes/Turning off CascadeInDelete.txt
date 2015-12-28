@@ -1,0 +1,86 @@
+﻿you can often get multiple deletion paths cuz of your Model class relationships.
+The best solution is to rearchitect your classes.
+
+In some cases this is not possible
+Example:
+Station class has 3 term composite key
+LogId is both a PK and a FK toLog table.
+The PK is required to all 2 logs to have the same StationName.
+The conposite key keeps a log from having dupe StationNames
+This is required to allow all Station rows to be associated with a log
+When the log is deletedm these rows are cascade deleted
+    public class Station
+    {
+        [Key]
+        [Column(Order = 1)]
+        public int StationId { get; set; }
+        [Key]
+        [Column(Order = 2)]
+        public int LogId { get; set; }
+        [Key]
+        [Column(Order = 3,TypeName = "varchar")]
+       // [Column(TypeName = "varchar")]
+        [MaxLength(20)]
+        [Required]
+        public string StationName { get; set; }
+    }
+
+	The QSO class has a StationName. This is a QSO attribute that identifies which radio made the Q.
+	A Multiop Qso needs to know which Log it belongs to. SingleOp have no StationName
+	Deletig the log might cause the StatioName to disappear from DB
+	We make LogId a foreign key (public Log Log { get; set; }) to prevent log deletion
+	without deleting all qsos in the log
+	public class Qso
+    {
+        //http://go.microsoft.com/fwlink/?LinkId=386388
+        [Key]
+        public  int QsoId { get; set; }
+
+        [Required]
+        public int LogId { get; set; }
+        public Log Log { get; set; }
+        //need to turn off CascadeOnDelete on QSO.LogId in LogDataDB.cs
+            //https://msdn.microsoft.com/en-us/data/jj591620#RequiredToRequired
+            //modelBuilder.Entity<LogData.DataModels.Qso>().HasRequired(p => p.Log)
+            //.WithMany().HasForeignKey(c=>c.LogId).WillCascadeOnDelete(false);
+
+        [Column(TypeName = "varchar")]
+        [MaxLength(20)]
+        public string StationName { get; set; }
+        public  int CallsignId { get; set; }
+        [DataType(DataType.Date)]
+        public  DateTime QsoDateEime { get; set; }
+        public  byte RxRst { get; set; }
+        public  byte TxRst { get; set; }
+
+        public virtual CallSign CallSign { get; set; }
+    }
+
+	Since LogID is FK, Deleting the Log with this ID will delete this instance of Qso also when cascade delete is pn
+	CascadeDelete is on cuz EF defaults to this when the FK qdo.LogOd is required.
+	This causes a circular path since Deleting a log will delete all station rows. If 
+		You can avoid cascadeDelete by fluentApi in the modelBuilder
+        //need to turn off CascadeOnDelete on QSO.LogId in LogDataDB.cs
+            //https://msdn.microsoft.com/en-us/data/jj591620#RequiredToRequired
+            //modelBuilder.Entity<LogData.DataModels.Qso>().HasRequired(p => p.Log)
+            //.WithMany().HasForeignKey(c=>c.LogId).WillCascadeOnDelete(false);
+
+	This is not a good idea, cuz you end up with a QSO wiyj no Log
+
+	//https://technet.microsoft.com/en-us/library/ms186973(v=sql.105).aspx
+Multiple Cascading Actions
+________________________________________
+Individual DELETE or UPDATE statements can start a series of cascading referential actions. 
+ example, a database contains three tables: TableA, TableB, and TableC.
+  A foreign key in TableB is defined with ON DELETE CASCADE against the primary key in TableA. 
+  A foreign key in TableC is defined with ON DELETE CASCADE against the primary key in TableB. 
+  If a DELETE statement deletes rows in TableA, the operation also deletes any rows in TableB 
+  that have foreign keys matching the deleted primary keys in TableA, and then deletes any rows in TableC
+  that have foreign keys that match the deleted primary keys in TableB.
+
+The series of cascading referential actions triggered by a single DELETE or UPDATE must form a tree
+ that contains no circular references. No table can appear more than one time in the list of all cascading
+ referential actions that result from the DELETE or UPDATE. Also, the tree of cascading referential actions
+ must not have more than one path to any specified table. Any branch of the tree is ended when it encounters
+ a table for which NO ACTION has been specified or is the default.
+

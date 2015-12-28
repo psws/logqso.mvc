@@ -6,22 +6,26 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace Logqso.mvc.DataModel.LogData.DataModels
 {
-    public class Station
+    public class QsoExchangeAlpha
     {
+        //http://go.microsoft.com/fwlink/?LinkId=386388
         [Key]
+        [ForeignKey("Qso")]
         [Column(Order = 1)]
-        public int StationId { get; set; }
+        public  short QsoNo { get; set; } // Log Order
         [Key]
+        [ForeignKey("Qso")]
         [Column(Order = 2)]
         public int LogId { get; set; }
-        [Key]
-        [Column(Order = 3,TypeName = "varchar")]
-       // [Column(TypeName = "varchar")]
+        [Column(TypeName = "varchar")]
         [MaxLength(20)]
-        //[Required]
-        public string StationName { get; set; }
+        [Required]
+        public string QsoExhangeAlphaValue { get; set; }
+
+        public virtual Qso Qso { get; set; }
+
+
     }
 }

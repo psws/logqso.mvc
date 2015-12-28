@@ -20,6 +20,7 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         public int LogCategoryId { get; set; }
 
         public List<Station> Stations { get; set; }
+        public List<Qso> Qsoes { get; set; }
 
 
         public virtual CallSign CallSign { get; set; }

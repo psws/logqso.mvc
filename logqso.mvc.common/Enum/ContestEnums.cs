@@ -6,24 +6,28 @@ using System.Threading.Tasks;
 
 namespace Logqso.mvc.common.Enum
 {
-    public enum ContestGroupEnum
+
+    public enum ContestTypeEnum
     {
         CQWW = 1,
         CQWPX,
         CQ160,
         RUSDXC,
+
     }
 
-    public enum ContestTypeEnum
+    public enum QsoModeTypeEnum
     {
-        CQ_WW_SSB = 1,
-        CQ_WW_CW,
-        CQ_WPX_SSB,
-        CQ_WPX_CW,
-        CQ_160_SSB,
-        CQ_160_CW,
-        RUSDXC,
-
+        SSB = 1,
+        CW,
+        MIXED,
+        RTTY,
     }
 
+    public enum QsoExchangeTypeEnum
+    {
+        QsoExchangeNumber = 1,
+        QsoExchangeAlpha,
+        QsoExchangeMixed,
+    }
 }

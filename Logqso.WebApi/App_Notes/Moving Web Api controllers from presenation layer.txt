@@ -1,0 +1,5 @@
+﻿The LogQso.WeApi projec is an example of Controllers in a seperate project from Logqso.mvc.ui presentation layer.
+The dat controller and ControlController are located there.
+
+You need to add the Logqso.WebApi project reference to the Logqso.mvc.ui presentation layer
+This is required for the WebApi 2 to discover the controllers when the project starts up

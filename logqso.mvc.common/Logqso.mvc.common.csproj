@@ -45,7 +45,6 @@
     <Compile Include="Enum\CategoryEnums.cs" />
     <Compile Include="Enum\ContestEnums.cs" />
     <Compile Include="Enum\ContinentEnum.cs" />
-    <Compile Include="Enum\QsoExchangeType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringOps.cs" />
   </ItemGroup>
