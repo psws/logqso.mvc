@@ -10,7 +10,7 @@ using Repository.Pattern.UnitOfWork;
 using Repository.Pattern.DataContext;
 using Repository.Pattern.Repositories;
 using Repository.Pattern.Ef6;
-using Logqso.mvc.Entities.LogControlEntity;
+//using Logqso.mvc.Entities.LogControlEntity;
 
 
 
@@ -23,7 +23,7 @@ namespace Logqso.mvc.ui.Controllers
         {
 
 
-#if true
+#if false
             var contextType = typeof(LogControlContext);
             
             //registerComponent.RegisterInstance<IDataContextAsync>(context);
