@@ -30,4 +30,13 @@ namespace Logqso.mvc.common.Enum
         QsoExchangeAlpha,
         QsoExchangeMixed,
     }
+
+    public enum QsoRadioTypeEnum
+    {
+        R1 = 1,
+        R2 = 2,
+        Run,
+        Mult,
+        S_P
+    }
 }

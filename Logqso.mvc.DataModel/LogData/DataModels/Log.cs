@@ -18,14 +18,28 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         public int CallsignId { get; set; }
         public  string ContestId { get; set; }
         public int LogCategoryId { get; set; }
+        [Column(TypeName = "varchar")]
+        [MaxLength(100)]
+        public string QsoDatabaseServdrinstance { get; set; }
+        [Column(TypeName = "varchar")]
+        [MaxLength(100)]
+        public string QsoDatabaseInstabce { get; set; }
+        [Column(TypeName = "varchar")]
+        [MaxLength(100)]
+        public string QsoDatabaseTableName { get; set; }
+        public int CabrilloInfoID { get; set; }
+        public int  WintestDataID { get;   set; }
+        public int N1mmDataID { get; set; }
 
-        public List<Station> Stations { get; set; }
-        public List<Qso> Qsoes { get; set; }
+        //navigation
+        public IList<Station> Stations { get; set; }
+        public IList<Qso> Qsoes { get; set; }
 
-
+        //FK
         public virtual CallSign CallSign { get; set; }
         public virtual Contest Contest { get; set; }
         public virtual LogCategory LogCategory { get; set; }
+        public virtual CabrilloInfo CabrilloInfo { get; set; }
 
 
         //public void FindByID(Guid LogCallsignID)

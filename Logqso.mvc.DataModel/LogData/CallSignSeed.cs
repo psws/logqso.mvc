@@ -17,7 +17,8 @@ namespace Logqso.mvc.DataModel.LogData
         /*
              QsoModeTypeSeeds.SeedContest(context);
             QsoExchangeTypeSeeds.SeedContest(context);
-            ContestTypeSeeds.SeedContest(context);
+             QsoRadioTypeSeeds.SeedContest(context);
+           ContestTypeSeeds.SeedContest(context);
            CallSignSeeds.SeedContest(context);
             ContestSeeds.SeedContest(context);
             LogCategorySeeds.SeedContest(context);

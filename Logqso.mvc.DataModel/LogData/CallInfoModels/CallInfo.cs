@@ -20,7 +20,7 @@ namespace Logqso.mvc.DataModel.LogData.CallInfoModels
         public string ContestId { get; set; }
         [Column(TypeName = "varchar")]
         [MaxLength(25)]
-        public string Call { get; set; }
+        public string SelectedCall { get; set; }
         public  int CallsignId { get; set; }
         //[Column(TypeName = "varchar")]
         //[MaxLength(20)]

@@ -24,4 +24,6 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         //[Required]
         public string StationName { get; set; }
     }
+
+    
 }

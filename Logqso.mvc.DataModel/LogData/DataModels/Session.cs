@@ -10,6 +10,8 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
 {
     public class Session
     {
+
+        // for saved sessions
         [Key]
         [Column(TypeName = "varchar")]
         [MaxLength(256)]
@@ -33,4 +35,5 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         public decimal Subscription { get; set; }
 
     }
+
 }

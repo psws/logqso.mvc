@@ -1,7 +1,50 @@
-﻿Github
-	Git clone repository url
+﻿Using Git and GitHub with Visual Studio
+It can be a bit confusing to get Visual Studio connected to your GitHub repository. If you are having problems you can try and follow these steps. 
+ The easiest way to do things is to create an empty repository in GitHub. It must be empty (no auto generated README or .gitignore files) otherwise Visual Studio will complain. I have some steps further down the page if you want to try and use Visual Studio with a Github repo that already has some files in it.
+ Log in to your github account and look for the little plus sign near the top of the page. 
+ Follow the github prompts from there to create a new repo. Do not add a README or .gitignore 
+ Now copy the URL that github has provided for your repo. It will be something like https://github.com/zanemayo/MyRepo.git 
+
+Now move over to Visual Studio. 
+ Create a new solution in Visual Studio. I'm using 2013. 
+ Right click on project and choose "Add Solution to source control" 
+ Select Git radio button and press OK. This creates a .git file in your project directory. You can also see little green plus signs next to the files in your solution 
+ Right click on the solution and choose 'Commit'. You will now be taken to the 'Team Explorer' pane. 
+ Type your commit message into the yellow textbox near the top and press commit
+
+Great, now you have commited the initial project files to your local repository. The next step is to syncronise your local repository with your github repository. 
+ Click on the 'unsynced commits' link near the top of the 'Team explorer' pane. 
+ You will notice that the 'Sync' button is greyed out. That's because you have to tell Visual Studio where it can find your GitHub repo. 
+ Just below that you should find a place to put in the URL you got from GitHub. Paste it in and click 'Publish'. 
+ Enter your GitHub username and password in the popup on that appears.
+ Now you can press the 'Sync' button and you're done. Yay!
+
+
+
+If your repository already had some files in it you will get an error.
+It may look something like this: 
+You cannot publish local branch master to the remote repository origin because a branch with the same name already exists there. You might want to rename your local branch and try again. 
+
+ This is a bit confusing, but it's caused by the fact that you have a new repo that your created on your PC and another separate repo that you created on GitHub with some files in it. 
+ Time to merge them together... 
+
+ Go to your command prompt and change to your solution directory. From there you should be able to run git commands. You may have to install git if you haven't already 
+ Run 'git pull origin master'. This should merge your GitHub repo with your local repo. 
+ That's all we have to do from the command prompt. Now go back to Visual Studio 
+
+ You may get some conflicts, if you do you will have to resolve these and commit locally again. Visual Studio will tell you if there are any conflicts. 
+ Once any conflicts are resolved, click on the 'master' link near the top of the pane. It should give you a dropdown with an item called 'manage branches'. Click it. 
+ You should see a branch called 'master' under the heading 'Unpublished Branches' 
+ Right click on master and click on 'Publish Branch' 
+ Now you can click on the 'unsynced changes' link again and you will see that the 'Sync' button is not greyed out anymore
+ Click on Sync and you're done!
+
+If you still have problems, it might be best to create a fresh, empty repository in GitHub to avoid any conflicts 
+
+Github
+	Git clone repository https://github.com/psws/logqso.mvc.git
 	Git status
-	Git add filename or  for all   git add . or git add -A
+	Git add filename or  for all   git add . or Git status
 Git commit –m “added  filename”
 Git push
 Git pull
@@ -19,7 +62,7 @@ git remote add origin https://github.com/psws/logqso.mvc.git
 git push -u origin master
 
 …or push an existing repository from the command line
-git remote add origin https://github.com/psws/logqso.mvc.git
+git remote add origin https://github.com/psws/logqso.mvc.git   //creates github repository
 git push -u origin master
 
 

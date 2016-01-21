@@ -10,8 +10,7 @@ namespace Logqso.Repository.Models.LogControl
     {
         public string FiltBand { get; set; }
         public string FiltContinent { get; set; }
-        public string FiltCountry { get; set; }
-        public int FiltCountryIndex { get; set; }
+        public string FiltCountryInnerHTML { get; set; }
         public string FiltCQZone { get; set; }
         public bool Disabled { get; set; }
     }

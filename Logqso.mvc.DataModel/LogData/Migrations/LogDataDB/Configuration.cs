@@ -27,18 +27,6 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-            QsoModeTypeSeeds.SeedContest(context);
-            QsoExchangeTypeSeeds.SeedContest(context);
-            ContestTypeSeeds.SeedContest(context);
-            CallSignSeeds.SeedContest(context);
-            ContestSeeds.SeedContest(context);
-            LogCategorySeeds.SeedContest(context);
-            LogSeeds.SeedContest(context);
-            StationSeeds.SeedContest(context);
-#if DEBUG
-         QsoSeeds.SeedContest(context);
-#endif
-
         }
     }
 }

@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Repository.Pattern.Ef6;
 
-namespace Logqso.mvc.Entities.LogDataEntity
+namespace Logqso.mvc.DataModel.Models
 {
-    public partial class Contest : Entity
+    public partial class Contest
     {
         public Contest()
         {
@@ -14,12 +13,13 @@ namespace Logqso.mvc.Entities.LogDataEntity
 
         public string ContestId { get; set; }
         public string ContestName { get; set; }
-        public int ContestGroup { get; set; }
-        public int ContestType { get; set; }
+        public int ContestTypeEnum { get; set; }
+        public int QsoModeTypeEnum { get; set; }
         public System.DateTime StartDateTime { get; set; }
         public System.DateTime EndDateTime { get; set; }
-        public bool Active { get; set; }
         public virtual ICollection<CallInfo> CallInfoes { get; set; }
+        public virtual ContestType ContestType { get; set; }
+        public virtual QsoModeType QsoModeType { get; set; }
         public virtual ICollection<Log> Logs { get; set; }
     }
 }

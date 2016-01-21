@@ -152,7 +152,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests
                 
                 Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltBand.Count > 1);
                 Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltContinent.Count > 1);
-                Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltCountry.Count > 1);
+                Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltCountryInnerHTML.Count > 1);
                 Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltCQZone.Count > 1);
 
                 Assert.IsTrue(ContestControl.ControlXaxisEntity.XaxisDuration.Count > 1);

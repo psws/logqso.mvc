@@ -19,9 +19,14 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         [Column(Order = 2)]
         //[ForeignKey("Log")]
         public int LogId { get; set; }
-        [Column(TypeName = "varchar")]
+        [Column(TypeName = "decimal(7,4)")]
         [MaxLength(20)]
-        public string StationName { get; set; }
+
+        public decimal Frequency { get; set; }
+
+        [ForeignKey("Station")]
+        [Column(Order = 1)]
+        public int StationId { get; set; }
 
 #if false
         [Required]
@@ -57,14 +62,20 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         public DateTime QsoDateTime { get; set; }
         public  byte RxRst { get; set; }
         public  byte TxRst { get; set; }
+        public int QsoExchangeNumber { get; set; }
         [Required]
          public Logqso.mvc.common.Enum.QsoModeTypeEnum QsoModeTypeEnum { get; set; }
+        [Required]
+        public Logqso.mvc.common.Enum.QsoRadioTypeEnum QsoRadioTypeEnum { get; set; }
+       
 
 
         public virtual CallSign CallSign { get; set; }
         //public Station Station { get; set; }
        //public virtual Log Log { get; set; }
        public virtual QsoModeType QsoModeType { get; set; }
+       public virtual QsoRadioType QsoRadioType { get; set; }
+       public virtual Station Station { get; set; }
 
     }
 }

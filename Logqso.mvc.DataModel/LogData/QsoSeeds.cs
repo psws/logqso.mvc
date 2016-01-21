@@ -18,10 +18,10 @@ namespace Logqso.mvc.DataModel.LogData
         {
             context.Qso.AddOrUpdate(
             p => p.QsoNo,
-                new Qso {    QsoNo = 1, LogId = 1, CallsignId = 2,  QsoModeTypeEnum = common.Enum.QsoModeTypeEnum.SSB,
-                        RxRst = 59, TxRst = 59, StationName = "STN1", QsoDateTime =  DateTime.Parse("10/23/2015 00:00:01") },
-                new Qso {    QsoNo = 2, LogId = 1, CallsignId = 3,  QsoModeTypeEnum = common.Enum.QsoModeTypeEnum.SSB,
-                        RxRst = 59, TxRst = 59, StationName = "STN1", QsoDateTime =  DateTime.Parse("10/23/2015 00:00:02") }
+                new Qso {    QsoNo = 1, LogId = 1, Frequency= 14208M, CallsignId = 2,  QsoModeTypeEnum = common.Enum.QsoModeTypeEnum.SSB,
+                        RxRst = 59, TxRst = 59, StationId = 1, QsoDateTime =  DateTime.Parse("10/23/2015 00:00:01"), QsoRadioTypeEnum = QsoRadioTypeEnum.R1 },
+                new Qso {    QsoNo = 2, LogId = 2, Frequency = 21290.7M, CallsignId = 3,  QsoModeTypeEnum = common.Enum.QsoModeTypeEnum.SSB,
+                        RxRst = 59, TxRst = 59, StationId = 1, QsoDateTime =  DateTime.Parse("10/23/2015 00:00:02"), QsoRadioTypeEnum = QsoRadioTypeEnum.R2 } 
                                   
             );
 

@@ -78,20 +78,19 @@
     <Compile Include="LogControl\YaxisModels\YaxisViewType.cs" />
     <Compile Include="LogControl\YaxisSeeds.cs" />
     <Compile Include="LogData\CallInfoModels\CallInfoDefault.cs" />
+    <Compile Include="LogData\DataModels\CabrilloInfo.cs" />
     <Compile Include="LogData\DataModels\QsoExtraData.cs" />
     <Compile Include="LogData\DataModels\QsoExchangeNumber.cs" />
     <Compile Include="LogData\DataModels\QsoExchangeAlpha.cs" />
     <Compile Include="LogData\ContestTypeSeeds.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201512280750083_InitialDatabaseCreation.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201512280750083_InitialDatabaseCreation.Designer.cs">
-      <DependentUpon>201512280750083_InitialDatabaseCreation.cs</DependentUpon>
-    </Compile>
+    <Compile Include="LogData\DataModels\QsoRadioType.cs" />
     <Compile Include="LogData\Migrations\LogDataDB\Configuration.cs" />
     <Compile Include="LogData\QsoExchangeTypeSeeds.cs" />
     <Compile Include="LogData\QsoModeTypeSeeds.cs" />
     <Compile Include="LogData\DataModels\QsoModeType.cs" />
     <Compile Include="LogData\DataModels\QsoExchangeType.cs" />
     <Compile Include="LogData\DataModels\ContestType.cs" />
+    <Compile Include="LogData\QsoRadioTypeSeeds.cs" />
     <Compile Include="LogData\QsoSeeds.cs" />
     <Compile Include="LogData\StationSeeds.cs" />
     <Compile Include="LogData\LogSeeds.cs" />
@@ -115,6 +114,37 @@
     <Compile Include="LogControl\FilterModels\FiltContinent.cs" />
     <Compile Include="LogControl\FilterModels\FiltBand.cs" />
     <Compile Include="LogControl\FiltersSeeds.cs" />
+    <Compile Include="Models\CallInfo.cs" />
+    <Compile Include="Models\CallInfoDefault.cs" />
+    <Compile Include="Models\CallSign.cs" />
+    <Compile Include="Models\Contest.cs" />
+    <Compile Include="Models\ContestType.cs" />
+    <Compile Include="Models\Log.cs" />
+    <Compile Include="Models\LogCategory.cs" />
+    <Compile Include="Models\LogqsoDataContext.cs" />
+    <Compile Include="Models\Mapping\CallInfoDefaultMap.cs" />
+    <Compile Include="Models\Mapping\CallInfoMap.cs" />
+    <Compile Include="Models\Mapping\CallSignMap.cs" />
+    <Compile Include="Models\Mapping\ContestMap.cs" />
+    <Compile Include="Models\Mapping\ContestTypeMap.cs" />
+    <Compile Include="Models\Mapping\LogCategoryMap.cs" />
+    <Compile Include="Models\Mapping\LogMap.cs" />
+    <Compile Include="Models\Mapping\QsoExchangeAlphaMap.cs" />
+    <Compile Include="Models\Mapping\QsoExchangeNumberMap.cs" />
+    <Compile Include="Models\Mapping\QsoExchangeTypeMap.cs" />
+    <Compile Include="Models\Mapping\QsoExtraDataMap.cs" />
+    <Compile Include="Models\Mapping\QsoMap.cs" />
+    <Compile Include="Models\Mapping\QsoModeTypeMap.cs" />
+    <Compile Include="Models\Mapping\SessionMap.cs" />
+    <Compile Include="Models\Mapping\StationMap.cs" />
+    <Compile Include="Models\Qso.cs" />
+    <Compile Include="Models\QsoExchangeAlpha.cs" />
+    <Compile Include="Models\QsoExchangeNumber.cs" />
+    <Compile Include="Models\QsoExchangeType.cs" />
+    <Compile Include="Models\QsoExtraData.cs" />
+    <Compile Include="Models\QsoModeType.cs" />
+    <Compile Include="Models\Session.cs" />
+    <Compile Include="Models\Station.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -147,9 +177,6 @@
     <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201508310133214_InitialDatabaseCreation.resx">
       <DependentUpon>201508310133214_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201512280750083_InitialDatabaseCreation.resx">
-      <DependentUpon>201512280750083_InitialDatabaseCreation.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Notes\DataModel LogControl code first database setup .txt" />
@@ -160,7 +187,11 @@
     <Content Include="App_Notes\Update entities in Logqso.mvc.Entities1.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CodeTemplates\" />
     <Folder Include="Repository\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
