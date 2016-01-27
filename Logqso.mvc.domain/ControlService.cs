@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using System.Threading.Tasks;
 using Logqso.mvc.domain.Interfaces;
+
 using Logqso.mvc.Entities.LogControlEntity;
 using Repository.Pattern.Repositories;
 using Service.Pattern;
@@ -28,8 +29,10 @@ namespace Logqso.mvc.domain
         ///     All methods that are exposed from Repository in Service are overridable to add business logic,
         ///     business logic should be in the Service layer and not in repository for separation of concerns.
         /// </summary>
+        /// 
     public class ControlService : Service<CatOperator>, IControlService
     {
+
         private readonly IRepositoryAsync<CatOperator> _repository;
 
         public ControlService(IRepositoryAsync<CatOperator> repository)

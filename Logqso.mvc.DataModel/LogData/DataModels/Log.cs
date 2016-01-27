@@ -18,18 +18,23 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         public int CallsignId { get; set; }
         public  string ContestId { get; set; }
         public int LogCategoryId { get; set; }
+        public short? QsoExchangeNumber { get; set; }  //ir: logs zone #
+
         [Column(TypeName = "varchar")]
         [MaxLength(100)]
-        public string QsoDatabaseServdrinstance { get; set; }
+        [Required]
+        public string QsoDatabaseServerInstance { get; set; }
         [Column(TypeName = "varchar")]
         [MaxLength(100)]
-        public string QsoDatabaseInstabce { get; set; }
+        [Required]
+        public string QsoDatabaseInstance { get; set; }
         [Column(TypeName = "varchar")]
         [MaxLength(100)]
+        [Required]
         public string QsoDatabaseTableName { get; set; }
-        public int CabrilloInfoID { get; set; }
-        public int  WintestDataID { get;   set; }
-        public int N1mmDataID { get; set; }
+        public int? CabrilloInfoID { get; set; }
+        public int? WintestDataID { get; set; }
+        public int? N1mmDataID { get; set; }
 
         //navigation
         public IList<Station> Stations { get; set; }
@@ -39,7 +44,11 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         public virtual CallSign CallSign { get; set; }
         public virtual Contest Contest { get; set; }
         public virtual LogCategory LogCategory { get; set; }
+        //http://stackoverflow.com/questions/15483019/entity-framework-code-first-how-to-annotate-a-foreign-key-for-a-default-valu
+        //[InverseProperty("CabrilloInfo")]
+        [ForeignKey("CabrilloInfoID")]
         public virtual CabrilloInfo CabrilloInfo { get; set; }
+        //public virtual ICollection<CabrilloInfo> CabrilloInfos { get; set; }
 
 
         //public void FindByID(Guid LogCallsignID)

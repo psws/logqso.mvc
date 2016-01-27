@@ -1,6 +1,9 @@
 ﻿you can often get multiple deletion paths cuz of your Model class relationships.
 The best solution is to rearchitect your classes.
 
+The problem is that when you call a delete on the entity, 
+it will delete each of the f-key referenced entities as well.
+
 In some cases this is not possible
 Example:
 Station class has 3 term composite key

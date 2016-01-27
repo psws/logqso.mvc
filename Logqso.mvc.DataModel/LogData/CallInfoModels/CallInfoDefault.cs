@@ -11,9 +11,9 @@ namespace Logqso.mvc.DataModel.LogData.CallInfoModels
     public class CallInfoDefault
     {
         [Key]
-        public int Id { get; set; }
+        public int CallInfoDefaultId { get; set; }
 
-        public List<CallInfo> CallInfos { get; set; }
+        public IList<CallInfo> CallInfos { get; set; }
         [Column(TypeName = "varchar")]
         [MaxLength(256)]
         [Required]

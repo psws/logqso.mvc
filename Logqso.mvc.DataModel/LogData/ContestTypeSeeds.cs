@@ -21,7 +21,7 @@ namespace Logqso.mvc.DataModel.LogData
                 new ContestType { ContestTypeEnum  = ContestTypeEnum.CQWW  , ContestTypeEnumName = Enum.GetName(typeof(ContestTypeEnum), ContestTypeEnum.CQWW),
                     QsoExchangeName = "Zone", QsoExchangeTypeEnum = QsoExchangeTypeEnum.QsoExchangeNumber, QsoMultName = "ZnMlt", QsoMult2Name = "CtyMlt"},
                 new ContestType { ContestTypeEnum  = ContestTypeEnum.CQWPX  , ContestTypeEnumName = Enum.GetName(typeof(ContestTypeEnum), ContestTypeEnum.CQWPX),
-                    QsoExchangeName = "Rx#", QsoExchangeTypeEnum = QsoExchangeTypeEnum.QsoExchangeNumber, QsoMultName = "PfxMlt", QsoMult2Name = "", ExtraDataName = "Prefix"},
+                    QsoExchangeName = "Rx #", QsoExchangeTypeEnum = QsoExchangeTypeEnum.QsoExchangeNumber, QsoMultName = "PfxMlt", QsoMult2Name = "", ExtraDataName = "Prefix"},
                 new ContestType { ContestTypeEnum  = ContestTypeEnum.CQ160  , ContestTypeEnumName = Enum.GetName(typeof(ContestTypeEnum), ContestTypeEnum.CQ160),
                     QsoExchangeName = "Cty/St/Pv", QsoExchangeTypeEnum = QsoExchangeTypeEnum.QsoExchangeAlpha, QsoMultName = "Cty/St/Pv-Mlt", QsoMult2Name = ""},
                 new ContestType { ContestTypeEnum  = ContestTypeEnum.RUSDXC  , ContestTypeEnumName = Enum.GetName(typeof(ContestTypeEnum), ContestTypeEnum.RUSDXC),
@@ -33,4 +33,5 @@ namespace Logqso.mvc.DataModel.LogData
         }
 
     }
+
 }

@@ -67,6 +67,20 @@ next create tables in DB
 
 NEXT:
 Add any seed data in the configuration.cs file
+                   QsoModeTypeSeeds.SeedContest(context);
+                   QsoExchangeTypeSeeds.SeedContest(context);
+                   ContestTypeSeeds.SeedContest(context);
+                   QsoRadioTypeSeeds.SeedContest(context);
+                   CabrilloInfoSeeds.SeedContest(context);
+                   CallSignSeeds.SeedContest(context);
+                   ContestSeeds.SeedContest(context);
+                   LogCategorySeeds.SeedContest(context);
+                   LogSeeds.SeedContest(context);
+                   StationSeeds.SeedContest(context);
+                   CallInfoSeeds.SeedContest(context);
+         #if DEBUG
+                QsoSeeds.SeedContest(context);
+        #endif
 
 PM>Update-Database -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogData.Migrations.LogDataDB.Configuration -Verbose -ConnectionStringName "LogDataDB"
 

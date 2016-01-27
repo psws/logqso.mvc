@@ -13,7 +13,9 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
     {
         [Key]
         public int CabrilloInfoId { get; set; }
-        public int LogId { get; set; }
+
+        ////[ForeignKey("Log")]
+        ////public int LogId { get; set; }
         public int ClaimedScore { get; set; }
         [Column(TypeName = "varchar")]
         [MaxLength(20)]
@@ -22,7 +24,7 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         [MaxLength(200)]
         public string Operators { get; set; }
 
-        public virtual Log Log { get; set; }
+        ////public virtual Log Log { get; set; }
 
     }
 }

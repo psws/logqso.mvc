@@ -18,11 +18,12 @@ namespace Logqso.mvc.DataModel.LogData
         {
             context.Station.AddOrUpdate(
             p => p.StationId,
-                new Station {  StationId = 1, LogId = 1,  StationName = "STN1" },
-                new Station {  StationId = 2, LogId = 1,  StationName = "STN2" },
-                new Station {  StationId = 3, LogId = 1,  StationName = "STN3" },
-                new Station {  StationId = 4, LogId = 1,  StationName = "STN4" }
-
+                new Station {  LogId = 1,  StationName = "STN1" },
+                new Station {  LogId = 1,  StationName = "STN2" },
+                new Station {  LogId = 1,  StationName = "STN3" },
+                new Station {  LogId = 1,  StationName = "STN4" },
+                new Station {  LogId = 2,  StationName = "STN1" },
+                new Station {  LogId = 2,  StationName = "STN2" }
                                     
             );
 

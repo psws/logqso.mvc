@@ -28,6 +28,17 @@ namespace Logqso.Repository
 
             //registerComponent.RegisterInstance<LogControlDB>(context);
 
+#if true
+            //MOVED FROM UI LATER
+            //var contextType = typeof(LogControlContext);
+
+            //registerComponent.RegisterInstance<IDataContextAsync>(context);
+            Object[] Parms = new Object[] {
+             contextType
+             };
+            registerComponent.RegisterTypeWithInjectionTypes<IUnitOfWorkAsync, UnitOfWork>(Parms, false);
+#endif
+
             var uowType = typeof(IUnitOfWorkAsync);
 
             Object[] Parms2 = new Object[] {

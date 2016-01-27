@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+ 
 
 
 namespace Logqso.mvc.DataModel.LogData.DataModels
@@ -13,9 +14,10 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
     {
         [Key]
         [Column(Order = 1)]
+        [System.ComponentModel.DataAnnotations.Schema.DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
         public int StationId { get; set; }
         [Key]
-        [Column(Order = 2)]
+        [Column(Order =2)]
         public int LogId { get; set; }
         [Key]
         [Column(Order = 3,TypeName = "varchar")]
@@ -23,6 +25,9 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         [MaxLength(20)]
         //[Required]
         public string StationName { get; set; }
+        ////[System.ComponentModel.DataAnnotations.Schema.DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
+        ////public int StationId { get; set; }
+
     }
 
     

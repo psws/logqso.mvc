@@ -1,0 +1,8 @@
+﻿
+When you enable cpnfigurations you can get a "Sequence contains no matching element" error.
+This is caused by sizing Typename annotations
+
+This line in [Column(TypeName = "decimal(7,4)")]
+changing to [Column(TypeName = "decimal")]  fixes this bug
+
+A [Column(TypeName="VARCHAR(254)")] will also generate this error

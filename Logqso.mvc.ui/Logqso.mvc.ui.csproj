@@ -268,7 +268,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\DependencyResolver.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogQsoController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -392,6 +391,8 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\TestClientDialogs.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\TestClientReferences.cshtml" />
     <Content Include="App_Notes\Global.asax, WebActivatorEx debugging.txt" />
+    <Content Include="CodeTemplates\EFModelFromDatabase\EntityType.cs.t4" />
+    <Content Include="CodeTemplates\EFModelFromDatabase\Context.cs.t4" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -416,7 +417,9 @@
     <Content Include="Scripts\WebApiTestClient.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Content\logqso.css" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -467,18 +470,6 @@
     <ProjectReference Include="..\logqso.mvc.common\Logqso.mvc.common.csproj">
       <Project>{7d8dad53-fc2e-4812-a636-be213a28fb0f}</Project>
       <Name>Logqso.mvc.common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Logqso.Mvc.domain\Logqso.mvc.domain.csproj">
-      <Project>{f04adb7b-8297-4e4a-a2b8-146c89e0c91e}</Project>
-      <Name>Logqso.mvc.domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Logqso.mvc.Entities\Logqso.mvc.Entities.csproj">
-      <Project>{c6e19eb6-8334-4d08-811a-2742701628e7}</Project>
-      <Name>Logqso.mvc.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Logqso.Repository\Logqso.Repository.csproj">
-      <Project>{b3a00fcf-b6bc-4269-b75a-edd91480d7aa}</Project>
-      <Name>Logqso.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\Logqso.WebApi\Logqso.WebApi.csproj">
       <Project>{c9b82e82-ec99-4e4f-a91a-030943ed87a9}</Project>

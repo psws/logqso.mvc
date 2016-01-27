@@ -152,16 +152,36 @@ namespace Logqso.WebApi
             {
                 Username = System.Web.HttpContext.Current.User.Identity.Name;
             }
-            bool bSaved = await _ControlService.SaveControlSelections(ContestControlSettingsEntity, Username);
-            if (ContestControlSettingsEntity == null)
+            try
             {
-                return NotFound();
+                _unitOfWorkAsync.BeginTransaction();
+
+                bool bSaved = await _ControlService.SaveControlSelections(ContestControlSettingsEntity, Username);
+
+
+                // save
+                var saveChangesAsync = _unitOfWorkAsync.SaveChanges();
+
+
+                _unitOfWorkAsync.Commit();
+                if (ContestControlSettingsEntity == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return Ok(bSaved);
+                    //return Ok(ContestControlEntity);
+                }
             }
-            else
+            catch (Exception e)
             {
-                return Ok(bSaved);
-                //return Ok(ContestControlEntity);
+                _unitOfWorkAsync.Rollback();
+                return Ok(false);
+
             }
+
+
 
         }
 

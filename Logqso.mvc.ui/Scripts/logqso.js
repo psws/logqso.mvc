@@ -324,10 +324,10 @@ each(function (indexInArray, valueOfElement) {
                     $(this).selectmenu("option", "width", 60);
                     break
                 case 'CatAssist':
-                    $(this).selectmenu("option", "width", 120);
+                    $(this).selectmenu("option", "width", 110);
                     break
                 case 'CatTX':
-                    $(this).selectmenu("option", "width", 110);
+                    $(this).selectmenu("option", "width", 90);
                     break
                 default:
                     $(this).selectmenu("option", "width", 100);
@@ -396,6 +396,15 @@ each(function (indexInArray, valueOfElement) {
     //                'margin-top': -(ElementCount * 25)
     //            });
 
+    //set DDL change event
+    $("select[id ^='Cat'], select[id ^='Filt'], select[id ^='Yaxis'], select[id ^='Xaxis']").
+        each(function (indexInArray, valueOfElement) {
+            $(this).on("selectmenuselect", function (event, ui) {
+                id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
+                _lq.ControlUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML);
+            })
+
+        });
 
 
     //$("ul[id^='Axis'] ").
@@ -639,11 +648,12 @@ each(function (indexInArray, valueOfElement) {
 
             $select = $('#FiltCountry');
             $select.html('');
-            $.each(data.ControlFiltersEntity.FiltCountry, function (key, val) {
+            $.each(data.ControlFiltersEntity.FiltCountryInnerHTML, function (key, val) {
+                //val has to be innerhtml with &nbsp
                 $select.append('<option>' + val + '</option>');
             })
             $ul = $("ul[id^=FiltCountry]");
-            if (data.ControlFiltersEntity.FiltCountry.length > 20) {
+            if (data.ControlFiltersEntity.FiltCountryInnerHTML.length > 20) {
                 $ul.css({
                     //'overflow-y':scroll,
                     'height': (20 * (20)) + "px",
@@ -657,7 +667,7 @@ each(function (indexInArray, valueOfElement) {
                 $select.append('<option >' + val + '</option>');
             })
             $ul = $("ul[id^=FiltCQZone]");
-            if (data.ControlFiltersEntity.FiltCountry.length > 20) {
+            if (data.ControlFiltersEntity.FiltCQZone.length > 20) {
                 $ul.css({
                     //'overflow-y':scroll,
                     'height': (20 * (20)) + "px",
@@ -843,9 +853,15 @@ each(function (indexInArray, valueOfElement) {
         $select.selectmenu("refresh");
 
         //index = $('#FiltCountry').prop("selectedIndex");
-        $('#FiltCountry').prop("selectedIndex", ControlFiltersSettingsEntity.FiltCountryIndex).selectmenu('refresh');
-        //$select = $('#FiltCountry').val(ControlFiltersSettingsEntity.FiltCountry);
-        //$select.selectmenu("refresh");
+
+        //$('#FiltCountry').prop("selectedValue", ControlFiltersSettingsEntity.FiltCountryInnerHTML).selectmenu('refresh');
+        if (ControlFiltersSettingsEntity.FiltCountryInnerHTML.indexOf("&nbsp") != -1) {
+            var Selectedval = ControlFiltersSettingsEntity.FiltCountryInnerHTML.replace("&nbsp;&nbsp;&nbsp;&nbsp;", "    ");
+            var Selectedval = Selectedval.replace("&amp;", "&");
+        }
+        //Selected val cannot be innerhtml
+        $('#FiltCountry').val(Selectedval).selectmenu('refresh');
+
 
 
 
@@ -897,15 +913,6 @@ each(function (indexInArray, valueOfElement) {
     $(window).resize();
     document.getElementById("body").style.visibility = "visible";
 
-    //set DDL change event
-    $("select[id ^='Cat'], select[id ^='Filt'], select[id ^='Yaxis'], select[id ^='Xaxis']").
-        each(function (indexInArray, valueOfElement) {
-            $(this).on("selectmenuchange", function (event, ui) {
-                id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
-                _lq.ControlUpdated(ui.item.element[0].parentElement.name, id.text());
-            })
-
-        });
 
     });
 
@@ -923,17 +930,16 @@ each(function (indexInArray, valueOfElement) {
     _lq.ControlCategorySettingsEntity =  {
         CatOperator: '',
         CatBand: '',
+        CatPower: '',
         CatAssisted: '',
         CatNoOfTx: '',
-        CatPower: '',
         Disabled: 0
     };
 
     _lq.ControlFiltersSettingsEntity = {
         FiltBand: '',
         FiltContinent: '',
-        FiltCountry: '',
-        FiltCountryIndex: '',
+        FiltCountryInnerHTML: '',
         FiltCQZone: '',
         Disabled: 0
     };
@@ -1002,17 +1008,24 @@ each(function (indexInArray, valueOfElement) {
         }else if (Controlid.indexOf("Filt")>= 0)  {
             switch (Controlid) {
                 case "FiltBand":
-                    _lq.ControlFiltersSettingsEntity.FiltBand = SelectedValue
+                    _lq.ControlFiltersSettingsEntity.FiltBand = SelectedValue;
                     break;
                 case "FiltContinent":
-                    _lq.ControlFiltersSettingsEntity.FiltContinent = SelectedValue
+                    _lq.ControlFiltersSettingsEntity.FiltContinent = SelectedValue;
                     break;
                 case "FiltCountry":
-                    _lq.ControlFiltersSettingsEntity.FiltCountry = SelectedValue
-                    _lq.ControlFiltersSettingsEntity.FiltCountryIndex = $('#FiltCountry').prop("selectedIndex");
+                    //if (SelectedValue.indexOf("&nbsp") == -1) {
+                    //    var val = SelectedValue.IndexOf(" ");
+                    //    _lq.ControlFiltersSettingsEntity.FiltCountryInnerHTML = SelectedValue.replace(/ /g, '+');
+                    //    //_lq.ControlFiltersSettingsEntity.FiltCountryInnerHTML = SelectedValue.replace(" ", String.fromCharCode(160) );
+                    //} else {
+                    //    _lq.ControlFiltersSettingsEntity.FiltCountryInnerHTML = SelectedValue;
+                    //}
+                    _lq.ControlFiltersSettingsEntity.FiltCountryInnerHTML = SelectedValue
+                    //_lq.ControlFiltersSettingsEntity.FiltCountryIndex = $('#FiltCountry').prop("selectedIndex");
                     break;
                 case "FiltCQZone":
-                    _lq.ControlFiltersSettingsEntity.FiltCQZone = SelectedValue
+                    _lq.ControlFiltersSettingsEntity.FiltCQZone = SelectedValue;
                     break;
                 default:
         
@@ -1024,7 +1037,7 @@ each(function (indexInArray, valueOfElement) {
                     _lq.ControlXaxisSettingsEntity.XaxisStarttimeIndex = $('#XaxisStarttime').prop("selectedIndex");
                     break;
                 case "XaxisDuration":
-                    _lq.ControlXaxisSettingsEntity.XaxisDuration = SelectedValue
+                    _lq.ControlXaxisSettingsEntity.XaxisDuration = SelectedValue;
                     break;
                 default:
         
@@ -1033,14 +1046,14 @@ each(function (indexInArray, valueOfElement) {
         } else if (Controlid.indexOf("Yaxis") >= 0)   {
             switch (Controlid) {
                 case "YaxisFunction":
-                    _lq.ControlYaxisSettingsEntity.YaxisFunction = SelectedValue
+                    _lq.ControlYaxisSettingsEntity.YaxisFunction = SelectedValue;
                     _lq.ControlYaxisSettingsEntity.YaxisFunctionIndex = $('#YaxisFunction').prop("selectedIndex");
                     break;
                 case "YaxisInterval":
-                    _lq.ControlYaxisSettingsEntity.YaxisInterval = SelectedValue
+                    _lq.ControlYaxisSettingsEntity.YaxisInterval = SelectedValue;
                     break;
                 case "YaxisViewType":
-                    _lq.ControlYaxisSettingsEntity.YaxisViewType = SelectedValue
+                    _lq.ControlYaxisSettingsEntity.YaxisViewType = SelectedValue;
                     break;
                 default:
         
@@ -1087,6 +1100,8 @@ each(function (indexInArray, valueOfElement) {
             ControlXaxisSettingsEntity: _lq.ControlXaxisSettingsEntity,
             ControlYaxisSettingsEntity: _lq.ControlYaxisSettingsEntity
         };
+        //get rid of old
+        window.sessionStorage.removeItem(_lq.SessionSaveControlSelections);
         window.sessionStorage.setItem(_lq.SessionSaveControlSelections, JSON.stringify(dataObj) );
 
     }

@@ -37,6 +37,9 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="googleutils">
+      <HintPath>..\..\..\VCSharp projects\projects .net 4.5.1\googleutils\bin\Debug\googleutils.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -50,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DependencyResolver.cs" />
+    <Compile Include="LogData\CabrilloInfoSeed.cs" />
     <Compile Include="LogData\CallInfoModels\CallInfo.cs" />
     <Compile Include="LogControl\CategoryModels\CatAssisted.cs" />
     <Compile Include="LogControl\CategoryModels\CatBand.cs" />
@@ -77,13 +81,17 @@
     <Compile Include="LogControl\YaxisModels\YaxisInterval.cs" />
     <Compile Include="LogControl\YaxisModels\YaxisViewType.cs" />
     <Compile Include="LogControl\YaxisSeeds.cs" />
-    <Compile Include="LogData\CallInfoModels\CallInfoDefault.cs" />
     <Compile Include="LogData\DataModels\CabrilloInfo.cs" />
+    <Compile Include="LogData\DataModels\CallInfoSeeds.cs" />
     <Compile Include="LogData\DataModels\QsoExtraData.cs" />
     <Compile Include="LogData\DataModels\QsoExchangeNumber.cs" />
     <Compile Include="LogData\DataModels\QsoExchangeAlpha.cs" />
     <Compile Include="LogData\ContestTypeSeeds.cs" />
     <Compile Include="LogData\DataModels\QsoRadioType.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201601270049256_InitialDatabaseCreation3.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201601270049256_InitialDatabaseCreation3.Designer.cs">
+      <DependentUpon>201601270049256_InitialDatabaseCreation3.cs</DependentUpon>
+    </Compile>
     <Compile Include="LogData\Migrations\LogDataDB\Configuration.cs" />
     <Compile Include="LogData\QsoExchangeTypeSeeds.cs" />
     <Compile Include="LogData\QsoModeTypeSeeds.cs" />
@@ -114,37 +122,12 @@
     <Compile Include="LogControl\FilterModels\FiltContinent.cs" />
     <Compile Include="LogControl\FilterModels\FiltBand.cs" />
     <Compile Include="LogControl\FiltersSeeds.cs" />
-    <Compile Include="Models\CallInfo.cs" />
-    <Compile Include="Models\CallInfoDefault.cs" />
-    <Compile Include="Models\CallSign.cs" />
-    <Compile Include="Models\Contest.cs" />
-    <Compile Include="Models\ContestType.cs" />
-    <Compile Include="Models\Log.cs" />
-    <Compile Include="Models\LogCategory.cs" />
-    <Compile Include="Models\LogqsoDataContext.cs" />
-    <Compile Include="Models\Mapping\CallInfoDefaultMap.cs" />
-    <Compile Include="Models\Mapping\CallInfoMap.cs" />
-    <Compile Include="Models\Mapping\CallSignMap.cs" />
-    <Compile Include="Models\Mapping\ContestMap.cs" />
-    <Compile Include="Models\Mapping\ContestTypeMap.cs" />
-    <Compile Include="Models\Mapping\LogCategoryMap.cs" />
-    <Compile Include="Models\Mapping\LogMap.cs" />
-    <Compile Include="Models\Mapping\QsoExchangeAlphaMap.cs" />
-    <Compile Include="Models\Mapping\QsoExchangeNumberMap.cs" />
-    <Compile Include="Models\Mapping\QsoExchangeTypeMap.cs" />
-    <Compile Include="Models\Mapping\QsoExtraDataMap.cs" />
-    <Compile Include="Models\Mapping\QsoMap.cs" />
-    <Compile Include="Models\Mapping\QsoModeTypeMap.cs" />
-    <Compile Include="Models\Mapping\SessionMap.cs" />
-    <Compile Include="Models\Mapping\StationMap.cs" />
-    <Compile Include="Models\Qso.cs" />
-    <Compile Include="Models\QsoExchangeAlpha.cs" />
-    <Compile Include="Models\QsoExchangeNumber.cs" />
-    <Compile Include="Models\QsoExchangeType.cs" />
-    <Compile Include="Models\QsoExtraData.cs" />
-    <Compile Include="Models\QsoModeType.cs" />
-    <Compile Include="Models\Session.cs" />
-    <Compile Include="Models\Station.cs" />
+    <Compile Include="LogData\UbnModels\UbnDupes.cs" />
+    <Compile Include="LogData\UbnModels\UbnIncorrectCall.cs" />
+    <Compile Include="LogData\UbnModels\UbnIncorrectExchange.cs" />
+    <Compile Include="LogData\UbnModels\UbnNotInLog.cs" />
+    <Compile Include="LogData\UbnModels\UbnSummary.cs" />
+    <Compile Include="LogData\UbnModels\UbnUniques.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -177,12 +160,17 @@
     <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201508310133214_InitialDatabaseCreation.resx">
       <DependentUpon>201508310133214_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201601270049256_InitialDatabaseCreation3.resx">
+      <DependentUpon>201601270049256_InitialDatabaseCreation3.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Notes\2 or more FK to same table.txt" />
     <Content Include="App_Notes\DataModel LogControl code first database setup .txt" />
     <Content Include="App_Notes\DataModel LogData code first database setup.txt" />
     <Content Include="App_Notes\Removing old migrations.txt" />
     <Content Include="App_Notes\Settng up DB user jims9mr in SQL DB.txt" />
+    <Content Include="App_Notes\Sequence contains no matching element.txt" />
     <Content Include="App_Notes\Turning off CascadeInDelete.txt" />
     <Content Include="App_Notes\Update entities in Logqso.mvc.Entities1.txt" />
   </ItemGroup>
