@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Repository.Pattern.Ef6;
+using Infrastructure;
 
 
 namespace Logqso.mvc.Entities.LogControlEntity

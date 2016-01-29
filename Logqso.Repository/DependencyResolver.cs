@@ -11,6 +11,7 @@ using Repository.Pattern.DataContext;
 using Repository.Pattern.Repositories;
 using Repository.Pattern.Ef6;
 using Logqso.mvc.Entities.LogControlEntity;
+using Logqso.mvc.DataModel.LogControl.Models;
 
 
 

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Repository.Pattern.Ef6;
+using Infrastructure;
+
+
 
 namespace Logqso.mvc.Entities.LogDataEntity
 {
@@ -9,6 +11,7 @@ namespace Logqso.mvc.Entities.LogDataEntity
         public LogCategory()
         {
             this.Logs = new List<Log>();
+            this.UbnSummaries = new List<UbnSummary>();
         }
 
         public int LogCategoryId { get; set; }
@@ -19,5 +22,6 @@ namespace Logqso.mvc.Entities.LogDataEntity
         public int CatAssisted { get; set; }
         public int CatNoOfIx { get; set; }
         public virtual ICollection<Log> Logs { get; set; }
+        public virtual ICollection<UbnSummary> UbnSummaries { get; set; }
     }
 }

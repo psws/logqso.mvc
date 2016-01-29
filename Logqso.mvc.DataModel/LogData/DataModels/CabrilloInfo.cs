@@ -24,6 +24,23 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         [MaxLength(200)]
         public string Operators { get; set; }
 
+        [Column(TypeName = "varchar")]
+        [MaxLength(200)]
+        public string Address { get; set; }
+        [Column(TypeName = "varchar")]
+        [MaxLength(100)]
+        public string AddressCity { get; set; }
+        [Column(TypeName = "varchar")]
+        [MaxLength(100)]
+        public string AddressState { get; set; }
+        [Column(TypeName = "varchar")]
+        [MaxLength(50)]
+        public string AddressPostalCode { get; set; }
+        [Column(TypeName = "varchar")]
+        [MaxLength(50)]
+        public string AddressCountry { get; set; }
+
+
         ////public virtual Log Log { get; set; }
 
     }

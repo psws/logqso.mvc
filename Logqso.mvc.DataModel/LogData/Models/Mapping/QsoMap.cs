@@ -1,0 +1,52 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
+using Logqso.mvc.Entities.LogDataEntity;
+
+
+namespace Logqso.mvc.DataModel.Models.Mapping
+{
+    public class QsoMap : EntityTypeConfiguration<Qso>
+    {
+        public QsoMap()
+        {
+            // Primary Key
+            this.HasKey(t => new { t.QsoNo, t.LogId });
+
+            // Properties
+            this.Property(t => t.QsoNo)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            this.Property(t => t.LogId)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
+            // Table & Column Mappings
+            this.ToTable("Qso");
+            this.Property(t => t.QsoNo).HasColumnName("QsoNo");
+            this.Property(t => t.LogId).HasColumnName("LogId");
+            this.Property(t => t.Frequency).HasColumnName("Frequency");
+            this.Property(t => t.StationId).HasColumnName("StationId");
+            this.Property(t => t.CallsignId).HasColumnName("CallsignId");
+            this.Property(t => t.QsoDateTime).HasColumnName("QsoDateTime");
+            this.Property(t => t.RxRst).HasColumnName("RxRst");
+            this.Property(t => t.TxRst).HasColumnName("TxRst");
+            this.Property(t => t.QsoExchangeNumber).HasColumnName("QsoExchangeNumber");
+            this.Property(t => t.QsoModeTypeEnum).HasColumnName("QsoModeTypeEnum");
+            this.Property(t => t.QsoRadioTypeEnum).HasColumnName("QsoRadioTypeEnum");
+
+            // Relationships
+            this.HasRequired(t => t.CallSign)
+                .WithMany(t => t.Qsoes)
+                .HasForeignKey(d => d.CallsignId);
+            this.HasRequired(t => t.Log)
+                .WithMany(t => t.Qsoes)
+                .HasForeignKey(d => d.LogId);
+            this.HasRequired(t => t.QsoModeType)
+                .WithMany(t => t.Qsoes)
+                .HasForeignKey(d => d.QsoModeTypeEnum);
+            this.HasRequired(t => t.QsoRadioType)
+                .WithMany(t => t.Qsoes)
+                .HasForeignKey(d => d.QsoRadioTypeEnum);
+
+        }
+    }
+}

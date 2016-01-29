@@ -59,25 +59,6 @@
     <Compile Include="LogControlEntity\FiltCQZone.cs" />
     <Compile Include="LogControlEntity\FiltDefault.cs" />
     <Compile Include="LogControlEntity\FiltPrefix.cs" />
-    <Compile Include="LogControlEntity\LogControlContext.cs" />
-    <Compile Include="LogControlEntity\Mapping\CatAssistedMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\CatBandMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\CatDefaultMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\CatNoOfTxMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\CatOperatorMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\CatPowerMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\FiltBandMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\FiltContinentMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\FiltCQZoneMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\FiltDefaulltMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\FiltPrefixMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\XaxisDefaultMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\XaxisDurationMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\XaxisStartTimeMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\YaxisDefaultMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\YaxisFunctionMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\YaxisIntervalMap.cs" />
-    <Compile Include="LogControlEntity\Mapping\YaxisViewTypeMap.cs" />
     <Compile Include="LogControlEntity\XaxisDefault.cs" />
     <Compile Include="LogControlEntity\XaxisDuration.cs" />
     <Compile Include="LogControlEntity\XaxisStartTime.cs" />
@@ -85,37 +66,31 @@
     <Compile Include="LogControlEntity\YaxisFunction.cs" />
     <Compile Include="LogControlEntity\YaxisInterval.cs" />
     <Compile Include="LogControlEntity\YaxisViewType.cs" />
+    <Compile Include="LogDataEntity\CabrilloInfo.cs" />
     <Compile Include="LogDataEntity\CallInfo.cs" />
-    <Compile Include="LogDataEntity\CallInfoDefault.cs" />
     <Compile Include="LogDataEntity\CallSign.cs" />
     <Compile Include="LogDataEntity\Contest.cs" />
+    <Compile Include="LogDataEntity\ContestType.cs" />
     <Compile Include="LogDataEntity\Log.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LogDataEntity\LogqsoDataContext.cs" />
-    <Compile Include="LogDataEntity\Mapping\CallInfoDefaultMap.cs" />
-    <Compile Include="LogDataEntity\Mapping\CallInfoMap.cs" />
-    <Compile Include="LogDataEntity\Mapping\CallSignMap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LogDataEntity\Mapping\ContestMap.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="LogDataEntity\LogCategory.cs" />
-    <Compile Include="LogDataEntity\Mapping\LogCategoryMap.cs" />
-    <Compile Include="LogDataEntity\Mapping\LogMap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LogDataEntity\Mapping\QsoMap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LogDataEntity\Mapping\SessionMap.cs" />
-    <Compile Include="LogDataEntity\Mapping\StationMap.cs" />
     <Compile Include="LogDataEntity\Qso.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LogDataEntity\QsoExchangeAlpha.cs" />
+    <Compile Include="LogDataEntity\QsoExchangeType.cs" />
+    <Compile Include="LogDataEntity\QsoExtraData.cs" />
+    <Compile Include="LogDataEntity\QsoModeType.cs" />
+    <Compile Include="LogDataEntity\QsoRadioType.cs" />
     <Compile Include="LogDataEntity\Session.cs" />
     <Compile Include="LogDataEntity\Station.cs" />
+    <Compile Include="LogDataEntity\UbnDupe.cs" />
+    <Compile Include="LogDataEntity\UbnIncorrectCall.cs" />
+    <Compile Include="LogDataEntity\UbnIncorrectExchange.cs" />
+    <Compile Include="LogDataEntity\UbnNotInLog.cs" />
+    <Compile Include="LogDataEntity\UbnSummary.cs" />
+    <Compile Include="LogDataEntity\UbnUnique.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -123,13 +98,9 @@
       <Project>{7d8dad53-fc2e-4812-a636-be213a28fb0f}</Project>
       <Name>Logqso.mvc.common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Source\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
-      <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
-      <Name>Repository.Pattern.Ef6</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Source\Repository.Pattern\Repository.Pattern.csproj">
-      <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
-      <Name>Repository.Pattern</Name>
+    <ProjectReference Include="..\URF\Infrastructure\Infrastructure.csproj">
+      <Project>{14b91c4e-7b93-42c8-afb1-d7983e7ad6a3}</Project>
+      <Name>Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

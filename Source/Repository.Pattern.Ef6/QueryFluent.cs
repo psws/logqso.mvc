@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Repository.Pattern.Infrastructure;
+//using Repository.Pattern.Infrastructure;
+using Logqso.mvc.common.Infrastructure;
+
 using Repository.Pattern.Repositories;
 
 namespace Repository.Pattern.Ef6

@@ -38,7 +38,7 @@ namespace Logqso.Repository
 
     public static class ControlRepository
     {
-        public static List<string> GetContestCategoryNames(this IRepository<CatOperator> repository)
+        public static IEnumerable<string> GetContestCategoryNames(this IRepository<CatOperator> repository)
         {
             var CatOperators = repository.Queryable();
 
@@ -57,25 +57,25 @@ namespace Logqso.Repository
         }
 #endif
 
-        public static List<string> GetContestAssistedNames(this IRepository<CatAssisted> repository)
+        public static IEnumerable<string> GetContestAssistedNames(this IRepository<CatAssisted> repository)
         {
             var CatAssisteds = repository.Queryable();
             var query = CatAssisteds.OrderBy(c => c.Index).Select(c => c.CatAssistedName).ToList();
             return query;
         }
-        public static List<string> GetContestBandNames(this IRepository<CatBand> repository)
+        public static IEnumerable<string> GetContestBandNames(this IRepository<CatBand> repository)
         {
             var CatBands = repository.Queryable();
             var query = CatBands.OrderBy(c => c.Index).Select(c => c.CatBandName).ToList();
             return query;
         }
-        public static List<string> GetContestNoOfTxNames(this IRepository<CatNoOfTx> repository)
+        public static IEnumerable<string> GetContestNoOfTxNames(this IRepository<CatNoOfTx> repository)
         {
             var CatNoOfTxs = repository.Queryable();
             var query = CatNoOfTxs.OrderBy(c => c.Index).Select(c => c.CatNoOfTxName).ToList();
             return query;
         }
-        public static List<string> GetContestPowerNames(this IRepository<CatPower> repository)
+        public static IEnumerable<string> GetContestPowerNames(this IRepository<CatPower> repository)
         {
             var CatPowers = repository.Queryable();
             var query = CatPowers.OrderBy(c => c.Index).Select(c => c.CatPowerName).ToList();
@@ -84,7 +84,7 @@ namespace Logqso.Repository
 
 
 
-        public static List<string> GetFiltPrefixNames(this IRepository<FiltPrefix> repository)
+        public static IEnumerable<string> GetFiltPrefixNames(this IRepository<FiltPrefix> repository)
         {
             var FiltPrefixes = repository.Queryable();
             //var query = FiltPrefixes.OrderBy(c => c.CountryName).Select(c => c.CountryName).ToList();
@@ -96,19 +96,19 @@ namespace Logqso.Repository
 
             return query; 
         }
-        public static List<string> GetFiltBandNames(this IRepository<FiltBand> repository)
+        public static IEnumerable<string> GetFiltBandNames(this IRepository<FiltBand> repository)
         {
             var FiltBands = repository.Queryable();
             var query = FiltBands.Select(c => c.FiltBandName).ToList();
             return query;
         }
-        public static List<string> GetFiltContinentNames(this IRepository<FiltContinent> repository)
+        public static IEnumerable<string> GetFiltContinentNames(this IRepository<FiltContinent> repository)
         {
             var FiltContinents = repository.Queryable();
             var query = FiltContinents.OrderBy(c => c.Index).Select(c => c.FiltContName).ToList();
             return query;
         }
-        public static List<string> GetFiltCQZoneNames(this IRepository<FiltCQZone> repository)
+        public static IEnumerable<string> GetFiltCQZoneNames(this IRepository<FiltCQZone> repository)
         {
             var FiltCQZones = repository.Queryable();
             var query = FiltCQZones.OrderBy(c => c.Index).Select(c => c.FiltCQZoneVal).ToList();
@@ -117,13 +117,13 @@ namespace Logqso.Repository
 
 
 
-        public static List<string> GetXaxisDurationeVals(this IRepository<XaxisDuration> repository)
+        public static IEnumerable<string> GetXaxisDurationeVals(this IRepository<XaxisDuration> repository)
         {
             var XaxisDurations = repository.Queryable();
             var query = XaxisDurations.OrderBy(c => c.Index).Select(c => c.XaxisDurationTime).ToList();
             return query;
         }
-        public static List<string> GetXaxisStartTimeNames(this IRepository<XaxisStartTime> repository)
+        public static IEnumerable<string> GetXaxisStartTimeNames(this IRepository<XaxisStartTime> repository)
         {
             var XaxisStartTimes = repository.Queryable();
             var query = (from e in XaxisStartTimes
@@ -136,19 +136,19 @@ namespace Logqso.Repository
 
 
 
-        public static List<string> GetYaxisFunctionNames(this IRepository<YaxisFunction> repository)
+        public static IEnumerable<string> GetYaxisFunctionNames(this IRepository<YaxisFunction> repository)
         {
             var YaxisFunctions = repository.Queryable();
             var query = YaxisFunctions.OrderBy(c => c.Index).Select(c => c.YaxisFuncName).ToList();
             return query;
         }
-        public static List<string> GetYaxisIntervalVals(this IRepository<YaxisInterval> repository)
+        public static IEnumerable<string> GetYaxisIntervalVals(this IRepository<YaxisInterval> repository)
         {
             var YaxisIntervals = repository.Queryable();
             var query = YaxisIntervals.OrderBy(c => c.Index).Select(c => c.YaxisIntvVal).ToList();
             return query;
         }
-        public static List<string> GetYaxisViewTypeNames(this IRepository<YaxisViewType> repository)
+        public static IEnumerable<string> GetYaxisViewTypeNames(this IRepository<YaxisViewType> repository)
         {
             var YaxisViewTypes = repository.Queryable();
             var query = YaxisViewTypes.OrderBy(c => c.Index).Select(c => c.YaxisViewTypeName).ToList();

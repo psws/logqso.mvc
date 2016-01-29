@@ -4,12 +4,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Repository.Pattern.DataContext;
 using Repository.Pattern.Repositories;
 using Repository.Pattern.UnitOfWork;
-using Repository.Pattern.Infrastructure;
+using Infrastructure;
 using Repository.Pattern.Ef6;
 using Repository.Pattern;
+using Logqso.mvc.DataModel.Models;
 using Logqso.mvc.Entities.LogControlEntity;
 using Logqso.mvc.domain.Interfaces;
 using Logqso.mvc.common.Enum;
+using Logqso.mvc.DataModel.LogControl.Models;
 
 
 

@@ -4,7 +4,8 @@ using System.Data.Entity;
 using System.Threading;
 using System.Threading.Tasks;
 using Repository.Pattern.DataContext;
-using Repository.Pattern.Infrastructure;
+//using Repository.Pattern.Infrastructure;
+using Logqso.mvc.common.Infrastructure;
 
 namespace Repository.Pattern.Ef6
 {

@@ -13,7 +13,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Practices.ServiceLocation;
 using Repository.Pattern.DataContext;
-using Repository.Pattern.Infrastructure;
+//using Repository.Pattern.Infrastructure;
+using Logqso.mvc.common.Infrastructure;
 using Repository.Pattern.Repositories;
 using Repository.Pattern.UnitOfWork;
 

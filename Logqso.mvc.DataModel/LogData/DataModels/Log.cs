@@ -37,8 +37,8 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         public int? N1mmDataID { get; set; }
 
         //navigation
-        public IList<Station> Stations { get; set; }
-        public IList<Qso> Qsoes { get; set; }
+        public ICollection<Station> Stations { get; set; }
+        public ICollection<Qso> Qsoes { get; set; }
 
         //FK
         public virtual CallSign CallSign { get; set; }

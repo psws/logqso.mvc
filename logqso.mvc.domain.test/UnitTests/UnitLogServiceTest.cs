@@ -18,7 +18,7 @@ namespace Logqso.mvc.domain.test.UnitTests
     public class UnitLogServiceTest
     {
         private ILogRepository _logRepository;
-        private LogService _logService;
+        private LoglvsService _logService;
         //private Guid guid;
         //private Guid Badguid;
         private int LogId;
@@ -59,7 +59,7 @@ namespace Logqso.mvc.domain.test.UnitTests
             //automapper
             AutoMapper.Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.Log, Log>();
 
-            _logService = new LogService(_logRepository);
+            _logService = new LoglvsService(_logRepository);
         }
 
         [TestMethod]

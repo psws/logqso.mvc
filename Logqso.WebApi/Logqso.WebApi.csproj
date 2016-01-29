@@ -81,17 +81,17 @@
       <Project>{b3a00fcf-b6bc-4269-b75a-edd91480d7aa}</Project>
       <Name>Logqso.Repository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Service.Pattern\Service.Pattern.csproj">
-      <Project>{575dd511-e5ef-4163-bf97-d3fcfcf14a00}</Project>
-      <Name>Service.Pattern</Name>
+    <ProjectReference Include="..\URF\Infrastructure\Infrastructure.csproj">
+      <Project>{14b91c4e-7b93-42c8-afb1-d7983e7ad6a3}</Project>
+      <Name>Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Source\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
-      <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
-      <Name>Repository.Pattern.Ef6</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Source\Repository.Pattern\Repository.Pattern.csproj">
+    <ProjectReference Include="..\URF\Repository.Pattern\Repository.Pattern.csproj">
       <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
       <Name>Repository.Pattern</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\URF\Service.Pattern\Service.Pattern.csproj">
+      <Project>{575dd511-e5ef-4163-bf97-d3fcfcf14a00}</Project>
+      <Name>Service.Pattern</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

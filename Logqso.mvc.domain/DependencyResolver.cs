@@ -11,7 +11,7 @@ using Logqso.mvc.domain;
 using Logqso.mvc.Entities.LogControlEntity;
 using Repository.Pattern.UnitOfWork;
 using Repository.Pattern.DataContext;
-using Repository.Pattern.Ef6;
+//using Repository.Pattern.Ef6;
 using Repository.Pattern.Repositories;
 using Service.Pattern;
 

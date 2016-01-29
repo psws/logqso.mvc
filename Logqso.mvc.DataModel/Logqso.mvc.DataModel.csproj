@@ -53,6 +53,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DependencyResolver.cs" />
+    <Compile Include="LogControl\Models\LogControlContext.cs" />
+    <Compile Include="LogControl\Models\Mapping\CatAssistedMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\CatBandMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\CatDefaultMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\CatNoOfTxMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\CatOperatorMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\CatPowerMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\FiltBandMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\FiltContinentMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\FiltCQZoneMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\FiltDefaulltMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\FiltPrefixMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\XaxisDefaultMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\XaxisDurationMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\XaxisStartTimeMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\YaxisDefaultMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\YaxisFunctionMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\YaxisIntervalMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\YaxisViewTypeMap.cs" />
     <Compile Include="LogData\CabrilloInfoSeed.cs" />
     <Compile Include="LogData\CallInfoModels\CallInfo.cs" />
     <Compile Include="LogControl\CategoryModels\CatAssisted.cs" />
@@ -88,9 +107,9 @@
     <Compile Include="LogData\DataModels\QsoExchangeAlpha.cs" />
     <Compile Include="LogData\ContestTypeSeeds.cs" />
     <Compile Include="LogData\DataModels\QsoRadioType.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201601270049256_InitialDatabaseCreation3.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201601270049256_InitialDatabaseCreation3.Designer.cs">
-      <DependentUpon>201601270049256_InitialDatabaseCreation3.cs</DependentUpon>
+    <Compile Include="LogData\Migrations\LogDataDB\201601290107323_InitialDatabaseCreation.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201601290107323_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201601290107323_InitialDatabaseCreation.cs</DependentUpon>
     </Compile>
     <Compile Include="LogData\Migrations\LogDataDB\Configuration.cs" />
     <Compile Include="LogData\QsoExchangeTypeSeeds.cs" />
@@ -128,6 +147,28 @@
     <Compile Include="LogData\UbnModels\UbnNotInLog.cs" />
     <Compile Include="LogData\UbnModels\UbnSummary.cs" />
     <Compile Include="LogData\UbnModels\UbnUniques.cs" />
+    <Compile Include="LogData\Models\LogqsoDataContext.cs" />
+    <Compile Include="LogData\Models\Mapping\CabrilloInfoMap.cs" />
+    <Compile Include="LogData\Models\Mapping\CallInfoMap.cs" />
+    <Compile Include="LogData\Models\Mapping\CallSignMap.cs" />
+    <Compile Include="LogData\Models\Mapping\ContestMap.cs" />
+    <Compile Include="LogData\Models\Mapping\ContestTypeMap.cs" />
+    <Compile Include="LogData\Models\Mapping\LogCategoryMap.cs" />
+    <Compile Include="LogData\Models\Mapping\LogMap.cs" />
+    <Compile Include="LogData\Models\Mapping\QsoExchangeAlphaMap.cs" />
+    <Compile Include="LogData\Models\Mapping\QsoExchangeTypeMap.cs" />
+    <Compile Include="LogData\Models\Mapping\QsoExtraDataMap.cs" />
+    <Compile Include="LogData\Models\Mapping\QsoMap.cs" />
+    <Compile Include="LogData\Models\Mapping\QsoModeTypeMap.cs" />
+    <Compile Include="LogData\Models\Mapping\QsoRadioTypeMap.cs" />
+    <Compile Include="LogData\Models\Mapping\SessionMap.cs" />
+    <Compile Include="LogData\Models\Mapping\StationMap.cs" />
+    <Compile Include="LogData\Models\Mapping\UbnDupeMap.cs" />
+    <Compile Include="LogData\Models\Mapping\UbnIncorrectCallMap.cs" />
+    <Compile Include="LogData\Models\Mapping\UbnIncorrectExchangeMap.cs" />
+    <Compile Include="LogData\Models\Mapping\UbnNotInLogMap.cs" />
+    <Compile Include="LogData\Models\Mapping\UbnSummaryMap.cs" />
+    <Compile Include="LogData\Models\Mapping\UbnUniqueMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -143,11 +184,15 @@
       <Project>{be14dc55-a8f1-4db8-b009-bcc9b3599bf0}</Project>
       <Name>Logqso.mvc.Resolver MEF</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Source\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
+    <ProjectReference Include="..\URF\Infrastructure\Infrastructure.csproj">
+      <Project>{14b91c4e-7b93-42c8-afb1-d7983e7ad6a3}</Project>
+      <Name>Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\URF\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
       <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
       <Name>Repository.Pattern.Ef6</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Source\Repository.Pattern\Repository.Pattern.csproj">
+    <ProjectReference Include="..\URF\Repository.Pattern\Repository.Pattern.csproj">
       <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
       <Name>Repository.Pattern</Name>
     </ProjectReference>
@@ -160,8 +205,8 @@
     <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201508310133214_InitialDatabaseCreation.resx">
       <DependentUpon>201508310133214_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201601270049256_InitialDatabaseCreation3.resx">
-      <DependentUpon>201601270049256_InitialDatabaseCreation3.cs</DependentUpon>
+    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201601290107323_InitialDatabaseCreation.resx">
+      <DependentUpon>201601290107323_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

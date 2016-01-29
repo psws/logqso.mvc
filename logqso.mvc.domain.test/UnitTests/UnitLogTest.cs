@@ -54,7 +54,7 @@ namespace Logqso.mvc.domain.test.UnitTests
            var LogRepository = new LogRepository();
            var logService = new LogService(LogRepository);
 #else
-           var logService = new LogService(_logRepository);
+           var logService = new LoglvsService(_logRepository);
 #endif
 
            Log LogEntity = logService.GetByID(LogId);

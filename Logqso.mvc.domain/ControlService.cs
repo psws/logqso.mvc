@@ -33,6 +33,7 @@ namespace Logqso.mvc.domain
     public class ControlService : Service<CatOperator>, IControlService
     {
 
+
         private readonly IRepositoryAsync<CatOperator> _repository;
 
         public ControlService(IRepositoryAsync<CatOperator> repository)
@@ -60,39 +61,39 @@ namespace Logqso.mvc.domain
             ContestControlEntity ContestControlEntity = new ContestControlEntity();
 
             ContestControlEntity.ControlCategoryEntity = new ControlCategoryEntity();
-            ContestControlEntity.ControlCategoryEntity.CatOperator = _repository.GetContestCategoryNames();
+            ContestControlEntity.ControlCategoryEntity.CatOperator = _repository.GetContestCategoryNames() as List<string>;
             var CatAssisteds= _repository.GetRepository<CatAssisted>();
-            ContestControlEntity.ControlCategoryEntity.CatAssisted = CatAssisteds.GetContestAssistedNames();
+            ContestControlEntity.ControlCategoryEntity.CatAssisted = CatAssisteds.GetContestAssistedNames() as List<string>;
             var CatBands = _repository.GetRepository<CatBand>();
-            ContestControlEntity.ControlCategoryEntity.CatBand = CatBands.GetContestBandNames();
+            ContestControlEntity.ControlCategoryEntity.CatBand = CatBands.GetContestBandNames() as List<string>;
             var CatNoOfTxs = _repository.GetRepository<CatNoOfTx>();
-            ContestControlEntity.ControlCategoryEntity.CatNoOfTx = CatNoOfTxs.GetContestNoOfTxNames();
+            ContestControlEntity.ControlCategoryEntity.CatNoOfTx = CatNoOfTxs.GetContestNoOfTxNames() as List<string>;
             var CatPowers = _repository.GetRepository<CatPower>();
-            ContestControlEntity.ControlCategoryEntity.CatPower = CatPowers.GetContestPowerNames();
+            ContestControlEntity.ControlCategoryEntity.CatPower = CatPowers.GetContestPowerNames() as List<string>;
 
             ContestControlEntity.ControlFiltersEntity = new ControlFiltersEntity();
             var FiltPrefixes = _repository.GetRepository<FiltPrefix>();
-            ContestControlEntity.ControlFiltersEntity.FiltCountryInnerHTML = FiltPrefixes.GetFiltPrefixNames();
+            ContestControlEntity.ControlFiltersEntity.FiltCountryInnerHTML = FiltPrefixes.GetFiltPrefixNames() as List<string>;
             var FiltBands = _repository.GetRepository<FiltBand>();
-            ContestControlEntity.ControlFiltersEntity.FiltBand = FiltBands.GetFiltBandNames();
+            ContestControlEntity.ControlFiltersEntity.FiltBand = FiltBands.GetFiltBandNames() as List<string>;
             var FiltContinents = _repository.GetRepository<FiltContinent>();
-            ContestControlEntity.ControlFiltersEntity.FiltContinent = FiltContinents.GetFiltContinentNames();
+            ContestControlEntity.ControlFiltersEntity.FiltContinent = FiltContinents.GetFiltContinentNames() as List<string>;
             var FiltCQZones = _repository.GetRepository<FiltCQZone>();
-            ContestControlEntity.ControlFiltersEntity.FiltCQZone = FiltCQZones.GetFiltCQZoneNames();
+            ContestControlEntity.ControlFiltersEntity.FiltCQZone = FiltCQZones.GetFiltCQZoneNames() as List<string>;
 
             ContestControlEntity.ControlXaxisEntity = new ControlXaxisEntity();
             var XaxisDurations = _repository.GetRepository<XaxisDuration>();
-            ContestControlEntity.ControlXaxisEntity.XaxisDuration = XaxisDurations.GetXaxisDurationeVals();
+            ContestControlEntity.ControlXaxisEntity.XaxisDuration = XaxisDurations.GetXaxisDurationeVals() as List<string>;
             var XaxisStartTimes = _repository.GetRepository<XaxisStartTime>();
-            ContestControlEntity.ControlXaxisEntity.XaxisStarttime = XaxisStartTimes.GetXaxisStartTimeNames();
+            ContestControlEntity.ControlXaxisEntity.XaxisStarttime = XaxisStartTimes.GetXaxisStartTimeNames() as List<string>;
 
             ContestControlEntity.ControlYaxisEntity = new ControlYaxisEntity();
             var YaxisFunctions = _repository.GetRepository<YaxisFunction>();
-            ContestControlEntity.ControlYaxisEntity.YaxisFunction = YaxisFunctions.GetYaxisFunctionNames();
+            ContestControlEntity.ControlYaxisEntity.YaxisFunction = YaxisFunctions.GetYaxisFunctionNames() as List<string>;
             var YaxisIntervals = _repository.GetRepository<YaxisInterval>();
-            ContestControlEntity.ControlYaxisEntity.YaxisInterval = YaxisIntervals.GetYaxisIntervalVals();
+            ContestControlEntity.ControlYaxisEntity.YaxisInterval = YaxisIntervals.GetYaxisIntervalVals() as List<string>;
             var YaxisViewTypes = _repository.GetRepository<YaxisViewType>();
-            ContestControlEntity.ControlYaxisEntity.YaxisViewType = YaxisViewTypes.GetYaxisViewTypeNames();
+            ContestControlEntity.ControlYaxisEntity.YaxisViewType = YaxisViewTypes.GetYaxisViewTypeNames() as List<string>;
 
             return Task.FromResult(ContestControlEntity);
         }

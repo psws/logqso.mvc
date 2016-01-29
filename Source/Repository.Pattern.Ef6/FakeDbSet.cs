@@ -5,7 +5,8 @@ using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using Repository.Pattern.Infrastructure;
+//using Repository.Pattern.Infrastructure;
+using Logqso.mvc.common.Infrastructure;
 
 namespace Repository.Pattern.Ef6
 {

@@ -479,18 +479,6 @@
       <Project>{be14dc55-a8f1-4db8-b009-bcc9b3599bf0}</Project>
       <Name>Logqso.mvc.Resolver MEF</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Service.Pattern\Service.Pattern.csproj">
-      <Project>{575dd511-e5ef-4163-bf97-d3fcfcf14a00}</Project>
-      <Name>Service.Pattern</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Source\Repository.Pattern.Ef6\Repository.Pattern.Ef6.csproj">
-      <Project>{f68a1d19-93fb-47c1-a22b-42bea3e4fd8c}</Project>
-      <Name>Repository.Pattern.Ef6</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Source\Repository.Pattern\Repository.Pattern.csproj">
-      <Project>{6e682a14-c872-4813-b620-76e108dea683}</Project>
-      <Name>Repository.Pattern</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -510,7 +498,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>63914</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:63914/</IISUrl>
+          <IISUrl>http://localhost:63918/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

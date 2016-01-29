@@ -12,7 +12,7 @@ namespace Logqso.mvc.domain.test.UnitTests
     public class QsoServiceTest
     {
         private ILogRepository _logRepository;
-        private LogService _logService;
+        private LoglvsService _logService;
         private IQsoRepository _QsoRepository;
         private QsoService _qsoService;
 
@@ -64,7 +64,7 @@ namespace Logqso.mvc.domain.test.UnitTests
 
             //automapper
             AutoMapper.Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.Log, Log>();
-            _logService = new LogService(_logRepository);
+            _logService = new LoglvsService(_logRepository);
 
             AutoMapper.Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.Qso, Qso>();
             _qsoService = new QsoService(_QsoRepository);

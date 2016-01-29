@@ -1,7 +1,7 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using Logqso.mvc.Entities.LogControlEntity.Mapping;
-using Repository.Pattern.Ef6;
+using Infrastructure;
 
 namespace Logqso.mvc.Entities.LogControlEntity
 {
