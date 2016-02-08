@@ -37,6 +37,7 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
             LogCategorySeeds.SeedContest(context);
             LogSeeds.SeedContest(context);
             StationSeeds.SeedContest(context);
+            SessionSeeds.SeedContest(context);
             CallInfoSeeds.SeedContest(context);
 #if DEBUG
             QsoSeeds.SeedContest(context);

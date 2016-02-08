@@ -71,6 +71,7 @@
     <Compile Include="QueryObject.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="StateHelper.cs" />
+    <Compile Include="UnitOfWorkData.cs" />
     <Compile Include="UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>

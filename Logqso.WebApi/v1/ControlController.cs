@@ -9,8 +9,7 @@ using System.Web.Http.Results;
 using System.Threading.Tasks;
 using Logqso.mvc.domain.Interfaces;
 using Repository.Pattern.UnitOfWork;
-using Logqso.Repository.Models;
-using Logqso.Repository.Models.LogControl;
+using Logqso.mvc.Dto.LogControl;
 
 namespace Logqso.WebApi
 {
@@ -58,14 +57,14 @@ namespace Logqso.WebApi
         public async Task<IHttpActionResult> Get()
         {
             //ContestControlsDataEntity ContestControlsDataEntity = await _ControlService.GetContestControlData();
-            ContestControlEntity ContestControlEntity = await _ControlService.GetContestControlNames();
-            if (ContestControlEntity == null)
+            ContestControlDto ContestControlDto = await _ControlService.GetContestControlNames();
+            if (ContestControlDto == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(ContestControlEntity);
+                return Ok(ContestControlDto);
                 //return Ok(ContestControlEntity);
             }
 
@@ -82,14 +81,14 @@ namespace Logqso.WebApi
             {
                 Username = System.Web.HttpContext.Current.User.Identity.Name;   
             }
-            ContestControlSettingsEntity ContestControlSettingsEntity = await _ControlService.GetControlSelections(Username);
-            if (ContestControlSettingsEntity == null)
+            ContestControlSettingsDto ContestControlSettingsDto = await _ControlService.GetControlSelections(Username);
+            if (ContestControlSettingsDto == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(ContestControlSettingsEntity);
+                return Ok(ContestControlSettingsDto);
                 //return Ok(ContestControlEntity);
             }
 
@@ -97,6 +96,7 @@ namespace Logqso.WebApi
 
 
         //one selection group
+        [HttpPost]
         [ResponseType(typeof(HttpResponseMessage))]
         [Route("GetControlSelection/{Selection}")]
         public async Task<IHttpActionResult> GetControlSelection(string Selection)
@@ -111,17 +111,17 @@ namespace Logqso.WebApi
             object valueObj = null;
             switch (Selection)
             {
-                case "ControlCategorySettingsEntity":
-                    valueObj = await _ControlService.GetControlSelection<ControlCategorySettingsEntity>(Username);
+                case "ControlCategorySettingsDto":
+                    valueObj = await _ControlService.GetControlSelection<ControlCategorySettingsDto>(Username);
                     break;
-                case "ControlFiltersSettingsEntity":
-                    valueObj = await _ControlService.GetControlSelection<ControlFiltersSettingsEntity>(Username);
+                case "ControlFiltersSettingsDto":
+                    valueObj = await _ControlService.GetControlSelection<ControlFiltersSettingsDto>(Username);
                     break;
-                case "ControlXaxisSettingsEntity":
-                    valueObj = await _ControlService.GetControlSelection<ControlXaxisSettingsEntity>(Username);
+                case "ControlXaxisSettingsDto":
+                    valueObj = await _ControlService.GetControlSelection<ControlXaxisSettingsDto>(Username);
                     break;
-                case "ControlYaxisSettingsEntity":
-                    valueObj = await _ControlService.GetControlSelection<ControlYaxisSettingsEntity>(Username);
+                case "ControlYaxisSettingsDto":
+                    valueObj = await _ControlService.GetControlSelection<ControlYaxisSettingsDto>(Username);
                     break;
                 default:
                     break;
@@ -143,7 +143,7 @@ namespace Logqso.WebApi
         [HttpPost]
         [ResponseType(typeof(HttpResponseMessage))]
         [Route("SendControlSelections")]
-        public async Task<IHttpActionResult> SendControlSelections(ContestControlSettingsEntity ContestControlSettingsEntity)
+        public async Task<IHttpActionResult> SendControlSelections(ContestControlSettingsDto ContestControlSettingsDto)
         {
             string Username = Logqso.mvc.common.definitions.Username;
             bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
@@ -155,7 +155,7 @@ namespace Logqso.WebApi
             {
                 _unitOfWorkAsync.BeginTransaction();
 
-                bool bSaved = await _ControlService.SaveControlSelections(ContestControlSettingsEntity, Username);
+                bool bSaved = await _ControlService.SaveControlSelections(ContestControlSettingsDto, Username);
 
 
                 // save
@@ -163,7 +163,7 @@ namespace Logqso.WebApi
 
 
                 _unitOfWorkAsync.Commit();
-                if (ContestControlSettingsEntity == null)
+                if (ContestControlSettingsDto == null)
                 {
                     return NotFound();
                 }
@@ -216,8 +216,8 @@ namespace Logqso.WebApi
                 {
                     _unitOfWorkAsync.BeginTransaction();
 
-                    //_ControlService.Insert(new ContestControlEntity { CustomerID = "YODA", CompanyName = "SkyRanch", ObjectState = ObjectState.Added });
-                    //_ControlService.Insert(new ContestControlEntity { CustomerID = "JEDI", CompanyName = "SkyRanch", ObjectState = ObjectState.Added });
+                    //_ControlService.Insert(new ContestControlDto { CustomerID = "YODA", CompanyName = "SkyRanch", ObjectState = ObjectState.Added });
+                    //_ControlService.Insert(new ContestControlDto { CustomerID = "JEDI", CompanyName = "SkyRanch", ObjectState = ObjectState.Added });
 
 
                     // save

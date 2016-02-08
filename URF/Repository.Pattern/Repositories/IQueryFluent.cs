@@ -14,6 +14,8 @@ namespace Repository.Pattern.Repositories
         IEnumerable<TEntity> SelectPage(int page, int pageSize, out int totalCount);
         IEnumerable<TResult> Select<TResult>(Expression<Func<TEntity, TResult>> selector = null);
         IEnumerable<TEntity> Select();
+        //Jims
+        IQueryable<TEntity> SelectQueryable(bool Tracking);
         Task<IEnumerable<TEntity>> SelectAsync();
         IQueryable<TEntity> SqlQuery(string query, params object[] parameters);
     }

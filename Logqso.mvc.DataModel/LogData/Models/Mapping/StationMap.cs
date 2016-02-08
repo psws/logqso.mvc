@@ -2,20 +2,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Logqso.mvc.Entities.LogDataEntity;
 
-
-namespace Logqso.mvc.DataModel.Models.Mapping
+namespace Logqso.mvc.DataModel.LogData.Models.Mapping
 {
     public class StationMap : EntityTypeConfiguration<Station>
     {
         public StationMap()
         {
             // Primary Key
-            this.HasKey(t => new { t.StationId, t.LogId, t.StationName });
+            this.HasKey(t => new { t.LogId, t.StationName });
 
             // Properties
-            this.Property(t => t.StationId)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-
             this.Property(t => t.LogId)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
@@ -25,7 +21,6 @@ namespace Logqso.mvc.DataModel.Models.Mapping
 
             // Table & Column Mappings
             this.ToTable("Station");
-            this.Property(t => t.StationId).HasColumnName("StationId");
             this.Property(t => t.LogId).HasColumnName("LogId");
             this.Property(t => t.StationName).HasColumnName("StationName");
 

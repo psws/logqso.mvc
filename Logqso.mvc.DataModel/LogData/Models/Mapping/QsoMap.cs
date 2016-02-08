@@ -2,8 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Logqso.mvc.Entities.LogDataEntity;
 
-
-namespace Logqso.mvc.DataModel.Models.Mapping
+namespace Logqso.mvc.DataModel.LogData.Models.Mapping
 {
     public class QsoMap : EntityTypeConfiguration<Qso>
     {
@@ -19,12 +18,15 @@ namespace Logqso.mvc.DataModel.Models.Mapping
             this.Property(t => t.LogId)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
+            this.Property(t => t.StationName)
+                .HasMaxLength(20);
+
             // Table & Column Mappings
             this.ToTable("Qso");
             this.Property(t => t.QsoNo).HasColumnName("QsoNo");
             this.Property(t => t.LogId).HasColumnName("LogId");
+            this.Property(t => t.StationName).HasColumnName("StationName");
             this.Property(t => t.Frequency).HasColumnName("Frequency");
-            this.Property(t => t.StationId).HasColumnName("StationId");
             this.Property(t => t.CallsignId).HasColumnName("CallsignId");
             this.Property(t => t.QsoDateTime).HasColumnName("QsoDateTime");
             this.Property(t => t.RxRst).HasColumnName("RxRst");
@@ -46,6 +48,9 @@ namespace Logqso.mvc.DataModel.Models.Mapping
             this.HasRequired(t => t.QsoRadioType)
                 .WithMany(t => t.Qsoes)
                 .HasForeignKey(d => d.QsoRadioTypeEnum);
+            this.HasOptional(t => t.Station)
+                .WithMany(t => t.Qsoes)
+                .HasForeignKey(d => new { d.LogId, d.StationName });
 
         }
     }

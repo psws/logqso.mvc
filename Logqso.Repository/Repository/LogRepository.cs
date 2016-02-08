@@ -1,57 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
+
 using System.Text;
 using System.Threading.Tasks;
-using Logqso.mvc.DataModel.LogData.DataModels;
-using Logqso.Repository.Interfaces;
+using Logqso.mvc.Dto.LogData;
+using Logqso.mvc.Entities.LogDataEntity;
+using Repository.Pattern.Repositories;
+using Logqso.mvc.common.Enum;
 
-namespace Logqso.Repository
+namespace Logqso.Repository.Repository
 {
-    public class LogRepository : ILogRepository, IDisposable
+    public static class LogRepository
     {
-        public Log GetByID(int LogID)
-        {
-            Log Log = new Log();
 
-            //stubed out. replace by DB call
-            Log.LogId = LogID;
-            Log.ContestYear = DateTime.Now;
-            Log.ContestId = "CQWWSSB2015";
+        //EXTENSION METHODS for IRepository<tEntity T>
 
-            return Log;
-        }
-
-        public IReadOnlyList<Log> GetByYear(DateTime Year)
+        public static IEnumerable<CallInfo> GetDataCallInfoSelections(this IRepository<CallInfo> repository, string Username)
         {
 
-            //stubed out. replace by DB call
-            IReadOnlyList<Log> Logs = new List<Log> {
-            new Log() {LogId = 1,  ContestId = "CQWWSSB2015" , ContestYear = Year    },
-            new Log() {LogId = 2,  ContestId = "CQWWSSB2015" , ContestYear = Year    },
-            };
+#if true
+            List<CallInfo>  callis = null;
+#else
+            IQueryable<CallInfo> CallInfoss = null;
+            List<CallInfo> CallInfoUser = null;
+#endif
 
-            return Logs;
-        }
-
-        private bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this.disposed)
+            try
             {
-                if (disposing)
-                {
-                    //context.Dispose();
-                }
+#if true
+                //tracked
+                callis = repository.Query(x => x.UserName == Username)
+                    .Include(x => x.Station).Include(x => x.CallSign)
+                    .Select().OrderBy(t => t.SessionName).ThenBy(t => t.CallGroup)
+                    .ToList();
+
+                var Logrepo = repository.GetRepository<Log>();
+                var CallInfoQ = repository.QueryableNoTracking();
+                var LogQ = Logrepo.QueryableNoTracking();
+                var entryPoint = (from ep in CallInfoQ
+                                  join e in LogQ on ep.LogId equals e.LogId
+                                  //join t in dbContext.tbl_Title on e.TID equals t.TID
+                                  where ep.UserName == Username
+                                  select new DataCallInfoDto
+                                  {
+                                      CallGroup = (CallGroupEnum)ep.CallGroup,
+                                      //TID = e.TID,
+                                      //Title = t.Title,
+                                      //EID = e.EID
+                                  });
+
+#else
+                // not tracked no include
+                CallInfoss = repository.QueryableNoTracking();
+                //no includes for  IQueryable<CallInfo> 
+                CallInfoUser = CallInfoss.Where(t => t.UserName == Username).OrderBy(t => t.SessionName).ThenBy(t => t.CallGroup).ToList();
+#endif          
+            
             }
-            this.disposed = true;
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
+
+#if true
+            return callis;
+
+#else
+            return CallInfoUser;
+#endif
         }
 
-        public void Dispose()
+        public static IEnumerable<Log> GetDataLogContestsStationsSelections(this IRepository<Log> repository, string Username)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            List<Log> Log= null;
+
+                //tracked
+                //log1 = repository.Query(x => x.UserName == Username)
+                //    .Include(x => x.Station).Include(x => x.CallSign)
+                //    .Select().OrderBy(t => t.SessionName).ThenBy(t => t.CallGroup)
+                //    .ToList();
+
+                return Log;
         }
 
 

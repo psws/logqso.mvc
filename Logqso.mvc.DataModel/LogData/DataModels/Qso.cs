@@ -18,26 +18,21 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         [Key]
         [Column(Order = 2)]
         //[ForeignKey("Log")]
-        public int LogId { get; set; }
-        ////[Column(TypeName = "decimal(7,4)")]
-        [Column(TypeName = "decimal")]
-        public decimal Frequency { get; set; }
-
-        //[ForeignKey("Station")]
         //[Column(Order = 1)]
-        //public int StationId { get; set; }
-        //[ForeignKey("Station")]
-        //[Column(Order = 2)]
         //public int LogId { get; set; }
-        //[ForeignKey("Station")]
+        [ForeignKey("Station")]
         //[Column(Order = 3)]
-        //
+        public int LogId { get; set; }
+        [ForeignKey("Station")]
+        [Column(Order = 3)]
+        [MaxLength(20)]
+        public string StationName { get; set; } //selected station
         //We do not ned to FK StationId cuz in this use it can be empty
         //If it has a value the LogID member does not protect the StationName from changing or being deleted
         //This is not an issue cuz QSO rows sets and initialize the corresponding Station row.
         //The row is used to prevent duplicate Log Station Names
         //If the log is deleted all Qsos and Stations for that log are deleted.
-        public  int? StationId { get; set; }
+        //////public  int? StationId { get; set; }
 
 #if false
         [Required]
@@ -65,6 +60,10 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         public string StationName { get; set; }
 
 #endif
+        ////[Column(TypeName = "decimal(7,4)")]
+        [Column(TypeName = "decimal")]
+        public decimal Frequency { get; set; }
+
 
         [Required]
         public int CallsignId { get; set; }
@@ -86,7 +85,7 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         //public virtual Log Log { get; set; }
         public virtual QsoModeType QsoModeType { get; set; }
         public virtual QsoRadioType QsoRadioType { get; set; }
-        //public virtual Station Station { get; set; }
+        public virtual Station Station { get; set; }
 
     }
 }

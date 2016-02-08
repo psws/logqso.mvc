@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Service.Pattern;
 using Logqso.mvc.Entities.LogDataEntity;
-using Logqso.Repository.Models;
+using Logqso.mvc.Dto.LogData;
 
 
 namespace Logqso.mvc.domain.Interfaces
@@ -15,6 +15,11 @@ namespace Logqso.mvc.domain.Interfaces
         ///     Add any custom business logic (interface methods) here
         /// </summary>
         {
+
+            Task<Log> GetLogById(int i);
+            Task<IEnumerable<DataCallInfoDto>> GetDataCallInfoSelections(string Username);
+ 
+            
 #if false
             Task<ContestControlEntity> GetContestControlNames();
              //Task<ContestControlsDataEntity> GetContestControlData();

@@ -11,11 +11,11 @@ using Logqso.mvc.Exceptions;
 
 namespace Logqso.mvc.domain
 {
-    public class LoglvsService
+    public class LogLvsService
     {
-        private readonly ILogRepository _logRepository;
+        private readonly ILogLvsRepository _logRepository;
 
-        public LoglvsService(ILogRepository LogRepository)
+        public LogLvsService(ILogLvsRepository LogRepository)
         {
             _logRepository = LogRepository;
 

@@ -11,8 +11,8 @@ namespace Logqso.mvc.domain.test.UnitTests
     [TestClass]
     public class QsoServiceTest
     {
-        private ILogRepository _logRepository;
-        private LoglvsService _logService;
+        private ILogLvsRepository _logRepository;
+        private LogLvsService _logService;
         private IQsoRepository _QsoRepository;
         private QsoService _qsoService;
 
@@ -27,7 +27,7 @@ namespace Logqso.mvc.domain.test.UnitTests
             //initialixe serves as the composition root
             //guid = Guid.NewGuid();
             LogId = 5;
-            _logRepository = A.Fake<ILogRepository>();
+            _logRepository = A.Fake<ILogLvsRepository>();
             A.CallTo(() => _logRepository.GetByID(LogId))
                 .Returns(new Logqso.mvc.DataModel.LogData.DataModels.Log
                 {
@@ -63,8 +63,8 @@ namespace Logqso.mvc.domain.test.UnitTests
 
 
             //automapper
-            AutoMapper.Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.Log, Log>();
-            _logService = new LoglvsService(_logRepository);
+            AutoMapper.Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.Log, Logqso.mvc.Entities.LogDataEntity.Log>();
+            _logService = new LogLvsService(_logRepository);
 
             AutoMapper.Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.Qso, Qso>();
             _qsoService = new QsoService(_QsoRepository);
@@ -76,7 +76,7 @@ namespace Logqso.mvc.domain.test.UnitTests
         public void Unit_QsoService_CreaeQso_ValidLog_CreateNewQso()
         {
             //arrange
-            Log LogEntity = _logService.GetByID(LogId);
+            Logqso.mvc.Entities.LogDataEntity.Log LogEntity = _logService.GetByID(LogId);
             //act
             Qso newQso = _qsoService.CreateQso(LogEntity.LogId);
             //assert

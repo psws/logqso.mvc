@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Service.Pattern;
 using Logqso.mvc.Entities.LogControlEntity;
-using Logqso.Repository.Models;
+using Logqso.mvc.Dto.LogControl;
 
 
 namespace Logqso.mvc.domain.Interfaces
@@ -15,10 +15,10 @@ namespace Logqso.mvc.domain.Interfaces
         ///     Add any custom business logic (interface methods) here
         /// </summary>
         {
-             Task<ContestControlEntity> GetContestControlNames();
+             Task<ContestControlDto> GetContestControlNames();
              //Task<ContestControlsDataEntity> GetContestControlData();
-             Task<ContestControlSettingsEntity> GetControlSelections(string Username);
-             Task<bool> SaveControlSelections(ContestControlSettingsEntity ContestControlSettingsEntity, string Username);
+             Task<ContestControlSettingsDto> GetControlSelections(string Username);
+             Task<bool> SaveControlSelections(ContestControlSettingsDto ContestControlSettingsEntity, string Username);
              Task<T> GetControlSelection<T>(string Username);
         }
 }

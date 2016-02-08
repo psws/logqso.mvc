@@ -12,6 +12,9 @@ using Repository.Pattern.Repositories;
 using Repository.Pattern.Ef6;
 using Logqso.mvc.Entities.LogControlEntity;
 using Logqso.mvc.DataModel.LogControl.Models;
+using Logqso.mvc.Entities.LogDataEntity;
+using Logqso.mvc.DataModel.LogData.Models;
+
 
 
 
@@ -48,6 +51,22 @@ namespace Logqso.Repository
              };
             registerComponent.RegisterTypeWithInjectionTypes<IRepositoryAsync<CatOperator>, Repository<CatOperator>>(Parms2, false);
 
+
+            //LOGQSOSATA
+            var contextTypeData = typeof(LogqsoDataContext);
+
+            Object[] ParmsData = new Object[] {
+             contextTypeData
+             };
+            registerComponent.RegisterTypeWithInjectionTypes<IUnitOfWorkDataAsync, UnitOfWorkData>(ParmsData, false);
+
+            var uowTypeData = typeof(IUnitOfWorkDataAsync);
+
+            Object[] ParmsData2 = new Object[] {
+             contextTypeData,
+             uowTypeData
+             };
+            registerComponent.RegisterTypeWithInjectionTypes<IRepositoryAsync<Log>, Repository<Log>>(ParmsData2, false);
 
             //IUnitOfWorkAsync UowObj = new UnitOfWork(context);
             //IRepositoryAsync<CatOperator> Repo = new Repository<CatOperator>(context, UowObj);

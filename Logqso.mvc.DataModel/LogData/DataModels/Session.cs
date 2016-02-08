@@ -10,7 +10,7 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
 {
     public class Session
     {
-
+    
         // for saved sessions
         [Key]
         [Column(TypeName = "varchar")]
@@ -27,14 +27,15 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
 
 
         [Column(TypeName = "xml")]
-        public string ControlCategorySettingsEntity { get; set; }
+        public string CategorySettings { get; set; }
         [Column(TypeName = "xml")]
-        public string ControlFiltersSettingsEntity { get; set; }
+        public string FiltersSettings { get; set; }
         [Column(TypeName = "xml")]
-        public string ControlXaxisSettingsEntity { get; set; }
+        public string XaxisSettings { get; set; }
         [Column(TypeName = "xml")]
-        public string ControlYaxisSettingsEntity { get; set; }
+        public string YaxisSettings { get; set; }
 
+#if false
         //http://stackoverflow.com/questions/5559043/entity-framework-code-first-two-foreign-keys-from-same-table
         [ForeignKey("CallInfo1"), Column(Order = 0)]
         public int? CallInfo1Id { get; set; }
@@ -52,7 +53,7 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         public virtual Logqso.mvc.DataModel.LogData.CallInfoModels.CallInfo CallInfo2 { get; set; }
         //[ForeignKey("CallInfo3Id")]
         public virtual Logqso.mvc.DataModel.LogData.CallInfoModels.CallInfo CallInfo3 { get; set; }
-
+#endif
 
         ////public string CallInfo1 { get; set; }
         ////[Column(TypeName = "xml")]

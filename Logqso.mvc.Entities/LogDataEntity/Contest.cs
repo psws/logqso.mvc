@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Infrastructure;
 
-
-
 namespace Logqso.mvc.Entities.LogDataEntity
 {
     public partial class Contest : Entity

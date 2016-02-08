@@ -12,6 +12,7 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
     public class CabrilloInfo
     {
         [Key]
+        [System.ComponentModel.DataAnnotations.Schema.DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
         public int CabrilloInfoId { get; set; }
 
         ////[ForeignKey("Log")]

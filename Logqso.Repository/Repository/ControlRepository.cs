@@ -7,7 +7,7 @@ using Logqso.mvc.Entities.LogControlEntity;
 using Repository.Pattern.Ef6;
 using Repository.Pattern.Repositories;
 using Service.Pattern;
-using Logqso.Repository.Models.LogControl;
+using Logqso.mvc.Dto.LogControl;
 using Logqso.mvc.common.Enum;
 using Repository.Pattern.DataContext;
 using Repository.Pattern.UnitOfWork;
@@ -157,24 +157,24 @@ namespace Logqso.Repository
 
 
         //Default Selection
-        public static ControlCategorySettingsEntity GetControlCategorySettings(this IRepository<CatDefault> repository, string Username)
+        public static ControlCategorySettingsDto GetControlCategorySettings(this IRepository<CatDefault> repository, string Username)
         {
-            ControlCategorySettingsEntity ControlCategorySettingsEntity = new ControlCategorySettingsEntity();
+            ControlCategorySettingsDto ControlCategorySettingsDto = new ControlCategorySettingsDto();
 
             var CatSettings = repository.Queryable();
 
             CatDefault CatDefault = CatSettings.Where(t=>t.UserName == Username).First();
-            ControlCategorySettingsEntity.CatAssisted = Enum.GetName(typeof(CatAssistedEnum), CatDefault.CatAssist);
-            ControlCategorySettingsEntity.CatBand = Enum.GetName(typeof(CatBandEnum), CatDefault.CatBnd);
-            ControlCategorySettingsEntity.CatNoOfTx = Enum.GetName(typeof(CatNoOfIxEnum), CatDefault.CatTx);
-            ControlCategorySettingsEntity.CatOperator = Enum.GetName(typeof(CatOperatorEnum), CatDefault.CatOpr);
-            ControlCategorySettingsEntity.CatPower = Enum.GetName(typeof(CatPowerrEnum), CatDefault.CatPwr);
-            return ControlCategorySettingsEntity;
+            ControlCategorySettingsDto.CatAssisted = Enum.GetName(typeof(CatAssistedEnum), CatDefault.CatAssist);
+            ControlCategorySettingsDto.CatBand = Enum.GetName(typeof(CatBandEnum), CatDefault.CatBnd);
+            ControlCategorySettingsDto.CatNoOfTx = Enum.GetName(typeof(CatNoOfIxEnum), CatDefault.CatTx);
+            ControlCategorySettingsDto.CatOperator = Enum.GetName(typeof(CatOperatorEnum), CatDefault.CatOpr);
+            ControlCategorySettingsDto.CatPower = Enum.GetName(typeof(CatPowerrEnum), CatDefault.CatPwr);
+            return ControlCategorySettingsDto;
         }
         
-        public static ControlFiltersSettingsEntity GetControlFilterSettings(this IRepository<FiltDefault> repository, string Username)
+        public static ControlFiltersSettingsDto GetControlFilterSettings(this IRepository<FiltDefault> repository, string Username)
         {
-            ControlFiltersSettingsEntity ControlFiltersSettingsEntity = new ControlFiltersSettingsEntity();
+            ControlFiltersSettingsDto ControlFiltersSettingsDto = new ControlFiltersSettingsDto();
 
             //var Settings = repository.GetRepository<FiltDefaullt>().Queryable();
             //var Settings  = repository.Queryable();
@@ -186,19 +186,19 @@ namespace Logqso.Repository
             FiltDefault FiltDefaullt = fluent.Select().First();
             //FiltDefaullt FiltDefaullt = Settings.Where(t=>t.UserName == "default").First();
 
-            ControlFiltersSettingsEntity.FiltBand = Enum.GetName(typeof(CatBandEnum), FiltDefaullt.FiltBnd);
-            ControlFiltersSettingsEntity.FiltContinent = Enum.GetName(typeof(ContinentEnum),FiltDefaullt.FiltCont);
+            ControlFiltersSettingsDto.FiltBand = Enum.GetName(typeof(CatBandEnum), FiltDefaullt.FiltBnd);
+            ControlFiltersSettingsDto.FiltContinent = Enum.GetName(typeof(ContinentEnum), FiltDefaullt.FiltCont);
             //ControlFiltersSettingsEntity.FiltCountry = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + FiltDefaullt.FiltPref;
             //when setting Val of select, you need to use spaces not &nbsp;
 
             if (FiltDefaullt.FiltPrefix.CountryName != "ALL")
 
             {
-                ControlFiltersSettingsEntity.FiltCountryInnerHTML = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + FiltDefaullt.FiltPref;
+                ControlFiltersSettingsDto.FiltCountryInnerHTML = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + FiltDefaullt.FiltPref;
             }
             else
             {
-                ControlFiltersSettingsEntity.FiltCountryInnerHTML = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;";  //no prefix
+                ControlFiltersSettingsDto.FiltCountryInnerHTML = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;";  //no prefix
             }
                 ////find index
                 //var FiltPrefixes = repository.GetRepository < FiltPrefix >(). Queryable();
@@ -209,48 +209,48 @@ namespace Logqso.Repository
                 //             select (e.CountryName )).ToList();
                 //ControlFiltersSettingsEntity.FiltCountryIndex = query.IndexOf(ControlFiltersSettingsEntity.FiltCountry);
 
-            ControlFiltersSettingsEntity.FiltCQZone = FiltDefaullt.FiltCQZoneVal;
+            ControlFiltersSettingsDto.FiltCQZone = FiltDefaullt.FiltCQZoneVal;
 
-            return ControlFiltersSettingsEntity;
+            return ControlFiltersSettingsDto;
         }
 
-        public static ControlXaxisSettingsEntity GetControlXaxisSettings(this IRepository<XaxisDefault> repository, string Username)
+        public static ControlXaxisSettingsDto GetControlXaxisSettings(this IRepository<XaxisDefault> repository, string Username)
         {
-            ControlXaxisSettingsEntity ControlXaxisSettingsEntity = new ControlXaxisSettingsEntity();
+            ControlXaxisSettingsDto ControlXaxisSettingsDto = new ControlXaxisSettingsDto();
 
             var Settings = repository.Queryable();
             var fluent = repository.Query(t => t.UserName == Username);
             XaxisDefault XaxisDefault = fluent.Select().First();
 
-            ControlXaxisSettingsEntity.XaxisDuration = XaxisDefault.XaxisDurationTime;
-            ControlXaxisSettingsEntity.XaxisStarttime = XaxisDefault.XaxisStrtTime;
+            ControlXaxisSettingsDto.XaxisDuration = XaxisDefault.XaxisDurationTime;
+            ControlXaxisSettingsDto.XaxisStarttime = XaxisDefault.XaxisStrtTime;
             var XaxisFunctions = repository.GetRepository<XaxisStartTime>().Queryable();
             var query = XaxisFunctions.OrderBy(c => c.Index).Select(c => c.XaxisStrtTime).ToList();
 
-            ControlXaxisSettingsEntity.XaxisStarttimeIndex = query.IndexOf(ControlXaxisSettingsEntity.XaxisStarttime);
+            ControlXaxisSettingsDto.XaxisStarttimeIndex = query.IndexOf(ControlXaxisSettingsDto.XaxisStarttime);
 
 
-            return ControlXaxisSettingsEntity;
+            return ControlXaxisSettingsDto;
         }
 
-        public static ControlYaxisSettingsEntity GetControlYaxisSettings(this IRepository<YaxisDefault> repository, string Username)
+        public static ControlYaxisSettingsDto GetControlYaxisSettings(this IRepository<YaxisDefault> repository, string Username)
         {
-            ControlYaxisSettingsEntity ControlYaxisSettingsEntity = new ControlYaxisSettingsEntity();
+            ControlYaxisSettingsDto ControlYaxisSettingsDto = new ControlYaxisSettingsDto();
 
             var Settings = repository.Queryable();
             var fluent = repository.Query(t => t.UserName == Username);
             YaxisDefault YaxisDefault = fluent.Select().First();
 
-            ControlYaxisSettingsEntity.YaxisFunction = YaxisDefault.YaxisFuncName;
+            ControlYaxisSettingsDto.YaxisFunction = YaxisDefault.YaxisFuncName;
             var YaxisFunctions = repository.GetRepository<YaxisFunction>().Queryable();
             var query = YaxisFunctions.OrderBy(c => c.Index).Select(c => c.YaxisFuncName).ToList();
 
-            ControlYaxisSettingsEntity.YaxisFunctionIndex = query.IndexOf(ControlYaxisSettingsEntity.YaxisFunction);
+            ControlYaxisSettingsDto.YaxisFunctionIndex = query.IndexOf(ControlYaxisSettingsDto.YaxisFunction);
 
-            ControlYaxisSettingsEntity.YaxisInterval = YaxisDefault.YaxisIntvVal;
-            ControlYaxisSettingsEntity.YaxisViewType = YaxisDefault.YaxisViewTypeName;
+            ControlYaxisSettingsDto.YaxisInterval = YaxisDefault.YaxisIntvVal;
+            ControlYaxisSettingsDto.YaxisViewType = YaxisDefault.YaxisViewTypeName;
 
-            return ControlYaxisSettingsEntity;
+            return ControlYaxisSettingsDto;
         }
 
 

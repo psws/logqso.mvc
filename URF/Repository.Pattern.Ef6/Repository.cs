@@ -15,6 +15,9 @@ using Repository.Pattern.DataContext;
 using Infrastructure;
 using Repository.Pattern.Repositories;
 using Repository.Pattern.UnitOfWork;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Core.Objects.DataClasses;
 
 #endregion
 
@@ -52,6 +55,17 @@ namespace Repository.Pattern.Ef6
                 }
             }
         }
+
+        //Jims
+        public bool GetEntityTrackingState(TEntity Entityc)
+        {
+            bool result;
+
+            var dbContext = _context as DbContext;
+            result =  dbContext.Set<TEntity>().Local.Any(e => e == Entityc);
+            return result;
+        }
+
 
         public virtual TEntity Find(params object[] keyValues)
         {
@@ -118,10 +132,58 @@ namespace Repository.Pattern.Ef6
             return new QueryFluent<TEntity>(this, query);
         }
 
+        //Jims
         public IQueryable<TEntity> Queryable()
         {
             return _dbSet;
         }
+
+        //Jims
+        public IQueryable<TEntity> QueryableNoTracking()
+        {
+            return _dbSet.AsNoTracking();
+        }
+
+        //Jims
+        public IEnumerable<TEntity> Item(Expression<Func<TEntity, bool>> wherePredicate, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            if (includeProperties != null)
+            {
+                query = includeProperties.Aggregate(query, (current, include) => current.Include(include));
+            }
+            if (wherePredicate != null)
+            {
+                query = query.AsExpandable().Where(wherePredicate);
+            }
+            return query;
+        }
+
+        //Jims
+        public IQueryable<TEntity> QueryableTrack(bool? track, Expression<Func<TEntity, bool>> wherePredicate, params Expression<Func<TEntity, object>>[] includeProperties)
+        {
+            IQueryable<TEntity> query;
+            if (track == true)
+            {
+                query = _dbSet.AsNoTracking();
+            }
+            else
+            {
+                query = _dbSet;
+            }
+
+            if (includeProperties != null)
+            {
+                query = includeProperties.Aggregate(query, (current, include) => current.Include(include));
+            }
+            if (wherePredicate != null)
+            {
+                query = query.AsExpandable().Where(wherePredicate);
+            }
+            return query;
+        }
+
 
         public IRepository<T> GetRepository<T>() where T : class, IObjectState
         {
@@ -158,14 +220,41 @@ namespace Repository.Pattern.Ef6
             return true;
         }
 
+
+        //Jims
+        //Ths next method is internal to block calling from other modules directly. Example: LogSeervice is a diferent module
+        //and has no visibility.
+        //We do not want to have Domain:logservice dependency on EF6
+        internal IQueryable<TEntity> SelectTracking(            
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            List<Expression<Func<TEntity, object>>> includes = null,
+            bool? tracking = null,
+            int? page = null,
+            int? pageSize = null)
+        {
+
+            return Select(filter, orderBy, includes, true);
+        }
+
+
         internal IQueryable<TEntity> Select(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             List<Expression<Func<TEntity, object>>> includes = null,
-            int? page = null,
+           bool? tracking = null,
+           int? page = null,
             int? pageSize = null)
         {
-            IQueryable<TEntity> query = _dbSet;
+            IQueryable<TEntity> query;
+            if (tracking != null)
+            {
+                query = _dbSet.AsNoTracking();
+            }
+            else
+            {
+                query = _dbSet;
+            } 
 
             if (includes != null)
             {
@@ -193,7 +282,7 @@ namespace Repository.Pattern.Ef6
             int? page = null,
             int? pageSize = null)
         {
-            return await Select(filter, orderBy, includes, page, pageSize).ToListAsync();
+            return await Select(filter, orderBy, includes, null, page, pageSize).ToListAsync();
         }
 
         public virtual void InsertOrUpdateGraph(TEntity entity)

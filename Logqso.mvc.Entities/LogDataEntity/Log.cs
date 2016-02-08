@@ -2,15 +2,12 @@ using System;
 using System.Collections.Generic;
 using Infrastructure;
 
-
-
 namespace Logqso.mvc.Entities.LogDataEntity
 {
     public partial class Log : Entity
     {
         public Log()
         {
-            this.CallInfoes = new List<CallInfo>();
             this.Qsoes = new List<Qso>();
             this.Stations = new List<Station>();
         }
@@ -28,7 +25,6 @@ namespace Logqso.mvc.Entities.LogDataEntity
         public Nullable<int> WintestDataID { get; set; }
         public Nullable<int> N1mmDataID { get; set; }
         public virtual CabrilloInfo CabrilloInfo { get; set; }
-        public virtual ICollection<CallInfo> CallInfoes { get; set; }
         public virtual CallSign CallSign { get; set; }
         public virtual Contest Contest { get; set; }
         public virtual LogCategory LogCategory { get; set; }

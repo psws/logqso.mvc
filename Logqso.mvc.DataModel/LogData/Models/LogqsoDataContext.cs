@@ -1,11 +1,13 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using Logqso.mvc.DataModel.Models.Mapping;
+using Logqso.mvc.DataModel.LogData.Models.Mapping;
 using Logqso.mvc.Entities.LogDataEntity;
+using Infrastructure;
+using Repository.Pattern.Ef6;
 
 namespace Logqso.mvc.DataModel.LogData.Models
 {
-    public partial class LogqsoDataContext : DbContext
+    public partial class LogqsoDataContext : DataContext
     {
         static LogqsoDataContext()
         {
@@ -13,7 +15,7 @@ namespace Logqso.mvc.DataModel.LogData.Models
         }
 
         public LogqsoDataContext()
-            : base("Name=LogqsoDataContext")
+            : base("Name=LogDataDB")
         {
         }
 

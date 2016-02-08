@@ -28,7 +28,7 @@ namespace Logqso.mvc.ui.App_Start
 
             //Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "Logqso.mvc.ui.dll");
             Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "LogQso.Repository.dll");
-            Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "LogQso.mvc.DataModel.dll");
+            //Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "LogQso.mvc.DataModel.dll");
             Resolver_MEF.ComponentLoader.LoadContainer(container, ".\\bin", "LogQso.mvc.Domain.dll");
             //jims: MVC resolver
             System.Web.Mvc.DependencyResolver.SetResolver(new UnityDependencyResolver(container));

@@ -17,7 +17,7 @@ namespace Logqso.mvc.DataModel.LogData
         public static void SeedContest(Logqso.mvc.DataModel.LogData.LogDataDB context)
         {
             context.Station.AddOrUpdate(
-            p => p.StationId,
+            p => p.StationName,
                 new Station {  LogId = 1,  StationName = "STN1" },
                 new Station {  LogId = 1,  StationName = "STN2" },
                 new Station {  LogId = 1,  StationName = "STN3" },

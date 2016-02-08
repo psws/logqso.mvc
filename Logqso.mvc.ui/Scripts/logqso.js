@@ -12,7 +12,8 @@ $(function () {
     //var controlUri = '/api/control/';
 
     
-    getAllControls();
+    //getAllControls();
+    getAllData();
 
     $.widget("ui.selectmenu", $.ui.selectmenu, {
         open: function (event, ui) {
@@ -191,12 +192,12 @@ each(function (indexInArray, valueOfElement) {
                 case 'filtercatchk':
                     PropertyColorState("#filtercatchk", "checked", true, "#a4a3a3");
                     SelectMenuState("Select[id^='Cat']", "disable");
-                    _lq.ControlCategorySettingsEntity.Disabled = true;
+                    _lq.ControlCategorySettingsDto.Disabled = true;
                     break;
                 case 'filterQsochk':
                     PropertyColorState("#filterQsochk", "checked", true, "#a4a3a3");
                     SelectMenuState("Select[id^='Filt']", "disable");
-                    _lq.ControlFiltersSettingsEntity.Disabled = true;
+                    _lq.ControlFiltersSettingsDto.Disabled = true;
                     break;
 
                 default:
@@ -216,11 +217,11 @@ each(function (indexInArray, valueOfElement) {
                     break;
                 case 'filtercatchk':
                     SelectMenuState("Select[id^='Cat']", "enable");
-                    _lq.ControlCategorySettingsEntity.Disabled = false;
+                    _lq.ControlCategorySettingsDto.Disabled = false;
                     break;
                 case 'filterQsochk':
                     SelectMenuState("Select[id^='Filt']", "enable");
-                    _lq.ControlFiltersSettingsEntity.Disabled = false;
+                    _lq.ControlFiltersSettingsDto.Disabled = false;
                 default:
 
             }
@@ -598,62 +599,62 @@ each(function (indexInArray, valueOfElement) {
 
     function getAllControls() {
         _lq.ajaxHelper(_lq.controlUri + "/GetControlNames", 'GET').done(function (data) {
-            //console.log(data.ControlCategoryEntity.CatOperator);
+            //console.log(data.ControlCategoryDto.CatOperator);
 
             $select = $('#CatOp');
             //clear the current content of the select
             $select.html('');
             //iterate over the data and append a select option
-            $.each(data.ControlCategoryEntity.CatOperator, function (key, val) {
+            $.each(data.ControlCategoryDto.CatOperator, function (key, val) {
                 //$select.append('<option id="' + val.CatOpr + '">' + val.CatOprName + '</option>');
                 $select.append('<option >' + val + '</option>');
             })
 
             $select = $('#CatBnd');
             $select.html('');
-            $.each(data.ControlCategoryEntity.CatBand, function (key, val) {
+            $.each(data.ControlCategoryDto.CatBand, function (key, val) {
                 $select.append('<option >' + val + '</option>');
             })
 
             $select = $('#CatPower');
             $select.html('');
-            $.each(data.ControlCategoryEntity.CatPower, function (key, val) {
+            $.each(data.ControlCategoryDto.CatPower, function (key, val) {
                 $select.append('<option >' + val + '</option>');
             })
 
             $select = $('#CatAssist');
             $select.html('');
-            $.each(data.ControlCategoryEntity.CatAssisted, function (key, val) {
+            $.each(data.ControlCategoryDto.CatAssisted, function (key, val) {
                 $select.append('<option >' + val + '</option>');
             })
 
             $select = $('#CatTX');
             $select.html('');
-            $.each(data.ControlCategoryEntity.CatNoOfTx, function (key, val) {
+            $.each(data.ControlCategoryDto.CatNoOfTx, function (key, val) {
                 $select.append('<option >' + val + '</option>');
             })
 
             //Filter
             $select = $('#FiltBand');
             $select.html('');
-            $.each(data.ControlFiltersEntity.FiltBand, function (key, val) {
+            $.each(data.ControlFiltersDto.FiltBand, function (key, val) {
                 $select.append('<option >' + val + '</option>');
             })
 
             $select = $('#FiltContinent');
             $select.html('');
-            $.each(data.ControlFiltersEntity.FiltContinent, function (key, val) {
+            $.each(data.ControlFiltersDto.FiltContinent, function (key, val) {
                 $select.append('<option >' + val + '</option>');
             })
 
             $select = $('#FiltCountry');
             $select.html('');
-            $.each(data.ControlFiltersEntity.FiltCountryInnerHTML, function (key, val) {
+            $.each(data.ControlFiltersDto.FiltCountryInnerHTML, function (key, val) {
                 //val has to be innerhtml with &nbsp
                 $select.append('<option>' + val + '</option>');
             })
             $ul = $("ul[id^=FiltCountry]");
-            if (data.ControlFiltersEntity.FiltCountryInnerHTML.length > 20) {
+            if (data.ControlFiltersDto.FiltCountryInnerHTML.length > 20) {
                 $ul.css({
                     //'overflow-y':scroll,
                     'height': (20 * (20)) + "px",
@@ -663,11 +664,11 @@ each(function (indexInArray, valueOfElement) {
 
             $select = $('#FiltCQZone');
             $select.html('');
-            $.each(data.ControlFiltersEntity.FiltCQZone, function (key, val) {
+            $.each(data.ControlFiltersDto.FiltCQZone, function (key, val) {
                 $select.append('<option >' + val + '</option>');
             })
             $ul = $("ul[id^=FiltCQZone]");
-            if (data.ControlFiltersEntity.FiltCQZone.length > 20) {
+            if (data.ControlFiltersDto.FiltCQZone.length > 20) {
                 $ul.css({
                     //'overflow-y':scroll,
                     'height': (20 * (20)) + "px",
@@ -679,38 +680,38 @@ each(function (indexInArray, valueOfElement) {
             //Yaxis
             $select = $('#YaxisFunction');
             $select.html('');
-            $.each(data.ControlYaxisEntity.YaxisFunction, function (key, val) {
+            $.each(data.ControlYaxisDto.YaxisFunction, function (key, val) {
                 val = val.replace("  ", "&nbsp;&nbsp;");
                 $select.append('<option >' + val + '</option>');
             })
             //make dropup
             $ul = $("ul[id^=YaxisFunction]");
             $ul.css({
-                'margin-top': -((data.ControlYaxisEntity.YaxisFunction.length + 1) * (22.5)) + "px",
+                'margin-top': -((data.ControlYaxisDto.YaxisFunction.length + 1) * (22.5)) + "px",
                 'line-height': '16px'
             });
 
             $select = $('#YaxisInterval');
             $select.html('');
-            $.each(data.ControlYaxisEntity.YaxisInterval, function (key, val) {
+            $.each(data.ControlYaxisDto.YaxisInterval, function (key, val) {
                 $select.append('<option >' + val + '</option>');
             })
             //make dropup
             $ul = $("ul[id^=YaxisInterval]");
             $ul.css({
-                'margin-top': -((data.ControlYaxisEntity.YaxisInterval.length + 1) * (23)) + "px",
+                'margin-top': -((data.ControlYaxisDto.YaxisInterval.length + 1) * (23)) + "px",
                 'line-height': '16px'
             });
 
             $select = $('#YaxisViewType');
             $select.html('');
-            $.each(data.ControlYaxisEntity.YaxisViewType, function (key, val) {
+            $.each(data.ControlYaxisDto.YaxisViewType, function (key, val) {
                 $select.append('<option >' + val + '</option>');
             })
             //make dropup
             $ul = $("ul[id^=YaxisViewType]");
             $ul.css({
-                'margin-top': -((data.ControlYaxisEntity.YaxisViewType.length + 1) * (23)) + "px",
+                'margin-top': -((data.ControlYaxisDto.YaxisViewType.length + 1) * (23)) + "px",
                 'line-height': '16px'
             });
 
@@ -718,7 +719,7 @@ each(function (indexInArray, valueOfElement) {
             $select = $('#XaxisStarttime');
             $select.html('');
             var Day2HR = false;
-            $.each(data.ControlXaxisEntity.XaxisStarttime, function (key, val) {
+            $.each(data.ControlXaxisDto.XaxisStarttime, function (key, val) {
                 if (Day2HR == false && val.indexOf("Day2") > -1) {
                     Day2HR = true;
                     $select.append('<option disabled>______________</option>');
@@ -729,19 +730,19 @@ each(function (indexInArray, valueOfElement) {
             //make dropup
             $ul = $("ul[id^=XaxisStarttime]");
             $ul.css({
-                'margin-top': -((data.ControlXaxisEntity.XaxisStarttime.length + 1) * (23.2)) + "px",
+                'margin-top': -((data.ControlXaxisDto.XaxisStarttime.length + 1) * (23.2)) + "px",
                 'line-height': '16px'
             });
 
             $select = $('#XaxisDuration');
             $select.html('');
-            $.each(data.ControlXaxisEntity.XaxisDuration, function (key, val) {
+            $.each(data.ControlXaxisDto.XaxisDuration, function (key, val) {
                 $select.append('<option >' + val + '</option>');
             })
             //make dropup
             $ul = $("ul[id^=XaxisDuration]");
             $ul.css({
-                'margin-top': -((data.ControlXaxisEntity.XaxisDuration.length + 1) * (23)) + "px",
+                'margin-top': -((data.ControlXaxisDto.XaxisDuration.length + 1) * (23)) + "px",
                 'line-height': '16px'
             });
 
@@ -750,10 +751,10 @@ each(function (indexInArray, valueOfElement) {
             dataobj = window.sessionStorage.getItem(_lq.SessionSaveControlSelections);
             SessionSaveControlSettings = JSON.parse(dataobj);
             if (SessionSaveControlSettings != null) {
-                SetControlCategorySettingsDefaults(SessionSaveControlSettings.ControlCategorySettingsEntity);
-                SetControlFiltersSettingsDefaults(SessionSaveControlSettings.ControlFiltersSettingsEntity);
-                SetControlXaxisSettingsDefaults(SessionSaveControlSettings.ControlXaxisSettingsEntity);
-                SetControlYaxisSettingsDefaults(SessionSaveControlSettings.ControlYaxisSettingsEntity);
+                SetControlCategorySettingsDefaults(SessionSaveControlSettings.ControlCategorySettingsDto);
+                SetControlFiltersSettingsDefaults(SessionSaveControlSettings.ControlFiltersSettingsDto);
+                SetControlXaxisSettingsDefaults(SessionSaveControlSettings.ControlXaxisSettingsDto);
+                SetControlYaxisSettingsDefaults(SessionSaveControlSettings.ControlYaxisSettingsDto);
                 _lq.SessionSaveControlSettings();
 
                 //SetControlDefaults(SessionSaveControlSettings);
@@ -764,17 +765,43 @@ each(function (indexInArray, valueOfElement) {
 
 
         });
+
     }
+
+
+    function getAllData() {
+        GetCallInfoObjDataSelections();
+    }
+
+    function SetCallInfoObjDataSettings(DataCallInfoObjDto) {
+        $("div.panel-body button[id^='Contest1']").
+            each(function (indexInArray, valueOfElement) {
+                $(this).innerHtml = DataCallInfoObjDto.DataCallInfoObjDto[1].ContestName;
+            });
+
+
+    }
+
 
     function GetControlSelections() {
         _lq.ajaxHelper(_lq.controlUri + "/GetControlSelections", 'GET')
             .done(function (data) {
-                SetControlCategorySettingsDefaults(data.ControlCategorySettingsEntity);
-                SetControlFiltersSettingsDefaults(data.ControlFiltersSettingsEntity);
-                SetControlXaxisSettingsDefaults(data.ControlXaxisSettingsEntity);
-                SetControlYaxisSettingsDefaults(data.ControlYaxisSettingsEntity);
+                SetControlCategorySettingsDefaults(data.ControlCategorySettingsDto);
+                SetControlFiltersSettingsDefaults(data.ControlFiltersSettingsDto);
+                SetControlXaxisSettingsDefaults(data.ControlXaxisSettingsDto);
+                SetControlYaxisSettingsDefaults(data.ControlYaxisSettingsDto);
 
                 _lq.SessionSaveControlSettings();
+
+            });  
+    }
+
+    function GetCallInfoObjDataSelections() {
+        _lq.ajaxHelper(_lq.dataUri + "/GetDataCallInfoSelections", 'GET')
+            .done(function (data) {
+                SetCallInfoObjDataSettings(data.DataCallInfoObjDto);
+
+                //_lq.SessionSaveControlSettings();
 
             });  
     }
@@ -783,32 +810,32 @@ each(function (indexInArray, valueOfElement) {
         var ReqUri = "/GetControlSelection/";
         switch (this.id ) {
             case "CatDft":
-                ReqUri += "ControlCategorySettingsEntity";
+                ReqUri += "ControlCategorySettingsDto";
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET')
-                   .done(function (ControlCategorySettingsEntity) {
-                       SetControlCategorySettingsDefaults(ControlCategorySettingsEntity);
+                   .done(function (ControlCategorySettingsDto) {
+                       SetControlCategorySettingsDefaults(ControlCategorySettingsDto);
                    });
                 break;
             case "QsoDft":
-                ReqUri += "ControlFiltersSettingsEntity";
+                ReqUri += "ControlFiltersSettingsDto";
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET')
-                   .done(function (ControlFiltersSettingsEntity) {
-                       SetControlFiltersSettingsDefaults(ControlFiltersSettingsEntity);
+                   .done(function (ControlFiltersSettingsDto) {
+                       SetControlFiltersSettingsDefaults(ControlFiltersSettingsDto);
 
                    });
                 break;
             case "AxisDft":
-                ReqUri += "ControlYaxisSettingsEntity";
+                ReqUri += "ControlYaxisSettingsDto";
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET')
-                  .done(function (ControlXaxisSettingsEntity) {
-                      SetControlYaxisSettingsDefaults(ControlYaxisSettingsEntity);
+                  .done(function (ControlXaxisSettingsDto) {
+                      SetControlYaxisSettingsDefaults(ControlYaxisSettingsDto);
                   });
                 break;
             case "XAxisDft":
-                ReqUri += "ControlXaxisSettingsEntity";
+                ReqUri += "ControlXaxisSettingsDto";
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET')
-                  .done(function (ControlXaxisSettingsEntity) {
-                      SetControlXaxisSettingsDefaults(ControlXaxisSettingsEntity);
+                  .done(function (ControlXaxisSettingsDto) {
+                      SetControlXaxisSettingsDefaults(ControlXaxisSettingsDto);
                   });
                 break;
             default:
@@ -819,44 +846,44 @@ each(function (indexInArray, valueOfElement) {
 
     })
 
-    function SetControlCategorySettingsDefaults(ControlCategorySettingsEntity) {
-        $select = $('#CatOp').val(ControlCategorySettingsEntity.CatOperator);
+    function SetControlCategorySettingsDefaults(ControlCategorySettingsDto) {
+        $select = $('#CatOp').val(ControlCategorySettingsDto.CatOperator);
         $select.selectmenu("refresh");
-        $select = $('#CatBnd').val(ControlCategorySettingsEntity.CatBand);
+        $select = $('#CatBnd').val(ControlCategorySettingsDto.CatBand);
         $select.selectmenu("refresh");
-        $select = $('#CatPower').val(ControlCategorySettingsEntity.CatPower);
+        $select = $('#CatPower').val(ControlCategorySettingsDto.CatPower);
         $select.selectmenu("refresh");
-        $select = $('#CatAssist').val(ControlCategorySettingsEntity.CatAssisted);
+        $select = $('#CatAssist').val(ControlCategorySettingsDto.CatAssisted);
         $select.selectmenu("refresh");
-        $select = $('#CatTX').val(ControlCategorySettingsEntity.CatNoOfTx);
+        $select = $('#CatTX').val(ControlCategorySettingsDto.CatNoOfTx);
         $select.selectmenu("refresh");
-        if (ControlCategorySettingsEntity.Disabled) {
+        if (ControlCategorySettingsDto.Disabled) {
             PropertyColorState("#filtercatchk", "checked", true, "#a4a3a3");
             $("#filtercatchk").prev("label").css(
                  { "color": "red" });
             SelectMenuState("Select[id^='Cat']", "disable");
-            _lq.ControlCategorySettingsEntity.Disabled = true;
+            _lq.ControlCategorySettingsDto.Disabled = true;
         } else {
             PropertyColorState("#filtercatchk", "checked", false, "");
             $("#filtercatchk").prev("label").css(
                 { "color": "" });
             SelectMenuState("Select[id^='Cat']", "enable");
-            _lq.ControlCategorySettingsEntity.Disabled = false;
+            _lq.ControlCategorySettingsDto.Disabled = false;
         }
-        _lq.ControlCategorySettingsEntity = ControlCategorySettingsEntity;
+        _lq.ControlCategorySettingsDto = ControlCategorySettingsDto;
     }
 
-    function SetControlFiltersSettingsDefaults(ControlFiltersSettingsEntity) {
-        $select = $('#FiltBand').val(ControlFiltersSettingsEntity.FiltBand);
+    function SetControlFiltersSettingsDefaults(ControlFiltersSettingsDto) {
+        $select = $('#FiltBand').val(ControlFiltersSettingsDto.FiltBand);
         $select.selectmenu("refresh");
-        $select = $('#FiltContinent').val(ControlFiltersSettingsEntity.FiltContinent);
+        $select = $('#FiltContinent').val(ControlFiltersSettingsDto.FiltContinent);
         $select.selectmenu("refresh");
 
         //index = $('#FiltCountry').prop("selectedIndex");
 
-        //$('#FiltCountry').prop("selectedValue", ControlFiltersSettingsEntity.FiltCountryInnerHTML).selectmenu('refresh');
-        if (ControlFiltersSettingsEntity.FiltCountryInnerHTML.indexOf("&nbsp") != -1) {
-            var Selectedval = ControlFiltersSettingsEntity.FiltCountryInnerHTML.replace("&nbsp;&nbsp;&nbsp;&nbsp;", "    ");
+        //$('#FiltCountry').prop("selectedValue", ControlFiltersSettingsDto.FiltCountryInnerHTML).selectmenu('refresh');
+        if (ControlFiltersSettingsDto.FiltCountryInnerHTML.indexOf("&nbsp") != -1) {
+            var Selectedval = ControlFiltersSettingsDto.FiltCountryInnerHTML.replace("&nbsp;&nbsp;&nbsp;&nbsp;", "    ");
             var Selectedval = Selectedval.replace("&amp;", "&");
         }
         //Selected val cannot be innerhtml
@@ -865,45 +892,45 @@ each(function (indexInArray, valueOfElement) {
 
 
 
-        $select = $('#FiltCQZone').val(ControlFiltersSettingsEntity.FiltCQZone);
+        $select = $('#FiltCQZone').val(ControlFiltersSettingsDto.FiltCQZone);
         $select.selectmenu("refresh");
-        if (ControlFiltersSettingsEntity.Disabled) {
+        if (ControlFiltersSettingsDto.Disabled) {
             PropertyColorState("#filterQsochk", "checked", true, "#a4a3a3");
             $("#filterQsochk").prev("label").css(
                  { "color": "red" });
             SelectMenuState("Select[id^='Filt']", "disable");
-            _lq.ControlFiltersSettingsEntity.Disabled = true;
+            _lq.ControlFiltersSettingsDto.Disabled = true;
         } else {
             PropertyColorState("#filterQsochk", "checked", false, "");
             $("#filterQsochk").prev("label").css(
                 { "color": "" });
             SelectMenuState("Select[id^='Filt']", "enable");
-            _lq.ControlFiltersSettingsEntity.Disabled = false;
+            _lq.ControlFiltersSettingsDto.Disabled = false;
         }
-        _lq.ControlFiltersSettingsEntity = ControlFiltersSettingsEntity;
+        _lq.ControlFiltersSettingsDto = ControlFiltersSettingsDto;
 
     }
 
-    function SetControlXaxisSettingsDefaults(ControlXaxisSettingsEntity) {
-        $('#XaxisStarttime').prop("selectedIndex", ControlXaxisSettingsEntity.XaxisStarttimeIndex).selectmenu('refresh');
+    function SetControlXaxisSettingsDefaults(ControlXaxisSettingsDto) {
+        $('#XaxisStarttime').prop("selectedIndex", ControlXaxisSettingsDto.XaxisStarttimeIndex).selectmenu('refresh');
 
-        //$select = $('#XaxisStarttime').val(ControlXaxisSettingsEntity.XaxisStarttime);
+        //$select = $('#XaxisStarttime').val(ControlXaxisSettingsDto.XaxisStarttime);
         //$select.selectmenu("refresh");
-        $select = $('#XaxisDuration').val(ControlXaxisSettingsEntity.XaxisDuration);
+        $select = $('#XaxisDuration').val(ControlXaxisSettingsDto.XaxisDuration);
         $select.selectmenu("refresh");
-        _lq.ControlXaxisSettingsEntity = ControlXaxisSettingsEntity;
+        _lq.ControlXaxisSettingsDto = ControlXaxisSettingsDto;
     }
 
-    function SetControlYaxisSettingsDefaults(ControlYaxisSettingsEntity) {
-        $('#YaxisFunction').prop("selectedIndex", ControlYaxisSettingsEntity.YaxisFunctionIndex).selectmenu('refresh');
+    function SetControlYaxisSettingsDefaults(ControlYaxisSettingsDto) {
+        $('#YaxisFunction').prop("selectedIndex", ControlYaxisSettingsDto.YaxisFunctionIndex).selectmenu('refresh');
 
-        //$select = $('#YaxisFunction').val(ControlYaxisSettingsEntity.YaxisFunction);
+        //$select = $('#YaxisFunction').val(ControlYaxisSettingsDto.YaxisFunction);
         //$select.selectmenu("refresh");
-        $select = $('#YaxisInterval').val(ControlYaxisSettingsEntity.YaxisInterval);
+        $select = $('#YaxisInterval').val(ControlYaxisSettingsDto.YaxisInterval);
         $select.selectmenu("refresh");
-        $select = $('#YaxisViewType').val(ControlYaxisSettingsEntity.YaxisViewType);
+        $select = $('#YaxisViewType').val(ControlYaxisSettingsDto.YaxisViewType);
         $select.selectmenu("refresh");
-        _lq.ControlYaxisSettingsEntity = ControlYaxisSettingsEntity;
+        _lq.ControlYaxisSettingsDto = ControlYaxisSettingsDto;
     }
 
   
@@ -922,12 +949,12 @@ each(function (indexInArray, valueOfElement) {
 // encapsuleted _lq class
     (function (_lq, $, undefined) {
     _lq.controlUri = '/v1/Control';
-       // _lq.controlUri = '/v1/Data';
+    _lq.dataUri = '/v1/Data';
 
     _lq.parent_modal_box_id;
     _lq.SessionSaveControlSelections;
 
-    _lq.ControlCategorySettingsEntity =  {
+    _lq.ControlCategorySettingsDto =  {
         CatOperator: '',
         CatBand: '',
         CatPower: '',
@@ -936,7 +963,7 @@ each(function (indexInArray, valueOfElement) {
         Disabled: 0
     };
 
-    _lq.ControlFiltersSettingsEntity = {
+    _lq.ControlFiltersSettingsDto = {
         FiltBand: '',
         FiltContinent: '',
         FiltCountryInnerHTML: '',
@@ -944,18 +971,31 @@ each(function (indexInArray, valueOfElement) {
         Disabled: 0
     };
 
-    _lq.ControlXaxisSettingsEntity = {
+    _lq.ControlXaxisSettingsDto = {
         XaxisDuration: '',
         XaxisStarttime: '',
         XaxisStarttimeIndex: ''
-};
+    };
 
-    _lq.ControlYaxisSettingsEntity = {
+    _lq.ControlYaxisSettingsDto = {
         YaxisFunction: '',
         YaxisFunctionIndex: '',
         YaxisInterval: '',
         YaxisViewType: ''
     };
+
+
+    _lq.DataCallInfoObjDto = {
+        SessionName: '',
+        LogId: '',
+        DataCallInfos: [
+            { ContestName: '', SelectedCall: '', StationName: '', LogId: '', Disabled: 0 },
+            { ContestName: '', SelectedCall: '', StationName: '', LogId: '', Disabled: 0 },
+            { ContestName: '', SelectedCall: '', StationName: '', LogId: '', Disabled: 0 }
+        ]
+
+    };
+
 
 
     _lq.ajaxHelper = function(uri, method, data) {
@@ -988,19 +1028,19 @@ each(function (indexInArray, valueOfElement) {
         if (Controlid.indexOf("Cat") >= 0) {
             switch (Controlid) {
                 case "CatOp":
-                    _lq.ControlCategorySettingsEntity.CatOperator = SelectedValue;
+                    _lq.ControlCategorySettingsDto.CatOperator = SelectedValue;
                     break;
                 case "CatBnd":
-                    _lq.ControlCategorySettingsEntity.CatBand = SelectedValue;
+                    _lq.ControlCategorySettingsDto.CatBand = SelectedValue;
                     break;
                 case "CatPower":
-                    _lq.ControlCategorySettingsEntity.CatPower = SelectedValue;
+                    _lq.ControlCategorySettingsDto.CatPower = SelectedValue;
                     break;
                 case "CatAssist":
-                    _lq.ControlCategorySettingsEntity.CatAssisted = SelectedValue;
+                    _lq.ControlCategorySettingsDto.CatAssisted = SelectedValue;
                     break;
                 case "CatTX":
-                    _lq.ControlCategorySettingsEntity.CatNoOfTx = SelectedValue;
+                    _lq.ControlCategorySettingsDto.CatNoOfTx = SelectedValue;
                     break;
                 default:
 
@@ -1008,24 +1048,24 @@ each(function (indexInArray, valueOfElement) {
         }else if (Controlid.indexOf("Filt")>= 0)  {
             switch (Controlid) {
                 case "FiltBand":
-                    _lq.ControlFiltersSettingsEntity.FiltBand = SelectedValue;
+                    _lq.ControlFiltersSettingsDto.FiltBand = SelectedValue;
                     break;
                 case "FiltContinent":
-                    _lq.ControlFiltersSettingsEntity.FiltContinent = SelectedValue;
+                    _lq.ControlFiltersSettingsDto.FiltContinent = SelectedValue;
                     break;
                 case "FiltCountry":
                     //if (SelectedValue.indexOf("&nbsp") == -1) {
                     //    var val = SelectedValue.IndexOf(" ");
-                    //    _lq.ControlFiltersSettingsEntity.FiltCountryInnerHTML = SelectedValue.replace(/ /g, '+');
-                    //    //_lq.ControlFiltersSettingsEntity.FiltCountryInnerHTML = SelectedValue.replace(" ", String.fromCharCode(160) );
+                    //    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML = SelectedValue.replace(/ /g, '+');
+                    //    //_lq.ControlFiltersSettingsDto.FiltCountryInnerHTML = SelectedValue.replace(" ", String.fromCharCode(160) );
                     //} else {
-                    //    _lq.ControlFiltersSettingsEntity.FiltCountryInnerHTML = SelectedValue;
+                    //    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML = SelectedValue;
                     //}
-                    _lq.ControlFiltersSettingsEntity.FiltCountryInnerHTML = SelectedValue
-                    //_lq.ControlFiltersSettingsEntity.FiltCountryIndex = $('#FiltCountry').prop("selectedIndex");
+                    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML = SelectedValue
+                    //_lq.ControlFiltersSettingsDto.FiltCountryIndex = $('#FiltCountry').prop("selectedIndex");
                     break;
                 case "FiltCQZone":
-                    _lq.ControlFiltersSettingsEntity.FiltCQZone = SelectedValue;
+                    _lq.ControlFiltersSettingsDto.FiltCQZone = SelectedValue;
                     break;
                 default:
         
@@ -1033,11 +1073,11 @@ each(function (indexInArray, valueOfElement) {
         }else if (Controlid.indexOf("Xaxis")>= 0)  {
             switch (Controlid) {
                 case "XaxisStarttime":
-                    _lq.ControlXaxisSettingsEntity.XaxisStarttime = SelectedValue
-                    _lq.ControlXaxisSettingsEntity.XaxisStarttimeIndex = $('#XaxisStarttime').prop("selectedIndex");
+                    _lq.ControlXaxisSettingsDto.XaxisStarttime = SelectedValue
+                    _lq.ControlXaxisSettingsDto.XaxisStarttimeIndex = $('#XaxisStarttime').prop("selectedIndex");
                     break;
                 case "XaxisDuration":
-                    _lq.ControlXaxisSettingsEntity.XaxisDuration = SelectedValue;
+                    _lq.ControlXaxisSettingsDto.XaxisDuration = SelectedValue;
                     break;
                 default:
         
@@ -1046,14 +1086,14 @@ each(function (indexInArray, valueOfElement) {
         } else if (Controlid.indexOf("Yaxis") >= 0)   {
             switch (Controlid) {
                 case "YaxisFunction":
-                    _lq.ControlYaxisSettingsEntity.YaxisFunction = SelectedValue;
-                    _lq.ControlYaxisSettingsEntity.YaxisFunctionIndex = $('#YaxisFunction').prop("selectedIndex");
+                    _lq.ControlYaxisSettingsDto.YaxisFunction = SelectedValue;
+                    _lq.ControlYaxisSettingsDto.YaxisFunctionIndex = $('#YaxisFunction').prop("selectedIndex");
                     break;
                 case "YaxisInterval":
-                    _lq.ControlYaxisSettingsEntity.YaxisInterval = SelectedValue;
+                    _lq.ControlYaxisSettingsDto.YaxisInterval = SelectedValue;
                     break;
                 case "YaxisViewType":
-                    _lq.ControlYaxisSettingsEntity.YaxisViewType = SelectedValue;
+                    _lq.ControlYaxisSettingsDto.YaxisViewType = SelectedValue;
                     break;
                 default:
         
@@ -1081,10 +1121,10 @@ each(function (indexInArray, valueOfElement) {
         }
 
         var dataObj = {
-            ControlCategorySettingsEntity: _lq.ControlCategorySettingsEntity,
-            ControlFiltersSettingsEntity: _lq.ControlFiltersSettingsEntity,
-            ControlXaxisSettingsEntity: _lq.ControlXaxisSettingsEntity,
-            ControlYaxisSettingsEntity: _lq.ControlYaxisSettingsEntity
+            ControlCategorySettingsDto: _lq.ControlCategorySettingsDto,
+            ControlFiltersSettingsDto: _lq.ControlFiltersSettingsDto,
+            ControlXaxisSettingsDto: _lq.ControlXaxisSettingsDto,
+            ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
         };
 
         _lq.ajaxHelper(_lq.controlUri + "/SendControlSelections", 'POST', dataObj)
@@ -1095,10 +1135,10 @@ each(function (indexInArray, valueOfElement) {
 
     _lq.SessionSaveControlSettings = function () {
         var dataObj = {
-            ControlCategorySettingsEntity: _lq.ControlCategorySettingsEntity,
-            ControlFiltersSettingsEntity: _lq.ControlFiltersSettingsEntity,
-            ControlXaxisSettingsEntity: _lq.ControlXaxisSettingsEntity,
-            ControlYaxisSettingsEntity: _lq.ControlYaxisSettingsEntity
+            ControlCategorySettingsDto: _lq.ControlCategorySettingsDto,
+            ControlFiltersSettingsDto: _lq.ControlFiltersSettingsDto,
+            ControlXaxisSettingsDto: _lq.ControlXaxisSettingsDto,
+            ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
         };
         //get rid of old
         window.sessionStorage.removeItem(_lq.SessionSaveControlSelections);

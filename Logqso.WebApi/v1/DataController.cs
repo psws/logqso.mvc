@@ -9,16 +9,15 @@ using System.Web.Http.Results;
 using System.Threading.Tasks;
 using Logqso.mvc.domain.Interfaces;
 using Repository.Pattern.UnitOfWork;
-using Logqso.Repository.Models;
-using Logqso.Repository.Models.LogControl;
+using Logqso.mvc.Dto.LogData;
 
 namespace Logqso.WebApi
 {
     [RoutePrefix("v1/Data")]
     public class DataController : ApiController
     {
-        private readonly IControlService _ControlService;
-        private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+        private readonly ILogService _LogService;
+        private readonly IUnitOfWorkDataAsync _unitOfWorkDataAsync;
       
     #region Public constructor
         /// <summary>
@@ -26,11 +25,11 @@ namespace Logqso.WebApi
         /// </summary>
 
         public DataController(
-            IUnitOfWorkAsync unitOfWorkAsync,
-            IControlService ControlService)
+            IUnitOfWorkDataAsync unitOfWorkAsync,
+            ILogService LogService)
         {
-            _unitOfWorkAsync = unitOfWorkAsync;
-            _ControlService = ControlService;
+            _unitOfWorkDataAsync = unitOfWorkAsync;
+            _LogService = LogService;
         }
 
     #endregion
@@ -54,23 +53,32 @@ namespace Logqso.WebApi
                             //This Works-- ASync example. nothing requires async
         [ResponseType(typeof(HttpResponseMessage))]
         [Route("")]
-        [Route("GetControlNames")]
+        [Route("GetDataCallInfoSelections")]
         public async Task<IHttpActionResult> Get()
         {
+            //This webapi method loads the Callinfo selection comboboxes and sets the seleced values
+
+            string Username = Logqso.mvc.common.definitions.Username;
+            bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+            if (val1)
+            {
+                Username = System.Web.HttpContext.Current.User.Identity.Name;
+            }
+
             //ContestControlsDataEntity ContestControlsDataEntity = await _ControlService.GetContestControlData();
-            ContestControlEntity ContestControlEntity = await _ControlService.GetContestControlNames();
-            if (ContestControlEntity == null)
+            IEnumerable<DataCallInfoDto> DataCallInfoDtos = await _LogService.GetDataCallInfoSelections(Username);
+            if (DataCallInfoDtos == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(ContestControlEntity);
-                //return Ok(ContestControlEntity);
+                return Ok(DataCallInfoDtos);
             }
 
         }
 
+#if false
         [ResponseType(typeof(HttpResponseMessage))]
         [Route("GetControlSelections")]
         public async Task<IHttpActionResult> GetControlSelections()
@@ -223,5 +231,6 @@ namespace Logqso.WebApi
         public void Delete(int id)
         {
         }
+#endif
     }
 }

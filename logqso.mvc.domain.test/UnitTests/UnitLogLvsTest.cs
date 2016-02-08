@@ -12,9 +12,9 @@ namespace Logqso.mvc.domain.test.UnitTests
 {
     
     [TestClass]
-    public class UnitLogTest
+    public class UnitLogLvsTest
     {
-        private ILogRepository  _logRepository;
+        private ILogLvsRepository  _logRepository;
         //private Guid guid;
         int LogId;
 
@@ -24,7 +24,7 @@ namespace Logqso.mvc.domain.test.UnitTests
             //initialixe serves as the composition root
             //guid = Guid.NewGuid();
             LogId = 5;
-            _logRepository = A.Fake<ILogRepository>();
+            _logRepository = A.Fake<ILogLvsRepository>();
             A.CallTo(() => _logRepository.GetByID(LogId))
                 .Returns(new Logqso.mvc.DataModel.LogData.DataModels.Log
                 {
@@ -34,7 +34,7 @@ namespace Logqso.mvc.domain.test.UnitTests
                 });
 
             //automapper
-            AutoMapper.Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.Log, Log>();
+            AutoMapper.Mapper.CreateMap<Logqso.mvc.DataModel.LogData.DataModels.Log, Logqso.mvc.Entities.LogDataEntity.Log>();
 
         }
 
@@ -54,11 +54,11 @@ namespace Logqso.mvc.domain.test.UnitTests
            var LogRepository = new LogRepository();
            var logService = new LogService(LogRepository);
 #else
-           var logService = new LoglvsService(_logRepository);
+           var logService = new LogLvsService(_logRepository);
 #endif
 
-           Log LogEntity = logService.GetByID(LogId);
-           Assert.IsInstanceOfType(LogEntity, typeof(Log));
+           Logqso.mvc.Entities.LogDataEntity.Log  LogEntity = logService.GetByID(LogId);
+           Assert.IsInstanceOfType(LogEntity, typeof( Logqso.mvc.Entities.LogDataEntity.Log));
            Assert.AreEqual(LogEntity.LogId, LogId);
            Assert.IsInstanceOfType(LogEntity.ContestYear, typeof(DateTime));
            Assert.AreEqual(LogEntity.ContestYear.Year, DateTime.Now.Year);

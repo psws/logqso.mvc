@@ -59,8 +59,9 @@ namespace Logqso.mvc.DataModel.LogData
                    ContestSeeds.SeedContest(context);
                    LogCategorySeeds.SeedContest(context);
                    LogSeeds.SeedContest(context);
-                   StationSeeds.SeedContest(context);
-                   CallInfoSeeds.SeedContest(context);
+                    StationSeeds.SeedContest(context);
+                    SessionSeeds.SeedContest(context); 
+                  CallInfoSeeds.SeedContest(context);
          #if DEBUG
                 QsoSeeds.SeedContest(context);
         #endif
@@ -100,8 +101,8 @@ namespace Logqso.mvc.DataModel.LogData
             modelBuilder.Entity<LogData.DataModels.Qso>().HasRequired(p => p.CallSign)
             .WithMany().HasForeignKey(c => c.CallsignId).WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<LogData.CallInfoModels.CallInfo>().HasRequired(p => p.Log)
-            .WithMany().HasForeignKey(c => c.LogId).WillCascadeOnDelete(false);
+            //modelBuilder.Entity<LogData.CallInfoModels.CallInfo>().HasRequired(p => p.Log)
+            //.WithMany().HasForeignKey(c => c.LogId).WillCascadeOnDelete(false);
 
 
 #if false

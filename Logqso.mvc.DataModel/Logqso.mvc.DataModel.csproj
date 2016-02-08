@@ -52,7 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DependencyResolver.cs" />
     <Compile Include="LogControl\Models\LogControlContext.cs" />
     <Compile Include="LogControl\Models\Mapping\CatAssistedMap.cs" />
     <Compile Include="LogControl\Models\Mapping\CatBandMap.cs" />
@@ -101,15 +100,15 @@
     <Compile Include="LogControl\YaxisModels\YaxisViewType.cs" />
     <Compile Include="LogControl\YaxisSeeds.cs" />
     <Compile Include="LogData\DataModels\CabrilloInfo.cs" />
-    <Compile Include="LogData\DataModels\CallInfoSeeds.cs" />
+    <Compile Include="LogData\CallInfoSeeds.cs" />
     <Compile Include="LogData\DataModels\QsoExtraData.cs" />
     <Compile Include="LogData\DataModels\QsoExchangeNumber.cs" />
     <Compile Include="LogData\DataModels\QsoExchangeAlpha.cs" />
     <Compile Include="LogData\ContestTypeSeeds.cs" />
     <Compile Include="LogData\DataModels\QsoRadioType.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201601290107323_InitialDatabaseCreation.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201601290107323_InitialDatabaseCreation.Designer.cs">
-      <DependentUpon>201601290107323_InitialDatabaseCreation.cs</DependentUpon>
+    <Compile Include="LogData\Migrations\LogDataDB\201602040906179_InitialDatabaseCreation.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201602040906179_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201602040906179_InitialDatabaseCreation.cs</DependentUpon>
     </Compile>
     <Compile Include="LogData\Migrations\LogDataDB\Configuration.cs" />
     <Compile Include="LogData\QsoExchangeTypeSeeds.cs" />
@@ -119,6 +118,7 @@
     <Compile Include="LogData\DataModels\ContestType.cs" />
     <Compile Include="LogData\QsoRadioTypeSeeds.cs" />
     <Compile Include="LogData\QsoSeeds.cs" />
+    <Compile Include="LogData\SessionSeeds.cs" />
     <Compile Include="LogData\StationSeeds.cs" />
     <Compile Include="LogData\LogSeeds.cs" />
     <Compile Include="LogData\LogCategorySeeds.cs" />
@@ -180,10 +180,6 @@
       <Project>{c6e19eb6-8334-4d08-811a-2742701628e7}</Project>
       <Name>Logqso.mvc.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Resolver MEF\Logqso.mvc.Resolver MEF.csproj">
-      <Project>{be14dc55-a8f1-4db8-b009-bcc9b3599bf0}</Project>
-      <Name>Logqso.mvc.Resolver MEF</Name>
-    </ProjectReference>
     <ProjectReference Include="..\URF\Infrastructure\Infrastructure.csproj">
       <Project>{14b91c4e-7b93-42c8-afb1-d7983e7ad6a3}</Project>
       <Name>Infrastructure</Name>
@@ -205,19 +201,21 @@
     <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201508310133214_InitialDatabaseCreation.resx">
       <DependentUpon>201508310133214_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201601290107323_InitialDatabaseCreation.resx">
-      <DependentUpon>201601290107323_InitialDatabaseCreation.cs</DependentUpon>
+    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201602040906179_InitialDatabaseCreation.resx">
+      <DependentUpon>201602040906179_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Notes\2 or more FK to same table.txt" />
+    <Content Include="App_Notes\Apperror logginng.txt" />
     <Content Include="App_Notes\DataModel LogControl code first database setup .txt" />
     <Content Include="App_Notes\DataModel LogData code first database setup.txt" />
     <Content Include="App_Notes\Removing old migrations.txt" />
+    <Content Include="App_Notes\Reverse Engineer and Update LogqsoData Data entities.txt" />
     <Content Include="App_Notes\Settng up DB user jims9mr in SQL DB.txt" />
     <Content Include="App_Notes\Sequence contains no matching element.txt" />
     <Content Include="App_Notes\Turning off CascadeInDelete.txt" />
-    <Content Include="App_Notes\Update entities in Logqso.mvc.Entities1.txt" />
+    <Content Include="App_Notes\Reverse Engineer and Update Logqso control entities.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CodeTemplates\" />

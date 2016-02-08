@@ -71,6 +71,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Repositories\IQueryObject.cs" />
     <Compile Include="Repositories\IRepositoryAsync.cs" />
+    <Compile Include="UnitOfWork\IUnitOfWorkDataAsync.cs" />
     <Compile Include="UnitOfWork\IUnitOfWorkAsync.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\IQueryFluent.cs" />

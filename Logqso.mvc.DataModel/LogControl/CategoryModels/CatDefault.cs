@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Logqso.mvc.DataModel.LogControl.CategoryModels
 {
+    [Serializable()] 
     public class CatDefault
     {
         [Key]

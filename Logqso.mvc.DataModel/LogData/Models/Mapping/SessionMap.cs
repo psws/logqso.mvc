@@ -2,8 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Logqso.mvc.Entities.LogDataEntity;
 
-
-namespace Logqso.mvc.DataModel.Models.Mapping
+namespace Logqso.mvc.DataModel.LogData.Models.Mapping
 {
     public class SessionMap : EntityTypeConfiguration<Session>
     {
@@ -23,29 +22,14 @@ namespace Logqso.mvc.DataModel.Models.Mapping
 
             // Table & Column Mappings
             this.ToTable("Session");
-            this.Property(t => t.CallInfo1Id).HasColumnName("CallInfo1Id");
-            this.Property(t => t.CallInfo2Id).HasColumnName("CallInfo2Id");
-            this.Property(t => t.CallInfo3Id).HasColumnName("CallInfo3Id");
             this.Property(t => t.SessionName).HasColumnName("SessionName");
             this.Property(t => t.UserName).HasColumnName("UserName");
             this.Property(t => t.SessionDateTime).HasColumnName("SessionDateTime");
-            this.Property(t => t.ControlCategorySettingsEntity).HasColumnName("ControlCategorySettingsEntity");
-            this.Property(t => t.ControlFiltersSettingsEntity).HasColumnName("ControlFiltersSettingsEntity");
-            this.Property(t => t.ControlXaxisSettingsEntity).HasColumnName("ControlXaxisSettingsEntity");
-            this.Property(t => t.ControlYaxisSettingsEntity).HasColumnName("ControlYaxisSettingsEntity");
+            this.Property(t => t.CategorySettings).HasColumnName("CategorySettings");
+            this.Property(t => t.FiltersSettings).HasColumnName("FiltersSettings");
+            this.Property(t => t.XaxisSettings).HasColumnName("XaxisSettings");
+            this.Property(t => t.YaxisSettings).HasColumnName("YaxisSettings");
             this.Property(t => t.Subscription).HasColumnName("Subscription");
-
-            // Relationships
-            this.HasOptional(t => t.CallInfo)
-                .WithMany(t => t.Sessions)
-                .HasForeignKey(d => d.CallInfo1Id);
-            this.HasOptional(t => t.CallInfo1)
-                .WithMany(t => t.Sessions1)
-                .HasForeignKey(d => d.CallInfo2Id);
-            this.HasOptional(t => t.CallInfo2)
-                .WithMany(t => t.Sessions2)
-                .HasForeignKey(d => d.CallInfo3Id);
-
         }
     }
 }

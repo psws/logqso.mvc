@@ -66,6 +66,10 @@
       <Project>{816aa619-9ac6-441f-80ba-d155904bcb1d}</Project>
       <Name>Logqso.mvc.DataModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Logqso.mvc.Dto\Logqso.mvc.Dto.csproj">
+      <Project>{d0ff7b8b-5f4f-49d2-9940-e6948653d70e}</Project>
+      <Name>Logqso.mvc.Dto</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Logqso.mvc.Entities\Logqso.mvc.Entities.csproj">
       <Project>{c6e19eb6-8334-4d08-811a-2742701628e7}</Project>
       <Name>Logqso.mvc.Entities</Name>

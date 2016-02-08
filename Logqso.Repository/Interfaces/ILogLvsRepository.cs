@@ -8,7 +8,7 @@ using Logqso.mvc.DataModel.LogData.DataModels;
 
 namespace Logqso.Repository.Interfaces
 {
-     public interface ILogRepository :  IDisposable
+     public interface ILogLvsRepository :  IDisposable
     {
          Log GetByID(int LogID);
          IReadOnlyList<Log> GetByYear(DateTime Year);

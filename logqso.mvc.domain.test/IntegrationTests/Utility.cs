@@ -14,20 +14,40 @@ namespace   Logqso.mvc.domain.test.IntegrationTests
 {
     public static class Utility
     {
-        public static void CreateSeededTestDatabase(string connectionstring, string pathsql)
+        public static void CreateSeededTestDatabase(string connectionDB, string pathsql)
         {
             //connection string comes from  app.config
-            var connectionString = ConfigurationManager.ConnectionStrings["LogControlDB"].ConnectionString;
+            var connectionString = ConfigurationManager.ConnectionStrings[connectionDB].ConnectionString;
 
             var path = Environment.CurrentDirectory.Replace("bin\\Debug", pathsql);
             var file = new FileInfo(path);
             var script = file.OpenText().ReadToEnd();
 
-            using (var connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
+                SqlConnection.ClearPool(connection); //clears SSMS connection
                 var server = new Server(new ServerConnection(connection));
+                
                 server.ConnectionContext.ExecuteNonQuery(script);
             }
         }
+        //public void CloseAllSQLConnections(string Connection)()
+        //{
+        //      using(var comm = new SqlConnection(Connection))
+        //      using(var comExecuteInsert = new SqlCommand())
+        //      {
+        //        comExecuteInsert.Connection = comm;
+        //        comExecuteInsert.CommandType = CommandType.StoredProcedure;
+        //        comExecuteInsert.CommandText = strProcedureName;
+        //        comExecuteInsert.ExecuteScalar();
+        //        comExecuteInsert.Parameters.Clear();
+        //        comm.Close();
+        //      }    
+
+        //        SqlConnection.ClearAllPools();
+        //}
+
+
+
     }
 }

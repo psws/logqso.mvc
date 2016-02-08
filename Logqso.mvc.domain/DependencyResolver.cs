@@ -14,6 +14,7 @@ using Repository.Pattern.DataContext;
 //using Repository.Pattern.Ef6;
 using Repository.Pattern.Repositories;
 using Service.Pattern;
+using Logqso.mvc.Entities.LogDataEntity;
 
 
 namespace Logqso.mvc.domain
@@ -37,6 +38,14 @@ namespace Logqso.mvc.domain
 
             registerComponent.RegisterTypeWithInjectionTypes<IControlService, ControlService>(Parms1, false);
 
+            //LogService for Data Conroller
+            var RepoTypelog = typeof(IRepositoryAsync<Log>);
+
+            Object[] ParmsLog = new Object[] {
+             RepoTypelog
+             };
+
+            registerComponent.RegisterTypeWithInjectionTypes<ILogService, LogService>(ParmsLog, false);
         }
     }
 

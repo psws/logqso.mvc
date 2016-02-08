@@ -44,10 +44,12 @@ namespace Repository.Pattern.Ef6
         public IEnumerable<TEntity> SelectPage(int page, int pageSize, out int totalCount)
         {
             totalCount = _repository.Select(_expression).Count();
-            return _repository.Select(_expression, _orderBy, _includes, page, pageSize);
+            return _repository.Select(_expression, _orderBy, _includes, null, page, pageSize);
         }
 
         public IEnumerable<TEntity> Select() { return _repository.Select(_expression, _orderBy, _includes); }
+        //Jims
+        public IQueryable<TEntity> SelectQueryable(bool Tracking ) { return _repository.SelectTracking(_expression, _orderBy, _includes, Tracking); }
 
         public IEnumerable<TResult> Select<TResult>(Expression<Func<TEntity, TResult>> selector) { return _repository.Select(_expression, _orderBy, _includes).Select(selector); }
 

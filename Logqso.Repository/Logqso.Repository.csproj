@@ -67,21 +67,12 @@
   <ItemGroup>
     <Compile Include="DependencyResolver.cs" />
     <Compile Include="Interfaces\ICallSignRepository.cs" />
-    <Compile Include="Interfaces\ILogRepository.cs" />
+    <Compile Include="Interfaces\ILogLvsRepository.cs" />
     <Compile Include="Interfaces\IQsoRepository.cs" />
-    <Compile Include="Models\ContestControlSettingsEntity.cs" />
-    <Compile Include="Models\LogControl\ControlCategorySettingsEntity.cs" />
-    <Compile Include="Models\LogControl\ControlCategoryEntity.cs" />
-    <Compile Include="Models\ContestControlEntity.cs" />
-    <Compile Include="Models\LogControl\ControlFiltersSettingsEntity.cs" />
-    <Compile Include="Models\LogControl\ControlXaxisSettingsEntity.cs" />
-    <Compile Include="Models\LogControl\ControlYaxisSettingsEntity.cs" />
-    <Compile Include="Models\LogControl\ControlYaxisEntity.cs" />
-    <Compile Include="Models\LogControl\ControlXaxisEntity.cs" />
-    <Compile Include="Models\LogControl\ControlFiltersEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\CallSignRepository.cs" />
     <Compile Include="Repository\ControlRepository.cs" />
+    <Compile Include="Repository\LogLvsRepository.cs" />
     <Compile Include="Repository\LogRepository.cs" />
     <Compile Include="Repository\QsoRepository.cs" />
   </ItemGroup>
@@ -97,6 +88,10 @@
     <ProjectReference Include="..\Logqso.mvc.DataModel\Logqso.mvc.DataModel.csproj">
       <Project>{816aa619-9ac6-441f-80ba-d155904bcb1d}</Project>
       <Name>Logqso.mvc.DataModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logqso.mvc.Dto\Logqso.mvc.Dto.csproj">
+      <Project>{d0ff7b8b-5f4f-49d2-9940-e6948653d70e}</Project>
+      <Name>Logqso.mvc.Dto</Name>
     </ProjectReference>
     <ProjectReference Include="..\Logqso.mvc.Entities\Logqso.mvc.Entities.csproj">
       <Project>{c6e19eb6-8334-4d08-811a-2742701628e7}</Project>
@@ -122,6 +117,9 @@
       <Project>{575dd511-e5ef-4163-bf97-d3fcfcf14a00}</Project>
       <Name>Service.Pattern</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

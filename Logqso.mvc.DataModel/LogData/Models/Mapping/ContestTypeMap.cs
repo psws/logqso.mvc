@@ -2,8 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Logqso.mvc.Entities.LogDataEntity;
 
-
-namespace Logqso.mvc.DataModel.Models.Mapping
+namespace Logqso.mvc.DataModel.LogData.Models.Mapping
 {
     public class ContestTypeMap : EntityTypeConfiguration<ContestType>
     {

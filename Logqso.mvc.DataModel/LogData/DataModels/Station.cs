@@ -12,15 +12,15 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
 {
     public class Station
     {
+        //[Key]
+        //[Column(Order = 1)]
+        //[System.ComponentModel.DataAnnotations.Schema.DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
+        //public int StationId { get; set; }
         [Key]
-        [Column(Order = 1)]
-        [System.ComponentModel.DataAnnotations.Schema.DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
-        public int StationId { get; set; }
-        [Key]
-        [Column(Order =2)]
+        [Column(Order =1)]
         public int LogId { get; set; }
         [Key]
-        [Column(Order = 3,TypeName = "varchar")]
+        [Column(Order = 2,TypeName = "varchar")]
        // [Column(TypeName = "varchar")]
         [MaxLength(20)]
         //[Required]

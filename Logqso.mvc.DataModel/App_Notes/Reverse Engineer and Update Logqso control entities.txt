@@ -1,0 +1,55 @@
+﻿Using installed extendion Microsoft entity power toos beta 4
+right click on Logqsomvc.DataModel project
+select entity framework select reverse engineer code first
+set server to PSS60\SQL2014
+Set sql sever account radio button
+enter User anme jims9m8r
+enter password jims9m8r
+select a database name = Logqso
+Click advanced tab
+go to  Security section
+Check persist security informatin = true
+
+A LOGQSO conreol models directory will be created.
+Ths directory has a Sub directory Mapping
+Perform yhe following steps to separate the Entities project from EF6
+Move the Logqso.mvc.DataModel/Models folder to:
+	Logqso.mvs.DataModel/LogControl foldeer
+	Leave the LogControlContext.cs file in the Logqso.mvs.DataModel/LogControl/Models foldeer
+	Move all the remaining files, in the Models folder to the Logqso.mvc.Entities/LogControlEntity foldeer.
+	Leave the Logqso.mvs.DataModel/LogControl/Models/Mapping folder in the Logqso.mvs.DataModel/LogControl/Models folder.
+
+	edit every file in the Logqso.mvs.DataModel/LogControl/Models/mapping folder change/add the following:
+		using Logqso.mvc.Entities.LogControlEntity;
+
+		namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
+
+	edit every file in the Logqso.mvc.Entities/LogCpmtrolEntity folder change/add the following:
+		using Infrastructure;
+
+		namespace Logqso.mvc.Entities.LogControlEntity
+
+	edit the Logqso.mvs.DataModel/LogControl/Models/LogControlContext file (needs to derive from DataContext)
+using Repository.Pattern.Ef6;
+using Logqso.mvc.DataModel.LogControl.Models.Mapping;
+using Logqso.mvc.Entities.LogControlEntity;
+using Infrastructure;
+
+namespace Logqso.mvc.DataModel.LogControl.Models
+{
+    public partial class LogControlContext : DataContext
+    {
+        static LogControlContext()
+        {
+            Database.SetInitializer<LogControlContext>(null);
+        }
+
+        public LogControlContext()
+            : base("Name=LogControlDB")
+        {
+        }
+
+
+
+
+

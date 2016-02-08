@@ -21,6 +21,11 @@ namespace Repository.Pattern.Repositories
         IQueryFluent<TEntity> Query(Expression<Func<TEntity, bool>> query);
         IQueryFluent<TEntity> Query();
         IQueryable<TEntity> Queryable();
+        IEnumerable<TEntity> Item(Expression<Func<TEntity, bool>> wherePredicate, params Expression<Func<TEntity, object>>[] includeProperties);
         IRepository<T> GetRepository<T>() where T : class, IObjectState;
+        //jims
+        IQueryable<TEntity> QueryableNoTracking();
+        bool GetEntityTrackingState(TEntity Entityc);
+        IQueryable<TEntity> QueryableTrack(bool? track, Expression<Func<TEntity, bool>> wherePredicate, params Expression<Func<TEntity, object>>[] includeProperties);
     }
 }

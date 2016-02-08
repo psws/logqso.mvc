@@ -7,6 +7,7 @@ using Repository.Pattern.UnitOfWork;
 using Infrastructure;
 using Repository.Pattern.Ef6;
 using Repository.Pattern;
+
 using Logqso.mvc.Entities.LogControlEntity;
 using Logqso.mvc.domain.Interfaces;
 using Logqso.mvc.common.Enum;
@@ -14,10 +15,10 @@ using Logqso.mvc.DataModel.LogControl.Models;
 
 
 
-namespace Logqso.mvc.domain.test.IntegrationTests
+namespace Logqso.mvc.domain.test.IntegrationTests.Control
 {
     [TestClass]
-    public class IntegrationControlRepositoryTests
+    public class IntegrationDataRepositoryTests
     {
         private readonly string CatOprName = "Hello Test";
 
@@ -26,11 +27,11 @@ namespace Logqso.mvc.domain.test.IntegrationTests
         [TestInitialize]
         public void Initialize()
         {
-            Utility.CreateSeededTestDatabase("LogDataDB", "Sql\\logqsoTest.sql");
+            Utility.CreateSeededTestDatabase("LogControlDB", "Sql\\logqsoTest.sql");
         }
 
         [TestMethod]
-        public void Integration_LogDataContext_CreateDataCatOperator_NoIndex_Exception()
+        public void Integration_LogControlContext_CreateControlCatOperator_NoIndex_Exception()
         {
 
             // Create new customer
@@ -66,7 +67,6 @@ namespace Logqso.mvc.domain.test.IntegrationTests
                 }
 
                 Assert.IsTrue(caught);
-
             }
         }
 
@@ -144,24 +144,24 @@ namespace Logqso.mvc.domain.test.IntegrationTests
                 var asyncTask = ContolService.GetContestControlNames();
                 var ContestControl = asyncTask.Result;
 
-                Assert.IsTrue(ContestControl.ControlCategoryEntity.CatOperator.Count > 1);
-                Assert.IsTrue(ContestControl.ControlCategoryEntity.CatAssisted.Count > 1);
-                Assert.IsTrue(ContestControl.ControlCategoryEntity.CatBand.Count > 1);
-                Assert.IsTrue(ContestControl.ControlCategoryEntity.CatNoOfTx.Count > 1);
-                Assert.IsTrue(ContestControl.ControlCategoryEntity.CatPower.Count > 1);
-                Assert.IsTrue(ContestControl.ControlCategoryEntity.CatOperator.Contains("SINGLE-OP"));
+                Assert.IsTrue(ContestControl.ControlCategoryDto.CatOperator.Count > 1);
+                Assert.IsTrue(ContestControl.ControlCategoryDto.CatAssisted.Count > 1);
+                Assert.IsTrue(ContestControl.ControlCategoryDto.CatBand.Count > 1);
+                Assert.IsTrue(ContestControl.ControlCategoryDto.CatNoOfTx.Count > 1);
+                Assert.IsTrue(ContestControl.ControlCategoryDto.CatPower.Count > 1);
+                Assert.IsTrue(ContestControl.ControlCategoryDto.CatOperator.Contains("SINGLE-OP"));
                 
-                Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltBand.Count > 1);
-                Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltContinent.Count > 1);
-                Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltCountryInnerHTML.Count > 1);
-                Assert.IsTrue(ContestControl.ControlFiltersEntity.FiltCQZone.Count > 1);
+                Assert.IsTrue(ContestControl.ControlFiltersDto.FiltBand.Count > 1);
+                Assert.IsTrue(ContestControl.ControlFiltersDto.FiltContinent.Count > 1);
+                Assert.IsTrue(ContestControl.ControlFiltersDto.FiltCountryInnerHTML.Count > 1);
+                Assert.IsTrue(ContestControl.ControlFiltersDto.FiltCQZone.Count > 1);
 
-                Assert.IsTrue(ContestControl.ControlXaxisEntity.XaxisDuration.Count > 1);
-                Assert.IsTrue(ContestControl.ControlXaxisEntity.XaxisStarttime.Count > 1);
+                Assert.IsTrue(ContestControl.ControlXaxisDto.XaxisDuration.Count > 1);
+                Assert.IsTrue(ContestControl.ControlXaxisDto.XaxisStarttime.Count > 1);
 
-                Assert.IsTrue(ContestControl.ControlYaxisEntity.YaxisFunction.Count > 1);
-                Assert.IsTrue(ContestControl.ControlYaxisEntity.YaxisInterval.Count > 1);
-                Assert.IsTrue(ContestControl.ControlYaxisEntity.YaxisViewType.Count > 1);
+                Assert.IsTrue(ContestControl.ControlYaxisDto.YaxisFunction.Count > 1);
+                Assert.IsTrue(ContestControl.ControlYaxisDto.YaxisInterval.Count > 1);
+                Assert.IsTrue(ContestControl.ControlYaxisDto.YaxisViewType.Count > 1);
             }
         }
         public void Integration_ControlService_GetsAsync()

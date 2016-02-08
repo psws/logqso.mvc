@@ -2,16 +2,14 @@ using System;
 using System.Collections.Generic;
 using Infrastructure;
 
-
-
 namespace Logqso.mvc.Entities.LogDataEntity
 {
     public partial class Qso : Entity
     {
         public short QsoNo { get; set; }
         public int LogId { get; set; }
+        public string StationName { get; set; }
         public decimal Frequency { get; set; }
-        public Nullable<int> StationId { get; set; }
         public int CallsignId { get; set; }
         public System.DateTime QsoDateTime { get; set; }
         public byte RxRst { get; set; }
@@ -23,6 +21,7 @@ namespace Logqso.mvc.Entities.LogDataEntity
         public virtual Log Log { get; set; }
         public virtual QsoModeType QsoModeType { get; set; }
         public virtual QsoRadioType QsoRadioType { get; set; }
+        public virtual Station Station { get; set; }
         public virtual QsoExchangeAlpha QsoExchangeAlpha { get; set; }
         public virtual QsoExtraData QsoExtraData { get; set; }
     }
