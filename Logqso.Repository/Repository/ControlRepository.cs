@@ -164,15 +164,15 @@ namespace Logqso.Repository
             var CatSettings = repository.Queryable();
 
             CatDefault CatDefault = CatSettings.Where(t=>t.UserName == Username).First();
-            ControlCategorySettingsDto.CatAssisted = Enum.GetName(typeof(CatAssistedEnum), CatDefault.CatAssist);
-            ControlCategorySettingsDto.CatBand = Enum.GetName(typeof(CatBandEnum), CatDefault.CatBnd);
-            ControlCategorySettingsDto.CatNoOfTx = Enum.GetName(typeof(CatNoOfIxEnum), CatDefault.CatTx);
-            ControlCategorySettingsDto.CatOperator = Enum.GetName(typeof(CatOperatorEnum), CatDefault.CatOpr);
-            ControlCategorySettingsDto.CatPower = Enum.GetName(typeof(CatPowerrEnum), CatDefault.CatPwr);
+            ControlCategorySettingsDto.CatAssisted = Enum.GetName(typeof(CatAssistedEnum), CatDefault.CatAssistedEnum);
+            ControlCategorySettingsDto.CatBand = Enum.GetName(typeof(CatBandEnum), CatDefault.CatBandEnum);
+            ControlCategorySettingsDto.CatNoOfTx = Enum.GetName(typeof(CatNoOfTxEnum), CatDefault.CatNoOfTxEnum);
+            ControlCategorySettingsDto.CatOperator = Enum.GetName(typeof(CatOperatorEnum), CatDefault.CatOperatorEnum);
+            ControlCategorySettingsDto.CatPower = Enum.GetName(typeof(CatPowerEnum), CatDefault.CatPowerEnum);
             return ControlCategorySettingsDto;
         }
-        
-        public static ControlFiltersSettingsDto GetControlFilterSettings(this IRepository<FiltDefault> repository, string Username)
+
+        public static ControlFiltersSettingsDto GetControlFilterSettings(this IRepository<FiltDefaullt> repository, string Username)
         {
             ControlFiltersSettingsDto ControlFiltersSettingsDto = new ControlFiltersSettingsDto();
 
@@ -183,7 +183,7 @@ namespace Logqso.Repository
             //fluent.Include(t => t.FiltPrefix);
             var fluent = repository.Query(t => t.UserName == Username).Include(t => t.FiltPrefix);
 
-            FiltDefault FiltDefaullt = fluent.Select().First();
+            FiltDefaullt FiltDefaullt = fluent.Select().First();
             //FiltDefaullt FiltDefaullt = Settings.Where(t=>t.UserName == "default").First();
 
             ControlFiltersSettingsDto.FiltBand = Enum.GetName(typeof(CatBandEnum), FiltDefaullt.FiltBnd);

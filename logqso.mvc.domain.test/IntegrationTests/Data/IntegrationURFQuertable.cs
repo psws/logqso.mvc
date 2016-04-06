@@ -37,7 +37,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
             List<CallInfo> callis = null;
 
             using (IDataContextAsync context = new LogqsoDataContext())
-            using (IUnitOfWorkDataAsync unitOfWorkData = new UnitOfWorkData(context))
+            using (IUnitOfWorkAsync unitOfWorkData = new UnitOfWork(context))
             {
                 bool caught = false;
                 IRepositoryAsync<CallInfo> _CallinfoRepository = new Repository<CallInfo>(context, unitOfWorkData);
@@ -74,10 +74,10 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
             IQueryable<CallInfo> CallInfo1 = null;
 
             using (IDataContextAsync context = new LogqsoDataContext())
-            using (IUnitOfWorkDataAsync unitOfWorkData = new UnitOfWorkData(context))
+            using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 bool caught = false;
-                IRepositoryAsync<CallInfo> _CallinfoRepository = new Repository<CallInfo>(context, unitOfWorkData);
+                IRepositoryAsync<CallInfo> _CallinfoRepository = new Repository<CallInfo>(context, unitOfWork);
                 try
                 {
                     //var LogQ = _logRepository.Queryable(x => x.LogId == 1, x => x.Stations, x => x.CallSign);
@@ -109,10 +109,10 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
             IQueryable<CallInfo> CallInfo1 = null;
 
             using (IDataContextAsync context = new LogqsoDataContext())
-            using (IUnitOfWorkDataAsync unitOfWorkData = new UnitOfWorkData(context))
+            using (IUnitOfWorkAsync unitOfWork= new UnitOfWork(context))
             {
                 bool caught = false;
-                IRepositoryAsync<CallInfo> _CallinfoRepository = new Repository<CallInfo>(context, unitOfWorkData);
+                IRepositoryAsync<CallInfo> _CallinfoRepository = new Repository<CallInfo>(context, unitOfWork);
                 try
                 {
                     //var LogQ = _logRepository.Queryable(x => x.LogId == 1, x => x.Stations, x => x.CallSign);
@@ -148,10 +148,10 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
             List<CallInfo> callis = null;
 
             using (IDataContextAsync context = new LogqsoDataContext())
-            using (IUnitOfWorkDataAsync unitOfWorkData = new UnitOfWorkData(context))
+            using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 bool caught = false;
-                IRepositoryAsync<CallInfo> _CallinfoRepository = new Repository<CallInfo>(context, unitOfWorkData);
+                IRepositoryAsync<CallInfo> _CallinfoRepository = new Repository<CallInfo>(context, unitOfWork);
 
                 try
                 {
@@ -185,19 +185,19 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         public void Integration_LogDataContext_URF_Queryable_DataCallInfoDto_Include_StationCallInfoContestType_Return_DataCallInfoDto()
         {
             List<DataCallInfoDto> DataCallInfoDtos = null;
-
+            bool Active = true;
             using (IDataContextAsync context = new LogqsoDataContext())
-            using (IUnitOfWorkDataAsync unitOfWorkData = new UnitOfWorkData(context))
+            using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 bool caught = false;
-                IRepositoryAsync<CallInfo> _CallinfoRepository = new Repository<CallInfo>(context, unitOfWorkData);
+                IRepositoryAsync<CallInfo> _CallinfoRepository = new Repository<CallInfo>(context, unitOfWork);
                 try
                 {
 
                     //var CallInfoss = _CallinfoRepository.QueryableNoTracking();
                     IQueryFluent<CallInfo> CallInfoss = _CallinfoRepository.Query(t => t.UserName == "default");
                     var CallInfoQ = CallInfoss
-                        .Include(x => x.Station).Include(x => x.CallSign)
+                        .Include(x => x.Station).Include(x => x.CallSign).Include(x=>x.QsoRadioType)
                         .SelectQueryable(true)
                         .OrderBy(t => t.SessionName).ThenBy(t => t.CallGroup);
 
@@ -208,12 +208,15 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                         .Include(x => x.Contest)
                         .SelectQueryable(true);
 
-                    var ContesttypeRepository = _CallinfoRepository.GetRepository<ContestType>();
-                    IQueryFluent<ContestType> ContestTypess = ContesttypeRepository.Query();
-                    var ContestQ = ContestTypess
-                        .Include(x => x.Contests)
-                        .SelectQueryable(true);
+                    var ContestRepository = LogRepository.GetRepository<Contest>();
+                    IQueryFluent<Contest> Contestss = ContestRepository.Query();
+                    var ContestQ = Contestss
+                        .SelectQueryable(true).Where(x => x.Active == Active);
 
+                    var RadioRepository = _CallinfoRepository.GetRepository<QsoRadioType>();
+                    IQueryFluent<QsoRadioType> RadioTypess = RadioRepository.Query();
+                    var RadioQ = RadioTypess
+                        .SelectQueryable(true);
 
                     DataCallInfoDtos = (from lc in CallInfoQ
                                       join lq in LogQ on lc.LogId equals lq.LogId
@@ -224,14 +227,37 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                                           SelectedContestName = lc.ContestId,
                                           SelectedCall = lc.CallSign.Call,
                                           SelectedStationName = lc.Station.StationName,
+                                          QsoRadioType = (QsoRadioTypeEnum)lc.QsoRadioTypeEnum,
                                           //Selecct() flattens
-                                          StationNames = lq.Stations.Select(x => x.StationName).ToList(), 
+                                          StationNames = (from cn in lq.Stations
+                                                          select new StationNamestype
+                                                          {
+                                                              key = cn.LogId,
+                                                              value = cn.StationName
+                                                          }).ToList(),
+                                          LogId = lc.LogId,
                                           //returns only contests that match the Callinfo
                                           //ContestNames = cq.Contests.Where(x => x.ContestName.Contains("cqww")).Select(x => x.ContestName).ToList(),
+                                          
                                           //return all contests in Db table ordered  by name
-                                          ContestNames = ContestQ.SelectMany(x=>x.Contests).OrderBy(x => x.ContestName).Select(x => x.ContestName).ToList(),
+                                          ContestNames = (from cn in ContestQ
+                                                          select new ContestNamestype
+                                                          {
+                                                              key = cn.ContestId,
+                                                              value = cn.ContestName
+                                                          }).ToList(),
+                                          
                                           //return all WPX contests in Db table ordered  by name
-                                          //ContestNames = ContestQ.SelectMany(x => x.Contests).Where(x => x.ContestName.Contains("Cqwpx")).OrderBy(x => x.ContestName).Select(x => x.ContestName).ToList(),
+                                          //ContestNames = ContestQ.SelectMany(x => x.Contests).Where(x => x.ContestName.StartsWith("Cqwpx")).OrderBy(x => x.ContestName).Select(x => x.ContestName).ToList(),
+
+                                          //return all contests in Db table 
+                                          RadioNames = (from cn in RadioQ
+                                                        select new RadioNamestype
+                                                        {
+                                                            key = cn.QsoRadioTypeEnum,
+                                                            value = cn.QsoRadioTypeName
+                                                        }).ToList(),
+                                       
                                           Disabled = lc.Disabled,
                                       }).ToList();
 
@@ -248,6 +274,105 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsNotNull(DataCallInfoDtos[0].StationNames);
                 Assert.IsNotNull(DataCallInfoDtos[0].ContestNames);
                 Assert.IsTrue(DataCallInfoDtos[0].ContestNames.Count >0);
+                Assert.IsTrue(DataCallInfoDtos[0].StationNames.Count >= 0);   //some entry ategories do not have STN defined (singleOp)
+
+            }
+
+        }
+
+        public void Integration_LogDataContext_URF_Query_DataCallInfoDto_Include_StationCallInfoContestType_Return_DataCallInfoDto()
+        {
+            List<DataCallInfoDto> DataCallInfoDtos = null;
+            bool Active = true;
+
+            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
+            {
+                bool caught = false;
+                IRepositoryAsync<CallInfo> _CallinfoRepository = new Repository<CallInfo>(context, unitOfWork);
+                try
+                {
+
+                    //var CallInfoss = _CallinfoRepository.QueryableNoTracking();
+                    IQueryFluent<CallInfo> CallInfoss = _CallinfoRepository.Query(t => t.UserName == "default");
+                    var CallInfoQ = CallInfoss
+                        .Include(x => x.Station).Include(x => x.CallSign).Include(x => x.QsoRadioType)
+                        .SelectQueryable(true)
+                        .OrderBy(t => t.SessionName).ThenBy(t => t.CallGroup);
+
+                    var LogRepository = _CallinfoRepository.GetRepository<Log>();
+                    IQueryFluent<Log> Logs = LogRepository.Query();
+                    var LogQ = Logs
+                        .Include(x => x.Stations)
+                        .Include(x => x.Contest)
+                        .SelectQueryable(true);
+
+                    var ContestRepository = LogRepository.GetRepository<Contest>();
+                    IQueryFluent<Contest> Contestss = ContestRepository.Query();
+                    var ContestQ = Contestss
+                        .SelectQueryable(true).Where(x => x.Active == Active);
+
+                    var RadioRepository = _CallinfoRepository.GetRepository<QsoRadioType>();
+                    IQueryFluent<QsoRadioType> RadioTypess = RadioRepository.Query();
+                    var RadioQ = RadioTypess
+                        .SelectQueryable(true);
+
+                    DataCallInfoDtos = (from lc in CallInfoQ
+                                        join lq in LogQ on lc.LogId equals lq.LogId
+                                        where lc.UserName == "default"
+                                        select new DataCallInfoDto
+                                        {
+                                            CallGroup = (CallGroupEnum)lc.CallGroup,
+                                            SelectedContestName = lc.ContestId,
+                                            SelectedCall = lc.CallSign.Call,
+                                            SelectedStationName = lc.Station.StationName,
+                                            QsoRadioType = (QsoRadioTypeEnum)lc.QsoRadioTypeEnum,
+                                            //Selecct() flattens
+                                            StationNames = (from cn in lq.Stations
+                                                            select new StationNamestype
+                                                            {
+                                                                key = cn.LogId,
+                                                                value = cn.StationName
+                                                            }).ToList(),
+                                            LogId = lc.LogId,
+                                            //returns only contests that match the Callinfo
+                                            //ContestNames = cq.Contests.Where(x => x.ContestName.Contains("cqww")).Select(x => x.ContestName).ToList(),
+
+                                            //return all contests in Db table ordered  by name
+                                            ContestNames = (from cn in ContestQ
+                                                            select new ContestNamestype
+                                                            {
+                                                                key = cn.ContestId,
+                                                                value = cn.ContestName
+                                                            }).ToList(),
+
+                                            //return all WPX contests in Db table ordered  by name
+                                            //ContestNames = ContestQ.SelectMany(x => x.Contests).Where(x => x.ContestName.StartsWith("Cqwpx")).OrderBy(x => x.ContestName).Select(x => x.ContestName).ToList(),
+
+                                            //return all contests in Db table 
+                                            RadioNames = (from cn in RadioQ
+                                                          select new RadioNamestype
+                                                          {
+                                                              key = cn.QsoRadioTypeEnum,
+                                                              value = cn.QsoRadioTypeName
+                                                          }).ToList(),
+
+                                            Disabled = lc.Disabled,
+                                        }).ToList();
+
+                }
+                catch (Exception ex)
+                {
+                    TestContext.WriteLine(string.Format("Integration_LogDataContext_URF_Queryable_DataCallInfoDto_Include_StationCallInfoContestType_Return_DataCallInfoDto exception {0}", ex.Message));
+                    caught = true;
+                }
+                Assert.IsFalse(caught);  //exception
+                Assert.IsNotNull(DataCallInfoDtos);
+                Assert.IsInstanceOfType(DataCallInfoDtos, typeof(List<DataCallInfoDto>));
+                Assert.AreEqual(DataCallInfoDtos.Count, 3);
+                Assert.IsNotNull(DataCallInfoDtos[0].StationNames);
+                Assert.IsNotNull(DataCallInfoDtos[0].ContestNames);
+                Assert.IsTrue(DataCallInfoDtos[0].ContestNames.Count > 0);
                 Assert.IsTrue(DataCallInfoDtos[0].StationNames.Count >= 0);   //some entry ategories do not have STN defined (singleOp)
 
             }

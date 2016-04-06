@@ -2,8 +2,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Logqso.mvc.Entities.LogControlEntity;
 
-
-
 namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
 {
     public class CatDefaultMap : EntityTypeConfiguration<CatDefault>
@@ -11,27 +9,9 @@ namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
         public CatDefaultMap()
         {
             // Primary Key
-            this.HasKey(t => new { t.Id, t.CatOpr, t.CatAssist, t.CatBnd, t.CatTx, t.CatPwr, t.UserName });
+            this.HasKey(t => t.Id);
 
             // Properties
-            this.Property(t => t.Id)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-
-            this.Property(t => t.CatOpr)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.CatAssist)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.CatBnd)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.CatTx)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
-            this.Property(t => t.CatPwr)
-                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-
             this.Property(t => t.UserName)
                 .IsRequired()
                 .HasMaxLength(256);
@@ -39,29 +19,29 @@ namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
             // Table & Column Mappings
             this.ToTable("CatDefault");
             this.Property(t => t.Id).HasColumnName("Id");
-            this.Property(t => t.CatOpr).HasColumnName("CatOpr");
-            this.Property(t => t.CatAssist).HasColumnName("CatAssist");
-            this.Property(t => t.CatBnd).HasColumnName("CatBnd");
-            this.Property(t => t.CatTx).HasColumnName("CatTx");
-            this.Property(t => t.CatPwr).HasColumnName("CatPwr");
             this.Property(t => t.UserName).HasColumnName("UserName");
+            this.Property(t => t.CatOperatorEnum).HasColumnName("CatOperatorEnum");
+            this.Property(t => t.CatAssistedEnum).HasColumnName("CatAssistedEnum");
+            this.Property(t => t.CatBandEnum).HasColumnName("CatBandEnum");
+            this.Property(t => t.CatNoOfTxEnum).HasColumnName("CatNoOfTxEnum");
+            this.Property(t => t.CatPowerEnum).HasColumnName("CatPowerEnum");
 
             // Relationships
             this.HasRequired(t => t.CatAssisted)
                 .WithMany(t => t.CatDefaults)
-                .HasForeignKey(d => d.CatAssist);
+                .HasForeignKey(d => d.CatAssistedEnum);
             this.HasRequired(t => t.CatBand)
                 .WithMany(t => t.CatDefaults)
-                .HasForeignKey(d => d.CatBnd);
+                .HasForeignKey(d => d.CatBandEnum);
             this.HasRequired(t => t.CatNoOfTx)
                 .WithMany(t => t.CatDefaults)
-                .HasForeignKey(d => d.CatTx);
+                .HasForeignKey(d => d.CatNoOfTxEnum);
             this.HasRequired(t => t.CatOperator)
                 .WithMany(t => t.CatDefaults)
-                .HasForeignKey(d => d.CatOpr);
+                .HasForeignKey(d => d.CatOperatorEnum);
             this.HasRequired(t => t.CatPower)
                 .WithMany(t => t.CatDefaults)
-                .HasForeignKey(d => d.CatPwr);
+                .HasForeignKey(d => d.CatPowerEnum);
 
         }
     }

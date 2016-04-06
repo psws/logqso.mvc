@@ -11,7 +11,7 @@ namespace Logqso.mvc.Entities.LogControlEntity
             this.CatDefaults = new List<CatDefault>();
         }
 
-        public int CatPwr { get; set; }
+        public int CatPowerEnum { get; set; }
         public string CatPowerName { get; set; }
         public byte Index { get; set; }
         public virtual ICollection<CatDefault> CatDefaults { get; set; }

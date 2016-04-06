@@ -24,11 +24,11 @@ namespace Logqso.mvc.DataModel.LogControl
                   p => p.CatOperator,
                   new CatDefault {
                       UserName = "default",
-                      CatOpr = CatOperatorEnum.ALL,
-                      CatAssist = CatAssistedEnum.ALL,
-                      CatBnd = CatBandEnum.ALL,
-                      CatTx = CatNoOfIxEnum.ALL,
-                      CatPwr = CatPowerrEnum.ALL
+                      CatOperatorEnum = CatOperatorEnum.ALL,
+                      CatAssistedEnum = CatAssistedEnum.ALL,
+                      CatBandEnum = CatBandEnum.ALL,
+                      CatNoOfTxEnum = CatNoOfTxEnum.ALL,
+                      CatPowerEnum = CatPowerEnum.ALL
                   } 
              );
 
@@ -39,7 +39,7 @@ namespace Logqso.mvc.DataModel.LogControl
                   UserName = "default",
                   FiltBnd = CatBandEnum.ALL,
                   FiltCont = ContinentEnum.ALL,
-                  FiltPref = "",
+                  FiltPref = "-",
                   
                   FiltCQZoneVal = "ALL"
               }

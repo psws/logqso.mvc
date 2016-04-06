@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Logqso.mvc.Entities.LogControlEntity;
 
-
 namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
 {
     public class CatBandMap : EntityTypeConfiguration<CatBand>
@@ -10,10 +9,10 @@ namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
         public CatBandMap()
         {
             // Primary Key
-            this.HasKey(t => t.CatBnd);
+            this.HasKey(t => t.CatBandEnum);
 
             // Properties
-            this.Property(t => t.CatBnd)
+            this.Property(t => t.CatBandEnum)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             this.Property(t => t.CatBandName)
@@ -22,7 +21,7 @@ namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
 
             // Table & Column Mappings
             this.ToTable("CatBand");
-            this.Property(t => t.CatBnd).HasColumnName("CatBnd");
+            this.Property(t => t.CatBandEnum).HasColumnName("CatBandEnum");
             this.Property(t => t.CatBandName).HasColumnName("CatBandName");
             this.Property(t => t.Index).HasColumnName("Index");
         }

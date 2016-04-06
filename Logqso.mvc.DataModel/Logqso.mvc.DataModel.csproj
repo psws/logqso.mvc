@@ -52,25 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LogControl\Models\LogControlContext.cs" />
-    <Compile Include="LogControl\Models\Mapping\CatAssistedMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\CatBandMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\CatDefaultMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\CatNoOfTxMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\CatOperatorMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\CatPowerMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\FiltBandMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\FiltContinentMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\FiltCQZoneMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\FiltDefaulltMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\FiltPrefixMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\XaxisDefaultMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\XaxisDurationMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\XaxisStartTimeMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\YaxisDefaultMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\YaxisFunctionMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\YaxisIntervalMap.cs" />
-    <Compile Include="LogControl\Models\Mapping\YaxisViewTypeMap.cs" />
+    <Compile Include="LogControl\Migrations\LogControlDB\201604061709021_InitialDatabaseCreation.cs" />
+    <Compile Include="LogControl\Migrations\LogControlDB\201604061709021_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201604061709021_InitialDatabaseCreation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LogControl\Migrations\LogControlDB\Configuration.cs" />
     <Compile Include="LogData\CabrilloInfoSeed.cs" />
     <Compile Include="LogData\CallInfoModels\CallInfo.cs" />
     <Compile Include="LogControl\CategoryModels\CatAssisted.cs" />
@@ -85,11 +71,6 @@
     <Compile Include="LogControl\FilterModels\FiltCQZone.cs" />
     <Compile Include="LogControl\FilterModels\FiltDefault.cs" />
     <Compile Include="LogControl\LogControlDB.cs" />
-    <Compile Include="LogControl\Migrations\LogControlDB\201508310133214_InitialDatabaseCreation.cs" />
-    <Compile Include="LogControl\Migrations\LogControlDB\201508310133214_InitialDatabaseCreation.Designer.cs">
-      <DependentUpon>201508310133214_InitialDatabaseCreation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LogControl\Migrations\LogControlDB\Configuration.cs" />
     <Compile Include="LogControl\XaxisModels\XaxisDefault.cs" />
     <Compile Include="LogControl\XaxisModels\XaxisDuration.cs" />
     <Compile Include="LogControl\XaxisModels\XaxisStartTime.cs" />
@@ -106,9 +87,9 @@
     <Compile Include="LogData\DataModels\QsoExchangeAlpha.cs" />
     <Compile Include="LogData\ContestTypeSeeds.cs" />
     <Compile Include="LogData\DataModels\QsoRadioType.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201602040906179_InitialDatabaseCreation.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201602040906179_InitialDatabaseCreation.Designer.cs">
-      <DependentUpon>201602040906179_InitialDatabaseCreation.cs</DependentUpon>
+    <Compile Include="LogData\Migrations\LogDataDB\201604061958316_InitialDatabaseCreation.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201604061958316_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201604061958316_InitialDatabaseCreation.cs</DependentUpon>
     </Compile>
     <Compile Include="LogData\Migrations\LogDataDB\Configuration.cs" />
     <Compile Include="LogData\QsoExchangeTypeSeeds.cs" />
@@ -147,6 +128,27 @@
     <Compile Include="LogData\UbnModels\UbnNotInLog.cs" />
     <Compile Include="LogData\UbnModels\UbnSummary.cs" />
     <Compile Include="LogData\UbnModels\UbnUniques.cs" />
+    <Compile Include="ControlUnitOfWork.cs" />
+    <Compile Include="LogUnitOfWork.cs" />
+    <Compile Include="LogControl\Models\LogqsoContext.cs" />
+    <Compile Include="LogControl\Models\Mapping\CatAssistedMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\CatBandMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\CatDefaultMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\CatNoOfTxMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\CatOperatorMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\CatPowerMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\FiltBandMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\FiltContinentMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\FiltCQZoneMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\FiltDefaulltMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\FiltPrefixMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\XaxisDefaultMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\XaxisDurationMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\XaxisStartTimeMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\YaxisDefaultMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\YaxisFunctionMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\YaxisIntervalMap.cs" />
+    <Compile Include="LogControl\Models\Mapping\YaxisViewTypeMap.cs" />
     <Compile Include="LogData\Models\LogqsoDataContext.cs" />
     <Compile Include="LogData\Models\Mapping\CabrilloInfoMap.cs" />
     <Compile Include="LogData\Models\Mapping\CallInfoMap.cs" />
@@ -180,6 +182,10 @@
       <Project>{c6e19eb6-8334-4d08-811a-2742701628e7}</Project>
       <Name>Logqso.mvc.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Repositary.Pattern.Extenions\Repository.Pattern.Extensions.csproj">
+      <Project>{413b4310-d3bc-4239-ad69-3048497426d4}</Project>
+      <Name>Repository.Pattern.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\URF\Infrastructure\Infrastructure.csproj">
       <Project>{14b91c4e-7b93-42c8-afb1-d7983e7ad6a3}</Project>
       <Name>Infrastructure</Name>
@@ -198,11 +204,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201508310133214_InitialDatabaseCreation.resx">
-      <DependentUpon>201508310133214_InitialDatabaseCreation.cs</DependentUpon>
+    <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201604061709021_InitialDatabaseCreation.resx">
+      <DependentUpon>201604061709021_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201602040906179_InitialDatabaseCreation.resx">
-      <DependentUpon>201602040906179_InitialDatabaseCreation.cs</DependentUpon>
+    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201604061958316_InitialDatabaseCreation.resx">
+      <DependentUpon>201604061958316_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

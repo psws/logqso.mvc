@@ -93,7 +93,7 @@ namespace Logqso.mvc.DataModel.LogControl
             //select all and paste here
             context.FiltPrefix.AddOrUpdate(
                 p => p.FiltPref,
-                new FiltPrefix { FiltPref = "", CountryName = "ALL" },
+                new FiltPrefix { FiltPref = "-", CountryName = "ALL" },
 
                 new FiltPrefix  { FiltPref  = "LU",  CountryName ="Argentina"},
                 new FiltPrefix { FiltPref = "VP5", CountryName = "Turks & Caicos" },

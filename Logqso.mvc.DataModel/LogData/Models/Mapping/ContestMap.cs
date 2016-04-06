@@ -28,6 +28,7 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
             this.Property(t => t.QsoModeTypeEnum).HasColumnName("QsoModeTypeEnum");
             this.Property(t => t.StartDateTime).HasColumnName("StartDateTime");
             this.Property(t => t.EndDateTime).HasColumnName("EndDateTime");
+            this.Property(t => t.Active).HasColumnName("Active");
 
             // Relationships
             this.HasRequired(t => t.ContestType)

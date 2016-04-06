@@ -13,7 +13,7 @@ namespace Logqso.mvc.DataModel.LogControl.CategoryModels
     {
         [Key]
         //[DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public Logqso.mvc.common.Enum.CatOperatorEnum CatOpr { get; set; }
+        public Logqso.mvc.common.Enum.CatOperatorEnum CatOperatorEnum { get; set; }
         [Column(TypeName = "varchar")]
         [MaxLength(20)]
         [Required]

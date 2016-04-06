@@ -11,6 +11,12 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
     //[Table("Contest")]
     public class Contest
     {
+        public Contest()
+        {
+            Active = true;
+        }
+
+
         [Key]
         [Column(TypeName = "varchar")]
         [MaxLength(35)]
@@ -27,7 +33,7 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         [DataType(DataType.DateTime)]
         public virtual DateTime EndDateTime { get; set; }
         [Column(TypeName = "bit")]
-        public bool Active = true;
+        public bool Active { get; set; }
 
         public virtual ContestType ContestType { get; set; }
         public virtual QsoModeType QsoModeType { get; set; }

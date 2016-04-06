@@ -111,12 +111,12 @@ namespace Logqso.mvc.DataModel.LogData
                                     ContestName = "Cqwpx Ssb 2016", StartDateTime = DateTime.Parse("03/26/2016 00:00:00"), EndDateTime = DateTime.Parse("03/27/2016 11:59:59 PM") },
 
                 //RUSDX
-                new Contest { ContestId = "RUSDXC2005", QsoModeTypeEnum =  QsoModeTypeEnum.MIXED, ContestTypeEnum = ContestTypeEnum.RUSDXC ,
+                new Contest { ContestId = "RUSDXC2005", QsoModeTypeEnum =  QsoModeTypeEnum.MIXED, ContestTypeEnum = ContestTypeEnum.RUSDXC , Active = false,
                                     ContestName = "Russian DX 2005", StartDateTime = DateTime.Parse("03/19/2005 12:00:00"), EndDateTime = DateTime.Parse("03/20/2005 11:59:59 AM") },
 
                 //cq160
-                new Contest { ContestId = "CQ1602003", QsoModeTypeEnum =  QsoModeTypeEnum.SSB, ContestTypeEnum = ContestTypeEnum.CQ160 ,
-                                    ContestName = "CQ 160 Meter SSB 2003 ", StartDateTime = DateTime.Parse("02/22/2003 00:00:00"), EndDateTime = DateTime.Parse("02/23/2003 11:59:59 PM" ) }
+                new Contest { ContestId = "CQ1602003", QsoModeTypeEnum =  QsoModeTypeEnum.SSB, ContestTypeEnum = ContestTypeEnum.CQ160 , Active = false,
+                                    ContestName = "Cq160 Ssb 2003 ", StartDateTime = DateTime.Parse("02/22/2003 00:00:00"), EndDateTime = DateTime.Parse("02/23/2003 11:59:59 PM" ) }
 
             );
 

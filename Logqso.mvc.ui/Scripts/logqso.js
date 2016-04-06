@@ -11,9 +11,10 @@ $(function () {
     // Fetch the initial data.
     //var controlUri = '/api/control/';
 
-    
-    //getAllControls();
+
+    getAllControls();
     getAllData();
+    LoadCallPopup2Tab();
 
     $.widget("ui.selectmenu", $.ui.selectmenu, {
         open: function (event, ui) {
@@ -84,14 +85,11 @@ $(function () {
          $(this).addClass('lq-panel-title');
      });
 
-    $("input[id^='Call'], input[id^='Station'] ").
+    $("button[id^='Call'] ").
     each(function (indexInArray, valueOfElement) {
-        $(this).addClass('lq-call-input');
-
-        //$(this).css({
-        //    "max-width" : "110px"
-        //});
+        $(this).addClass('lq-call-button');
     });
+
 
     $("input[type='checkbox']").
    each(function (indexInArray, valueOfElement) {
@@ -137,12 +135,12 @@ $(function () {
 
 
     $("div.panel-body[id^='bdyPnl']").
-each(function (indexInArray, valueOfElement) {
-    //$(this).prop('background-color', '#aed7ff');
-    $(this).css({
-        'padding': '6px 15px 8px 15px'
-    })
-});
+    each(function (indexInArray, valueOfElement) {
+        //$(this).prop('background-color', '#aed7ff');
+        $(this).css({
+            'padding': '4px 4px 2px 4px'
+        })
+    });
 
 
     $("div.panel[id^='AxisPnl'], div.panel-heading[id^='hdgAxisPnl'], div.panel-body[id^='bdyYaxisPnl'], div.panel-body[id^='bdyXaxisPnl']").
@@ -152,6 +150,13 @@ each(function (indexInArray, valueOfElement) {
     });
 
     $("span[id^='enb_dis'] input[id^='filter']").
+    each(function (indexInArray, valueOfElement) {
+        //$(this).prop('background-color', '#aed7ff');
+        $(this).css('margin-right', '4px');
+
+    });
+
+    $("div.panel-body span[id^='enb_dis'] ").
     each(function (indexInArray, valueOfElement) {
         //$(this).prop('background-color', '#aed7ff');
         $(this).css('margin-right', '4px');
@@ -182,12 +187,15 @@ each(function (indexInArray, valueOfElement) {
             switch (e.currentTarget.id) {
                 case 'chk1':
                     PropertyColorState("#Call1", "disabled", true, "#a4a3a3");
+                    SelectMenuState("#Station1, #Radio1", "disable");
                     break;
                 case 'chk2':
                     PropertyColorState("#Call2", "disabled", true, "#a4a3a3");
+                    SelectMenuState("#Station2, #Radio2", "disable");
                     break;
                 case 'chk3':
                     PropertyColorState("#Call3", "disabled", true, "#a4a3a3");
+                    SelectMenuState("#Station3, #Radio3", "disable");
                     break;
                 case 'filtercatchk':
                     PropertyColorState("#filtercatchk", "checked", true, "#a4a3a3");
@@ -208,12 +216,15 @@ each(function (indexInArray, valueOfElement) {
             switch (e.currentTarget.id) {
                 case 'chk1':
                     PropertyColorState("#Call1", "disabled", false, "");
+                    SelectMenuState("#Station1, #Radio1", "enable");
                     break;
                 case 'chk2':
                     PropertyColorState("#Call2", "disabled", false, "");
+                    SelectMenuState("#Station2, #Radio2", "enable");
                     break;
                 case 'chk3':
                     PropertyColorState("#Call3", "disabled", false, "");
+                    SelectMenuState("#Station3, #Radio3", "enable");
                     break;
                 case 'filtercatchk':
                     SelectMenuState("Select[id^='Cat']", "enable");
@@ -302,7 +313,7 @@ each(function (indexInArray, valueOfElement) {
 
     //});
     //$(" div.panel-body[id^='CtestPnl']").css("padding", "15px 4px 15px 4px");
-    $("div.panel-body button[id^='Contest']").addClass('lq-contest-selector')
+    $("div.panel-body button[id^='Contest'], button[id^=Call]").addClass('lq-contest-selector')
    .button({
        icons: {
            secondary: "ui-icon-triangle-1-s"
@@ -373,25 +384,44 @@ each(function (indexInArray, valueOfElement) {
             switch (valueOfElement.id) {
                 case 'YaxisFunction':
                     $(this).selectmenu("option", "width", 120);
-                    break
+                    break;
                 case 'YaxisInterval':
                     $(this).selectmenu("option", "width", 70);
-                    break
+                    break;
                 case 'YaxisViewType':
                     $(this).selectmenu("option", "width", 130);
-                    break
+                    break;
                 case 'XaxisStarttime':
                     $(this).selectmenu("option", "width", 130);
-                    break
+                    break;
                 case 'XaxisDuration':
                     $(this).selectmenu("option", "width", 70);
-                    break
+                    break;
                 default:
                     $(this).selectmenu("option", "width", 100);
 
             }
 
         });
+
+
+    $("select[name^='Station']").selectmenu().
+        each(function (indexInArray, valueOfElement) {
+            $(this).selectmenu('menuWidget').addClass('lq-dropdwn');
+            $(this).selectmenu("option", "width", 80);
+            $(this).selectmenu('widget').addClass('lq-dropdwn');
+
+        });
+
+    $("select[name^='Radio']").selectmenu().
+        each(function (indexInArray, valueOfElement) {
+            $(this).selectmenu('menuWidget').addClass('lq-dropdwn');
+            $(this).selectmenu("option", "width", 60);
+            $(this).selectmenu('widget').addClass('lq-dropdwn');
+
+        });
+
+
     //ElementCount = 5;
     //$("ul[id^='Axis']").css({
     //                'margin-top': -(ElementCount * 25)
@@ -403,6 +433,15 @@ each(function (indexInArray, valueOfElement) {
             $(this).on("selectmenuselect", function (event, ui) {
                 id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
                 _lq.ControlUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML);
+            })
+
+        });
+    //set DDL Data change event
+    $("select[id ^='Station'], select[id ^='Radio']").
+        each(function (indexInArray, valueOfElement) {
+            $(this).on("selectmenuselect", function (event, ui) {
+                id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
+                _lq.DataUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML);
             })
 
         });
@@ -504,17 +543,17 @@ each(function (indexInArray, valueOfElement) {
 
 
     //$('a[data-modal-id]').click(function (e) {
-    $('button[data-modal-id]').click(function (e) {
+    $('button[id^=Contest][ data-modal-id]').click(function (e) {
         e.preventDefault();
 
         _lq.parent_modal_box_id = e.currentTarget.id;
-        var newleft = $("button[id=" + _lq.parent_modal_box_id + "]").offset().left - $(".modal-box").width() / 2
+        var newleft = $("button[id=" + _lq.parent_modal_box_id + "]").offset().left - $(".modal-box").width() / 1.3
         newleft = (newleft < 0) ? 0 : newleft;
 
         $(".modal-box").css({
             top: $("button[id=" + _lq.parent_modal_box_id + "]").offset().top + 20,
             left: newleft
-        });
+        }).css('width', '500px');;
         $("body").append(appendthis);
 
         $(".modal-overlay").fadeTo(500, 0.7);
@@ -537,6 +576,72 @@ each(function (indexInArray, valueOfElement) {
         $('#' + modalBox).fadeIn($(this).data());
     });
 
+    $('button[id^=Call][ data-modal-id]').click(function (e) {
+        e.preventDefault();
+
+        _lq.parent_modal_box_id = e.currentTarget.id;
+        var newleft = $("button[id=" + _lq.parent_modal_box_id + "]").offset().left - $(".modal-box").width() / 1.3
+        newleft = (newleft < 0) ? 0 : newleft;
+
+        $(".modal-box").css({
+            top: $("button[id=" + _lq.parent_modal_box_id + "]").offset().top + 20,
+            left: newleft
+        }).css('width','570px');
+        $("body").append(appendthis);
+
+        $(".modal-overlay").fadeTo(500, 0.7);
+
+        //$(".js-modalbox").fadeIn(500);
+        //style popup
+        var modalBox = $(this).attr('data-modal-id');
+        var popup = $('#' + modalBox + ' h4');
+        //popup.html("Select a contest for " + _lq.parent_modal_box_id);
+        //popup.addClass('lq-popup-hdr');
+        //var list = $('#' + modalBox + ' div[id$="list"]');
+        //list.addClass('lq-popup-list');
+
+        //$('#jqxTabs').jqxTabs({
+        //    width: 480,
+        //    height: 150,
+        //    theme: 'energyblue'
+        //});
+        $("#tabs").tabs({
+                width: 480,
+                height: 150,
+                activate: function (event, ui) {
+                    //alert(  ui.newTab.index());
+                    alert(ui.newTab.attr('li', "innerHTML")[0].getElementsByTagName("a")[0].innerHTML);
+                    //alert( this.text);
+                }
+            //event: "mouseover"
+        });
+        var CallTab = $("#tabs").tabs("widget");
+        $("ul.ui-tabs-nav li a").
+            each(function (indexInArray, valueOfElement) {
+                //console.log(indexInArray + ": " + valueOfElement);
+                $(this).addClass('jqxtab-tab-button');
+                $(this).css('padding', '1px 1px 1px 1px');
+            });
+        $("ul.ui-tabs-nav li").
+         each(function (indexInArray, valueOfElement) {
+            $(this).css('margin', '0');
+        });
+
+        //$("#tabs li" ).tab(function (index, event) {
+        //    this.
+
+        //});
+
+        //$('#jqxTabs').jqxTabs('addFirst', '1-9', 'tabContent');
+
+        // map all choices to ContestSelectHandler()
+        $('#' + modalBox + ' ol.two-col-list li').off('click').on("click",
+            {
+                test: _lq.parent_modal_box_id,
+                callNo: _lq.parent_modal_box_id
+            }, _lq.ContestSelectHandler);
+        $('#' + modalBox).fadeIn($(this).data());
+    });
 
     //var appendthis = ("<div class='modal-overlay js-modal-close'></div>");
 
@@ -598,7 +703,9 @@ each(function (indexInArray, valueOfElement) {
 
 
     function getAllControls() {
-        _lq.ajaxHelper(_lq.controlUri + "/GetControlNames", 'GET').done(function (data) {
+        _lq.ajaxHelper(_lq.controlUri + "/GetControlNames", 'GET',null , getAllControlsLoad);
+
+    function getAllControlsLoad(data) {
             //console.log(data.ControlCategoryDto.CatOperator);
 
             $select = $('#CatOp');
@@ -764,28 +871,14 @@ each(function (indexInArray, valueOfElement) {
 
 
 
-        });
-
-    }
-
-
-    function getAllData() {
-        GetCallInfoObjDataSelections();
-    }
-
-    function SetCallInfoObjDataSettings(DataCallInfoObjDto) {
-        $("div.panel-body button[id^='Contest1']").
-            each(function (indexInArray, valueOfElement) {
-                $(this).innerHtml = DataCallInfoObjDto.DataCallInfoObjDto[1].ContestName;
-            });
-
+        };
 
     }
 
 
     function GetControlSelections() {
-        _lq.ajaxHelper(_lq.controlUri + "/GetControlSelections", 'GET')
-            .done(function (data) {
+        _lq.ajaxHelper(_lq.controlUri + "/GetControlSelections", 'GET', null, GetControlSelectionsLoad);
+        function GetControlSelectionsLoad(data) {
                 SetControlCategorySettingsDefaults(data.ControlCategorySettingsDto);
                 SetControlFiltersSettingsDefaults(data.ControlFiltersSettingsDto);
                 SetControlXaxisSettingsDefaults(data.ControlXaxisSettingsDto);
@@ -793,50 +886,125 @@ each(function (indexInArray, valueOfElement) {
 
                 _lq.SessionSaveControlSettings();
 
-            });  
+            };  
     }
 
-    function GetCallInfoObjDataSelections() {
-        _lq.ajaxHelper(_lq.dataUri + "/GetDataCallInfoSelections", 'GET')
-            .done(function (data) {
-                SetCallInfoObjDataSettings(data.DataCallInfoObjDto);
 
-                //_lq.SessionSaveControlSettings();
 
-            });  
+
+    function getAllData() {
+        _lq.ajaxHelper(_lq.dataUri + "/GetDataCallInfoSelections", 'GET', null, SetCallInfoObjDataSettings);
     }
+
+
+
+    function SetCallInfoObjDataSettings(data) {
+        if (data.length > 3) {
+            //popup dialog selection box, to select whivh saved session
+            //noy implemented yet
+        } else {
+            for (var i = 0; i < data.length; i++) {
+    
+                switch (data[i].CallGroup) {
+                    case 1:
+                        SetCallinfo(1, data[i]);
+                        break;
+                    case 2:
+                        SetCallinfo(2, data[i]);
+                        break;
+                    case 3:
+                        SetCallinfo(3, data[i]);
+                        break;
+                    default:
+        
+                }
+            }
+        }
+        SetDataSettingsDefaults(data);
+
+    }
+
+    function SetCallinfo(index, data) {
+        var olWWs = $("div[id= WWssblist] ol.two-col-list")
+        var olWWc = $("div[id= WWcwlist] ol.two-col-list")
+        var olWPX = $("div[id= WPXlist] ol.two-col-list")
+        olWWs.html('');
+        olWWc.html('');
+        olWPX.html('');
+        $.each(data.ContestNames, function (key, val) {
+            if (val.value.indexOf('Cqww S') != -1) {
+                olWWs.append('<li value = ' + val.key +'>' + val.value + '</li>');
+            }else if (val.value.indexOf('Cqww C') != -1) {
+                olWWc.append('<li value = ' + val.key +'>' + val.value + '</li>');
+            } else if (val.value.indexOf('Cqwpx') != -1) {
+                olWPX.append('<li value = ' + val.key +'>' + val.value + '</li>');
+            }
+        })
+
+        $select = $("div[id^= bdyPnl] #Station" + index)
+        $select.html('');
+        $.each(data.StationNames, function (key, val) {
+            $select.append('<option value = ' + val.key + '>' + val.value + '</option>');
+        })
+
+        $select = $("div[id^= bdyPnl] #Radio" + index)
+        $select.html('');
+        $.each(data.RadioNames, function (key, val) {
+            $select.append('<option value = ' + val.key + '>' + val.value + '</option>');
+        })
+    }
+
+    function LoadCallPopup2Tab() {
+
+        var TabUl = $('div[id=tabs] ul');
+        var DivUl = $('div[id=tabs]');
+        var alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        if ($('div[id=tabs] ul li').length == 0) {
+
+            TabUl.append('<li ><a href="#CTab1">1-9</a></li>');
+            DivUl.append('<div id="CTab1">Content 1</div>');
+            var CTab = "CTab";
+            for (var i = 0; i < 26; i++) {
+                TabUl.append('<li ><a href="#' + CTab + alpha[i] + '">' + alpha[i] + '</a></li>');
+                DivUl.append('<div id="' + CTab + alpha[i] + '"></div>');
+            }
+        }
+
+    }
+
+
 
     $("button[id$= 'Dft']").click(function () {
         var ReqUri = "/GetControlSelection/";
         switch (this.id ) {
             case "CatDft":
                 ReqUri += "ControlCategorySettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET')
-                   .done(function (ControlCategorySettingsDto) {
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', null, ControlCategorySettingsDtoLoad);
+                function ControlCategorySettingsDtoLoad(ControlCategorySettingsDto) {
                        SetControlCategorySettingsDefaults(ControlCategorySettingsDto);
-                   });
+                   };
                 break;
             case "QsoDft":
                 ReqUri += "ControlFiltersSettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET')
-                   .done(function (ControlFiltersSettingsDto) {
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', null, SetControlFiltersSettingsDefaultsLoad);
+                function SetControlFiltersSettingsDefaultsLoad(ControlFiltersSettingsDto) {
                        SetControlFiltersSettingsDefaults(ControlFiltersSettingsDto);
 
-                   });
+                   };
                 break;
             case "AxisDft":
                 ReqUri += "ControlYaxisSettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET')
-                  .done(function (ControlXaxisSettingsDto) {
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', null, ControlYaxisSettingsDtoLoad);
+                function ControlYaxisSettingsDtoLoad(ControlYaxisSettingsDto) {
                       SetControlYaxisSettingsDefaults(ControlYaxisSettingsDto);
-                  });
+                  };
                 break;
             case "XAxisDft":
                 ReqUri += "ControlXaxisSettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET')
-                  .done(function (ControlXaxisSettingsDto) {
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', null, SetControlXaxisSettingsDefaultsLoad);
+                function SetControlXaxisSettingsDefaultsLoad(ControlXaxisSettingsDto) {
                       SetControlXaxisSettingsDefaults(ControlXaxisSettingsDto);
-                  });
+                  };
                 break;
             default:
 
@@ -933,9 +1101,49 @@ each(function (indexInArray, valueOfElement) {
         _lq.ControlYaxisSettingsDto = ControlYaxisSettingsDto;
     }
 
-  
+    function SetDataSettingsDefaults(DataCallInfoObj) {
+        for (var i = 0; i < DataCallInfoObj.length; i++) {
+            switch (DataCallInfoObj[i].CallGroup) {
+                case 1:
+                    //http://stackoverflow.com/questions/5580616/jquery-change-button-text
+                    $("button[id='Contest1'] span").text(DataCallInfoObj[i].SelectedContestName);
+                    if (DataCallInfoObj[i].SelectedStationName != null) {
+                        $select = $('#Station1').val(DataCallInfoObj[i].SelectedStationName).selectmenu("refresh");
+                    }else {
+                        $select = $('#Station1').val("ALL").selectmenu("refresh");
+                    }
+                    $select = $('#Radio1').prop("selectedIndex", DataCallInfoObj[i].QsoRadioType).selectmenu('refresh');
+                    break;
+                case 2:
+                    //http://stackoverflow.com/questions/5580616/jquery-change-button-text
+                    $("button[id='Contest2'] span").text(DataCallInfoObj[i].SelectedContestName);
+                    if (DataCallInfoObj[i].SelectedStationName != null) {
+                        $select = $('#Station2').val(DataCallInfoObj[i].SelectedStationName).selectmenu("refresh");
+                    } else {
+                        $select = $('#Station2').val("ALL").selectmenu("refresh");
+                    }
+                    $select = $('#Radio2').prop("selectedIndex", DataCallInfoObj[i].QsoRadioType).selectmenu('refresh');
+                    break;
+                case 3:
+                    //http://stackoverflow.com/questions/5580616/jquery-change-button-text
+                    $("button[id='Contest3'] span").text(DataCallInfoObj[i].SelectedContestName);
+                    if (DataCallInfoObj[i].SelectedStationName != null) {
+                        $select = $('#Station3').val(DataCallInfoObj[i].SelectedStationName).selectmenu("refresh");
+                    }else {
+                        $select = $('#Station3').val("ALL").selectmenu("refresh");
+                    }
+                    $select = $('#Radio3').prop("selectedIndex", DataCallInfoObj[i].QsoRadioType).selectmenu('refresh');
+                    break;
+                default:
+        
+            }
+        }
 
-  
+
+    }
+ 
+
+
 
     $(window).resize();
     document.getElementById("body").style.visibility = "visible";
@@ -985,28 +1193,31 @@ each(function (indexInArray, valueOfElement) {
     };
 
 
-    _lq.DataCallInfoObjDto = {
-        SessionName: '',
-        LogId: '',
-        DataCallInfos: [
-            { ContestName: '', SelectedCall: '', StationName: '', LogId: '', Disabled: 0 },
-            { ContestName: '', SelectedCall: '', StationName: '', LogId: '', Disabled: 0 },
-            { ContestName: '', SelectedCall: '', StationName: '', LogId: '', Disabled: 0 }
-        ]
-
+    _lq.DataCallInfoObj = {
+        SelectedContestName: '',
+        SelectedCall: '', 
+        SelectedStationName: '', 
+        CallGroup: '', 
+        QsoRadioType: '', 
+        LogId: '', 
+        Disabled: 0, 
+        StationNames: '', 
+        ContestNames: '',
+        RadioNames: '' ,
     };
 
 
 
-    _lq.ajaxHelper = function(uri, method, data) {
-
-        return $.ajax({
+    _lq.ajaxHelper = function(uri, method, data, Function) {
+         $.ajax({
             type: method,
             url: uri,
             dataType: 'json',
             contentType: 'application/json',
-            data: data ? JSON.stringify(data) : null
-        }).fail(function (jqXHR, textStatus, errorThrown) {
+            data: data ? JSON.stringify(data) : null,
+         })
+        .done (Function)
+        .fail(function (jqXHR, textStatus, errorThrown) {
             console.log(errorThrown);
         });
 
@@ -1018,7 +1229,7 @@ each(function (indexInArray, valueOfElement) {
         $('#' + event.data.test + ' span.ui-button-text').text(event.currentTarget.textContent);
         $(".js-modal-close, .modal-overlay").trigger('click');
         //call DDL change event
-        _lq.ControlUpdated(event.data.test, event.currentTarget.textContent);
+        _lq.DataUpdated(event.data.test, event.currentTarget.textContent);
     };
 
     //function for updating graph POST
@@ -1098,13 +1309,7 @@ each(function (indexInArray, valueOfElement) {
                 default:
         
             }
-        } else if (Controlid.indexOf("Contest") >= 0) {
-            switch (Controlid) {
-                case "Contest1":
-                default:
-
-            }
-        }
+        } 
         else {
             bUpdated = false;
         }
@@ -1114,6 +1319,8 @@ each(function (indexInArray, valueOfElement) {
             _lq.SendControlSettings(false);
         }
     }
+
+
 
     _lq.SendControlSettings = function (save) {
         if (save == true) {
@@ -1127,10 +1334,10 @@ each(function (indexInArray, valueOfElement) {
             ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
         };
 
-        _lq.ajaxHelper(_lq.controlUri + "/SendControlSelections", 'POST', dataObj)
-        .done(function () {
+        _lq.ajaxHelper(_lq.controlUri + "/SendControlSelections", 'POST', dataObj, UpdateControlsLoad);
+        function UpdateControlsLoad() {
             //update controls and graph
-        });
+        };
     }
 
     _lq.SessionSaveControlSettings = function () {
@@ -1145,6 +1352,70 @@ each(function (indexInArray, valueOfElement) {
         window.sessionStorage.setItem(_lq.SessionSaveControlSelections, JSON.stringify(dataObj) );
 
     }
+
+        //function for updating graph POST
+    _lq.DataUpdated = function (Controlid, SelectedValue) {
+        //alert("Control: " + Controlid + "-->Selected:" + SelectedValue);
+        var bUpdated = true;
+        if (Controlid.indexOf("Station") >= 0) {
+            switch (Controlid) {
+                case "Station1":
+                    ////_lq.ControlCategorySettingsDto.CatOperator = SelectedValue;
+                    break;
+            }
+        }else if (Controlid.indexOf("Radio") >= 0) {
+            switch (Controlid) {
+                case "Radio11":
+                default:
+            }
+
+        }else if (Controlid.indexOf("Contest") >= 0) {
+            switch (Controlid) {
+                case "Contest1":
+                default:
+
+            }
+        }else {
+            bUpdated = false;
+        }
+
+        if (bUpdated) {
+            _lq.SessionSaveDataSettings();
+            _lq.SendDataSettings(false);
+        }
+    }
+
+    _lq.SendDataSettings = function (save) {
+        if (save == true) {
+            _lq.SessionSaveDataSettings();
+        }
+
+        var dataObj = {
+            ////ControlCategorySettingsDto: _lq.ControlCategorySettingsDto,
+            ////ControlFiltersSettingsDto: _lq.ControlFiltersSettingsDto,
+            ////ControlXaxisSettingsDto: _lq.ControlXaxisSettingsDto,
+            ////ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
+        };
+
+        ////_lq.ajaxHelper(_lq.controlUri + "/SendDataSelections", 'POST', dataObj, UpdateDatasLoad);
+        ////function UpdateDatasLoad() {
+            //update controls and graph
+        ////};
+    }
+
+    _lq.SessionSaveDataSettings = function () {
+        var dataObj = {
+            ////ControlCategorySettingsDto: _lq.ControlCategorySettingsDto,
+            ////ControlFiltersSettingsDto: _lq.ControlFiltersSettingsDto,
+            ////ControlXaxisSettingsDto: _lq.ControlXaxisSettingsDto,
+            ////ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
+        };
+        //get rid of old
+        ////window.sessionStorage.removeItem(_lq.SessionSaveControlSelections);
+        ////window.sessionStorage.setItem(_lq.SessionSaveControlSelections, JSON.stringify(dataObj) );
+
+    }
+
 
 }(window._lq = window._lq || {}, jQuery));
 

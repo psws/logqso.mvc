@@ -44,6 +44,7 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
             this.Property(t => t.UserName).HasColumnName("UserName");
             this.Property(t => t.SessionName).HasColumnName("SessionName");
             this.Property(t => t.Disabled).HasColumnName("Disabled");
+            this.Property(t => t.QsoRadioTypeEnum).HasColumnName("QsoRadioTypeEnum");
 
             // Relationships
             this.HasRequired(t => t.CallSign)
@@ -52,6 +53,9 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
             this.HasRequired(t => t.Contest)
                 .WithMany(t => t.CallInfoes)
                 .HasForeignKey(d => d.ContestId);
+            this.HasRequired(t => t.QsoRadioType)
+                .WithMany(t => t.CallInfoes)
+                .HasForeignKey(d => d.QsoRadioTypeEnum);
             this.HasRequired(t => t.Session)
                 .WithMany(t => t.CallInfoes)
                 .HasForeignKey(d => d.SessionName);

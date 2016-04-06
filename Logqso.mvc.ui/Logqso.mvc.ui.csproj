@@ -304,6 +304,8 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\themes\jqx.base.css" />
+    <Content Include="Content\themes\jqx.energyblue.css" />
     <Content Include="Content\themes\Stock\jquery-ui.css" />
     <Content Include="Content\themes\Stock\jquery-ui.min.css" />
     <Content Include="Content\themes\Stock\accordion.css" />
@@ -410,6 +412,8 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jqxcore.js" />
+    <Content Include="Scripts\jqxtabs.js" />
     <Content Include="Scripts\logqso.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\respond.js" />

@@ -1,11 +1,14 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using Logqso.mvc.Entities.LogControlEntity.Mapping;
+using Repository.Pattern.Ef6;
+using Logqso.mvc.DataModel.LogControl.Models.Mapping;
+using Logqso.mvc.Entities.LogControlEntity;
+using Repository.Pattern.Extensions.interfaces;
 using Infrastructure;
 
-namespace Logqso.mvc.Entities.LogControlEntity
+namespace Logqso.mvc.DataModel.LogControl.Models
 {
-    public partial class LogControlContext : DataContext
+    public partial class LogControlContext : DataContext, ILogqsoControlContext
     {
         static LogControlContext()
         {
@@ -25,9 +28,9 @@ namespace Logqso.mvc.Entities.LogControlEntity
         public DbSet<CatPower> CatPowers { get; set; }
         public DbSet<FiltBand> FiltBands { get; set; }
         public DbSet<FiltContinent> FiltContinents { get; set; }
-        public DbSet<FiltPrefix> FiltPrefixes { get; set; }
         public DbSet<FiltCQZone> FiltCQZones { get; set; }
-        public DbSet<FiltDefault> FiltDefaullts { get; set; }
+        public DbSet<FiltDefaullt> FiltDefaullts { get; set; }
+        public DbSet<FiltPrefix> FiltPrefixes { get; set; }
         public DbSet<XaxisDefault> XaxisDefaults { get; set; }
         public DbSet<XaxisDuration> XaxisDurations { get; set; }
         public DbSet<XaxisStartTime> XaxisStartTimes { get; set; }
@@ -46,9 +49,9 @@ namespace Logqso.mvc.Entities.LogControlEntity
             modelBuilder.Configurations.Add(new CatPowerMap());
             modelBuilder.Configurations.Add(new FiltBandMap());
             modelBuilder.Configurations.Add(new FiltContinentMap());
-            modelBuilder.Configurations.Add(new FiltPrefixMap());
             modelBuilder.Configurations.Add(new FiltCQZoneMap());
             modelBuilder.Configurations.Add(new FiltDefaulltMap());
+            modelBuilder.Configurations.Add(new FiltPrefixMap());
             modelBuilder.Configurations.Add(new XaxisDefaultMap());
             modelBuilder.Configurations.Add(new XaxisDurationMap());
             modelBuilder.Configurations.Add(new XaxisStartTimeMap());
@@ -57,6 +60,5 @@ namespace Logqso.mvc.Entities.LogControlEntity
             modelBuilder.Configurations.Add(new YaxisIntervalMap());
             modelBuilder.Configurations.Add(new YaxisViewTypeMap());
         }
-
     }
 }

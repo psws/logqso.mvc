@@ -45,6 +45,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
@@ -75,6 +76,8 @@
     <Compile Include="Repository\LogLvsRepository.cs" />
     <Compile Include="Repository\LogRepository.cs" />
     <Compile Include="Repository\QsoRepository.cs" />
+    <Compile Include="Repository\ResposituryControl.cs" />
+    <Compile Include="Repository\ResposituryLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -96,6 +99,10 @@
     <ProjectReference Include="..\Logqso.mvc.Entities\Logqso.mvc.Entities.csproj">
       <Project>{c6e19eb6-8334-4d08-811a-2742701628e7}</Project>
       <Name>Logqso.mvc.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Repositary.Pattern.Extenions\Repository.Pattern.Extensions.csproj">
+      <Project>{413b4310-d3bc-4239-ad69-3048497426d4}</Project>
+      <Name>Repository.Pattern.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Resolver MEF\Logqso.mvc.Resolver MEF.csproj">
       <Project>{be14dc55-a8f1-4db8-b009-bcc9b3599bf0}</Project>
@@ -120,6 +127,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Notes\URF DataContext Initialization Flow.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

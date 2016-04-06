@@ -11,21 +11,21 @@ namespace Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB
                 "dbo.CatAssisted",
                 c => new
                     {
-                        CatAssist = c.Int(nullable: false),
+                        CatAssistedEnum = c.Int(nullable: false),
                         CatAssistedName = c.String(nullable: false, maxLength: 15, unicode: false),
                         Index = c.Byte(nullable: false),
                     })
-                .PrimaryKey(t => t.CatAssist);
+                .PrimaryKey(t => t.CatAssistedEnum);
             
             CreateTable(
                 "dbo.CatBand",
                 c => new
                     {
-                        CatBnd = c.Int(nullable: false),
+                        CatBandEnum = c.Int(nullable: false),
                         CatBandName = c.String(nullable: false, maxLength: 4, unicode: false),
                         Index = c.Byte(nullable: false),
                     })
-                .PrimaryKey(t => t.CatBnd);
+                .PrimaryKey(t => t.CatBandEnum);
             
             CreateTable(
                 "dbo.CatDefault",
@@ -33,53 +33,53 @@ namespace Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB
                     {
                         Id = c.Int(nullable: false, identity: true),
                         UserName = c.String(nullable: false, maxLength: 256, unicode: false),
-                        CatOpr = c.Int(nullable: false),
-                        CatAssist = c.Int(nullable: false),
-                        CatBnd = c.Int(nullable: false),
-                        CatTx = c.Int(nullable: false),
-                        CatPwr = c.Int(nullable: false),
+                        CatOperatorEnum = c.Int(nullable: false),
+                        CatAssistedEnum = c.Int(nullable: false),
+                        CatBandEnum = c.Int(nullable: false),
+                        CatNoOfTxEnum = c.Int(nullable: false),
+                        CatPowerEnum = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.CatAssisted", t => t.CatAssist, cascadeDelete: true)
-                .ForeignKey("dbo.CatBand", t => t.CatBnd, cascadeDelete: true)
-                .ForeignKey("dbo.CatNoOfTx", t => t.CatTx, cascadeDelete: true)
-                .ForeignKey("dbo.CatOperator", t => t.CatOpr, cascadeDelete: true)
-                .ForeignKey("dbo.CatPower", t => t.CatPwr, cascadeDelete: true)
-                .Index(t => t.CatOpr)
-                .Index(t => t.CatAssist)
-                .Index(t => t.CatBnd)
-                .Index(t => t.CatTx)
-                .Index(t => t.CatPwr);
+                .ForeignKey("dbo.CatAssisted", t => t.CatAssistedEnum, cascadeDelete: true)
+                .ForeignKey("dbo.CatBand", t => t.CatBandEnum, cascadeDelete: true)
+                .ForeignKey("dbo.CatNoOfTx", t => t.CatNoOfTxEnum, cascadeDelete: true)
+                .ForeignKey("dbo.CatOperator", t => t.CatOperatorEnum, cascadeDelete: true)
+                .ForeignKey("dbo.CatPower", t => t.CatPowerEnum, cascadeDelete: true)
+                .Index(t => t.CatOperatorEnum)
+                .Index(t => t.CatAssistedEnum)
+                .Index(t => t.CatBandEnum)
+                .Index(t => t.CatNoOfTxEnum)
+                .Index(t => t.CatPowerEnum);
             
             CreateTable(
                 "dbo.CatNoOfTx",
                 c => new
                     {
-                        CatTx = c.Int(nullable: false),
+                        CatNoOfTxEnum = c.Int(nullable: false),
                         CatNoOfTxName = c.String(nullable: false, maxLength: 12, unicode: false),
                         Index = c.Byte(nullable: false),
                     })
-                .PrimaryKey(t => t.CatTx);
+                .PrimaryKey(t => t.CatNoOfTxEnum);
             
             CreateTable(
                 "dbo.CatOperator",
                 c => new
                     {
-                        CatOpr = c.Int(nullable: false),
+                        CatOperatorEnum = c.Int(nullable: false),
                         CatOprName = c.String(nullable: false, maxLength: 20, unicode: false),
                         Index = c.Byte(nullable: false),
                     })
-                .PrimaryKey(t => t.CatOpr);
+                .PrimaryKey(t => t.CatOperatorEnum);
             
             CreateTable(
                 "dbo.CatPower",
                 c => new
                     {
-                        CatPwr = c.Int(nullable: false),
+                        CatPowerEnum = c.Int(nullable: false),
                         CatPowerName = c.String(nullable: false, maxLength: 6, unicode: false),
                         Index = c.Byte(nullable: false),
                     })
-                .PrimaryKey(t => t.CatPwr);
+                .PrimaryKey(t => t.CatPowerEnum);
             
             CreateTable(
                 "dbo.FiltBand",
@@ -232,11 +232,11 @@ namespace Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB
             DropForeignKey("dbo.FiltDefaullt", "FiltCQZoneVal", "dbo.FiltCQZone");
             DropForeignKey("dbo.FiltDefaullt", "FiltCont", "dbo.FiltContinent");
             DropForeignKey("dbo.FiltDefaullt", "FiltBnd", "dbo.FiltBand");
-            DropForeignKey("dbo.CatDefault", "CatPwr", "dbo.CatPower");
-            DropForeignKey("dbo.CatDefault", "CatOpr", "dbo.CatOperator");
-            DropForeignKey("dbo.CatDefault", "CatTx", "dbo.CatNoOfTx");
-            DropForeignKey("dbo.CatDefault", "CatBnd", "dbo.CatBand");
-            DropForeignKey("dbo.CatDefault", "CatAssist", "dbo.CatAssisted");
+            DropForeignKey("dbo.CatDefault", "CatPowerEnum", "dbo.CatPower");
+            DropForeignKey("dbo.CatDefault", "CatOperatorEnum", "dbo.CatOperator");
+            DropForeignKey("dbo.CatDefault", "CatNoOfTxEnum", "dbo.CatNoOfTx");
+            DropForeignKey("dbo.CatDefault", "CatBandEnum", "dbo.CatBand");
+            DropForeignKey("dbo.CatDefault", "CatAssistedEnum", "dbo.CatAssisted");
             DropIndex("dbo.YaxisViewType", new[] { "YaxisViewTypeName" });
             DropIndex("dbo.YaxisDefault", new[] { "YaxisViewTypeName" });
             DropIndex("dbo.YaxisDefault", new[] { "YaxisIntvVal" });
@@ -247,11 +247,11 @@ namespace Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB
             DropIndex("dbo.FiltDefaullt", new[] { "FiltPref" });
             DropIndex("dbo.FiltDefaullt", new[] { "FiltCont" });
             DropIndex("dbo.FiltDefaullt", new[] { "FiltBnd" });
-            DropIndex("dbo.CatDefault", new[] { "CatPwr" });
-            DropIndex("dbo.CatDefault", new[] { "CatTx" });
-            DropIndex("dbo.CatDefault", new[] { "CatBnd" });
-            DropIndex("dbo.CatDefault", new[] { "CatAssist" });
-            DropIndex("dbo.CatDefault", new[] { "CatOpr" });
+            DropIndex("dbo.CatDefault", new[] { "CatPowerEnum" });
+            DropIndex("dbo.CatDefault", new[] { "CatNoOfTxEnum" });
+            DropIndex("dbo.CatDefault", new[] { "CatBandEnum" });
+            DropIndex("dbo.CatDefault", new[] { "CatAssistedEnum" });
+            DropIndex("dbo.CatDefault", new[] { "CatOperatorEnum" });
             DropTable("dbo.YaxisViewType");
             DropTable("dbo.YaxisInterval");
             DropTable("dbo.YaxisFunction");

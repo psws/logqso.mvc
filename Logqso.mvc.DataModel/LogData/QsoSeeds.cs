@@ -34,7 +34,7 @@ namespace Logqso.mvc.DataModel.LogData
                         RxRst = 59, TxRst = 59, StationName = "STN1", QsoDateTime =  DateTime.Parse("10/23/2015 00:00:02"), QsoRadioTypeEnum = QsoRadioTypeEnum.R1,
                         QsoExchangeNumber = 33}, 
                new Qso {    QsoNo = 1, LogId = 3, Frequency = 14190.7M, CallsignId = 1,  QsoModeTypeEnum = common.Enum.QsoModeTypeEnum.SSB,
-                        RxRst = 59, TxRst = 59,  QsoDateTime =  DateTime.Parse("10/23/2015 00:00:02"), QsoRadioTypeEnum = QsoRadioTypeEnum.R1,
+                        RxRst = 59, TxRst = 59,  QsoDateTime =  DateTime.Parse("10/23/2015 00:00:02"), QsoRadioTypeEnum = QsoRadioTypeEnum.Run,
                         QsoExchangeNumber = 33} 
                                   
             );

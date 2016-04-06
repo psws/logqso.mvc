@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Logqso.mvc.Entities.LogControlEntity;
 
-
 namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
 {
     public class YaxisIntervalMap : EntityTypeConfiguration<YaxisInterval>

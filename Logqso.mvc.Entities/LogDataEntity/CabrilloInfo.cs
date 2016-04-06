@@ -6,12 +6,8 @@ namespace Logqso.mvc.Entities.LogDataEntity
 {
     public partial class CabrilloInfo : Entity
     {
-        public CabrilloInfo()
-        {
-            this.Logs = new List<Log>();
-        }
-
-        public int CabrilloInfoId { get; set; }
+        public string ContestId { get; set; }
+        public int CallSignId { get; set; }
         public int ClaimedScore { get; set; }
         public string Club { get; set; }
         public string Operators { get; set; }
@@ -20,6 +16,7 @@ namespace Logqso.mvc.Entities.LogDataEntity
         public string AddressState { get; set; }
         public string AddressPostalCode { get; set; }
         public string AddressCountry { get; set; }
-        public virtual ICollection<Log> Logs { get; set; }
+        public virtual CallSign CallSign { get; set; }
+        public virtual Contest Contest { get; set; }
     }
 }

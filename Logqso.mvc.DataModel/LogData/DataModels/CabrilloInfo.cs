@@ -11,12 +11,24 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
 {
     public class CabrilloInfo
     {
-        [Key]
-        [System.ComponentModel.DataAnnotations.Schema.DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
-        public int CabrilloInfoId { get; set; }
+        //[Key]
+        //[System.ComponentModel.DataAnnotations.Schema.DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
+        //[Column(Order = 1)]
+        //public int CabrilloInfoId { get; set; }
 
         ////[ForeignKey("Log")]
         ////public int LogId { get; set; }
+        [Key]
+        [ForeignKey("Contest")]
+        [Column(Order = 1, TypeName = "varchar")]
+        [MaxLength(35)]
+        public string ContestId { get; set; }
+        [Key]
+        [ForeignKey("CallSign")]
+        [Column(Order = 2)]
+        public int CallSignId { get; set; }
+
+
         public int ClaimedScore { get; set; }
         [Column(TypeName = "varchar")]
         [MaxLength(20)]
@@ -43,6 +55,9 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
 
 
         ////public virtual Log Log { get; set; }
+        //FK
+        public virtual CallSign CallSign { get; set; }
+        public virtual Contest Contest { get; set; }
 
     }
 }

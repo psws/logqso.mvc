@@ -21,10 +21,8 @@ namespace Logqso.mvc.Entities.LogDataEntity
         public string QsoDatabaseServerInstance { get; set; }
         public string QsoDatabaseInstance { get; set; }
         public string QsoDatabaseTableName { get; set; }
-        public Nullable<int> CabrilloInfoID { get; set; }
         public Nullable<int> WintestDataID { get; set; }
         public Nullable<int> N1mmDataID { get; set; }
-        public virtual CabrilloInfo CabrilloInfo { get; set; }
         public virtual CallSign CallSign { get; set; }
         public virtual Contest Contest { get; set; }
         public virtual LogCategory LogCategory { get; set; }

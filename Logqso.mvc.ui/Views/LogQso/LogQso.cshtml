@@ -89,7 +89,7 @@
                         </div>
                         <div class="lq-inline-block">
                             <label for="FiltCQZone">CQ Zone</label>
-                            <select name="FiltCQZone" id="FiltCQZone" ></select>
+                            <select name="FiltCQZone" id="FiltCQZone"></select>
                         </div>
 
                     </fieldset>
@@ -107,7 +107,7 @@
                         Call1
                     </h3>
                 </div>
-                <div id="bdyPnl3" class=" panel-body ">
+                <div id="bdyPnl3" class="panel-body">
                     <fieldset>
                         <label for=" contest1" id="test2">
                             Contest
@@ -115,18 +115,21 @@
                         <div>
                             <button id="Contest1" data-modal-id="popup">CqwwSsb2010</button>
                         </div>
-                        <span>
-                            Call
-                            <span id="enb_dis3">
-                                Disable
-                                <input type="checkbox" id="chk1" aria-label="...">
-                            </span>
+                        <label class="lq-inline" for="Call1">Call</label>
+                        <span id="enb_dis3" class="lq-inline">
+                            <label class="lq-inline" for="chk1"> Disable</label>
+                            <input class="lq-inline" type="checkbox" id="chk1" aria-label="...">
                         </span>
-                        <input type="text" id="Call1" aria-label="...">
-                        <span>
-                            Station
-                        </span>
-                        <input type="text" id="Station1" aria-label="...">
+                        <button id="Call1" data-modal-id="popup2">cn2r</button>
+
+                        <div class="lq-inline-block">
+                            <label for="Station1">Station</label>
+                            <select name="Station1" id="Station1"></select>
+                        </div>
+                        <div class="lq-inline-block">
+                            <label for="Radio1">Radio</label>
+                            <select name="Radio1" id="Radio1"></select>
+                        </div>
                     </fieldset>
 
                 </div>
@@ -143,18 +146,20 @@
                         <div>
                             <button id="Contest2" data-modal-id="popup">CqwwSsb2010</button>
                         </div>
-                        <span>
-                            Call
-                            <span id="enb_dis4">
-                                Disable
-                                <input type="checkbox" id="chk2" aria-label="...">
-                            </span>
+                        <label class="lq-inline" for="Call2">Call</label>
+                        <span id="enb_dis4" class="lq-inline">
+                            <label class=" lq-inline" for="chk2"> Disable</label>
+                            <input class="lq-inline" type="checkbox" id="chk2" aria-label="...">
                         </span>
-                        <input type="text" id="Call2" />
-                        <span>
-                            Station
-                        </span>
-                        <input type="text" id="Station2" aria-label="...">
+                        <button id="Call2" data-modal-id="popup2">cn2r</button>
+                        <div class="lq-inline-block">
+                            <label for="Station2">Station</label>
+                            <select name="Station2" id="Station2"></select>
+                        </div>
+                        <div class="lq-inline-block">
+                            <label for="Radio2">Radio</label>
+                            <select name="Radio2" id="Radio2"></select>
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -170,18 +175,20 @@
                         <div>
                             <button id="Contest3" data-modal-id="popup">CqwwSsb2010</button>
                         </div>
-                        <span>
-                            Call
-                            <span id="enb_dis5">
-                                Disable
-                                <input type="checkbox" id="chk3" aria-label="...">
-                            </span>
+                        <label class="lq-inline" for="Call3">Call</label>
+                        <span id="enb_dis5" class="lq-inline">
+                            <label class=" lq-inline" for="chk3"> Disable</label>
+                            <input class="lq-inline" type="checkbox" id="chk3" aria-label="...">
                         </span>
-                        <input type="text" id="Call3" />
-                        <span>
-                            Station
-                        </span>
-                        <input type="text" id="Station3" aria-label="...">
+                        <button id="Call3" data-modal-id="popup2">cn2r</button>
+                        <div class="lq-inline-block">
+                            <label for="Station3">Station</label>
+                            <select name="Station3" id="Station3"></select>
+                        </div>
+                        <div class="lq-inline-block">
+                            <label for="Radio3">Radio</label>
+                            <select name="Radio3" id="Radio3"></select>
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -274,67 +281,30 @@
 
 
 
-    <div class="container">
-        <div class="row">
-            <a class="js-open-modal " href="#" data-modal-id="popup2"> Click me </a>
-            <div>
-                <div>
-                    <button id="ContestName1">Select an action</button>
-                    <button id="Contest1select">Select an action</button>
-                    @*<button id="ContestNa" class="ui-icon ui-icon-triangle-1-s">></button>
-                        <span class="ui-icon ui-icon-triangle-1-s"></span>*@
-                </div>
-                <ul>
-                    <li><span style="color:red">Open...</span></li>
-                    <li>Save</li>
-                    <li>Delete</li>
-                </ul>
-                <pre>
-                <select>
-                <option value="shit a    brick"> shit a    brick</option>
-                </select>
-</pre>
-
-            </div>
-        </div>
-
-    </div>
-
 
     <div id="popup" class="modal-box clear ">
         <header>
             <a href="#" class="js-modal-close close" title="Cancel selection">X</a>
             <h4> Title</h4>
         </header>
-        <div id="WWlist" class=" modal-body">
+        <div id="WWssblist" class=" modal-body">
             <h5 class="lq-popup-subhdr">
-                CQ WorldWide
+                CQ WorldWide SSB
             </h5>
-            <ol class="two-col-list">
-                <li>Cqww Ssb 2005</li>
-                <li>CqwwSsb2006</li>
-                <li>CqwwSsb2007</li>
-                <li>CqwwSsb2008</li>
-                <li>CqwwSsb2009</li>
-                <li>CqwwSsb2010</li>
-                <li>CqwwSsb2011</li>
-                <li>CqwwSsb2012</li>
-                <li>CqwwSsb2013</li>
-                <li>CqwwSsb2014</li>
-                <li>CqwwSsb2015</li>
-            </ol>
+            <ol class="two-col-list"></ol>
         </div>
+        <div id="WWcwlist" class=" modal-body">
+            <h5 class="lq-popup-subhdr">
+                CQ WorldWide CW
+            </h5>
+            <ol class="two-col-list"></ol>
+        </div>
+
         <div id="WPXlist" class=" modal-body">
             <h5 class="lq-popup-subhdr">
                 CQ Wpx
             </h5>
-            <ol class="two-col-list">
-                <li>CqwpxSsb2010</li>
-                <li>CqwpxSsb2011</li>
-                <li>CqwpxSsb2012</li>
-                <li>CqwpxSsb2013</li>
-                <li>CqwpxSsb2014</li>
-            </ol>
+            <ol class="two-col-list"></ol>
         </div>
         @*<footer>
                 <a href="#" class="js-modal-close">Close Button</a>
@@ -349,7 +319,34 @@
             <h3><a href="http://www.jqueryscript.net/tags.php?/Modal/">Modal</a> Title</h3>
         </header>
         <div class="modal-body">
-            <p>Modal Body</p>
+            <div id='tabs'>
+                <ul style='margin-left: 5px;'>
+                    @*<li ><a href="#CTab1">1-9</a></li>
+                    <li><a href="#CTabA">A</a></li>
+                    <li><a href="#CTabB">B</a></li>
+                    <li><a href="#CTabC">C</a></li>
+                    <li><a href="#CTabD">D</a></li>
+                    <li><a href="#CTabE">E</a></li>
+                    <li><a href="#CTabF">F</a></li>
+                    <li><a href="#CTabG">G</a></li>
+                    <li><a href="#CTabH">H</a></li>
+                    <li><a href="#CTabI">I</a></li>
+                    <li><a href="#CTabJ">J</a></li>
+                    <li><a href="#CTabK">K</a></li>*@
+                </ul>
+                @*<div id="CTab1">Content 1</div>
+                <div id="CTabA">Content A</div>
+                <div id="CTabB">Content B</div>
+                <div id="CTabC">Content B</div>
+                <div id="CTabD">Content B</div>
+                <div id="CTabE">Content B</div>
+                <div id="CTabF">Content B</div>
+                <div id="CTabG">Content B</div>
+                <div id="CTabH">Content B</div>
+                <div id="CTabI">Content B</div>
+                <div id="CTabJ">Content B</div>
+                <div id="CTabK">Content B</div>*@
+           </div>
         </div>
         <footer>
             <a href="#" class="js-modal-close">Close Button</a>

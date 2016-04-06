@@ -8,11 +8,11 @@ namespace Logqso.mvc.Entities.LogControlEntity
     {
         public FiltPrefix()
         {
-            this.FiltDefaullts = new List<FiltDefault>();
+            this.FiltDefaullts = new List<FiltDefaullt>();
         }
 
         public string FiltPref { get; set; }
         public string CountryName { get; set; }
-        public virtual ICollection<FiltDefault> FiltDefaullts { get; set; }
+        public virtual ICollection<FiltDefaullt> FiltDefaullts { get; set; }
     }
 }

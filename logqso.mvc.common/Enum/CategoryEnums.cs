@@ -34,7 +34,7 @@ namespace Logqso.mvc.common.Enum
         _10M,
     }
 
-    public enum CatPowerrEnum
+    public enum CatPowerEnum
     {
         ALL = 1,
         HIGH,
@@ -49,7 +49,7 @@ namespace Logqso.mvc.common.Enum
         NON_ASSISTED,
     }
 
-    public enum CatNoOfIxEnum
+    public enum CatNoOfTxEnum
     {
         ALL = 1,
         ONE,

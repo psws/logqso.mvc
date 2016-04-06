@@ -110,7 +110,7 @@ namespace Logqso.mvc.domain
             }
             else if (typeof(T) == typeof(ControlFiltersSettingsDto))
             {
-                var FiltDefautResp = _repository.GetRepository<FiltDefault>();
+                var FiltDefautResp = _repository.GetRepository<FiltDefaullt>();
                 valueObj = FiltDefautResp.GetControlFilterSettings(Username);
 
             }
@@ -136,7 +136,7 @@ namespace Logqso.mvc.domain
             ContestControlSettingsDto ContestControlSettingsEntity = new ContestControlSettingsDto( );
             var CatDefautResp = _repository.GetRepository<CatDefault>();
             ContestControlSettingsEntity.ControlCategorySettingsDto = CatDefautResp.GetControlCategorySettings(username);
-            var FiltDefautResp = _repository.GetRepository<FiltDefault>();
+            var FiltDefautResp = _repository.GetRepository<FiltDefaullt>();
             ContestControlSettingsEntity.ControlFiltersSettingsDto = FiltDefautResp.GetControlFilterSettings(username);
             var XaxisDefautResp = _repository.GetRepository<XaxisDefault>();
             ContestControlSettingsEntity.ControlXaxisSettingsDto = XaxisDefautResp.GetControlXaxisSettings(username);

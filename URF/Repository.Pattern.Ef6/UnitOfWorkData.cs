@@ -42,6 +42,7 @@ namespace Repository.Pattern.Ef6
             _repositories = new Dictionary<string, dynamic>();
         }
 
+
         public void Dispose()
         {
             Dispose(true);

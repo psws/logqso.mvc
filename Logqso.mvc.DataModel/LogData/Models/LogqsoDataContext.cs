@@ -1,13 +1,15 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using Repository.Pattern.Ef6;
+
 using Logqso.mvc.DataModel.LogData.Models.Mapping;
 using Logqso.mvc.Entities.LogDataEntity;
-using Infrastructure;
-using Repository.Pattern.Ef6;
+
+using Repository.Pattern.Extensions.interfaces;
 
 namespace Logqso.mvc.DataModel.LogData.Models
 {
-    public partial class LogqsoDataContext : DataContext
+    public partial class LogqsoDataContext : DataContext, ILogqsoDataContext
     {
         static LogqsoDataContext()
         {

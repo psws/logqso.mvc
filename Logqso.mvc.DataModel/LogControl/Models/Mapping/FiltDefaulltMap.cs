@@ -2,10 +2,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Logqso.mvc.Entities.LogControlEntity;
 
-
 namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
 {
-    public class FiltDefaulltMap : EntityTypeConfiguration<FiltDefault>
+    public class FiltDefaulltMap : EntityTypeConfiguration<FiltDefaullt>
     {
         public FiltDefaulltMap()
         {

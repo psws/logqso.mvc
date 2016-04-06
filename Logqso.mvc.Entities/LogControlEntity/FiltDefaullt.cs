@@ -4,7 +4,7 @@ using Infrastructure;
 
 namespace Logqso.mvc.Entities.LogControlEntity
 {
-    public partial class FiltDefault : Entity
+    public partial class FiltDefaullt : Entity
     {
         public int Id { get; set; }
         public string UserName { get; set; }

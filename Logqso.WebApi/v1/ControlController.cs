@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Logqso.mvc.domain.Interfaces;
 using Repository.Pattern.UnitOfWork;
 using Logqso.mvc.Dto.LogControl;
+using Repository.Pattern.Extensions.interfaces;
 
 namespace Logqso.WebApi
 {
@@ -17,7 +18,7 @@ namespace Logqso.WebApi
     public class ControlController : ApiController
     {
         private readonly IControlService _ControlService;
-        private readonly IUnitOfWorkAsync _unitOfWorkAsync;
+        private readonly IControlUnitOfWorkAsync _unitOfWorkAsync;
       
     #region Public constructor
         /// <summary>
@@ -25,7 +26,7 @@ namespace Logqso.WebApi
         /// </summary>
 
         public ControlController(
-            IUnitOfWorkAsync unitOfWorkAsync,
+            IControlUnitOfWorkAsync unitOfWorkAsync,
             IControlService ControlService)
         {
             _unitOfWorkAsync = unitOfWorkAsync;

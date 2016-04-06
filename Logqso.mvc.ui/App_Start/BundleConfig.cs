@@ -16,6 +16,8 @@ namespace Logqso.mvc.ui
                         "~/Scripts/jquery-ui-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/logqso").Include(
+                        "~/Scripts/jqxcore.js",
+                        "~/Scripts/jqxtabs.js",
                         "~/Scripts/logqso.js"));
 
 
@@ -50,6 +52,8 @@ namespace Logqso.mvc.ui
                                "~/Content/bootstrap.css",
                                stylePath,
                               "~/Content/site.css",
+                            "~/Content/themes/jqx.base.css",
+                            "~/Content/themes/jqx.energyblue.css",
                               "~/Content/logqso.css"));
                    break;
                 case JQueryUI.eTheme.Flick:
@@ -60,7 +64,9 @@ namespace Logqso.mvc.ui
                                 "~/Content/themes/Stock/jquery-ui.css",
                               stylePath,
                               "~/Content/site.css",
-                              "~/Content/logqso.css"));
+                             "~/Content/themes/jqx.base.css",
+                             "~/Content/themes/jqx.energyblue.css",
+                            "~/Content/logqso.css"));
                   break;
                 default:
                      stylePath = string.Format("~/Content/Themes/{0}/jquery-ui.css", theme);

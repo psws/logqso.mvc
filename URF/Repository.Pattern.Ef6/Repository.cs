@@ -35,6 +35,8 @@ namespace Repository.Pattern.Ef6
 
         public Repository(IDataContextAsync context, IUnitOfWorkAsync unitOfWork)
         {
+            //string ConnectioString = unitOfWork.GetConnectioString();
+            //_context = unitOfWork.DataContext(ConnectioString);
             _context = context;
             _unitOfWork = unitOfWork;
 
@@ -55,6 +57,8 @@ namespace Repository.Pattern.Ef6
                 }
             }
         }
+
+
 
         //Jims
         public bool GetEntityTrackingState(TEntity Entityc)

@@ -31,16 +31,59 @@ namespace Repository.Pattern.Ef6
         private ObjectContext _objectContext;
         private DbTransaction _transaction;
         private Dictionary<string, dynamic> _repositories;
-
+#if false
+        private Dictionary<string, DataContext> _DataContexts;
+        private string _ConnectionString;
+#endif
         #endregion Private Fields
 
         #region Constuctor/Dispose
+
+#if false
+        public UnitOfWork( string nameOrConnectionString)
+        {
+            _ConnectionString = nameOrConnectionString;
+            _repositories = new Dictionary<string, dynamic>();
+            _DataContexts = new Dictionary<string, DataContext>();
+            _dataContext = DataContext(nameOrConnectionString);
+        }
+
+        private IDataContextAsync DataContext(string nameOrConnectionString)
+        {
+            //IDataContextAsync IDataContextAsync = null;
+            DataContext _DataContext;
+
+            if (_DataContexts == null)
+            {
+                _DataContexts = new Dictionary<string, DataContext>();
+            }
+
+
+            if (_DataContexts.ContainsKey(nameOrConnectionString))
+            {
+                _DataContext = ((DataContext)_DataContexts[nameOrConnectionString]);
+            }
+            else
+            {
+                _DataContext = new DataContext(nameOrConnectionString);
+                _DataContexts.Add(nameOrConnectionString, _DataContext);
+            }
+            return _DataContext;
+        }
+
+        public string GetConnectioString()
+        {
+            return _ConnectionString;
+        }
+
+#endif
 
         public UnitOfWork(IDataContextAsync dataContext)
         {
             _dataContext = dataContext;
             _repositories = new Dictionary<string, dynamic>();
         }
+
 
         public void Dispose()
         {

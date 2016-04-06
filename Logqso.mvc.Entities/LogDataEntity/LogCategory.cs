@@ -13,12 +13,12 @@ namespace Logqso.mvc.Entities.LogDataEntity
         }
 
         public int LogCategoryId { get; set; }
-        public int CatOperator { get; set; }
-        public int CatOperatorOverlay { get; set; }
-        public int CatBand { get; set; }
-        public int CatPower { get; set; }
-        public int CatAssisted { get; set; }
-        public int CatNoOfIx { get; set; }
+        public int CatOperatorEnum { get; set; }
+        public int CatOperatorOverlayEnum { get; set; }
+        public int CatBandEnum { get; set; }
+        public int CatPowerEnum { get; set; }
+        public int CatAssistedEnum { get; set; }
+        public int CatNoOfTxEnum { get; set; }
         public virtual ICollection<Log> Logs { get; set; }
         public virtual ICollection<UbnSummary> UbnSummaries { get; set; }
     }

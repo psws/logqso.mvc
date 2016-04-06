@@ -18,9 +18,10 @@ namespace Logqso.mvc.DataModel.LogData
         public static void SeedContest(Logqso.mvc.DataModel.LogData.LogDataDB context)
         {
             context.CabrilloInfo.AddOrUpdate(
-            p => p.CabrilloInfoId,
-                new CabrilloInfo {  ClaimedScore= 15000060, Club= "EA Contest Clib",Operators= "EA9LZ, W7EJ, M0DRX" }, 
-                new CabrilloInfo {  ClaimedScore= 10000060, Club= "EA Contest Clib",Operators= "EA9IE, W7Zr, OK1RI" }
+            p => p.CallSignId,
+                new CabrilloInfo {  CallSignId = 1, ContestId = "CQWWSSB2015", ClaimedScore= 15000060, Club= "EA Contest Clib", Operators= "EA9LZ, W7EJ, M0DRX" },
+                new CabrilloInfo { CallSignId = 2, ContestId = "CQWWSSB2015", ClaimedScore = 10000060, Club = "ITALY Clib", Operators = "IK2QEI" },
+                new CabrilloInfo {  CallSignId = 3, ContestId = "CQWWSSB2015", ClaimedScore= 10000060, Club= "MOSCOW Clib", Operators= "RL3FT" }
                 );
         }
     }

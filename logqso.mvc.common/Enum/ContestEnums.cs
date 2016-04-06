@@ -33,8 +33,10 @@ namespace Logqso.mvc.common.Enum
 
     public enum QsoRadioTypeEnum
     {
-        R1 = 1,
-        R2 = 2,
+        NONE = 0,
+        ALL = 1,
+        R1 = 2,
+        R2 = 3,
         Run,
         Mult,
         S_P

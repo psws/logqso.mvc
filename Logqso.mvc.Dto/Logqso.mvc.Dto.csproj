@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IDto.cs" />
     <Compile Include="LogControl\ContestControlDto.cs" />
     <Compile Include="LogControl\ContestControlSettingsDto.cs" />
     <Compile Include="LogControl\ControlCategoryDto.cs" />

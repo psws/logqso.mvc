@@ -58,10 +58,10 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
             // context object LogDataContext matches the same name used for LogqsoData DB
             using (IDataContextAsync context = new LogqsoDataContext())
             //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
-            using (IUnitOfWorkDataAsync unitOfWorkData = new UnitOfWorkData(context))
+            using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 bool caught = false;
-                IRepositoryAsync<Logqso.mvc.Entities.LogDataEntity.Log> _logRepository = new Repository<Log>(context, unitOfWorkData);
+                IRepositoryAsync<Logqso.mvc.Entities.LogDataEntity.Log> _logRepository = new Repository<Log>(context, unitOfWork);
 
                 try
                 {
@@ -90,10 +90,10 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
             // context object LogDataContext matches the same name used for LogqsoData DB
             using (IDataContextAsync context = new LogqsoDataContext())
             //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
-            using (IUnitOfWorkDataAsync unitOfWorkData = new UnitOfWorkData(context))
+            using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 bool caught = false;
-                IRepositoryAsync<Log> _logRepository = new Repository<Log>(context, unitOfWorkData);
+                IRepositoryAsync<Log> _logRepository = new Repository<Log>(context, unitOfWork);
 
                 try
                 {
@@ -124,10 +124,10 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
             // context object LogDataContext matches the same name used for LogqsoData DB
             using (IDataContextAsync context = new LogqsoDataContext())
             //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
-            using (IUnitOfWorkDataAsync unitOfWorkData = new UnitOfWorkData(context))
+            using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 bool caught = false;
-                IRepositoryAsync<Log> _logRepository = new Repository<Log>(context, unitOfWorkData);
+                IRepositoryAsync<Log> _logRepository = new Repository<Log>(context, unitOfWork);
                 Log Logtask = null;
 
                 try
@@ -155,7 +155,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsInstanceOfType(Logtask.ContestYear, typeof(DateTime));
                 Assert.AreEqual(Logtask.CallsignId, 1);
                  Assert.IsNotNull(Logtask.LogCategory);
-                 Assert.AreEqual(Logtask.LogCategory.CatBand, (int)Logqso.mvc.common.Enum.CatBandEnum.ALL);
+                 Assert.AreEqual(Logtask.LogCategory.CatBandEnum, (int)Logqso.mvc.common.Enum.CatBandEnum.ALL);
                 Assert.IsNotNull(Logtask.Qsoes);
 
                 Assert.AreEqual(Logtask.Qsoes.Count, 2);

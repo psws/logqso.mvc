@@ -18,6 +18,7 @@ Move the Logqso.mvc.DataModel/Models folder to:
 	Leave the LogDataContext.cs file in the Logqso.mvs.DataModel/LogData/Models foldeer
 	Move all the remaining files, in the Models folder to the Logqso.mvc.Entities/LogDataEntity foldeer.
 	Leave the Logqso.mvs.DataModel/LogData/Models/Mapping folder in the Logqso.mvs.DataModel/LogData/Models folder.
+		be sure to change its namespace to Logqso.mvc.DataModel.LogData.Models
 
 	edit every file in the Logqso.mvs.DataModel/LogData/Models/mapping folder change/add the following:
 		using Logqso.mvc.Entities.LogDataEntity;
@@ -30,14 +31,15 @@ Move the Logqso.mvc.DataModel/Models folder to:
 		namespace Logqso.mvc.Entities.LogDataEntity
 
 	edit the Logqso.mvs.DataModel/LogData/Models/LogDataContext file ( needs to derive from DataContext
-sing Logqso.mvc.DataModel.LogData.Models.Mapping;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using Logqso.mvc.DataModel.LogData.Models.Mapping;
 using Logqso.mvc.Entities.LogDataEntity;
-using Infrastructure;
-using Repository.Pattern.Ef6;
 
-namespace Logqso.mvc.DataModel.LogData.Models
+using Repository.Pattern.Extensions.interfaces;
+namespace Logqso.mvc.DataModel.Models
 {
-    public partial class LogqsoDataContext : DataContext
+    public partial class LogqsoDataContext : DbContext, ILogqsoDataContext
     {
         static LogqsoDataContext()
         {
@@ -48,6 +50,7 @@ namespace Logqso.mvc.DataModel.LogData.Models
             : base("Name=LogDataDB")
         {
         }
+
 
 
 

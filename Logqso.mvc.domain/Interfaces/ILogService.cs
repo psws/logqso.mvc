@@ -18,6 +18,7 @@ namespace Logqso.mvc.domain.Interfaces
 
             Task<Log> GetLogById(int i);
             Task<IEnumerable<DataCallInfoDto>> GetDataCallInfoSelections(string Username);
+            Task<IEnumerable<DataCallInfoDto>> GetDataCallInfoSelectionsAsync(string username);
  
             
 #if false

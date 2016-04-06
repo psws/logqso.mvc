@@ -95,6 +95,7 @@ Go to generated configuration.cs model and add the Control Seed methods
             FiltersSeeds.SeedFilters(context);
             YaxisSeeds.SeedYaxis(context);
             XAxisSeeds.SeedXaxis(context);
+            DefaultSeeds.SeedDefault(context);
 
         }
 

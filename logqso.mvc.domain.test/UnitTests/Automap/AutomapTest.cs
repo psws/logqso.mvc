@@ -24,6 +24,8 @@ namespace Logqso.mvc.domain.test.UnitTests.Automap
                 MapperCallInfoDatToCallInfoDto.ForMember(m => m.StationNames, c => c.Ignore());
                 //AutoMapper.Mapper.CreateMap<Logqso.mvc.Entities.LogDataEntity.CallInfo, Logqso.mvc.Dto.LogData.DataCallInfoDto>().
                 MapperCallInfoDatToCallInfoDto.ForMember(m => m.ContestNames, c => c.Ignore());
+                MapperCallInfoDatToCallInfoDto.ForMember(m => m.RadioNames, c => c.Ignore());
+                MapperCallInfoDatToCallInfoDto.ForMember(m => m.QsoRadioType, c => c.MapFrom(s => s.QsoRadioTypeEnum));
 
                 //MapperLogDatToCallInfoDto =  AutoMapper.Mapper.CreateMap<Logqso.mvc.Entities.LogDataEntity.Log, Logqso.mvc.Dto.LogData.DataCallInfoDto>().
                 //   ForMember(m => m.ContestNames, c => c.MapFrom(s => s.Contest));
@@ -39,6 +41,21 @@ namespace Logqso.mvc.domain.test.UnitTests.Automap
  
             //Assert
             Mapper.AssertConfigurationIsValid();
+
+            //DataCallInfoDtos = new List<DataCallInfoDto>();
+
+            //CallInfo CallinfoItem = CallInfos.Where(t => t.CallGroup == (int)CallGroupEnum.CALL1).FirstOrDefault();
+            //DataCallInfoDtos.Insert(0, new DataCallInfoDto());
+            //AutoMapper.Mapper.Map(CallinfoItem, DataCallInfoDtos[0]);
+
+            //CallinfoItem = CallInfos.Where(t => t.CallGroup == (int)CallGroupEnum.CALL2).FirstOrDefault();
+            //DataCallInfoDtos.Insert(1, new DataCallInfoDto());
+            //AutoMapper.Mapper.Map(CallinfoItem, DataCallInfoDtos[1]);
+
+            //CallinfoItem = CallInfos.Where(t => t.CallGroup == (int)CallGroupEnum.CALL3).FirstOrDefault();
+            //DataCallInfoDtos.Insert(2, new DataCallInfoDto());
+            //AutoMapper.Mapper.Map(CallinfoItem, DataCallInfoDtos[2]);
+
 
 
         }

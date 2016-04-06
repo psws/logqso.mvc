@@ -15,12 +15,12 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
             // Table & Column Mappings
             this.ToTable("LogCategory");
             this.Property(t => t.LogCategoryId).HasColumnName("LogCategoryId");
-            this.Property(t => t.CatOperator).HasColumnName("CatOperator");
-            this.Property(t => t.CatOperatorOverlay).HasColumnName("CatOperatorOverlay");
-            this.Property(t => t.CatBand).HasColumnName("CatBand");
-            this.Property(t => t.CatPower).HasColumnName("CatPower");
-            this.Property(t => t.CatAssisted).HasColumnName("CatAssisted");
-            this.Property(t => t.CatNoOfIx).HasColumnName("CatNoOfIx");
+            this.Property(t => t.CatOperatorEnum).HasColumnName("CatOperatorEnum");
+            this.Property(t => t.CatOperatorOverlayEnum).HasColumnName("CatOperatorOverlayEnum");
+            this.Property(t => t.CatBandEnum).HasColumnName("CatBandEnum");
+            this.Property(t => t.CatPowerEnum).HasColumnName("CatPowerEnum");
+            this.Property(t => t.CatAssistedEnum).HasColumnName("CatAssistedEnum");
+            this.Property(t => t.CatNoOfTxEnum).HasColumnName("CatNoOfTxEnum");
         }
     }
 }

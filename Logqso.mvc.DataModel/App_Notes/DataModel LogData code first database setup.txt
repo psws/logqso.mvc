@@ -59,7 +59,7 @@ Next do the Add-Migration Seed dasta in the configuration.cs filel.LogData.Migra
 
 Next do the Add-Migration
 
-PM> Add-Migration -ProjectName Logqso.mvc.DataModel - Force -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogData.Migrations.LogDataDB.Configuration "InitialDatabaseCreation" 
+PM> Add-Migration -ProjectName Logqso.mvc.DataModel -Force -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogData.Migrations.LogDataDB.Configuration "InitialDatabaseCreation" 
 
 The Designer Code for this migration file includes a snapshot of your current Code First model. This snapshot is used to calculate the changes to your model when you scaffold the next migration. 
 If you make additional changes to your model that you want to include in this migration, then you can re-scaffold it by running 'Add-Migration InitialDatabaseCreation' again.
@@ -67,20 +67,21 @@ next create tables in DB
 
 NEXT:
 Add any seed data in the configuration.cs file
-                   QsoModeTypeSeeds.SeedContest(context);
-                   QsoExchangeTypeSeeds.SeedContest(context);
-                   ContestTypeSeeds.SeedContest(context);
-                   QsoRadioTypeSeeds.SeedContest(context);
-                   CabrilloInfoSeeds.SeedContest(context);
-                   CallSignSeeds.SeedContest(context);
-                   ContestSeeds.SeedContest(context);
-                   LogCategorySeeds.SeedContest(context);
-                   LogSeeds.SeedContest(context);
-                   StationSeeds.SeedContest(context);
-                   CallInfoSeeds.SeedContest(context);
-         #if DEBUG
-                QsoSeeds.SeedContest(context);
-        #endif
+            QsoModeTypeSeeds.SeedContest(context);
+            QsoExchangeTypeSeeds.SeedContest(context);
+            ContestTypeSeeds.SeedContest(context);
+            QsoRadioTypeSeeds.SeedContest(context);
+            CabrilloInfoSeeds.SeedContest(context);
+            CallSignSeeds.SeedContest(context);
+            ContestSeeds.SeedContest(context);
+            LogCategorySeeds.SeedContest(context);
+            LogSeeds.SeedContest(context);
+            StationSeeds.SeedContest(context);
+            SessionSeeds.SeedContest(context);
+            CallInfoSeeds.SeedContest(context);
+#if DEBUG
+            QsoSeeds.SeedContest(context);
+#endif
 
 PM>Update-Database -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogData.Migrations.LogDataDB.Configuration -Verbose -ConnectionStringName "LogDataDB"
 

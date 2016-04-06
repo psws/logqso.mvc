@@ -9,10 +9,10 @@ namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
         public CatAssistedMap()
         {
             // Primary Key
-            this.HasKey(t => t.CatAssist);
+            this.HasKey(t => t.CatAssistedEnum);
 
             // Properties
-            this.Property(t => t.CatAssist)
+            this.Property(t => t.CatAssistedEnum)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             this.Property(t => t.CatAssistedName)
@@ -21,7 +21,7 @@ namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
 
             // Table & Column Mappings
             this.ToTable("CatAssisted");
-            this.Property(t => t.CatAssist).HasColumnName("CatAssist");
+            this.Property(t => t.CatAssistedEnum).HasColumnName("CatAssistedEnum");
             this.Property(t => t.CatAssistedName).HasColumnName("CatAssistedName");
             this.Property(t => t.Index).HasColumnName("Index");
         }

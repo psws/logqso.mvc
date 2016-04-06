@@ -30,11 +30,11 @@ namespace Logqso.mvc.DataModel.LogData
            {
                Id = 1,
                UserName = "default",
-               CatOpr = CatOperatorEnum.ALL,
-               CatAssist = CatAssistedEnum.ALL,
-               CatBnd = CatBandEnum.ALL,
-               CatTx = CatNoOfIxEnum.ALL,
-               CatPwr = CatPowerrEnum.ALL 
+               CatOperatorEnum = CatOperatorEnum.ALL,
+               CatAssistedEnum = CatAssistedEnum.ALL,
+               CatBandEnum = CatBandEnum.ALL,
+               CatNoOfTxEnum = CatNoOfTxEnum.ALL,
+               CatPowerEnum = CatPowerEnum.ALL 
            }; 
 
             FiltDefaullt FiltDefaullt = new FiltDefaullt

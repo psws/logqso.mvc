@@ -18,6 +18,7 @@ namespace Logqso.mvc.DataModel.LogData
         {
             context.QsoRadioType.AddOrUpdate(
             p => p.QsoRadioTypeEnum,
+                new QsoRadioType { QsoRadioTypeEnum = QsoRadioTypeEnum.ALL, QsoRadioTypeName = Enum.GetName(typeof(QsoRadioTypeEnum), QsoRadioTypeEnum.ALL) },
                 new QsoRadioType { QsoRadioTypeEnum = QsoRadioTypeEnum.R1, QsoRadioTypeName = Enum.GetName(typeof(QsoRadioTypeEnum), QsoRadioTypeEnum.R1) },
                  new QsoRadioType { QsoRadioTypeEnum = QsoRadioTypeEnum.R2, QsoRadioTypeName = Enum.GetName(typeof(QsoRadioTypeEnum), QsoRadioTypeEnum.R2) },
                  new QsoRadioType { QsoRadioTypeEnum = QsoRadioTypeEnum.Run, QsoRadioTypeName = Enum.GetName(typeof(QsoRadioTypeEnum), QsoRadioTypeEnum.Run) },

@@ -2,14 +2,10 @@ using System;
 using System.Collections.Generic;
 using Infrastructure;
 
-namespace Logqso.mvc.Entities.LogDataEntity 
+namespace Logqso.mvc.Entities.LogDataEntity
 {
     public partial class CallInfo : Entity
     {
-        public CallInfo()
-        {
-        }
-
         public int CallInfoId { get; set; }
         public int CallGroup { get; set; }
         public int LogId { get; set; }
@@ -19,8 +15,10 @@ namespace Logqso.mvc.Entities.LogDataEntity
         public string UserName { get; set; }
         public string SessionName { get; set; }
         public bool Disabled { get; set; }
+        public int QsoRadioTypeEnum { get; set; }
         public virtual CallSign CallSign { get; set; }
         public virtual Contest Contest { get; set; }
+        public virtual QsoRadioType QsoRadioType { get; set; }
         public virtual Session Session { get; set; }
         public virtual Station Station { get; set; }
     }

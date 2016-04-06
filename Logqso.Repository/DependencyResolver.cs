@@ -14,6 +14,9 @@ using Logqso.mvc.Entities.LogControlEntity;
 using Logqso.mvc.DataModel.LogControl.Models;
 using Logqso.mvc.Entities.LogDataEntity;
 using Logqso.mvc.DataModel.LogData.Models;
+using Repository.Pattern.Extensions.interfaces;
+using Logqso.mvc.DataModel;
+using Logqso.Repository.Repository;
 
 
 
@@ -25,7 +28,19 @@ namespace Logqso.Repository
     {
         public void SetUp(IRegisterComponent registerComponent)
         {
-            //regisre  DbCFpntext cuz ef lib required
+ #if true
+            //registerComponent.RegisterType<IDataContextAsync, LogqsoDataContext>();
+
+           // registerComponent.RegisterType<IUnitOfWorkAsync, UnitOfWork>();
+            //registerComponent.RegisterType<IRepositoryAsync<CatOperator>, Repository<CatOperator>>();
+
+            registerComponent.RegisterType<ILogqsoControlContext, LogControlContext>();
+            registerComponent.RegisterType<IControlUnitOfWorkAsync, ControlUnitOfWork>();
+            registerComponent.RegisterType<IRepositoryAsync<CatOperator>, ResposituryControl<CatOperator>>();
+
+
+#else
+           //regisre  DbCFpntext cuz ef lib required
             //LogControlDB context = new Logqso.mvc.DataModel.LogControl.LogControlDB();
 
             var contextType = typeof(LogControlContext);
@@ -44,21 +59,38 @@ namespace Logqso.Repository
 #endif
 
             var uowType = typeof(IUnitOfWorkAsync);
+                        registerComponent.RegisterType<IDataContextAsync, LogControlContext>();
 
             Object[] Parms2 = new Object[] {
              contextType,
              uowType
              };
             registerComponent.RegisterTypeWithInjectionTypes<IRepositoryAsync<CatOperator>, Repository<CatOperator>>(Parms2, false);
-
+#endif
 
             //LOGQSOSATA
+#if true
+            //registerComponent.RegisterType<IDataContextAsync, LogqsoDataContext>();
+
+            //registerComponent.RegisterType<IUnitOfWorkAsync, UnitOfWork>();
+            //registerComponent.RegisterType<IRepositoryAsync<Log>, Repository<Log>>();
+            //support for multiple DB
+            registerComponent.RegisterType<ILogqsoDataContext, LogqsoDataContext>();
+            registerComponent.RegisterType<ILogUnitOfWorkAsync, LogUnitOfWork>();
+            registerComponent.RegisterType<IRepositoryAsync<Log>, ResposituryLog<Log>>();
+            
+
+
+#else
             var contextTypeData = typeof(LogqsoDataContext);
+            //registerComponent.RegisterType<IDataContextAsync, LogqsoDataContext>();
+            //contextTypeData = typeof(IDataContextAsync);
 
             Object[] ParmsData = new Object[] {
              contextTypeData
              };
             registerComponent.RegisterTypeWithInjectionTypes<IUnitOfWorkDataAsync, UnitOfWorkData>(ParmsData, false);
+            //registerComponent.RegisterTypeWithInjectionTypes<IUnitOfWorkAsync, UnitOfWork>(ParmsData, false);
 
             var uowTypeData = typeof(IUnitOfWorkDataAsync);
 
@@ -67,7 +99,7 @@ namespace Logqso.Repository
              uowTypeData
              };
             registerComponent.RegisterTypeWithInjectionTypes<IRepositoryAsync<Log>, Repository<Log>>(ParmsData2, false);
-
+#endif
             //IUnitOfWorkAsync UowObj = new UnitOfWork(context);
             //IRepositoryAsync<CatOperator> Repo = new Repository<CatOperator>(context, UowObj);
             //registerComponent.RegisterInstance<IRepositoryAsync<CatOperator>>(Repo);

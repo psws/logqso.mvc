@@ -18,26 +18,32 @@ Move the Logqso.mvc.DataModel/Models folder to:
 	Leave the LogControlContext.cs file in the Logqso.mvs.DataModel/LogControl/Models foldeer
 	Move all the remaining files, in the Models folder to the Logqso.mvc.Entities/LogControlEntity foldeer.
 	Leave the Logqso.mvs.DataModel/LogControl/Models/Mapping folder in the Logqso.mvs.DataModel/LogControl/Models folder.
+		be sure to change its namespace to Logqso.mvc.DataModel.LogControl.Models.
 
 	edit every file in the Logqso.mvs.DataModel/LogControl/Models/mapping folder change/add the following:
 		using Logqso.mvc.Entities.LogControlEntity;
 
 		namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
-
-	edit every file in the Logqso.mvc.Entities/LogCpmtrolEntity folder change/add the following:
+		onpmtrolEntity folder change/add the following:
 		using Infrastructure;
 
 		namespace Logqso.mvc.Entities.LogControlEntity
+		//evety file must derive from  : Entity in the LogControlEntity
+		public partial class YaxisViewType : Entity
 
 	edit the Logqso.mvs.DataModel/LogControl/Models/LogControlContext file (needs to derive from DataContext)
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using Repository.Pattern.Ef6;
 using Logqso.mvc.DataModel.LogControl.Models.Mapping;
+
 using Logqso.mvc.Entities.LogControlEntity;
+using Repository.Pattern.Extensions.interfaces;
 using Infrastructure;
 
 namespace Logqso.mvc.DataModel.LogControl.Models
 {
-    public partial class LogControlContext : DataContext
+    public partial class LogControlContext : DataContext, ILogqsoControlContext
     {
         static LogControlContext()
         {
@@ -48,8 +54,6 @@ namespace Logqso.mvc.DataModel.LogControl.Models
             : base("Name=LogControlDB")
         {
         }
-
-
 
 
 

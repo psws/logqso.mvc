@@ -38,14 +38,10 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
             this.Property(t => t.QsoDatabaseServerInstance).HasColumnName("QsoDatabaseServerInstance");
             this.Property(t => t.QsoDatabaseInstance).HasColumnName("QsoDatabaseInstance");
             this.Property(t => t.QsoDatabaseTableName).HasColumnName("QsoDatabaseTableName");
-            this.Property(t => t.CabrilloInfoID).HasColumnName("CabrilloInfoID");
             this.Property(t => t.WintestDataID).HasColumnName("WintestDataID");
             this.Property(t => t.N1mmDataID).HasColumnName("N1mmDataID");
 
             // Relationships
-            this.HasOptional(t => t.CabrilloInfo)
-                .WithMany(t => t.Logs)
-                .HasForeignKey(d => d.CabrilloInfoID);
             this.HasRequired(t => t.CallSign)
                 .WithMany(t => t.Logs)
                 .HasForeignKey(d => d.CallsignId);

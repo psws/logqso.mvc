@@ -13,17 +13,17 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         [Key]
         public int LogCategoryId { get; set; }
         [Required]
-        public Logqso.mvc.common.Enum.CatOperatorEnum CatOperator { get; set; }
+        public Logqso.mvc.common.Enum.CatOperatorEnum CatOperatorEnum { get; set; }
         [Required]
-        public Logqso.mvc.common.Enum.CatOperatorOverlayEnum CatOperatorOverlay { get; set; }
+        public Logqso.mvc.common.Enum.CatOperatorOverlayEnum CatOperatorOverlayEnum { get; set; }
         [Required]
-        public Logqso.mvc.common.Enum.CatBandEnum CatBand { get; set; }
+        public Logqso.mvc.common.Enum.CatBandEnum CatBandEnum { get; set; }
         [Required]
-        public Logqso.mvc.common.Enum.CatPowerrEnum CatPower { get; set; }
+        public Logqso.mvc.common.Enum.CatPowerEnum CatPowerEnum { get; set; }
         [Required]
-        public Logqso.mvc.common.Enum.CatAssistedEnum CatAssisted { get; set; }
+        public Logqso.mvc.common.Enum.CatAssistedEnum CatAssistedEnum { get; set; }
         [Required]
-        public Logqso.mvc.common.Enum.CatNoOfIxEnum CatNoOfIx { get; set; }
+        public Logqso.mvc.common.Enum.CatNoOfTxEnum CatNoOfTxEnum { get; set; }
 
     }
 }

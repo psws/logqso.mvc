@@ -43,7 +43,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Control
                 IRepositoryAsync<CatOperator> CatOperatorRepository = new Repository<CatOperator>(context, unitOfWork);
                 var CatOperator = new CatOperator
                 {
-                    CatOpr = (int)CatOperatorEnum.SINGLE_OP,
+                    CatOperatorEnum = (int)CatOperatorEnum.SINGLE_OP,
                     CatOprName = CatOprName,
                     ObjectState = ObjectState.Added,
                 };
@@ -83,7 +83,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Control
                 IRepositoryAsync<CatOperator> CatOperatorRepository = new Repository<CatOperator>(context, unitOfWork);
                 var CatOperator = new CatOperator
                 {
-                    CatOpr = (int)CatOperatorEnum.SINGLE_OP,
+                    CatOperatorEnum = (int)CatOperatorEnum.SINGLE_OP,
                     CatOprName = CatOprName,
                     Index = 2,
                     ObjectState = ObjectState.Added,

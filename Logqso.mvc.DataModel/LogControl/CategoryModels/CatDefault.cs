@@ -17,11 +17,11 @@ namespace Logqso.mvc.DataModel.LogControl.CategoryModels
         [MaxLength(256)]
         [Required]
         public string UserName { get; set; }
-        public Logqso.mvc.common.Enum.CatOperatorEnum CatOpr { get; set; }
-        public Logqso.mvc.common.Enum.CatAssistedEnum CatAssist { get; set; }
-        public Logqso.mvc.common.Enum.CatBandEnum CatBnd { get; set; }
-        public Logqso.mvc.common.Enum.CatNoOfIxEnum CatTx { get; set; }
-        public Logqso.mvc.common.Enum.CatPowerrEnum CatPwr { get; set; }
+        public Logqso.mvc.common.Enum.CatOperatorEnum CatOperatorEnum { get; set; }
+        public Logqso.mvc.common.Enum.CatAssistedEnum CatAssistedEnum { get; set; }
+        public Logqso.mvc.common.Enum.CatBandEnum CatBandEnum { get; set; }
+        public Logqso.mvc.common.Enum.CatNoOfTxEnum CatNoOfTxEnum { get; set; }
+        public Logqso.mvc.common.Enum.CatPowerEnum CatPowerEnum { get; set; }
         public virtual CatOperator CatOperator { get; set; }
         public virtual CatAssisted CatAssisted { get; set; }
         public virtual CatBand CatBand { get; set; }

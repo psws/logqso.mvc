@@ -8,12 +8,12 @@ namespace Logqso.mvc.Entities.LogControlEntity
     {
         public FiltContinent()
         {
-            this.FiltDefaullts = new List<FiltDefault>();
+            this.FiltDefaullts = new List<FiltDefaullt>();
         }
 
         public int FiltCont { get; set; }
         public string FiltContName { get; set; }
         public byte Index { get; set; }
-        public virtual ICollection<FiltDefault> FiltDefaullts { get; set; }
+        public virtual ICollection<FiltDefaullt> FiltDefaullts { get; set; }
     }
 }

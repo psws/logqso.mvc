@@ -118,6 +118,10 @@
       <Project>{b3a00fcf-b6bc-4269-b75a-edd91480d7aa}</Project>
       <Name>Logqso.Repository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Repositary.Pattern.Extenions\Repository.Pattern.Extensions.csproj">
+      <Project>{413b4310-d3bc-4239-ad69-3048497426d4}</Project>
+      <Name>Repository.Pattern.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\URF\Infrastructure\Infrastructure.csproj">
       <Project>{14b91c4e-7b93-42c8-afb1-d7983e7ad6a3}</Project>
       <Name>Infrastructure</Name>

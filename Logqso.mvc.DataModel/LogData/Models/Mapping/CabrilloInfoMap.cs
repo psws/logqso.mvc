@@ -9,9 +9,16 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
         public CabrilloInfoMap()
         {
             // Primary Key
-            this.HasKey(t => t.CabrilloInfoId);
+            this.HasKey(t => new { t.ContestId, t.CallSignId });
 
             // Properties
+            this.Property(t => t.ContestId)
+                .IsRequired()
+                .HasMaxLength(35);
+
+            this.Property(t => t.CallSignId)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+
             this.Property(t => t.Club)
                 .HasMaxLength(20);
 
@@ -35,7 +42,8 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
 
             // Table & Column Mappings
             this.ToTable("CabrilloInfo");
-            this.Property(t => t.CabrilloInfoId).HasColumnName("CabrilloInfoId");
+            this.Property(t => t.ContestId).HasColumnName("ContestId");
+            this.Property(t => t.CallSignId).HasColumnName("CallSignId");
             this.Property(t => t.ClaimedScore).HasColumnName("ClaimedScore");
             this.Property(t => t.Club).HasColumnName("Club");
             this.Property(t => t.Operators).HasColumnName("Operators");
@@ -44,6 +52,15 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
             this.Property(t => t.AddressState).HasColumnName("AddressState");
             this.Property(t => t.AddressPostalCode).HasColumnName("AddressPostalCode");
             this.Property(t => t.AddressCountry).HasColumnName("AddressCountry");
+
+            // Relationships
+            this.HasRequired(t => t.CallSign)
+                .WithMany(t => t.CabrilloInfoes)
+                .HasForeignKey(d => d.CallSignId);
+            this.HasRequired(t => t.Contest)
+                .WithMany(t => t.CabrilloInfoes)
+                .HasForeignKey(d => d.ContestId);
+
         }
     }
 }

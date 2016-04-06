@@ -8,6 +8,7 @@ namespace Logqso.mvc.Entities.LogDataEntity
     {
         public CallSign()
         {
+            this.CabrilloInfoes = new List<CabrilloInfo>();
             this.CallInfoes = new List<CallInfo>();
             this.Logs = new List<Log>();
             this.Qsoes = new List<Qso>();
@@ -21,6 +22,7 @@ namespace Logqso.mvc.Entities.LogDataEntity
         public Nullable<double> Latitude { get; set; }
         public Nullable<double> Longitude { get; set; }
         public Nullable<bool> GeoCodeChk { get; set; }
+        public virtual ICollection<CabrilloInfo> CabrilloInfoes { get; set; }
         public virtual ICollection<CallInfo> CallInfoes { get; set; }
         public virtual ICollection<Log> Logs { get; set; }
         public virtual ICollection<Qso> Qsoes { get; set; }

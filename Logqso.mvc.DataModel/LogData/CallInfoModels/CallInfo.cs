@@ -55,6 +55,8 @@ namespace Logqso.mvc.DataModel.LogData.CallInfoModels
         [Column(Order = 4)]
         [MaxLength(20)]
         public string StationName { get; set; } //selected station
+        public Logqso.mvc.common.Enum.QsoRadioTypeEnum QsoRadioTypeEnum { get; set; } //Selected Radio
+
 #else
         public int LogId { get; set; }
         public virtual Log Log { get; set; }
@@ -73,6 +75,8 @@ namespace Logqso.mvc.DataModel.LogData.CallInfoModels
         public virtual Contest Contest { get; set; }
         public virtual CallSign CallSign { get; set; }
         public virtual Station Station { get; set; }
+        [ForeignKey("QsoRadioTypeEnum")]
+        public virtual QsoRadioType QsoRadioType { get; set; }
 
     }
 }

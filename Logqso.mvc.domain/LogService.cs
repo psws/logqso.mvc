@@ -12,6 +12,8 @@ using Logqso.Repository.Repository;
 
 using Logqso.Repository;
 using Logqso.mvc.Dto.LogData;
+using Logqso.mvc.Dto.Interfaces;
+
 using Logqso.mvc.common.Enum;
 using AutoMapper;
 
@@ -43,57 +45,27 @@ namespace Logqso.mvc.domain
             return Task.FromResult(Log);            
         }
 
-        public Task<IEnumerable<DataCallInfoDto>> GetDataCallInfoSelections(string username)
+
+        public  async Task<IEnumerable<DataCallInfoDto>> GetDataCallInfoSelections(string username)
         {
-            //ContestControlsDataEntity ContestControlsDataEntity = new ContestControlsDataEntity();
-
-            //ContestControlsDataEntity.ControlCategorysEntity = new ControlCategorysEntity();
-            //ContestControlsDataEntity.ControlCategorysEntity.CatOperator = _repository.GetContestCategorys();
-            var CallInfoRepo =  _repository.GetRepository<CallInfo>();
-            //automapper
-            if (MapperCallInfoDatToCallInfoDto == null)
-            {
-                AutoMapper.IMappingExpression<Logqso.mvc.Entities.LogDataEntity.Log, Logqso.mvc.Dto.LogData.DataCallInfoDto> MapperLogDatToCallInfoDto = null;
-                //Arrange
-                MapperCallInfoDatToCallInfoDto = AutoMapper.Mapper.CreateMap<Logqso.mvc.Entities.LogDataEntity.CallInfo, Logqso.mvc.Dto.LogData.DataCallInfoDto>().
-                     ForMember(m => m.SelectedContestName, c => c.MapFrom(s => s.ContestId));
-                //AutoMapper.Mapper.CreateMap<Logqso.mvc.Entities.LogDataEntity.CallInfo, Logqso.mvc.Dto.LogData.DataCallInfoDto>().
-                MapperCallInfoDatToCallInfoDto.ForMember(m => m.SelectedCall, c => c.MapFrom(s => s.CallSign.Call));
-                //AutoMapper.Mapper.CreateMap<Logqso.mvc.Entities.LogDataEntity.CallInfo, Logqso.mvc.Dto.LogData.DataCallInfoDto>().
-                MapperCallInfoDatToCallInfoDto.ForMember(m => m.SelectedStationName, c => c.MapFrom(s => s.StationName));
-                //AutoMapper.Mapper.CreateMap<Logqso.mvc.Entities.LogDataEntity.CallInfo, Logqso.mvc.Dto.LogData.DataCallInfoDto>().
-                MapperCallInfoDatToCallInfoDto.ForMember(m => m.StationNames, c => c.Ignore());
-                //AutoMapper.Mapper.CreateMap<Logqso.mvc.Entities.LogDataEntity.CallInfo, Logqso.mvc.Dto.LogData.DataCallInfoDto>().
-                MapperCallInfoDatToCallInfoDto.ForMember(m => m.ContestNames, c => c.Ignore());
-
-            }
-            AutoMapper.Mapper.AssertConfigurationIsValid();
-
-             List<DataCallInfoDto> DataCallInfoDtos = null;
-            var CallInfos = CallInfoRepo.GetDataCallInfoSelections(username);
-            if (CallInfos.Count<CallInfo>() != 0)
-	        {
-                DataCallInfoDtos = new List<DataCallInfoDto>();
-
-               CallInfo CallinfoItem = CallInfos.Where(t => t.CallGroup == (int)CallGroupEnum.CALL1).FirstOrDefault();
-                DataCallInfoDtos.Insert(0, new DataCallInfoDto());
-                AutoMapper.Mapper.Map(CallinfoItem, DataCallInfoDtos[0]);
-
-                CallinfoItem = CallInfos.Where(t => t.CallGroup == (int)CallGroupEnum.CALL2).FirstOrDefault();
-                DataCallInfoDtos.Insert(1, new DataCallInfoDto());
-                AutoMapper.Mapper.Map(CallinfoItem, DataCallInfoDtos[1]);
- 
-                CallinfoItem = CallInfos.Where(t => t.CallGroup == (int)CallGroupEnum.CALL3).FirstOrDefault();
-                DataCallInfoDtos.Insert(2, new DataCallInfoDto());
-                AutoMapper.Mapper.Map(CallinfoItem, DataCallInfoDtos[2]);
-
-	        }
-            //get the collections for combobox.
-            //var CallInfoCollections = CallInfoRepo.GetDataCallInfoCollections(username);
+             IEnumerable<DataCallInfoDto> DataCallInfoDtos = null;
+             DataCallInfoDtos = await _repository.GetDataCallInfoSelections(username, true);
 
 
-            return Task.FromResult(DataCallInfoDtos.AsEnumerable());
+             //return Task.FromResult(DataCallInfoDtos);
+             return DataCallInfoDtos;
         }
+
+        public async Task<IEnumerable<DataCallInfoDto>> GetDataCallInfoSelectionsAsync(string username)
+        {
+            IEnumerable<DataCallInfoDto> DataCallInfoDtos = null;
+            DataCallInfoDtos = await _repository.GetDataCallInfoSelectionsAsync(username, true);
+
+
+            //return Task.FromResult(DataCallInfoDtos);
+            return DataCallInfoDtos;
+        }
+
 
 #if false
         //old depredated method

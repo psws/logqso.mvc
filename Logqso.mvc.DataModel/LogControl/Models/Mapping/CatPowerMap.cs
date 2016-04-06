@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Logqso.mvc.Entities.LogControlEntity;
 
-
 namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
 {
     public class CatPowerMap : EntityTypeConfiguration<CatPower>
@@ -10,10 +9,10 @@ namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
         public CatPowerMap()
         {
             // Primary Key
-            this.HasKey(t => t.CatPwr);
+            this.HasKey(t => t.CatPowerEnum);
 
             // Properties
-            this.Property(t => t.CatPwr)
+            this.Property(t => t.CatPowerEnum)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
             this.Property(t => t.CatPowerName)
@@ -22,7 +21,7 @@ namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
 
             // Table & Column Mappings
             this.ToTable("CatPower");
-            this.Property(t => t.CatPwr).HasColumnName("CatPwr");
+            this.Property(t => t.CatPowerEnum).HasColumnName("CatPowerEnum");
             this.Property(t => t.CatPowerName).HasColumnName("CatPowerName");
             this.Property(t => t.Index).HasColumnName("Index");
         }
