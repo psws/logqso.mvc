@@ -132,8 +132,8 @@ CREATE TABLE [dbo].[Qso] (
     [LogId] [int] NOT NULL,
     [CallsignId] [int] NOT NULL,
     [QsoDateEime] [datetime] NOT NULL,
-    [RxRst] [tinyint] NOT NULL,
-    [TxRst] [tinyint] NOT NULL,
+    [RxRst] [smallint] NOT NULL,
+    [TxRst] [smallint] NOT NULL,
     CONSTRAINT [PK_dbo.Qso] PRIMARY KEY ([QsoId])
 )
 CREATE INDEX [IX_LogId] ON [dbo].[Qso]([LogId])

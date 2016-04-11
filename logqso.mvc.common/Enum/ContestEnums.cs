@@ -33,7 +33,7 @@ namespace Logqso.mvc.common.Enum
 
     public enum QsoRadioTypeEnum
     {
-        NONE = 0,
+        NONE = 7,
         ALL = 1,
         R1 = 2,
         R2 = 3,

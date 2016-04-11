@@ -33,13 +33,16 @@ Move the Logqso.mvc.DataModel/Models folder to:
 	edit the Logqso.mvs.DataModel/LogData/Models/LogDataContext file ( needs to derive from DataContext
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using Repository.Pattern.Ef6;
+
 using Logqso.mvc.DataModel.LogData.Models.Mapping;
 using Logqso.mvc.Entities.LogDataEntity;
 
 using Repository.Pattern.Extensions.interfaces;
-namespace Logqso.mvc.DataModel.Models
+
+namespace Logqso.mvc.DataModel.LogData.Models
 {
-    public partial class LogqsoDataContext : DbContext, ILogqsoDataContext
+    public partial class LogqsoDataContext : DataContext, ILogqsoDataContext
     {
         static LogqsoDataContext()
         {

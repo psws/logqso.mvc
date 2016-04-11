@@ -36,7 +36,6 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using Repository.Pattern.Ef6;
 using Logqso.mvc.DataModel.LogControl.Models.Mapping;
-
 using Logqso.mvc.Entities.LogControlEntity;
 using Repository.Pattern.Extensions.interfaces;
 using Infrastructure;
@@ -54,6 +53,5 @@ namespace Logqso.mvc.DataModel.LogControl.Models
             : base("Name=LogControlDB")
         {
         }
-
 
 

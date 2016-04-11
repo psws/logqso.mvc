@@ -53,8 +53,8 @@ When the log is deletedm these rows are cascade deleted
         public  int CallsignId { get; set; }
         [DataType(DataType.Date)]
         public  DateTime QsoDateEime { get; set; }
-        public  byte RxRst { get; set; }
-        public  byte TxRst { get; set; }
+        public  short RxRst { get; set; }
+        public  short TxRst { get; set; }
 
         public virtual CallSign CallSign { get; set; }
     }

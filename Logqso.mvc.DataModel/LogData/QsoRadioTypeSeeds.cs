@@ -23,7 +23,8 @@ namespace Logqso.mvc.DataModel.LogData
                  new QsoRadioType { QsoRadioTypeEnum = QsoRadioTypeEnum.R2, QsoRadioTypeName = Enum.GetName(typeof(QsoRadioTypeEnum), QsoRadioTypeEnum.R2) },
                  new QsoRadioType { QsoRadioTypeEnum = QsoRadioTypeEnum.Run, QsoRadioTypeName = Enum.GetName(typeof(QsoRadioTypeEnum), QsoRadioTypeEnum.Run) },
                   new QsoRadioType { QsoRadioTypeEnum = QsoRadioTypeEnum.Mult, QsoRadioTypeName = Enum.GetName(typeof(QsoRadioTypeEnum), QsoRadioTypeEnum.Mult) },
-                new QsoRadioType { QsoRadioTypeEnum = QsoRadioTypeEnum.S_P, QsoRadioTypeName = Enum.GetName(typeof(QsoRadioTypeEnum), QsoRadioTypeEnum.S_P) } 
+                new QsoRadioType { QsoRadioTypeEnum = QsoRadioTypeEnum.S_P, QsoRadioTypeName = Enum.GetName(typeof(QsoRadioTypeEnum), QsoRadioTypeEnum.S_P) },
+                new QsoRadioType { QsoRadioTypeEnum = QsoRadioTypeEnum.NONE, QsoRadioTypeName = Enum.GetName(typeof(QsoRadioTypeEnum), QsoRadioTypeEnum.NONE) } 
 
               );
 

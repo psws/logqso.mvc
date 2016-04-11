@@ -70,8 +70,8 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         [DataType(DataType.Date)]
         [Required]
         public DateTime QsoDateTime { get; set; }
-        public byte RxRst { get; set; }
-        public byte TxRst { get; set; }
+        public short RxRst { get; set; }
+        public short TxRst { get; set; }
         public short? QsoExchangeNumber { get; set; }
         [Required]
         public Logqso.mvc.common.Enum.QsoModeTypeEnum QsoModeTypeEnum { get; set; }

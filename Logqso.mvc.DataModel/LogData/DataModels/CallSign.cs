@@ -29,7 +29,11 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         [Index(IsUnique = true)] 
         [Required]
         public virtual string Call { get; set; }
-        public virtual Logqso.mvc.common.Enum.ContinentEnum Continent { get; set; }
+        [Column(TypeName = "varchar")]
+        [MaxLength(10)]
+        [Required]
+        public virtual string Prefix { get; set; }
+        public virtual Logqso.mvc.common.Enum.ContinentEnum ContinentEnum { get; set; }
 
         public googleutils.Geo.GAccuracyCode Accuracy { get; set; }
         public double? Latitude { get; set; }

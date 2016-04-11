@@ -47,9 +47,6 @@ namespace Logqso.mvc.DataModel.LogData
                                      CatOperatorOverlayEnum = CatOperatorOverlayEnum.NONE },
                 new LogCategory {  LogCategoryId = 10, CatAssistedEnum = CatAssistedEnum.ASSISTED, CatOperatorEnum = CatOperatorEnum.SINGLE_OP,
                                     CatBandEnum = CatBandEnum.ALL, CatPowerEnum= CatPowerEnum.QRP, CatNoOfTxEnum = CatNoOfTxEnum.ONE, 
-                                     CatOperatorOverlayEnum = CatOperatorOverlayEnum.NONE },
-                new LogCategory {  LogCategoryId = 11, CatAssistedEnum = CatAssistedEnum.ASSISTED, CatOperatorEnum = CatOperatorEnum.SINGLE_OP,
-                                    CatBandEnum = CatBandEnum.ALL, CatPowerEnum= CatPowerEnum.QRP, CatNoOfTxEnum = CatNoOfTxEnum.ONE, 
                                      CatOperatorOverlayEnum = CatOperatorOverlayEnum.NONE }
 
 

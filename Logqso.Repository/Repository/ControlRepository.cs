@@ -198,7 +198,7 @@ namespace Logqso.Repository
             }
             else
             {
-                ControlFiltersSettingsDto.FiltCountryInnerHTML = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;";  //no prefix
+                ControlFiltersSettingsDto.FiltCountryInnerHTML = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + FiltDefaullt.FiltPref;  //no prefix
             }
                 ////find index
                 //var FiltPrefixes = repository.GetRepository < FiltPrefix >(). Queryable();

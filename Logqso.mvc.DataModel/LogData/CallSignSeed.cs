@@ -34,9 +34,9 @@ namespace Logqso.mvc.DataModel.LogData
         {
             context.CallSign.AddOrUpdate(
             p => p.Call,
-                new CallSign {  CallSignId = 1, Call = "cn2r", Continent = ContinentEnum.AF },
-                new CallSign { CallSignId = 2, Call = "cn3a", Continent = ContinentEnum.AF },
-                new CallSign { CallSignId = 3, Call = "cn2aa", Continent = ContinentEnum.AF }
+                new CallSign { CallSignId = 1, Call = "CN2R", Prefix = "CN", ContinentEnum = ContinentEnum.AF },
+                new CallSign { CallSignId = 2, Call = "CN3A", Prefix = "CN", ContinentEnum = ContinentEnum.AF },
+                new CallSign { CallSignId = 3, Call = "CN2AA", Prefix = "CN", ContinentEnum = ContinentEnum.AF }
 
                                     
             );

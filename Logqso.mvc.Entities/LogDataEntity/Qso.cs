@@ -12,8 +12,8 @@ namespace Logqso.mvc.Entities.LogDataEntity
         public decimal Frequency { get; set; }
         public int CallsignId { get; set; }
         public System.DateTime QsoDateTime { get; set; }
-        public byte RxRst { get; set; }
-        public byte TxRst { get; set; }
+        public short RxRst { get; set; }
+        public short TxRst { get; set; }
         public Nullable<short> QsoExchangeNumber { get; set; }
         public int QsoModeTypeEnum { get; set; }
         public int QsoRadioTypeEnum { get; set; }
