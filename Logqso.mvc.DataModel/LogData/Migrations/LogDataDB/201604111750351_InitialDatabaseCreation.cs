@@ -34,7 +34,8 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
                     {
                         CallSignId = c.Int(nullable: false, identity: true),
                         Call = c.String(nullable: false, maxLength: 20, unicode: false),
-                        Continent = c.Int(nullable: false),
+                        Prefix = c.String(nullable: false, maxLength: 10, unicode: false),
+                        ContinentEnum = c.Int(nullable: false),
                         Accuracy = c.Int(nullable: false),
                         Latitude = c.Double(),
                         Longitude = c.Double(),

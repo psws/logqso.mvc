@@ -17,7 +17,8 @@ namespace Logqso.mvc.Entities.LogDataEntity
 
         public int CallSignId { get; set; }
         public string Call { get; set; }
-        public int Continent { get; set; }
+        public string Prefix { get; set; }
+        public int ContinentEnum { get; set; }
         public int Accuracy { get; set; }
         public Nullable<double> Latitude { get; set; }
         public Nullable<double> Longitude { get; set; }

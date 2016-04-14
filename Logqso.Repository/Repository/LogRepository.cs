@@ -91,7 +91,7 @@ namespace Logqso.Repository.Repository
                                     {
                                         CallGroup = (CallGroupEnum)lc.CallGroup,
                                         SelectedContestName = lc.Contest.ContestName,
-                                        SelectedCall = lq.Contest.ContestName,
+                                        SelectedCall = lc.CallSign.Call,
                                         SelectedStationName = lc.Station.StationName,
                                         QsoRadioType = (QsoRadioTypeEnum)lc.QsoRadioTypeEnum,
                                         //Selecct() flattens

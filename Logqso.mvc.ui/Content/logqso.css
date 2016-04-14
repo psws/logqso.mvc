@@ -204,6 +204,26 @@ span[id^='enb_dis']{
     vertical-align: top;  /* required to get second list to top in chrome */
 }
 
+.updateProgress
+{
+    border-width: 1px;
+    border-style: solid;
+    background-color: #CCCCCC;
+    position: absolute;
+    z-index: 1000;
+    width: 180px;
+    height: 50px;
+}
+.updateProgressMessage
+{
+    margin: 3px;
+    font-family: Trebuchet MS;
+    font-size: medium;
+    vertical-align: middle;
+    color: green;
+    font-weight: bold; 
+
+}
 
 /*2 column list*/
 .two-col-list {
@@ -234,11 +254,47 @@ span[id^='enb_dis']{
     /*vertical-align: top; /* In case multi-word categories form two lines */
 }
 
+
 .two-col-list li:hover {
     cursor: pointer; 
     background-color: #0073ea; 
     color:white
 }
+
+.five-col-list {
+    border: 1px solid green;
+    overflow: auto;
+    max-height: 205px;
+    margin-bottom:10px;
+    padding-left: 10px;
+    padding-right:5px;
+    /*-moz-column-count: 2;
+    -moz-column-gap: 20px;
+    -webkit-column-count: 2;
+    -webkit-column-gap: 20px;
+    column-count: 2;
+    column-gap: 20px;*/
+        /*vertical-align: top;*/
+
+}
+.five-col-list li {
+    display: inline;
+    /*width: 45%;*/
+    width:20%;
+    float:left;
+    margin: 0;
+    padding: 0;
+    font-size:100%;
+    line-height:17px;
+    /*vertical-align: top; /* In case multi-word categories form two lines */
+}
+
+.five-col-list li:hover {
+    cursor: pointer; 
+    background-color: #0073ea; 
+    color:white
+}
+
 
 .jqxtab-tab-button{
     font-size:70%;

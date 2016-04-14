@@ -10,7 +10,20 @@ $(function () {
 
     // Fetch the initial data.
     //var controlUri = '/api/control/';
+    var bodyContainer =  $("div.body-content ");
+    var updateProgressDiv = $("#updateProgressDiv");
+    var tmp = bodyContainer.width();
+    var position = bodyContainer.offset();
 
+    var x = position.left + Math.round(bodyContainer.width() / 2) - Math.round(updateProgressDiv.width() / 2);
+    var y = position.top + Math.round(bodyContainer.height() / 2) - Math.round(updateProgressDiv.height() / 2);
+
+    //	set the progress element to this position
+    updateProgressDiv.css({
+        position: "absolute",
+        top: y + "px",
+        left: x + "px"
+    } );
 
     getAllControls();
     getAllData();
@@ -595,9 +608,9 @@ $(function () {
         //style popup
         var modalBox = $(this).attr('data-modal-id');
         var popup = $('#' + modalBox + ' h4');
-        //popup.html("Select a contest for " + _lq.parent_modal_box_id);
-        //popup.addClass('lq-popup-hdr');
-        //var list = $('#' + modalBox + ' div[id$="list"]');
+        popup.html("Select a Call for " + _lq.parent_modal_box_id);
+        popup.addClass('lq-popup-hdr');
+        var list = $('#' + modalBox + ' div[id$="list"]');
         //list.addClass('lq-popup-list');
 
         //$('#jqxTabs').jqxTabs({
@@ -605,16 +618,39 @@ $(function () {
         //    height: 150,
         //    theme: 'energyblue'
         //});
+
+        var call = e.currentTarget.innerText.toUpperCase();
+        //set active tab 
+        var c = call.charCodeAt(0).toString(16);
+        var acttab;
+        var actDiv;
+        if (c > 0 && c <= 9) {
+            acttab = 0;
+            actDiv = 'CTab1';
+        } else {
+            acttab = c - 40;
+            actDiv = 'CTab' + call[0];
+
+        }
+
         $("#tabs").tabs({
-                width: 480,
-                height: 150,
-                activate: function (event, ui) {
-                    //alert(  ui.newTab.index());
-                    alert(ui.newTab.attr('li', "innerHTML")[0].getElementsByTagName("a")[0].innerHTML);
-                    //alert( this.text);
-                }
+            width: 480,
+            height: 150,
+            active: acttab,
+            create: function (event, ui) {
+                LoadInitialCallTab(event, ui);
+            },
+            activate: function (event, ui)
+            {
+                //alert(  ui.newTab.index());
+                LoadCallTab(event, ui);
+                //alert(ui.newTab.attr('li', "innerHTML")[0].getElementsByTagName("a")[0].innerHTML);
+                //alert( this.text);
+            }
             //event: "mouseover"
         });
+
+
         var CallTab = $("#tabs").tabs("widget");
         $("ul.ui-tabs-nav li a").
             each(function (indexInArray, valueOfElement) {
@@ -624,22 +660,20 @@ $(function () {
             });
         $("ul.ui-tabs-nav li").
          each(function (indexInArray, valueOfElement) {
-            $(this).css('margin', '0');
-        });
+             $(this).css('margin', '0');
+         });
 
         //$("#tabs li" ).tab(function (index, event) {
         //    this.
 
         //});
 
-        //$('#jqxTabs').jqxTabs('addFirst', '1-9', 'tabContent');
-
         // map all choices to ContestSelectHandler()
-        $('#' + modalBox + ' ol.two-col-list li').off('click').on("click",
+        $('#' + modalBox + ' ol.five-col-list li').off('click').on("click",
             {
                 test: _lq.parent_modal_box_id,
                 callNo: _lq.parent_modal_box_id
-            }, _lq.ContestSelectHandler);
+            }, _lq.CallSelectHandler);
         $('#' + modalBox).fadeIn($(this).data());
     });
 
@@ -705,7 +739,7 @@ $(function () {
     function getAllControls() {
         _lq.ajaxHelper(_lq.controlUri + "/GetControlNames", 'GET',null , getAllControlsLoad);
 
-    function getAllControlsLoad(data) {
+        function getAllControlsLoad(data) {
             //console.log(data.ControlCategoryDto.CatOperator);
 
             $select = $('#CatOp');
@@ -879,14 +913,14 @@ $(function () {
     function GetControlSelections() {
         _lq.ajaxHelper(_lq.controlUri + "/GetControlSelections", 'GET', null, GetControlSelectionsLoad);
         function GetControlSelectionsLoad(data) {
-                SetControlCategorySettingsDefaults(data.ControlCategorySettingsDto);
-                SetControlFiltersSettingsDefaults(data.ControlFiltersSettingsDto);
-                SetControlXaxisSettingsDefaults(data.ControlXaxisSettingsDto);
-                SetControlYaxisSettingsDefaults(data.ControlYaxisSettingsDto);
+            SetControlCategorySettingsDefaults(data.ControlCategorySettingsDto);
+            SetControlFiltersSettingsDefaults(data.ControlFiltersSettingsDto);
+            SetControlXaxisSettingsDefaults(data.ControlXaxisSettingsDto);
+            SetControlYaxisSettingsDefaults(data.ControlYaxisSettingsDto);
 
-                _lq.SessionSaveControlSettings();
+            _lq.SessionSaveControlSettings();
 
-            };  
+        };  
     }
 
 
@@ -958,6 +992,7 @@ $(function () {
 
         var TabUl = $('div[id=tabs] ul');
         var DivUl = $('div[id=tabs]');
+
         var alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         if ($('div[id=tabs] ul li').length == 0) {
 
@@ -971,6 +1006,47 @@ $(function () {
         }
 
     }
+
+    function LoadInitialCallTab(event, ui) {
+        //function LoadCallTab(actDiv, Callgroup) {
+        var actDiv = ui.panel[0].id;
+        var Tabdiv = $('div[id=' + actDiv + ']')
+        var list = "list" + actDiv;
+        Tabdiv.append("<ol id ='list" + actDiv + "' class='five-col-list'></ol>");
+        var TabOl = $('ol[id=' + list + ']');
+        //TabOl.append('<li value = ' + val.key + '>' + val.value + '</li>');
+        for (var i = 0; i < 25; i++) {
+            TabOl.append('<li value = '+ i +'> CN2R </li>');
+        }
+
+        //Div[0].innerText += "Hello World inital " + _lq.parent_modal_box_id;
+    }
+
+    function LoadCallTab(event, ui) {
+        //function LoadCallTab(actDiv, Callgroup) {
+        var actDiv = ui.newPanel[0].id;
+        Tabdiv = $('div[id=' + actDiv + ']')
+        var list = "list" + actDiv;
+        var TabOl = $('ol[id=' + list + ']');
+        if (TabOl.length == 0) {
+            Tabdiv.append("<ol id ='list" + actDiv + "' class='five-col-list'></ol>");
+            TabOl = $('ol[id=' + list + ']');
+            //TabOl.append('<li value = ' + val.key + '>' + val.value + '</li>');
+            for (var i = 0; i < 200; i++) {
+                TabOl.append('<li value = ' + i + '> CN2R </li>');
+            }
+
+        }
+        var modalBox = $(this).attr('data-modal-id');
+
+        $('div[id=' + actDiv + ']  ol.five-col-list li').off('click').on("click",
+                    {
+                        test: _lq.parent_modal_box_id,
+                        callNo: _lq.parent_modal_box_id
+                    }, _lq.CallSelectHandler);
+
+    }
+
 
 
 
@@ -1106,6 +1182,7 @@ $(function () {
             switch (DataCallInfoObj[i].CallGroup) {
                 case 1:
                     //http://stackoverflow.com/questions/5580616/jquery-change-button-text
+                    $("button[id='Call1'] ").text(DataCallInfoObj[i].SelectedCall);
                     $("button[id='Contest1'] span").text(DataCallInfoObj[i].SelectedContestName);
                     if (DataCallInfoObj[i].SelectedStationName != null) {
                         $select = $('#Station1').val(DataCallInfoObj[i].SelectedStationName).selectmenu("refresh");
@@ -1116,6 +1193,7 @@ $(function () {
                     break;
                 case 2:
                     //http://stackoverflow.com/questions/5580616/jquery-change-button-text
+                    $("button[id='Call2'] ").text(DataCallInfoObj[i].SelectedCall);
                     $("button[id='Contest2'] span").text(DataCallInfoObj[i].SelectedContestName);
                     if (DataCallInfoObj[i].SelectedStationName != null) {
                         $select = $('#Station2').val(DataCallInfoObj[i].SelectedStationName).selectmenu("refresh");
@@ -1126,6 +1204,7 @@ $(function () {
                     break;
                 case 3:
                     //http://stackoverflow.com/questions/5580616/jquery-change-button-text
+                    $("button[id='Call3'] ").text(DataCallInfoObj[i].SelectedCall);
                     $("button[id='Contest3'] span").text(DataCallInfoObj[i].SelectedContestName);
                     if (DataCallInfoObj[i].SelectedStationName != null) {
                         $select = $('#Station3').val(DataCallInfoObj[i].SelectedStationName).selectmenu("refresh");
@@ -1160,6 +1239,8 @@ $(function () {
     _lq.dataUri = '/v1/Data';
 
     _lq.parent_modal_box_id;
+    _lq.ajaxCallCount = 0;
+
     _lq.SessionSaveControlSelections;
 
     _lq.ControlCategorySettingsDto =  {
@@ -1208,18 +1289,29 @@ $(function () {
 
 
 
-    _lq.ajaxHelper = function(uri, method, data, Function) {
-         $.ajax({
+    _lq.ajaxHelper = function (uri, method, data, Function) {
+        $.ajax({
             type: method,
             url: uri,
             dataType: 'json',
             contentType: 'application/json',
+            beforeSend: function () {
+                _lq.ajaxCallCount++;
+                $('#updateProgressDiv').show();
+            },
+            complete: function () {
+                _lq.ajaxCallCount--;
+                if (_lq.ajaxCallCount == 0) {
+                    $('#updateProgressDiv').hide();
+                }
+            },
+
             data: data ? JSON.stringify(data) : null,
-         })
-        .done (Function)
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            console.log(errorThrown);
-        });
+        })
+       .done(Function)
+       .fail(function (jqXHR, textStatus, errorThrown) {
+           console.log(errorThrown);
+       });
 
     }
 
@@ -1231,6 +1323,15 @@ $(function () {
         //call DDL change event
         _lq.DataUpdated(event.data.test, event.currentTarget.textContent);
     };
+
+    _lq.CallSelectHandler = function (event) {
+        //alert(event.data.test);
+        $('#' + event.data.test + ' span.ui-button-text').text(event.currentTarget.textContent);
+        $(".js-modal-close, .modal-overlay").trigger('click');
+        //call DDL change event
+        _lq.DataUpdated(event.data.test, event.currentTarget.textContent);
+    };
+
 
     //function for updating graph POST
     _lq.ControlUpdated = function (Controlid, SelectedValue) {

@@ -16,11 +16,16 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(20);
 
+            this.Property(t => t.Prefix)
+                .IsRequired()
+                .HasMaxLength(10);
+
             // Table & Column Mappings
             this.ToTable("CallSign");
             this.Property(t => t.CallSignId).HasColumnName("CallSignId");
             this.Property(t => t.Call).HasColumnName("Call");
-            this.Property(t => t.Continent).HasColumnName("Continent");
+            this.Property(t => t.Prefix).HasColumnName("Prefix");
+            this.Property(t => t.ContinentEnum).HasColumnName("ContinentEnum");
             this.Property(t => t.Accuracy).HasColumnName("Accuracy");
             this.Property(t => t.Latitude).HasColumnName("Latitude");
             this.Property(t => t.Longitude).HasColumnName("Longitude");

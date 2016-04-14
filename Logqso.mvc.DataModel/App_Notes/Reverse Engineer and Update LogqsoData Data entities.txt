@@ -29,6 +29,8 @@ Move the Logqso.mvc.DataModel/Models folder to:
 		using Infrastructure;
 
 		namespace Logqso.mvc.Entities.LogDataEntity
+		//evety file must derive from  : Entity in the LogControlEntity
+		public partial class Qso : Entity
 
 	edit the Logqso.mvs.DataModel/LogData/Models/LogDataContext file ( needs to derive from DataContext
 using System.Data.Entity;

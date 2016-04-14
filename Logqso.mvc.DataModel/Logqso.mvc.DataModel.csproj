@@ -87,9 +87,9 @@
     <Compile Include="LogData\DataModels\QsoExchangeAlpha.cs" />
     <Compile Include="LogData\ContestTypeSeeds.cs" />
     <Compile Include="LogData\DataModels\QsoRadioType.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201604061958316_InitialDatabaseCreation.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201604061958316_InitialDatabaseCreation.Designer.cs">
-      <DependentUpon>201604061958316_InitialDatabaseCreation.cs</DependentUpon>
+    <Compile Include="LogData\Migrations\LogDataDB\201604111750351_InitialDatabaseCreation.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201604111750351_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201604111750351_InitialDatabaseCreation.cs</DependentUpon>
     </Compile>
     <Compile Include="LogData\Migrations\LogDataDB\Configuration.cs" />
     <Compile Include="LogData\QsoExchangeTypeSeeds.cs" />
@@ -207,8 +207,8 @@
     <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201604061709021_InitialDatabaseCreation.resx">
       <DependentUpon>201604061709021_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201604061958316_InitialDatabaseCreation.resx">
-      <DependentUpon>201604061958316_InitialDatabaseCreation.cs</DependentUpon>
+    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201604111750351_InitialDatabaseCreation.resx">
+      <DependentUpon>201604111750351_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

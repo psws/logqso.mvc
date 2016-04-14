@@ -137,7 +137,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                      .Select()
                      .SingleOrDefault();
                      
-                    TestContext.WriteLine("Integration_LogDataContext_LogRepository_Query_Log_Include_LogCategory_Return_LogCategorie_Qsoes_Stations_Callsign exception");
+                    //TestContext.WriteLine("Integration_LogDataContext_LogRepository_Query_Log_Include_LogCategory_Return_LogCategorie_Qsoes_Stations_Callsign exception");
 
 
                     //LogforId1s = Logtask as List<Log>;
@@ -162,7 +162,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsNotNull(Logtask.Stations);
                 Assert.AreEqual(Logtask.Stations.Count, 4);
                 Assert.IsNotNull(Logtask.CallSign);
-                Assert.AreEqual(Logtask.CallSign.Call, "cn2r");
+                Assert.AreEqual(Logtask.CallSign.Call, "CN2R");
 
             }
         }
