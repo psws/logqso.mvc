@@ -17,7 +17,15 @@ namespace Logqso.mvc.DataModel.LogData.Models
         }
 
         public LogqsoDataContext()
+#if CONTESTQSODEBUG || CONTESTQSORELEASE
+            : base("Name=LogDataDBhostfest")
+#elif CONTESTQSO1n1DEBUG
+        : base("Name=LogDataDB1and1")
+#elif CONTESTQSOSQL2012
+            : base("Name=LogDataDBsql2012")
+#else
             : base("Name=LogDataDB")
+#endif
         {
         }
 

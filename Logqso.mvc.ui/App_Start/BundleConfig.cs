@@ -33,13 +33,19 @@ namespace Logqso.mvc.ui
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      //"~/Content/jquery-ui.css",
-                        "~/Content/site.css",
+            bundles.Add(new StyleBundle("~/Content").Include(
+                     "~/Content/bootstrap.css",
+                    "~/Content/Themes/Stock/jquery-ui.css",
+                     "~/Content/site.css",
+                       "~/Content/themes/jqx.base.css",
+                      "~/Content/themes/jqx.energyblue.css",
                         "~/Content/logqso.css"));
 
-            
+
+            //turns off bundle minimzations when webconfig compilation debug="false"
+            //some bug hoses UI if minimizatios occur on css and js files
+            BundleTable.EnableOptimizations = false;
+          
             var theme =  Themes.CurrentTheme;
             JQueryUI.eTheme eTheme;
             string  stylePath;

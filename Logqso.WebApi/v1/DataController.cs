@@ -11,6 +11,11 @@ using Logqso.mvc.domain.Interfaces;
 using Repository.Pattern.UnitOfWork;
 using Logqso.mvc.Dto.LogData;
 using Repository.Pattern.Extensions.interfaces;
+using System.IO;
+using System.Web.UI.WebControls;
+using System.Web.Hosting;
+using System.Net.Http.Headers;
+using Logqso.mvc.Dto.LogControl;
 
 
 namespace Logqso.WebApi
@@ -80,81 +85,43 @@ namespace Logqso.WebApi
 
         }
 
-#if false
+        [HttpPost]
         [ResponseType(typeof(HttpResponseMessage))]
-        [Route("GetControlSelections")]
-        public async Task<IHttpActionResult> GetControlSelections()
+        [Route("PostCallsRequest")]
+        public async Task<IHttpActionResult> PostCallsRequest(ControlCategorySettingsDto ControlCategorySettingsDto)
         {
-            string Username = Logqso.mvc.common.definitions.Username;
-
-            bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
-            if (val1)
-            {
-                Username = System.Web.HttpContext.Current.User.Identity.Name;   
-            }
-            ContestControlSettingsEntity ContestControlSettingsEntity = await _ControlService.GetControlSelections(Username);
-            if (ContestControlSettingsEntity == null)
+            DataCalls DataCalls = null;
+            if (DataCalls == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(ContestControlSettingsEntity);
-                //return Ok(ContestControlEntity);
+                return Ok(DataCalls);
             }
-
         }
 
-
-        //one selection group
+        [HttpPost]
         [ResponseType(typeof(HttpResponseMessage))]
-        [Route("GetControlSelection/{Selection}")]
-        public async Task<IHttpActionResult> GetControlSelection(string Selection)
+        [Route("PostDataCallsRequest")]
+        public async Task<IHttpActionResult> PostDataCallsRequest(DataCallSetting DataCallSetting)
         {
-            string Username = Logqso.mvc.common.definitions.Username;
-            bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
-            if (val1)
-            {
-                Username = System.Web.HttpContext.Current.User.Identity.Name;
-            }
-
-            object valueObj = null;
-            switch (Selection)
-            {
-                case "ControlCategorySettingsEntity":
-                    valueObj = await _ControlService.GetControlSelection<ControlCategorySettingsEntity>(Username);
-                    break;
-                case "ControlFiltersSettingsEntity":
-                    valueObj = await _ControlService.GetControlSelection<ControlFiltersSettingsEntity>(Username);
-                    break;
-                case "ControlXaxisSettingsEntity":
-                    valueObj = await _ControlService.GetControlSelection<ControlXaxisSettingsEntity>(Username);
-                    break;
-                case "ControlYaxisSettingsEntity":
-                    valueObj = await _ControlService.GetControlSelection<ControlYaxisSettingsEntity>(Username);
-                    break;
-                default:
-                    break;
-            }
-
-            if (valueObj == null)
+            DataCalls DataCalls = null;
+            if (DataCalls == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(valueObj);
+                return Ok(DataCalls);
             }
-
-
         }
-
 
 
         [HttpPost]
         [ResponseType(typeof(HttpResponseMessage))]
-        [Route("SendControlSelections")]
-        public async Task<IHttpActionResult> SendControlSelections(ContestControlSettingsEntity ContestControlSettingsEntity)
+        [Route("CallsRequest")]
+        public async Task<IHttpActionResult> CallsRequest(dataCallObjDTO dataCallObjDTO)
         {
             string Username = Logqso.mvc.common.definitions.Username;
             bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
@@ -162,77 +129,79 @@ namespace Logqso.WebApi
             {
                 Username = System.Web.HttpContext.Current.User.Identity.Name;
             }
-            bool bSaved = await _ControlService.SaveControlSelections(ContestControlSettingsEntity, Username);
-            if (ContestControlSettingsEntity == null)
+
+
+            DataCalls DataCalls;
+
+            DataCalls = await _LogService.GetCategorizedCallsAsync(dataCallObjDTO, Username);
+
+
+            if (DataCalls == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(bSaved);
-                //return Ok(ContestControlEntity);
+                return Ok(DataCalls);
             }
 
         }
 
-
-        //public async Task<int> doWork()
-        //{
-        //    int control =  await GetContestControlEntitAsync();
-        //    return control;
-        //}
-
-        //public  Task<int> GetContestControlEntitAsync()
-        //{
-        //    int val =  5;
+        [HttpPost]
+        [ResponseType(typeof(HttpResponseMessage))]
+        [Route("UpdateChart")]
+        public async Task<IHttpActionResult> UpdateChartSettings(ChartCtlDataSettingsDto ChartCtlDataSettingsDto)
+        {
+            string Username = Logqso.mvc.common.definitions.Username;
+            bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+            if (val1)
+            {
+                Username = System.Web.HttpContext.Current.User.Identity.Name;
+            }
             
-        //    return Task.FromResult(val);
+            MemoryStream MemoryStream = null;
+            HttpResponseMessage HttpResponseMessage;
+            try
+            {
+                _unitOfWorkAsync.BeginTransaction();
 
-        //}
+                MemoryStream = await _LogService.UpdateChartSettingsAsync(ChartCtlDataSettingsDto, Username);
 
-        // GET: api/Controls/5
-        //[Route("{id:int}")]
-        //[Route("GetaBook/{id:int}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+                //HttpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
+                HttpResponseMessage = Request.CreateResponse(HttpStatusCode.OK);
+                //String filePath = HostingEnvironment.MapPath("~/Images/HT.jpg");
+                //FileStream fileStream = new FileStream(filePath, FileMode.Open);
+                //Image image = System.Drawing.Image.FromStream(fileStream);
+                //MemoryStream memoryStream = new MemoryStream();
+                //image.Save(memoryStream, ImageFormat.Jpeg);
 
-        // POST: api/Controls
-        //[Route("")]
-        public void Post([FromBody]string value)
-        {
+                //HttpResponseMessage.Content = new StreamContent(MemoryStream);
 
-                try
+                HttpResponseMessage.Content = new ByteArrayContent(MemoryStream.ToArray());
+                HttpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+                // save
+                var saveChangesAsync = _unitOfWorkAsync.SaveChanges();
+
+
+                _unitOfWorkAsync.Commit();
+                if (MemoryStream == null )
                 {
-                    _unitOfWorkAsync.BeginTransaction();
-
-                    //_ControlService.Insert(new ContestControlEntity { CustomerID = "YODA", CompanyName = "SkyRanch", ObjectState = ObjectState.Added });
-                    //_ControlService.Insert(new ContestControlEntity { CustomerID = "JEDI", CompanyName = "SkyRanch", ObjectState = ObjectState.Added });
-
-
-                    // save
-                    var saveChangesAsync = _unitOfWorkAsync.SaveChanges();
-
-
-                    _unitOfWorkAsync.Commit();
+                    return NotFound();
                 }
-                catch (Exception e)
+                else 
                 {
-                    _unitOfWorkAsync.Rollback();
+                    return ResponseMessage(HttpResponseMessage);
+                    //return Ok(MemoryStream);
+
                 }
+            }
+            catch (Exception e)
+            {
+                _unitOfWorkAsync.Rollback();
+                return Ok(false);
+
+            }
         }
 
-        // PUT: api/Controls/5
-        //[Route("{id:int}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Controls/5
-        public void Delete(int id)
-        {
-        }
-#endif
     }
 }

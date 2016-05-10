@@ -1,0 +1,152 @@
+﻿https://bubblogging.wordpress.com/2011/12/31/mvc-data-controller-view/
+
+1. Passing Data From a Controller to a View
+
+In an MVC request processing model, controllers are executed before views are rendered. It is pretty important to understand how to pass data from a controller to a view.
+•ViewData
+•ViewBag
+•TempData
+•View Model Object
+•Strongly-typed View Model Object
+
+
+
+2. ViewData
+
+The simplest way to pass data from Controllers to Views is to use the “ViewData” property.
+•public ViewDataDictionary ViewData { get; set; }
+
+You can use the “ViewData” property, which is avaiable from both a Controller object and a View page. It returns a “ViewDataDictionary” object. Assign a value with a key in the controller and read the value using the key in the View page.
+ 
+// Controller class - ControllerBase class has a property "ViewData"
+public ActionResult Index()
+{
+  ViewData["Message"] = "Hello, World";
+  return View();
+}
+ 
+// in View page
+The message is <%: ViewData["Message"] %>
+========================================================
+3. ViewBag
+•public Object ViewBag { get; }
+
+MVC3 provides a new data object “ViewBag“.
+•ViewData is a dictionary of objects that are accessible using strings as keys.
+•ViewBag uses the dynamic feature that was added into C# 4. It allows an object to dynamically have properties added to it. So with a ViewBag, you can use the “.” notation.
+ 
+// Controller class - ControllerBase class has a property "ViewBag"
+public ActionResult Index()
+{
+  ViewBag.Message = "Hello, World";
+  return View();
+}
+ 
+// in View page
+The message is @ViewBag.Message
+==========================================================
+
+4. TempData
+
+The “TempData” is another dictionary for storing temporary data like the “ViewBag“.  The key difference is that “TempData” is deleted at the end of the HTTP request.
+•public TempDataDictionary TempData { get; set; }
+
+“TempData” is similar to Session data, except that “TempData” values are marked for deletion when they are read, and they are removed when the request has been processed.
+
+The “System.Web.Mvc.TempDataDictionary” class provides “Keep()” and “Peek()” methods:
+•public void Keep(string key) //  marks the specified key in the dictionary for retention
+•public Object Peek(string key) // returns an object without marking the key for deletion
+==================================================================
+
+5. View Model Object – WebFormViewEngine
+
+You can pass any object as a model to a view using the one of the overloaded “View()” helper methods.
+•ViewResult View(Object model)
+•ViewResult View(string viewName, Object model)
+•ViewResult View(string viewName, string masterName, Object model)
+
+In a view, you can acsess this object through the “Model” property. You do not have a code-behind file
+ for a view anymore but actually the view is a subclass of the “System.Web.Mvc.ViewPage” class.
+•public Object Model { get; }
+
+Note that the “Model” property is the type of “Object“. Therefore you need to cast it before accessing data.
+At first, you need to prepare data as a Model class.
+
+public clss Product { ... }
+In the action method, create a data (Model) object and pass it to the View.
+ 
+public ActionResult Index()
+{
+  Product p = new Product();
+  p.Name = "Toy";
+  return View(p);
+}
+ 
+Now in a view, you can access the data you passed from the controller.
+
+Product : <%: ((Product)Model).Name %>
+==========================================================
+
+6. Strongly-Typed View Model Object – WebFormViewEngine
+
+Wouldn’t it be nice if we can pass strongly-typed data from a Controller to a View?
+The View page needs to know which type of data is passed from a Controller. Specify the type in the “@Page” directive.
+ 
+<%@ Page Inherits="System.Web.Mvc.ViewPage<Product>" %>
+
+The stronly typed views derive from the “System.Web.Mvc.ViewPage<TModel>” generic class.
+In the View Page, use the “Model” property to access data passed from the controller.
+ 
+<h2> Product Name: <%: Model.Name %> </h2>
+=============================================================
+
+7. Strongly-Typed View Model Object – Razor
+
+When you use a “Razor” view engine, the view derives from “System.Web.Mvc.WebViewPage<TModel>” class.
+Rather than using the “@Page” directive, you can define the model type like this:
+ 
+@model Mvc3App.Models.Product
+
+Now you are free to access data in a view.
+ 
+<h2> Product: @Model.Name </h2>
+=====================================================================
+
+8. Best Practices
+
+IMHO, the best way to pass data from a controller to a view is to use the stronly-typed view model (with a Razor syntax if possible).
+•Do not pass a domain model object directly to a view
+•Create a view model in the “Models” folder
+•Include all data object in a view model
+ 
+namespace Mvc3App.Models
+{
+  public class Product
+  {
+    public string Name { get; set; }
+  }
+  public class ProductViewModel
+  {
+    public Product Product { get; set; }
+    public string SalesPerson { get; set; }
+  }
+}
+ 
+public class ProductController : Controller
+{
+  public ActionResult Info()
+  {
+    ProductViewModel ProductViewModel = new ProductViewModel
+    {
+      Product = new Product { Name = "Toy" },
+      SalesPerson = "Homer Simpson"
+    };
+    return View(ProductViewModel);
+  }
+}
+ 
+@model Mvc3App.Models.ProductViewModel
+@{ ViewBag.Title = "Info"; }
+<h2>Product: @Model.Product.Name</h2>
+<p>Sold by: @Model.SalesPerson</p>
+ 

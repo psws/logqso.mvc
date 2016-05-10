@@ -10,7 +10,7 @@ namespace Logqso.mvc.Dto.LogControl
     {
         public string FiltBand { get; set; }
         public string FiltContinent { get; set; }
-        public string FiltCountryInnerHTML { get; set; }
+        public CountryPrefixtype FiltCountryInnerHTML { get; set; }
         public string FiltCQZone { get; set; }
         public bool Disabled { get; set; }
     }

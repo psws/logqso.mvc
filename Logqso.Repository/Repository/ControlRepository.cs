@@ -84,16 +84,30 @@ namespace Logqso.Repository
 
 
 
-        public static IEnumerable<string> GetFiltPrefixNames(this IRepository<FiltPrefix> repository)
+        public static IEnumerable<CountryPrefixtype> GetFiltPrefixNames(this IRepository<FiltPrefix> repository)
         {
             var FiltPrefixes = repository.Queryable();
+            int index = 0;
             //var query = FiltPrefixes.OrderBy(c => c.CountryName).Select(c => c.CountryName).ToList();
             //var query = FiltCountrys.Select(c => c.CountryName).OrderBy(CountryName).ToList();
             var query = (from e in FiltPrefixes
-                        orderby e.CountryName
-                         select (e.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + e.FiltPref)).ToList();
-            
+                         orderby e.CountryName
+                         select new CountryPrefixtype
+                         {
+                             key = 1,
+                             value = e.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + e.FiltPref
+                         }).ToList();
 
+                         //select (e.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + e.FiltPref)).ToList();
+
+            if (query != null)
+            {
+                foreach (var item in query)
+                {
+                    item.key = index++;
+                }
+                
+            }
             return query; 
         }
         public static IEnumerable<string> GetFiltBandNames(this IRepository<FiltBand> repository)
@@ -184,22 +198,29 @@ namespace Logqso.Repository
             var fluent = repository.Query(t => t.UserName == Username).Include(t => t.FiltPrefix);
 
             FiltDefaullt FiltDefaullt = fluent.Select().First();
-            //FiltDefaullt FiltDefaullt = Settings.Where(t=>t.UserName == "default").First();
 
-            ControlFiltersSettingsDto.FiltBand = Enum.GetName(typeof(CatBandEnum), FiltDefaullt.FiltBnd);
-            ControlFiltersSettingsDto.FiltContinent = Enum.GetName(typeof(ContinentEnum), FiltDefaullt.FiltCont);
-            //ControlFiltersSettingsEntity.FiltCountry = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + FiltDefaullt.FiltPref;
-            //when setting Val of select, you need to use spaces not &nbsp;
+            //now we need to get the index of the FiltPrefix
+            //No index in DB
+            IRepository<FiltPrefix> FiltPrefixRepository = repository.GetRepository<FiltPrefix>();
+            IEnumerable<CountryPrefixtype> CountryPrefixtypes = GetFiltPrefixNames(FiltPrefixRepository);
+            var CountryPrefixtype  = CountryPrefixtypes.Where(x=>x.value.Contains(FiltDefaullt.FiltPrefix.CountryName) ).FirstOrDefault();
+            if (CountryPrefixtype != null)
+	        {
+                    ControlFiltersSettingsDto.FiltCountryInnerHTML = new mvc.Dto.LogControl.CountryPrefixtype();
+                    ControlFiltersSettingsDto.FiltCountryInnerHTML.key = CountryPrefixtype.key;
+                    ControlFiltersSettingsDto.FiltCountryInnerHTML.value = CountryPrefixtype.value;
+	        }
 
-            if (FiltDefaullt.FiltPrefix.CountryName != "ALL")
 
-            {
-                ControlFiltersSettingsDto.FiltCountryInnerHTML = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + FiltDefaullt.FiltPref;
-            }
-            else
-            {
-                ControlFiltersSettingsDto.FiltCountryInnerHTML = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + FiltDefaullt.FiltPref;  //no prefix
-            }
+            ////if (FiltDefaullt.FiltPrefix.CountryName != "ALL")
+
+            ////{
+            ////    ControlFiltersSettingsDto.FiltCountryInnerHTML.value = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + FiltDefaullt.FiltPref;
+            ////}
+            ////else
+            ////{
+            ////    ControlFiltersSettingsDto.FiltCountryInnerHTML.value = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + FiltDefaullt.FiltPref;  //no prefix
+            ////}
                 ////find index
                 //var FiltPrefixes = repository.GetRepository < FiltPrefix >(). Queryable();
                 ////var index = FiltPrefixes.OrderBy(t => t.CountryName).AsEnumerable().TakeWhile(t => t.CountryName != FiltDefaullt.FiltPrefix.CountryName).ToList();//.Count();
@@ -210,6 +231,15 @@ namespace Logqso.Repository
                 //ControlFiltersSettingsEntity.FiltCountryIndex = query.IndexOf(ControlFiltersSettingsEntity.FiltCountry);
 
             ControlFiltersSettingsDto.FiltCQZone = FiltDefaullt.FiltCQZoneVal;
+
+            
+            //FiltDefaullt FiltDefaullt = Settings.Where(t=>t.UserName == "default").First();
+
+            ControlFiltersSettingsDto.FiltBand = Enum.GetName(typeof(CatBandEnum), FiltDefaullt.FiltBnd);
+            ControlFiltersSettingsDto.FiltContinent = Enum.GetName(typeof(ContinentEnum), FiltDefaullt.FiltCont);
+            //ControlFiltersSettingsEntity.FiltCountry = FiltDefaullt.FiltPrefix.CountryName + "&nbsp;&nbsp;&nbsp;&nbsp;" + FiltDefaullt.FiltPref;
+            //when setting Val of select, you need to use spaces not &nbsp;
+
 
             return ControlFiltersSettingsDto;
         }

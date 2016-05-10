@@ -15,6 +15,7 @@ using Logqso.mvc.Entities.LogDataEntity;
 using Logqso.mvc.Dto.LogData;
 using AutoMapper;
 using System.Threading.Tasks;
+using Logqso.mvc.Dto.LogControl;
 
 
 
@@ -246,6 +247,71 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
 
             }
         }
+
+
+       [TestMethod]  
+        public async Task Integration_LogDataContext_LogService_Log_await_GetDataCallInfoSelectionsAsync_Return_DataCalls()
+        {
+            bool caught = false;
+            // context object LogDataContext matches the same name used for LogqsoData DB
+            using (IDataContextAsync context = new LogqsoDataContext())
+            //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
+            using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
+            {
+
+                IRepositoryAsync<Log> _logRepository = new Repository<Log>(context, unitOfWork);
+                //Task<DataCalls> DataCalls = null;
+                DataCalls DataCalls = null;
+                string SelectedCall=  "CN2R";
+
+                var logService = new LogService(_logRepository);
+                try
+                {
+
+
+                    dataCallObjDTO dataCallObjDTO = new Dto.LogData.dataCallObjDTO()
+                    {
+                        ControlCategorySettingsDto = new   ControlCategorySettingsDto()
+                        {
+                            CatAssisted = Enum.GetName( typeof(CatAssistedEnum), CatAssistedEnum.ASSISTED ).Replace('_','-'),
+                            CatBand = Enum.GetName( typeof(CatBandEnum), CatBandEnum.ALL ),
+                            CatNoOfTx = Enum.GetName( typeof(CatNoOfTxEnum), CatNoOfTxEnum.TWO ),
+                            CatOperator = Enum.GetName(typeof(CatOperatorEnum), CatOperatorEnum.MULTI_OP).Replace('_', '-'),
+                            CatPower = Enum.GetName( typeof(CatPowerEnum), CatPowerEnum.HIGH ),
+                            CatOperatorOverlay = Enum.GetName( typeof(CatOperatorOverlayEnum), CatOperatorOverlayEnum.NONE )
+                        },
+                        DataCallSetting = new DataCallSetting()
+                        {
+                            CallGroup =   CallGroupEnum.CALL1,
+                            SelectedCall =  SelectedCall,
+                            SelectedContestName = "CQWWSSB2015"
+                        }
+                    };
+
+                    DataCalls = await logService.GetCategorizedCallsAsync(dataCallObjDTO, "default");
+                    //GetCategorizedCallsAsync() is  async method of Logservice.
+                    //awaut on logService.GetCategorizedCallsAsync() runs asynchronously
+                    //converts return type Task<DataCalls> to DataCalls
+                    //it will return a DataCalls
+
+                    Assert.IsNotNull(DataCalls);
+                    Assert.IsInstanceOfType(DataCalls, typeof(DataCalls) );
+                    Assert.AreEqual(DataCalls.CallGroup, CallGroupEnum.CALL1 );
+                    Assert.AreEqual(DataCalls.SelectedCall, "CN2R");
+                    Assert.IsInstanceOfType(DataCalls.Calls, typeof(ICollection<CallGroupCall>));
+                    Assert.AreNotEqual(DataCalls.Calls.Count(), 0);
+                    Assert.AreEqual(DataCalls.Calls.ElementAt(0).Call.Substring(0,1), SelectedCall.Substring(0,1) );
+              }
+                catch (Exception ex)
+                {
+                    TestContext.WriteLine(string.Format("Integration_LogDataContext_LogService_Log_await_GetDataCallInfoSelectionsAsync_Return_DataCalls exception {0}", ex.Message));
+                    caught = true;
+                }
+                Assert.IsFalse(caught);  //exception
+
+            }
+        }
+
 
     }
 }

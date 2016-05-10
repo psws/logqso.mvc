@@ -120,7 +120,7 @@
                             <label class="lq-inline" for="chk1"> Disable</label>
                             <input class="lq-inline" type="checkbox" id="chk1" aria-label="...">
                         </span>
-                        <button id="Call1" data-modal-id="popup2">cn2r</button>
+                        <button id="Call1" data-modal-id="popupCall1">cn2r</button>
 
                         <div class="lq-inline-block">
                             <label for="Station1">Station</label>
@@ -151,7 +151,7 @@
                             <label class=" lq-inline" for="chk2"> Disable</label>
                             <input class="lq-inline" type="checkbox" id="chk2" aria-label="...">
                         </span>
-                        <button id="Call2" data-modal-id="popup2">cn2r</button>
+                        <button id="Call2" data-modal-id="popupCall2">cn2r</button>
                         <div class="lq-inline-block">
                             <label for="Station2">Station</label>
                             <select name="Station2" id="Station2"></select>
@@ -180,7 +180,7 @@
                             <label class=" lq-inline" for="chk3"> Disable</label>
                             <input class="lq-inline" type="checkbox" id="chk3" aria-label="...">
                         </span>
-                        <button id="Call3" data-modal-id="popup2">cn2r</button>
+                        <button id="Call3" data-modal-id="popupCall3">cn2r</button>
                         <div class="lq-inline-block">
                             <label for="Station3">Station</label>
                             <select name="Station3" id="Station3"></select>
@@ -200,7 +200,7 @@
         <div class="row">
 
             <div class="col-md-12 " id="graph">
-                <img src="~/image/ChartImg.png" class="img-responsive lq-graph" alt="Missimg">
+                <img id="ChartRate" src="~/image/ChartImg.png" class="img-responsive lq-graph" alt="Missimg">
             </div>
         </div>
     </div>
@@ -282,7 +282,7 @@
 
 
 
-    <div id="popup" class="modal-box clear ">
+    <div id="popup" class="modal-box  clear ">
         <header>
             <a href="#" class="js-modal-close close" title="Cancel selection">X</a>
             <h4> Title</h4>
@@ -313,7 +313,7 @@
 
 
 
-    <div id="popup2" class="modal-box">
+    <div id="popupCall1" class="modal-box">
         <header>
             <a href="#" class="js-modal-close close">×</a>
             <h4> Title</h4>
@@ -321,39 +321,65 @@
             @*<h3><a href="http://www.jqueryscript.net/tags.php?/Modal/">Modal</a> Title</h3>*@
         </header>
         <div class="modal-body">
-            <div id='tabs'>
+            <div id='tabs1'>
                 <ul style='margin-left: 5px;'>
                     @*<li ><a href="#CTab1">1-9</a></li>
-                    <li><a href="#CTabA">A</a></li>
-                    <li><a href="#CTabB">B</a></li>
-                    <li><a href="#CTabC">C</a></li>
-                    <li><a href="#CTabD">D</a></li>
-                    <li><a href="#CTabE">E</a></li>
-                    <li><a href="#CTabF">F</a></li>
-                    <li><a href="#CTabG">G</a></li>
-                    <li><a href="#CTabH">H</a></li>
-                    <li><a href="#CTabI">I</a></li>
-                    <li><a href="#CTabJ">J</a></li>
-                    <li><a href="#CTabK">K</a></li>*@
+                        <li><a href="#CTabA">A</a></li>
+                        <li><a href="#CTabB">B</a></li>
+                        <li><a href="#CTabC">C</a></li>
+                        <li><a href="#CTabD">D</a></li>
+                        <li><a href="#CTabE">E</a></li>
+                        <li><a href="#CTabF">F</a></li>
+                        <li><a href="#CTabG">G</a></li>
+                        <li><a href="#CTabH">H</a></li>
+                        <li><a href="#CTabI">I</a></li>
+                        <li><a href="#CTabJ">J</a></li>
+                        <li><a href="#CTabK">K</a></li>*@
                 </ul>
                 @*<div id="CTab1">Content 1</div>
-                <div id="CTabA">Content A</div>
-                <div id="CTabB">Content B</div>
-                <div id="CTabC">Content B</div>
-                <div id="CTabD">Content B</div>
-                <div id="CTabE">Content B</div>
-                <div id="CTabF">Content B</div>
-                <div id="CTabG">Content B</div>
-                <div id="CTabH">Content B</div>
-                <div id="CTabI">Content B</div>
-                <div id="CTabJ">Content B</div>
-                <div id="CTabK">Content B</div>*@
-           </div>
+                    <div id="CTabA">Content A</div>
+                    <div id="CTabB">Content B</div>
+                    <div id="CTabC">Content B</div>
+                    <div id="CTabD">Content B</div>
+                    <div id="CTabE">Content B</div>
+                    <div id="CTabF">Content B</div>
+                    <div id="CTabG">Content B</div>
+                    <div id="CTabH">Content B</div>
+                    <div id="CTabI">Content B</div>
+                    <div id="CTabJ">Content B</div>
+                    <div id="CTabK">Content B</div>*@
+            </div>
         </div>
         @*<footer>
-            <a href="#" class="js-modal-close">Close Button</a>
-        </footer>*@
+                <a href="#" class="js-modal-close">Close Button</a>
+            </footer>*@
     </div>
+    <div id="popupCall2" class="modal-box">
+        <header>
+            <a href="#" class="js-modal-close close">×</a>
+            <h4> Title</h4>
+        </header>
+        <div class="modal-body">
+            <div id='tabs2'>
+                <ul style='margin-left: 5px;'>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="popupCall3" class="modal-box">
+        <header>
+            <a href="#" class="js-modal-close close">×</a>
+            <h4> Title</h4>
+        </header>
+        <div class="modal-body">
+            <div id='tabs3'>
+                <ul style='margin-left: 5px;'>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
 
 </div>
 <div id="updateProgressDiv" class="updateProgress" style="display: none;" >

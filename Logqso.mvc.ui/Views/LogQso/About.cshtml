@@ -1,0 +1,27 @@
+﻿@model Logqso.mvc.ui.Models.AssemblyViewModel
+@{ ViewBag.Title = "About"; }
+<h2>Product: @Model.Assembly.ProductName</h2>
+<p>Description: @Model.Assembly.AppDescription</p>
+
+@*<h2>@ViewContext.HttpContext.ApplicationInstance.GetType().BaseType.Assembly.GetName().FullName.ToString();</h2>
+    <h3>@ViewBag.Message</h3>*@
+@*@ViewContext.HttpContext.ApplicationInstance.GetType().BaseType.Assembly.GetName().Version.ToString();*@
+<div class="panel-body" font-bold="True" font-size="X-Large" forecolor="#3399FF" style="width: 700px; text-align: left">
+    <div class ="lq-inline-block">
+        Company: @Model.Assembly.CompanyName
+</div>
+    <div class="lq-inline-block" style="float:right; margin-right:100px">
+        Copyright# :@Model.Assembly.Copyright
+    </div>
+    <br /><br />
+    <div>
+        <div class="lq-inline-block">
+            @Html.AppVersion()
+        </div>
+        <div class="lq-inline-block" style="float:right; ">
+            <img src="~/Image/pswsblue.jpg" width="300" style="margin-right:70px" />
+        </div>
+    </div>
+</div>
+
+

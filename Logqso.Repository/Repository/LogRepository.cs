@@ -10,6 +10,7 @@ using Logqso.mvc.Dto.Interfaces;
 using Logqso.mvc.Entities.LogDataEntity;
 using Repository.Pattern.Repositories;
 using Logqso.mvc.common.Enum;
+using System.Data;
 
 namespace Logqso.Repository.Repository
 {
@@ -157,26 +158,210 @@ namespace Logqso.Repository.Repository
             return Task.FromResult(DataCallInfoDtos);
         }
 
-        public static IEnumerable<Log> GetDataLogContestsStationsSelections(this IRepository<Log> repository, string Username)
+
+        public static async Task<DataTable> GenerateChartAsync(this IRepositoryAsync<Log> LogRepository, ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username)
         {
-            List<Log> Log = null;
+            return await GenerateChart(LogRepository, ChartCtlDataSettingsDto, username);
+        }
 
-            //tracked
-            //log1 = repository.Query(x => x.UserName == Username)
-            //    .Include(x => x.Station).Include(x => x.CallSign)
-            //    .Select().OrderBy(t => t.SessionName).ThenBy(t => t.CallGroup)
-            //    .ToList();
-
-            return Log;
+        public static Task<DataTable> GenerateChart(this IRepositoryAsync<Log> _LogRepository, ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username)
+        {
+            string filepath = "chart.png";
+            DataTable DataTable = new DataTable();
+            return Task.FromResult(DataTable);
         }
 
 
+        public static async Task<DataCalls> GetCategorizedCallsAsync(this IRepository<Log> LogRepository, LogCategory LogCategory,
+            string SelectedContestName, string CallChar, Logqso.mvc.common.Enum.CallGroupEnum CallGroup, string Username)
+        {
+            return await GetCategorizedCalls(LogRepository, LogCategory, SelectedContestName, CallChar, CallGroup,  Username);
+        }
 
-    }
-    public class test9
-    {
-        string key;
-        string value;
-    };
+
+        public static Task<DataCalls> GetCategorizedCalls(this IRepository<Log> _LogRepository, LogCategory LogCategory,
+            string SelectedContestName, string SelectedCall, Logqso.mvc.common.Enum.CallGroupEnum CallGroup, string Username)
+        {
+            //The passed in _LogRepository has a DataContext from Dependency resolver
+            //The Unit of work DataContext does not match the DataContext of the _Logrespository
+            //SOLUTION: use the _LogRepository to get a LogRespositpry with the  UoW DataContext
+            //This allows the join below to have all of the expression trees point to the same DBContext.
+            //This hook fixes a problem that should not occur,
+
+            var LogRepository = _LogRepository.GetRepository<Log>();
+
+            DataCalls DataCalls = new DataCalls();
+            string CallChar = SelectedCall.Substring(0, 1);
+
+            var CallSignRepository = LogRepository.GetRepository<CallSign>();
+            IQueryFluent<CallSign> CallSigns = CallSignRepository.Query();
+            var CallSignQ = CallSigns.SelectQueryable(false);
+
+
+
+            var LogCategoryRepository = LogRepository.GetRepository<LogCategory>();
+                IQueryFluent<LogCategory> LogCategorys = LogCategoryRepository.Query();
+                var LogCategoryQ = LogCategorys.SelectQueryable(false);
+
+                //LogCategory LogCategoryQ = LogCategorys
+                //    .SelectQueryable(false).Where(
+                //            l => l.CatAssistedEnum == LogCategory.CatAssistedEnum &&
+                //                l.CatBandEnum == LogCategory.CatBandEnum &&
+                //                l.CatNoOfTxEnum == LogCategory.CatNoOfTxEnum &&
+                //                l.CatOperatorEnum == LogCategory.CatOperatorEnum &&
+                //                l.CatOperatorOverlayEnum == LogCategory.CatOperatorOverlayEnum &&
+                //                l.CatPowerEnum == LogCategory.CatPowerEnum
+                //                       ).SingleOrDefault();
+
+
+                var ContestRepository = LogRepository.GetRepository<Contest>();
+                IQueryFluent<Contest> Contests = ContestRepository.Query();
+                var ContestQ = Contests.
+                    SelectQueryable(false).Where(x => x.ContestName == SelectedContestName).FirstOrDefault();
+
+
+
+                try
+                {
+                    IQueryFluent<Log> Logs = LogRepository.Query();
+                    var LogQ1 = Logs
+                        .Include(x => x.CallSign)
+                        //.Include(x=>x.LogCategory)
+                        .SelectQueryable(false).Where(x => x.ContestId == ContestQ.ContestId);
+
+                    if (LogCategory.CatAssistedEnum != (int)CatAssistedEnum.ALL)
+                    {
+                        LogQ1 = (from lq in LogQ1
+                                        join lc in LogCategoryQ on lq.LogCategoryId equals lc.LogCategoryId
+                                        where (lc.CatAssistedEnum == LogCategory.CatAssistedEnum)
+                                        select lq).AsQueryable();
+                    }
+
+                    if (LogCategory.CatBandEnum != (int)CatBandEnum.ALL)
+                    {
+                            LogQ1 = (from lq in LogQ1
+                                        join lc in LogCategoryQ on lq.LogCategoryId equals lc.LogCategoryId
+                                        where (lc.CatBandEnum == LogCategory.CatBandEnum)
+                                        select lq).AsQueryable();
+
+                    }
+
+#if true
+                   if (LogCategory.CatNoOfTxEnum != (int)CatNoOfTxEnum.ALL)
+                    {
+                        LogQ1 = (from lq in LogQ1
+                                    join lc in LogCategoryQ on lq.LogCategoryId equals lc.LogCategoryId
+                                    where (lc.CatNoOfTxEnum == LogCategory.CatNoOfTxEnum)
+                                    select lq).AsQueryable();
+
+                    }
+
+                    if (LogCategory.CatOperatorEnum != (int)CatOperatorEnum.ALL)
+                    {
+                        LogQ1 = (from lq in LogQ1
+                                    join lc in LogCategoryQ on lq.LogCategoryId equals lc.LogCategoryId
+                                    where (lc.CatOperatorEnum == LogCategory.CatOperatorEnum)
+                                    select lq).AsQueryable();
+
+                    }
+
+                    if (LogCategory.CatOperatorOverlayEnum !=null && LogCategory.CatOperatorOverlayEnum != (int)CatOperatorOverlayEnum.NONE)
+                    {
+                        LogQ1 = (from lq in LogQ1
+                                    join lc in LogCategoryQ on lq.LogCategoryId equals lc.LogCategoryId
+                                    where (lc.CatOperatorEnum == LogCategory.CatOperatorEnum)
+                                    select lq).AsQueryable();
+
+                    }
+
+
+                    if (LogCategory.CatPowerEnum != (int)CatPowerEnum.ALL)
+                    {
+                        LogQ1 = (from lq in LogQ1
+                                    join lc in LogCategoryQ on lq.LogCategoryId equals lc.LogCategoryId
+                                    where (lc.CatPowerEnum == LogCategory.CatPowerEnum)
+                                    select lq).AsQueryable();
+
+                    }
+#endif
+                    //var Log = LogQ.ToList();
+
+                    //var cs = CallSignQ.Where(x => x.Call.Substring(0, 1) == CallChar).ToList();
+                    //var res = (from lq in LogQ
+                    //           join lc in CallSignQ on lq.CallsignId equals lc.CallSignId
+                    //           where (lc.Call.Substring(0, 1) == CallChar)
+                    //           select lq
+                    //                ).ToList();
+
+                    //var res2 = (from lq in LogQ
+                    //           join lc in CallSignQ on lq.CallsignId equals lc.CallSignId
+                    //           where (lc.Call.Substring(0, 1) == CallChar)
+                    //           select lc
+                    //                ).ToList();
+
+                    if (CallChar == "1")
+                    {//get all calls beginning with 1 through nine.
+                       var  CallGroupCalls = (from lq in LogQ1
+                                          join lc in CallSignQ on lq.CallsignId equals lc.CallSignId
+                                          where new[] { "1", "2", "3", "4", "5", "6","7", "8", "9" }.Contains(lc.Call.Substring(0, 1) )
+
+                                          select new CallGroupCall
+                                          {
+                                              CallSignID = lq.CallSign.CallSignId,
+                                              Call = lq.CallSign.Call
+
+                                          }
+                                        ).OrderBy(x => x.Call).ToList();
+
+                       DataCalls.CallGroup = CallGroup;
+                       DataCalls.SelectedCall = SelectedCall;
+                       DataCalls.Calls = CallGroupCalls;
+                    }
+                    else
+                    {
+                        var CallGroupCalls = (from lq in LogQ1
+                                          join lc in CallSignQ on lq.CallsignId equals lc.CallSignId
+                                          where (lc.Call.Substring(0, 1) == CallChar)
+                                          select new CallGroupCall
+                                          {
+                                              CallSignID = lq.CallSign.CallSignId,
+                                              Call = lq.CallSign.Call
+
+                                          }
+                                        ).OrderBy(x => x.Call).ToList();
+
+                        DataCalls.CallGroup = CallGroup;
+                        DataCalls.SelectedCall = SelectedCall;
+                        DataCalls.Calls = CallGroupCalls;
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+
+
+
+                //tracked
+                //log1 = repository.Query(x => x.UserName == Username)
+                //    .Include(x => x.Station).Include(x => x.CallSign)
+                //    .Select().OrderBy(t => t.SessionName).ThenBy(t => t.CallGroup)
+                //    .ToList();
+
+                return Task.FromResult(DataCalls); ;
+            }
+
+
+
+        }
+
+        public class test9
+        {
+            string key;
+            string value;
+        };
 
 }

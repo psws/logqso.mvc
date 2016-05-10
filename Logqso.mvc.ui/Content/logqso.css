@@ -222,7 +222,6 @@ span[id^='enb_dis']{
     vertical-align: middle;
     color: green;
     font-weight: bold; 
-
 }
 
 /*2 column list*/
@@ -295,6 +294,28 @@ span[id^='enb_dis']{
     color:white
 }
 
+.TabDivLiCol {
+    overflow: auto;
+    max-height: 208px;
+    margin-bottom:10px;
+    padding-left: 10px;
+    padding-right:5px;
+
+}
+
+.liCol {
+    padding: 0px;
+    margin: 0px;
+    float: left;
+    list-style: none;
+}
+
+.liCol li:hover {
+    cursor: pointer; 
+    background-color: #0073ea; 
+    color:white
+}
+
 
 .jqxtab-tab-button{
     font-size:70%;
@@ -314,6 +335,7 @@ span[id^='enb_dis']{
   z-index: 1000;
   /*width: 98%;*/
   /*width:500px;*/
+    width:500px;
   background: white;
   border-bottom: 1px solid #aaa;
   border-radius: 4px;

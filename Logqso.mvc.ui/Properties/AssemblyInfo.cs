@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Logqso.mvc.ui")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("ContestQso")]
+[assembly: AssemblyDescription("Web application for contest analysis")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Logqso.mvc.ui")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCompany("Perpetual Software Solutions")]
+[assembly: AssemblyProduct("ContestQso")]
+[assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

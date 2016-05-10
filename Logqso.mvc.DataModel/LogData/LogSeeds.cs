@@ -25,7 +25,7 @@ namespace Logqso.mvc.DataModel.LogData
                                     LogCategoryId = 2, QsoExchangeNumber = 33, 
                                     QsoDatabaseServerInstance =@"PSS60\SQL2014",  QsoDatabaseInstance = "LogqsoData",QsoDatabaseTableName = "Qso"},
                 new Log {   LogId = 3, CallsignId = 3,  ContestId = "CQWWSSB2015", ContestYear = DateTime.Parse("10/23/2015 00:00:00"),
-                                    LogCategoryId = 6, QsoExchangeNumber = 33,
+                                    LogCategoryId = 1, QsoExchangeNumber = 33,
                                     QsoDatabaseServerInstance =@"PSS60\SQL2014", QsoDatabaseInstance = "LogqsoData", QsoDatabaseTableName = "Qso"}
 
                                     

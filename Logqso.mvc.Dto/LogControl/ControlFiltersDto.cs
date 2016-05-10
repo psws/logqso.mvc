@@ -10,7 +10,13 @@ namespace Logqso.mvc.Dto.LogControl
     {
         public List<string> FiltBand { get; set; }
         public List<string> FiltContinent { get; set; }
-        public List<string> FiltCountryInnerHTML { get; set; }
+        public List<CountryPrefixtype> FiltCountryInnerHTML { get; set; }
         public List<string> FiltCQZone { get; set; }
     }
+    public class CountryPrefixtype
+    {
+        public int key;
+        public string value;
+    };
+
 }

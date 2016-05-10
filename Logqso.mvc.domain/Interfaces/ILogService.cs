@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Service.Pattern;
 using Logqso.mvc.Entities.LogDataEntity;
 using Logqso.mvc.Dto.LogData;
+using System.IO;
 
 
 namespace Logqso.mvc.domain.Interfaces
@@ -19,6 +20,9 @@ namespace Logqso.mvc.domain.Interfaces
             Task<Log> GetLogById(int i);
             Task<IEnumerable<DataCallInfoDto>> GetDataCallInfoSelections(string Username);
             Task<IEnumerable<DataCallInfoDto>> GetDataCallInfoSelectionsAsync(string username);
+            Task<MemoryStream> UpdateChartSettingsAsync(ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username);
+            Task<MemoryStream> UpdateChartSettings(ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username);
+            Task<DataCalls> GetCategorizedCallsAsync(dataCallObjDTO DataCallSetting, string Username);
  
             
 #if false

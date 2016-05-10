@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Hosting;
 using System.Threading.Tasks;
 using Logqso.mvc.domain.Interfaces;
 using Logqso.mvc.Entities.LogDataEntity;
@@ -13,9 +14,14 @@ using Logqso.Repository.Repository;
 using Logqso.Repository;
 using Logqso.mvc.Dto.LogData;
 using Logqso.mvc.Dto.Interfaces;
+using Logqso.mvc.Dto.LogControl;
 
 using Logqso.mvc.common.Enum;
 using AutoMapper;
+using System.IO;
+using System.Drawing;
+using System.Diagnostics;
+
 
 
 namespace Logqso.mvc.domain
@@ -66,145 +72,62 @@ namespace Logqso.mvc.domain
             return DataCallInfoDtos;
         }
 
-
-#if false
-        //old depredated method
-        public Task<ContestControlsDataEntity> GetContestControlData()
+        public async Task<MemoryStream> UpdateChartSettingsAsync(ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username)
         {
-            ContestControlsDataEntity ContestControlsDataEntity = new ContestControlsDataEntity();
+            MemoryStream MemoryStream = new MemoryStream();
+            //MemoryStream = await _repository.GenerateChartAsync(ChartCtlDataSettingsDto, username);
+//temporary
+            String filePath = HostingEnvironment.MapPath("~/Image/chart.png");
 
-            ContestControlsDataEntity.ControlCategorysEntity = new ControlCategorysEntity();
-            ContestControlsDataEntity.ControlCategorysEntity.CatOperator = _repository.GetContestCategorys();
-
-            return Task.FromResult(ContestControlsDataEntity);
-        }
-#endif
-
-
-#if false
-        public  Task<ContestControlEntity> GetContestControlNames()
-        {
-            ContestControlEntity ContestControlEntity = new ContestControlEntity();
-
-            ContestControlEntity.ControlCategoryEntity = new ControlCategoryEntity();
-            ContestControlEntity.ControlCategoryEntity.CatOperator = _repository.GetContestCategoryNames() as List<string>;
-            var CatAssisteds= _repository.GetRepository<CatAssisted>();
-            ContestControlEntity.ControlCategoryEntity.CatAssisted = CatAssisteds.GetContestAssistedNames();
-            var CatBands = _repository.GetRepository<CatBand>();
-            ContestControlEntity.ControlCategoryEntity.CatBand = CatBands.GetContestBandNames();
-            var CatNoOfTxs = _repository.GetRepository<CatNoOfTx>();
-            ContestControlEntity.ControlCategoryEntity.CatNoOfTx = CatNoOfTxs.GetContestNoOfTxNames();
-            var CatPowers = _repository.GetRepository<CatPower>();
-            ContestControlEntity.ControlCategoryEntity.CatPower = CatPowers.GetContestPowerNames();
-
-            ContestControlEntity.ControlFiltersEntity = new ControlFiltersEntity();
-            var FiltPrefixes = _repository.GetRepository<FiltPrefix>();
-            ContestControlEntity.ControlFiltersEntity.FiltCountryInnerHTML = FiltPrefixes.GetFiltPrefixNames();
-            var FiltBands = _repository.GetRepository<FiltBand>();
-            ContestControlEntity.ControlFiltersEntity.FiltBand = FiltBands.GetFiltBandNames();
-            var FiltContinents = _repository.GetRepository<FiltContinent>();
-            ContestControlEntity.ControlFiltersEntity.FiltContinent = FiltContinents.GetFiltContinentNames();
-            var FiltCQZones = _repository.GetRepository<FiltCQZone>();
-            ContestControlEntity.ControlFiltersEntity.FiltCQZone = FiltCQZones.GetFiltCQZoneNames();
-
-            ContestControlEntity.ControlXaxisEntity = new ControlXaxisEntity();
-            var XaxisDurations = _repository.GetRepository<XaxisDuration>();
-            ContestControlEntity.ControlXaxisEntity.XaxisDuration = XaxisDurations.GetXaxisDurationeVals();
-            var XaxisStartTimes = _repository.GetRepository<XaxisStartTime>();
-            ContestControlEntity.ControlXaxisEntity.XaxisStarttime = XaxisStartTimes.GetXaxisStartTimeNames();
-
-            ContestControlEntity.ControlYaxisEntity = new ControlYaxisEntity();
-            var YaxisFunctions = _repository.GetRepository<YaxisFunction>();
-            ContestControlEntity.ControlYaxisEntity.YaxisFunction = YaxisFunctions.GetYaxisFunctionNames();
-            var YaxisIntervals = _repository.GetRepository<YaxisInterval>();
-            ContestControlEntity.ControlYaxisEntity.YaxisInterval = YaxisIntervals.GetYaxisIntervalVals();
-            var YaxisViewTypes = _repository.GetRepository<YaxisViewType>();
-            ContestControlEntity.ControlYaxisEntity.YaxisViewType = YaxisViewTypes.GetYaxisViewTypeNames();
-
-            return Task.FromResult(ContestControlEntity);
-        }
-
-        public Task<T> GetControlSelection<T>(string Username)
-        {
-            object valueObj =  default(T);
-
-            if (typeof(T) == typeof(ControlCategorySettingsEntity))
+            using (FileStream fs = File.OpenRead(filePath))
             {
-                 var CatDefautResp = _repository.GetRepository<CatDefault>();
-                valueObj  = CatDefautResp.GetControlCategorySettings(Username);
-            }
-            else if (typeof(T) == typeof(ControlFiltersSettingsEntity))
-            {
-                var FiltDefautResp = _repository.GetRepository<FiltDefault>();
-                valueObj = FiltDefautResp.GetControlFilterSettings(Username);
-
-            }
-            else if (typeof(T) == typeof(ControlXaxisSettingsEntity)  )
-            {
-                var XaxisDefautResp = _repository.GetRepository<XaxisDefault>();
-                valueObj = XaxisDefautResp.GetControlXaxisSettings(Username);
-            }
-            else if (typeof(T) == typeof(ControlYaxisSettingsEntity))
-            {
-                var YaxisDefautResp = _repository.GetRepository<YaxisDefault>();
-                valueObj = YaxisDefautResp.GetControlYaxisSettings(Username);
+                fs.CopyTo(MemoryStream);
             }
 
 
-            return Task.FromResult((T)valueObj);
+            //MemoryStream memoryStream = new MemoryStream();
 
+            //string path = Server.MapPath("~/ChartImages/chart.png");
+            //QSORateChart.SaveImage(path, ChartImageFormat.Png);
+
+            //return Task.FromResult(DataCallInfoDtos);
+            return MemoryStream;
         }
 
-
-        public Task<ContestControlSettingsEntity> GetControlSelections(string username)
+        public async Task<MemoryStream> UpdateChartSettings(ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username)
         {
-            ContestControlSettingsEntity ContestControlSettingsEntity = new ContestControlSettingsEntity( );
-            var CatDefautResp = _repository.GetRepository<CatDefault>();
-            ContestControlSettingsEntity.ControlCategorySettingsEntity = CatDefautResp.GetControlCategorySettings(username);
-            var FiltDefautResp = _repository.GetRepository<FiltDefault>();
-            ContestControlSettingsEntity.ControlFiltersSettingsEntity = FiltDefautResp.GetControlFilterSettings(username);
-            var XaxisDefautResp = _repository.GetRepository<XaxisDefault>();
-            ContestControlSettingsEntity.ControlXaxisSettingsEntity = XaxisDefautResp.GetControlXaxisSettings(username);
-            var YaxisDefautResp = _repository.GetRepository<YaxisDefault>();
-            ContestControlSettingsEntity.ControlYaxisSettingsEntity = YaxisDefautResp.GetControlYaxisSettings(username);
+            MemoryStream MemoryStream = null;
+            //MemoryStream = await _repository.GenerateChart(ChartCtlDataSettingsDto, username);
 
-            return Task.FromResult(ContestControlSettingsEntity);
+            //temporary
+            String filePath = HostingEnvironment.MapPath("~/Image/chart.png");
+
+            using (FileStream fs = File.OpenRead(filePath))
+            {
+                fs.CopyTo(MemoryStream);
+            }
+
+            //return Task.FromResult(DataCallInfoDtos);
+            return MemoryStream;
         }
 
-        public Task<bool> SaveControlSelections(ContestControlSettingsEntity ContestControlSettingsEntity, string Username)
+        public async Task<DataCalls> GetCategorizedCallsAsync(dataCallObjDTO dataCallObjDTO, string Username)
         {
-            bool bSaved = false;
+            DataCalls DataCalls = null;
+            //get LogCategory of client
+            LogCategory LogCategory = new LogCategory();
+            SetLogCategory( LogCategory,  dataCallObjDTO.ControlCategorySettingsDto);
 
-            //todo  Call into respositiry to save
-#warning //Todo Need to add SaveControlSelections()
+            Logqso.mvc.common.Enum.CallGroupEnum CallGroup;
+            //Enum.TryParse<CallGroupEnum>(dataCallObjDTO.DataCallSetting.CallGroup.ToString(), out CallGroup);
 
 
-            return Task.FromResult(bSaved);
+            DataCalls = await _repository.GetCategorizedCallsAsync(LogCategory, dataCallObjDTO.DataCallSetting.SelectedContestName,
+                dataCallObjDTO.DataCallSetting.SelectedCall, (CallGroupEnum)dataCallObjDTO.DataCallSetting.CallGroup, Username);
+
+            return DataCalls;
+
         }
-
-
-        //public List<string> GetContestCategoryNames()
-        //{
-        //    List<string> vals  = new List<string>();
-        //        //from c in _repository.Queryable()
-        //    //            select new { CustomerName = c., LibraryName = l.Name };
-        //    //.u_unitOfWork.Repository<CatOperator>.()
-        //    //    (from myRow in dc.CatOperator
-        //    //                                     select myRow.CatOprName).ToList();
-        //    //ContestCategoryEntity.CatPower = (from myRow in dc.CatPower
-        //    //                                  select myRow.CatPowerName).ToList();
-        //    //ContestCategoryEntity.CatBand = (from myRow in dc.CatBand
-        //    //                                 select myRow.CatBandName).ToList();
-        //    //ContestCategoryEntity.CatAssisted = (from myRow in dc.CatAssisted
-        //    //                                     select myRow.CatAssistedName).ToList();
-        //    //ContestCategoryEntity.CatNoOfTx = (from myRow in dc.CatNoOfTx
-        //    //select myRow.CatNoOfTxName).ToList();
-
-        //    return vals;
-
-        //}
-
-#endif
 
         public override void Insert(Log entity)
         {
@@ -218,6 +141,152 @@ namespace Logqso.mvc.domain
             base.Delete(id);
         }
 
+
+        private void SetLogCategory(LogCategory LogCategory, ControlCategorySettingsDto ControlCategorySettingsDto)
+        {
+            //ALL HAVE TO BE CAST AS INT BECAUSE OF EF BUG
+            //ALL names SHOULD MATCH 
+            // LogCategory.CatOperator needs to be LogCategory.CatOperatorEnum
+            //http://stackoverflow.com/questions/26692965/no-corresponding-object-layer-type-could-be-found-for-the-conceptual-type
+            //http://stackoverflow.com/questions/13527400/entity-framework-5-rtm-code-first-enum-support-broken-enums-in-other-namespaces
+            //QsoModeTypeEnum, ContestTypeEnum, QsoRadioTypeEnum are ok to map to enum
+            try
+            {
+                switch (ControlCategorySettingsDto.CatAssisted)
+                {
+                    case "NON-ASSISTED":
+                        LogCategory.CatAssistedEnum = (int)CatAssistedEnum.NON_ASSISTED;
+                        break;
+                    case "ASSISTED":
+                        LogCategory.CatAssistedEnum = (int)CatAssistedEnum.ASSISTED;
+                        break;
+                    case "ALL":
+                        LogCategory.CatAssistedEnum = (int)CatAssistedEnum.ALL;
+                        break;
+                    default:
+                        break;
+                }
+
+                switch (ControlCategorySettingsDto.CatBand)
+                {
+                    case "10M":
+                        LogCategory.CatBandEnum = (int)CatBandEnum._10M;
+                        break;
+                    case "15M":
+                        LogCategory.CatBandEnum = (int)CatBandEnum._15M;
+                        break;
+                    case "20M":
+                        LogCategory.CatBandEnum = (int)CatBandEnum._20M;
+                        break;
+                    case "40M":
+                        LogCategory.CatBandEnum = (int)CatBandEnum._40M;
+                        break;
+                    case "80M":
+                        LogCategory.CatBandEnum = (int)CatBandEnum._80M;
+                        break;
+                    case "160M":
+                        LogCategory.CatBandEnum = (int)CatBandEnum._160M;
+                        break;
+                    case "ALL":
+                        LogCategory.CatBandEnum = (int)CatBandEnum.ALL;
+                        break;
+                    default:
+                        LogCategory.CatBandEnum = (int)CatBandEnum.ALL;
+                        break;
+                }
+
+
+                switch (ControlCategorySettingsDto.CatOperator)
+                {
+                    case "SINGLE-OP":
+                        LogCategory.CatOperatorEnum = (int)CatOperatorEnum.SINGLE_OP;
+                        break;
+                    case "MULTI-OP":
+                        LogCategory.CatOperatorEnum = (int)CatOperatorEnum.MULTI_OP;
+                        break;
+                    case "ALL":
+                        LogCategory.CatOperatorEnum = (int)CatOperatorEnum.ALL;
+                        break;
+                    case "CHECKLOG":
+                        LogCategory.CatOperatorEnum = (int)CatOperatorEnum.CHECKLOG;
+                        break;
+                    default:
+                        LogCategory.CatOperatorEnum = (int)CatOperatorEnum.SINGLE_OP;
+                        break;
+                }
+
+
+                switch (ControlCategorySettingsDto.CatPower)
+                {
+                    case "HIGH":
+                        LogCategory.CatPowerEnum = (int)CatPowerEnum.HIGH;
+                        break;
+                    case "LOW":
+                        LogCategory.CatPowerEnum = (int)CatPowerEnum.LOW;
+                        break;
+                    case "ALL":
+                        LogCategory.CatPowerEnum = (int)CatPowerEnum.ALL;
+                        break;
+                    case "QRP":
+                        LogCategory.CatPowerEnum = (int)CatPowerEnum.QRP;
+                        break;
+                    default:
+                        LogCategory.CatPowerEnum = (int)CatPowerEnum.LOW;
+                        break;
+                }
+
+                //if (!string.IsNullOrEmpty(ControlCategorySettingsDto.CatOverlay))
+                //{
+                //    switch (CabInfo.CatOverlay)
+                //    {
+                //        case "SINGLE_OP_CLASSIC":
+                //            LogCategory.CatOperatorOverlayEnum = CatOperatorOverlayEnum.SINGLE_OP_CLASSIC;
+                //            break;
+                //        case "SINGLE_OP_ROOKIE":
+                //            LogCategory.CatOperatorOverlayEnum = CatOperatorOverlayEnum.SINGLE_OP_ROOKIE;
+                //            break;
+                //        case "NONE":
+                //            LogCategory.CatOperatorOverlayEnum = CatOperatorOverlayEnum.NONE;
+                //            break;
+                //        default:
+                //            LogCategory.CatOperatorOverlayEnum = CatOperatorOverlayEnum.NONE;
+                //            break;
+                //    }
+                //}
+                //else
+                //{
+                LogCategory.CatOperatorOverlayEnum = (int)CatOperatorOverlayEnum.NONE;
+                //}
+
+
+                switch (ControlCategorySettingsDto.CatNoOfTx)
+                {
+                    case "ONE":
+                        LogCategory.CatNoOfTxEnum = (int)CatNoOfTxEnum.ONE;
+                        break;
+                    case "TWO":
+                        LogCategory.CatNoOfTxEnum = (int)CatNoOfTxEnum.TWO;
+                        break;
+                    case "ALL":
+                        LogCategory.CatNoOfTxEnum = (int)CatNoOfTxEnum.ALL;
+                        break;
+                    case "UNLIMITED":
+                        LogCategory.CatNoOfTxEnum = (int)CatNoOfTxEnum.UNLIMITED;
+                        break;
+                    default:
+                        LogCategory.CatNoOfTxEnum = (int)CatNoOfTxEnum.ONE;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(string.Format(" Problem in ControlCategorySettingsDto"));
+                throw;
+            }
+
+
+
+        }
 
     }
 }

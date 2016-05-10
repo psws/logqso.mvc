@@ -74,7 +74,7 @@ namespace Logqso.mvc.domain
 
             ContestControlDto.ControlFiltersDto = new ControlFiltersDto();
             var FiltPrefixes = _repository.GetRepository<FiltPrefix>();
-            ContestControlDto.ControlFiltersDto.FiltCountryInnerHTML = FiltPrefixes.GetFiltPrefixNames() as List<string>;
+            ContestControlDto.ControlFiltersDto.FiltCountryInnerHTML = FiltPrefixes.GetFiltPrefixNames() as List<CountryPrefixtype>;
             var FiltBands = _repository.GetRepository<FiltBand>();
             ContestControlDto.ControlFiltersDto.FiltBand = FiltBands.GetFiltBandNames() as List<string>;
             var FiltContinents = _repository.GetRepository<FiltContinent>();

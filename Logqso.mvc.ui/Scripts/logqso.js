@@ -1,5 +1,6 @@
 ﻿
 $(function () {
+    window.URL = window.URL || window.webkitURL;
     _lq.parent_modal_box_id = undefined;
     _lq.SessionSaveControlSelections = "SessionSaveControlSettings";
     var btn = $.fn.button.noConflict();
@@ -27,7 +28,7 @@ $(function () {
 
     getAllControls();
     getAllData();
-    LoadCallPopup2Tab();
+    LoadCallPopupTabs();
 
     $.widget("ui.selectmenu", $.ui.selectmenu, {
         open: function (event, ui) {
@@ -196,29 +197,40 @@ $(function () {
 
     $("span[id^='enb_dis'] input").click(function (e) {
         if (e.currentTarget.checked) {
+            var DataUpdated = false;
+            var ControlUpdated = false;
+
             e.currentTarget.parentNode.style.color = "red";
             switch (e.currentTarget.id) {
                 case 'chk1':
                     PropertyColorState("#Call1", "disabled", true, "#a4a3a3");
                     SelectMenuState("#Station1, #Radio1", "disable");
+                    _lq.DataCallSettingsDto[1].Disabled = true;
+                    DataUpdated = true;
                     break;
                 case 'chk2':
                     PropertyColorState("#Call2", "disabled", true, "#a4a3a3");
                     SelectMenuState("#Station2, #Radio2", "disable");
+                    _lq.DataCallSettingsDto[2].Disabled = true;
+                    DataUpdated = true;
                     break;
                 case 'chk3':
                     PropertyColorState("#Call3", "disabled", true, "#a4a3a3");
                     SelectMenuState("#Station3, #Radio3", "disable");
+                    _lq.DataCallSettingsDto[3].Disabled = true;
+                    DataUpdated = true;
                     break;
                 case 'filtercatchk':
                     PropertyColorState("#filtercatchk", "checked", true, "#a4a3a3");
                     SelectMenuState("Select[id^='Cat']", "disable");
                     _lq.ControlCategorySettingsDto.Disabled = true;
+                    ControlUpdated = true;
                     break;
                 case 'filterQsochk':
                     PropertyColorState("#filterQsochk", "checked", true, "#a4a3a3");
                     SelectMenuState("Select[id^='Filt']", "disable");
                     _lq.ControlFiltersSettingsDto.Disabled = true;
+                    ControlUpdated = true;
                     break;
 
                 default:
@@ -230,29 +242,45 @@ $(function () {
                 case 'chk1':
                     PropertyColorState("#Call1", "disabled", false, "");
                     SelectMenuState("#Station1, #Radio1", "enable");
+                    _lq.DataCallSettingsDto[1].Disabled = false;
+                    DataUpdated = true;
                     break;
                 case 'chk2':
                     PropertyColorState("#Call2", "disabled", false, "");
                     SelectMenuState("#Station2, #Radio2", "enable");
+                    _lq.DataCallSettingsDto[2].Disabled = false;
+                    DataUpdated = true;
                     break;
                 case 'chk3':
                     PropertyColorState("#Call3", "disabled", false, "");
                     SelectMenuState("#Station3, #Radio3", "enable");
+                    _lq.DataCallSettingsDto[31].Disabled = false;
+                    DataUpdated = true;
                     break;
                 case 'filtercatchk':
                     SelectMenuState("Select[id^='Cat']", "enable");
                     _lq.ControlCategorySettingsDto.Disabled = false;
+                    ControlUpdated = true;
                     break;
                 case 'filterQsochk':
                     SelectMenuState("Select[id^='Filt']", "enable");
                     _lq.ControlFiltersSettingsDto.Disabled = false;
+                    ControlUpdated = true;
                 default:
 
             }
 
         }
-        //e.preventDefault();
-        _lq.SendControlSettings(true);
+        if (ControlUpdated == true) {
+            _lq.SessionSaveControlSettings();
+        }
+        if (DataUpdated == true) {
+            _lq.SessionSaveDataSettings();
+        }
+        if (ControlUpdated == true || DataUpdated == true) {
+            
+        }
+
 
     });
 
@@ -445,7 +473,7 @@ $(function () {
         each(function (indexInArray, valueOfElement) {
             $(this).on("selectmenuselect", function (event, ui) {
                 id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
-                _lq.ControlUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML);
+                _lq.ControlUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML, id[0].value);
             })
 
         });
@@ -558,15 +586,21 @@ $(function () {
     //$('a[data-modal-id]').click(function (e) {
     $('button[id^=Contest][ data-modal-id]').click(function (e) {
         e.preventDefault();
-
+        puwidth = 500;
+        //var bodywidth = $('#body')[0].clientWidth;
+        //if (puwidth + 10 > bodywidth) {
+        //    puwidth = bodywidth - 10;
+        //}
         _lq.parent_modal_box_id = e.currentTarget.id;
-        var newleft = $("button[id=" + _lq.parent_modal_box_id + "]").offset().left - $(".modal-box").width() / 1.3
+        offset = $("button[id=" + _lq.parent_modal_box_id + "]").offset();
+        //wid = $("div[id=popup].modal-box").width();
+        var newleft = $("button[id=" + _lq.parent_modal_box_id + "]").offset().left - puwidth / 1.3
         newleft = (newleft < 0) ? 0 : newleft;
 
         $(".modal-box").css({
             top: $("button[id=" + _lq.parent_modal_box_id + "]").offset().top + 20,
             left: newleft
-        }).css('width', '500px');;
+        }).css('width', puwidth +'px');;
         $("body").append(appendthis);
 
         $(".modal-overlay").fadeTo(500, 0.7);
@@ -586,6 +620,7 @@ $(function () {
                 test: _lq.parent_modal_box_id,
                 callNo: _lq.parent_modal_box_id
             }, _lq.ContestSelectHandler);
+
         $('#' + modalBox).fadeIn($(this).data());
     });
 
@@ -593,24 +628,22 @@ $(function () {
         e.preventDefault();
 
         _lq.parent_modal_box_id = e.currentTarget.id;
-        var newleft = $("button[id=" + _lq.parent_modal_box_id + "]").offset().left - $(".modal-box").width() / 1.3
+        puwidth = 570;
+        var bodywidth = $('#body')[0].clientWidth;
+        if (puwidth + 10 > bodywidth) {
+            puwidth = bodywidth - 10;
+        }
+        var newleft = $("button[id=" + _lq.parent_modal_box_id + "]").offset().left - puwidth / 1.3
         newleft = (newleft < 0) ? 0 : newleft;
 
-        $(".modal-box").css({
-            top: $("button[id=" + _lq.parent_modal_box_id + "]").offset().top + 20,
-            left: newleft
-        }).css('width','570px');
-        $("body").append(appendthis);
-
-        $(".modal-overlay").fadeTo(500, 0.7);
-
+        
         //$(".js-modalbox").fadeIn(500);
-        //style popup
-        var modalBox = $(this).attr('data-modal-id');
-        var popup = $('#' + modalBox + ' h4');
-        popup.html("Select a Call for " + _lq.parent_modal_box_id);
-        popup.addClass('lq-popup-hdr');
-        var list = $('#' + modalBox + ' div[id$="list"]');
+        ////style popup
+        //var modalBox = $(this).attr('data-modal-id');
+        //var popup = $('#' + modalBox + ' h4');
+        //popup.html("Select a Call for " + _lq.parent_modal_box_id);
+        //popup.addClass('lq-popup-hdr');
+        //var list = $('#' + modalBox + ' div[id$="list"]');
         //list.addClass('lq-popup-list');
 
         //$('#jqxTabs').jqxTabs({
@@ -633,12 +666,50 @@ $(function () {
 
         }
 
-        $("#tabs").tabs({
+        var tdiv;
+        var tabNo;
+        var popupNo;
+        switch (_lq.parent_modal_box_id) {
+            case 'Call1':
+                tdiv = $('div[id=tabs1]');
+                tabNo = 'tabs1';
+                popupNo = 'popupCall1';
+                break;
+            case 'Call2':
+                tdiv = $('div[id=tabs2]');
+                tabNo = 'tabs2';
+                popupNo = 'popupCall2';
+                break;
+            case 'Call3':
+                tdiv = $('div[id=tabs3]');
+                tabNo = 'tabs3';
+                popupNo = 'popupCall3';
+                break;
+            default:
+
+        }
+        $('#' + popupNo).css({
+            top: $("button[id=" + _lq.parent_modal_box_id + "]").offset().top + 20,
+            left: newleft
+        }).css('width', puwidth + 'px');
+        $("body").append(appendthis);
+
+        $(".modal-overlay").fadeTo(500, 0.7);
+
+        //style popup
+        var modalBox = $('#' + popupNo + '' );
+        var popup = $('#' + popupNo + ' h4');
+        popup.html("Select a Call for " + _lq.parent_modal_box_id);
+        popup.addClass('lq-popup-hdr');
+
+        tdiv.tabs({
             width: 480,
             height: 150,
             active: acttab,
             create: function (event, ui) {
+                _lq.InitTab = ui.tab[0].innerText;
                 LoadInitialCallTab(event, ui);
+
             },
             activate: function (event, ui)
             {
@@ -647,18 +718,25 @@ $(function () {
                 //alert(ui.newTab.attr('li', "innerHTML")[0].getElementsByTagName("a")[0].innerHTML);
                 //alert( this.text);
             }
-            //event: "mouseover"
-        });
+            });
 
-
-        var CallTab = $("#tabs").tabs("widget");
-        $("ul.ui-tabs-nav li a").
+        //LoadInitialCallTab() tab is only called once
+        //after this first call, InitTabState is set true.
+        //Whenever the call? button is pushed, getAllData will be called if the button call[0] is in the InitTab character range.
+        //Without this hack the initTab initial tab is never updated again.
+        if (_lq.InitTabState == 0) {
+            _lq.InitTabState = 1;
+        } else if (_lq.InitTab == call[0]) {
+            _lq.GetCallData(_lq.parent_modal_box_id, null);
+        }
+        //var CallTab = $("#tabs1").tabs("widget");
+        $("#" + tabNo + " ul.ui-tabs-nav li a").
             each(function (indexInArray, valueOfElement) {
                 //console.log(indexInArray + ": " + valueOfElement);
                 $(this).addClass('jqxtab-tab-button');
                 $(this).css('padding', '1px 1px 1px 1px');
             });
-        $("ul.ui-tabs-nav li").
+        $("#" + tabNo + " ul.ui-tabs-nav li").
          each(function (indexInArray, valueOfElement) {
              $(this).css('margin', '0');
          });
@@ -668,13 +746,8 @@ $(function () {
 
         //});
 
-        // map all choices to ContestSelectHandler()
-        $('#' + modalBox + ' ol.five-col-list li').off('click').on("click",
-            {
-                test: _lq.parent_modal_box_id,
-                callNo: _lq.parent_modal_box_id
-            }, _lq.CallSelectHandler);
-        $('#' + modalBox).fadeIn($(this).data());
+        //$('#' + modalBox).fadeIn($(this).data());
+        $('#' + popupNo).fadeIn($(this).data());
     });
 
     //var appendthis = ("<div class='modal-overlay js-modal-close'></div>");
@@ -737,7 +810,7 @@ $(function () {
 
 
     function getAllControls() {
-        _lq.ajaxHelper(_lq.controlUri + "/GetControlNames", 'GET',null , getAllControlsLoad);
+        _lq.ajaxHelper(_lq.controlUri + "/GetControlNames", 'GET','json', true, null , getAllControlsLoad);
 
         function getAllControlsLoad(data) {
             //console.log(data.ControlCategoryDto.CatOperator);
@@ -792,7 +865,7 @@ $(function () {
             $select.html('');
             $.each(data.ControlFiltersDto.FiltCountryInnerHTML, function (key, val) {
                 //val has to be innerhtml with &nbsp
-                $select.append('<option>' + val + '</option>');
+                $select.append('<option value =' + val.key + '>' + val.value + '</option>');
             })
             $ul = $("ul[id^=FiltCountry]");
             if (data.ControlFiltersDto.FiltCountryInnerHTML.length > 20) {
@@ -911,7 +984,7 @@ $(function () {
 
 
     function GetControlSelections() {
-        _lq.ajaxHelper(_lq.controlUri + "/GetControlSelections", 'GET', null, GetControlSelectionsLoad);
+        _lq.ajaxHelper(_lq.controlUri + "/GetControlSelections", 'GET', 'json', true, null, GetControlSelectionsLoad);
         function GetControlSelectionsLoad(data) {
             SetControlCategorySettingsDefaults(data.ControlCategorySettingsDto);
             SetControlFiltersSettingsDefaults(data.ControlFiltersSettingsDto);
@@ -927,7 +1000,7 @@ $(function () {
 
 
     function getAllData() {
-        _lq.ajaxHelper(_lq.dataUri + "/GetDataCallInfoSelections", 'GET', null, SetCallInfoObjDataSettings);
+        _lq.ajaxHelper(_lq.dataUri + "/GetDataCallInfoSelections", 'GET', 'json', true, null, SetCallInfoObjDataSettings);
     }
 
 
@@ -988,62 +1061,104 @@ $(function () {
         })
     }
 
-    function LoadCallPopup2Tab() {
+    function LoadCallPopupTabs() {
+        $('div[id^=tab]').each(function () {
+            var tab = this.id;
+            var TabUl = $('div[id=' + tab + '] ul');
+            var DivUl = $('div[id=' + tab + ']');
 
-        var TabUl = $('div[id=tabs] ul');
-        var DivUl = $('div[id=tabs]');
+            var alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            if ($('div[id=' + tab + '] ul li').length == 0) {
 
-        var alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        if ($('div[id=tabs] ul li').length == 0) {
-
-            TabUl.append('<li ><a href="#CTab1">1-9</a></li>');
-            DivUl.append('<div id="CTab1">Content 1</div>');
-            var CTab = "CTab";
-            for (var i = 0; i < 26; i++) {
-                TabUl.append('<li ><a href="#' + CTab + alpha[i] + '">' + alpha[i] + '</a></li>');
-                DivUl.append('<div id="' + CTab + alpha[i] + '"></div>');
+                TabUl.append('<li ><a href="#CTab1">1-9</a></li>');
+                DivUl.append('<div id="CTab1"></div>');
+                var CTab = "CTab";
+                for (var i = 0; i < 26; i++) {
+                    TabUl.append('<li ><a href="#' + CTab + alpha[i] + '">' + alpha[i] + '</a></li>');
+                    DivUl.append('<div id="' + CTab + alpha[i] + '"></div>');
+                }
             }
-        }
+
+        });
 
     }
 
     function LoadInitialCallTab(event, ui) {
         //function LoadCallTab(actDiv, Callgroup) {
         var actDiv = ui.panel[0].id;
-        var Tabdiv = $('div[id=' + actDiv + ']')
+        var tabNo = event.target.id;
+        var Tabdiv = $('div[id =' + tabNo + '] div[id=' + actDiv + ']')
         var list = "list" + actDiv;
-        Tabdiv.append("<ol id ='list" + actDiv + "' class='five-col-list'></ol>");
-        var TabOl = $('ol[id=' + list + ']');
+        //Tabdiv.append("<ol id ='list" + actDiv + "' class='five-col-list'></ol>");
+        //var TabOl = $('div[id =' + tabNo + '] ol[id=' + list + ']');
         //TabOl.append('<li value = ' + val.key + '>' + val.value + '</li>');
-        for (var i = 0; i < 25; i++) {
-            TabOl.append('<li value = '+ i +'> CN2R </li>');
-        }
+        //for (var i = 0; i < 25; i++) {
+        //    TabOl.append('<li value = '+ i +'> CN2R </li>');
+        //}
 
         //Div[0].innerText += "Hello World inital " + _lq.parent_modal_box_id;
+        // map all choices to CallSelectHandler()
+        //var modalBox = $(this).attr('data-modal-id');
+
+        //$('div[id=' + actDiv + '] ol.five-col-list li').off('click').on("click",
+        //    {
+        //        test: _lq.parent_modal_box_id,
+        //        callNo: _lq.parent_modal_box_id
+        //    }, _lq.CallSelectHandler);
+
+        _lq.GetCallData(_lq.parent_modal_box_id, null);
+
     }
 
     function LoadCallTab(event, ui) {
         //function LoadCallTab(actDiv, Callgroup) {
         var actDiv = ui.newPanel[0].id;
-        Tabdiv = $('div[id=' + actDiv + ']')
+        var tabNo = event.target.id;
+
+        TabdivOl = $('div[id =' + tabNo + '] div[id=' + actDiv + ']')
         var list = "list" + actDiv;
-        var TabOl = $('ol[id=' + list + ']');
-        if (TabOl.length == 0) {
-            Tabdiv.append("<ol id ='list" + actDiv + "' class='five-col-list'></ol>");
-            TabOl = $('ol[id=' + list + ']');
-            //TabOl.append('<li value = ' + val.key + '>' + val.value + '</li>');
-            for (var i = 0; i < 200; i++) {
-                TabOl.append('<li value = ' + i + '> CN2R </li>');
-            }
-
+        var TabOl = $('div[id =' + tabNo + '] ol[id=' + list + ']');
+        var ReloadCalltab = false;
+        switch (_lq.parent_modal_box_id) {
+            case 'Call1':
+                if (_lq.CallReload1 == true) {
+                    ReloadCalltab = true;
+                }
+                break;
+            case 'Call2':
+                if (_lq.CallReload2 == true) {
+                    ReloadCalltab = true;
+                }
+            case 'Call3':
+                if (_lq.CallReload3 == true) {
+                    ReloadCalltab = true;
+                }
+                break;
+            default:
         }
-        var modalBox = $(this).attr('data-modal-id');
 
-        $('div[id=' + actDiv + ']  ol.five-col-list li').off('click').on("click",
-                    {
-                        test: _lq.parent_modal_box_id,
-                        callNo: _lq.parent_modal_box_id
-                    }, _lq.CallSelectHandler);
+        //ReloadCalltab is true whenever the cat or contest changes.
+        if (TabdivOl[0].children.length == 0 || ReloadCalltab == true) {
+            ////Tabdiv.append("<ol id ='list" + actDiv + "' class='five-col-list'></ol>");
+            ////TabOl = $('div[id =' + tabNo + '] ol[id=' + list + ']');
+            //TabOl.append('<li value = ' + val.key + '>' + val.value + '</li>');
+            //for (var i = 0; i < 200; i++) {
+            //    TabOl.append('<li value = ' + i + '> CN2R </li>');
+            //}
+            //if (ReloadCalltab) {
+            //    ui.newPanel.empty();
+            //}
+
+            var tabChar = ui.newTab[0].innerText;
+            _lq.GetCallData(_lq.parent_modal_box_id, tabChar);
+
+
+            //$('div[id=' + actDiv + ']  ol.five-col-list li').off('click').on("click",
+            //            {
+            //                test: _lq.parent_modal_box_id,
+            //                callNo: _lq.parent_modal_box_id
+            //            }, _lq.CallSelectHandler);
+        }
 
     }
 
@@ -1055,14 +1170,14 @@ $(function () {
         switch (this.id ) {
             case "CatDft":
                 ReqUri += "ControlCategorySettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', null, ControlCategorySettingsDtoLoad);
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, ControlCategorySettingsDtoLoad);
                 function ControlCategorySettingsDtoLoad(ControlCategorySettingsDto) {
                        SetControlCategorySettingsDefaults(ControlCategorySettingsDto);
                    };
                 break;
             case "QsoDft":
                 ReqUri += "ControlFiltersSettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', null, SetControlFiltersSettingsDefaultsLoad);
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, SetControlFiltersSettingsDefaultsLoad);
                 function SetControlFiltersSettingsDefaultsLoad(ControlFiltersSettingsDto) {
                        SetControlFiltersSettingsDefaults(ControlFiltersSettingsDto);
 
@@ -1070,14 +1185,14 @@ $(function () {
                 break;
             case "AxisDft":
                 ReqUri += "ControlYaxisSettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', null, ControlYaxisSettingsDtoLoad);
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, ControlYaxisSettingsDtoLoad);
                 function ControlYaxisSettingsDtoLoad(ControlYaxisSettingsDto) {
                       SetControlYaxisSettingsDefaults(ControlYaxisSettingsDto);
                   };
                 break;
             case "XAxisDft":
                 ReqUri += "ControlXaxisSettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', null, SetControlXaxisSettingsDefaultsLoad);
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, SetControlXaxisSettingsDefaultsLoad);
                 function SetControlXaxisSettingsDefaultsLoad(ControlXaxisSettingsDto) {
                       SetControlXaxisSettingsDefaults(ControlXaxisSettingsDto);
                   };
@@ -1126,13 +1241,21 @@ $(function () {
         //index = $('#FiltCountry').prop("selectedIndex");
 
         //$('#FiltCountry').prop("selectedValue", ControlFiltersSettingsDto.FiltCountryInnerHTML).selectmenu('refresh');
-        if (ControlFiltersSettingsDto.FiltCountryInnerHTML.indexOf("&nbsp") != -1) {
-            var Selectedval = ControlFiltersSettingsDto.FiltCountryInnerHTML.replace("&nbsp;&nbsp;&nbsp;&nbsp;", "    ");
+        if (ControlFiltersSettingsDto.FiltCountryInnerHTML.value.indexOf("&nbsp") != -1) {
+            var Selectedval = ControlFiltersSettingsDto.FiltCountryInnerHTML.value.replace("&nbsp;&nbsp;&nbsp;&nbsp;", "    ");
             var Selectedval = Selectedval.replace("&amp;", "&");
         }
-        //Selected val cannot be innerhtml
-        $('#FiltCountry').val(Selectedval).selectmenu('refresh');
-
+        // $('#FiltCountry').val(Selectedval).selectmenu('refresh');
+        $select = $('#FiltCountry');
+        ////var tmp = $select.value;
+        ////var tmp = $('#FiltCountry option[value=' + ControlFiltersSettingsDto.FiltCountryInnerHTML.key + ']').prop('selected', true);
+        if ($select.length != 0) {
+            $select[0].selectedIndex = ControlFiltersSettingsDto.FiltCountryInnerHTML.key;
+            //the next 2 lines are required for the Samsung Internet browser
+            $select = $('#FiltCountry option[value=' + ControlFiltersSettingsDto.FiltCountryInnerHTML.key + ']');
+            $select[0].innerText = Selectedval;
+            $('#FiltCountry').selectmenu("refresh");
+        }
 
 
 
@@ -1179,6 +1302,13 @@ $(function () {
 
     function SetDataSettingsDefaults(DataCallInfoObj) {
         for (var i = 0; i < DataCallInfoObj.length; i++) {
+            _lq.DataCallSettingsDto[i].CallGroup = DataCallInfoObj[i].CallGroup;
+            _lq.DataCallSettingsDto[i].SelectedContestName = DataCallInfoObj[i].SelectedContestName;
+            _lq.DataCallSettingsDto[i].SelectedCall = DataCallInfoObj[i].SelectedCall;
+            _lq.DataCallSettingsDto[i].SelectedRadioType = DataCallInfoObj[i].QsoRadioType;
+            _lq.DataCallSettingsDto[i].Disabled = DataCallInfoObj[i].Disabled;
+            _lq.DataCallSettingsDto[i].LogId = DataCallInfoObj[i].LogId;
+
             switch (DataCallInfoObj[i].CallGroup) {
                 case 1:
                     //http://stackoverflow.com/questions/5580616/jquery-change-button-text
@@ -1186,8 +1316,18 @@ $(function () {
                     $("button[id='Contest1'] span").text(DataCallInfoObj[i].SelectedContestName);
                     if (DataCallInfoObj[i].SelectedStationName != null) {
                         $select = $('#Station1').val(DataCallInfoObj[i].SelectedStationName).selectmenu("refresh");
+                        _lq.DataCallSettingsDto[i].SelectedStationName = DataCallInfoObj[i].SelectedStationName;
                     }else {
                         $select = $('#Station1').val("ALL").selectmenu("refresh");
+                        _lq.DataCallSettingsDto[i].SelectedStationName = "ALL";
+                    }
+                    var chk = $("input[id='chk1'] ")
+                    if (chk .length != 0) {
+                        if (DataCallInfoObj[i].Disabled == true) {
+                            chk[0].checked = true;
+                        } else {
+                            chk[0].checked = false;
+                        }
                     }
                     $select = $('#Radio1').prop("selectedIndex", DataCallInfoObj[i].QsoRadioType).selectmenu('refresh');
                     break;
@@ -1200,6 +1340,14 @@ $(function () {
                     } else {
                         $select = $('#Station2').val("ALL").selectmenu("refresh");
                     }
+                    var chk = $("input[id='chk2'] ")
+                    if (chk.length != 0) {
+                        if (DataCallInfoObj[i].Disabled == true) {
+                            chk[0].checked = true;
+                        } else {
+                            chk[0].checked = false;
+                        }
+                    }
                     $select = $('#Radio2').prop("selectedIndex", DataCallInfoObj[i].QsoRadioType).selectmenu('refresh');
                     break;
                 case 3:
@@ -1211,12 +1359,21 @@ $(function () {
                     }else {
                         $select = $('#Station3').val("ALL").selectmenu("refresh");
                     }
+                    var chk = $("input[id='chk3'] ")
+                    if (chk.length != 0) {
+                        if (DataCallInfoObj[i].Disabled == true) {
+                            chk[0].checked = true;
+                        } else {
+                            chk[0].checked = false;
+                        }
+                    }
                     $select = $('#Radio3').prop("selectedIndex", DataCallInfoObj[i].QsoRadioType).selectmenu('refresh');
                     break;
                 default:
         
             }
         }
+        _lq.SessionSaveDataSettings();
 
 
     }
@@ -1239,6 +1396,11 @@ $(function () {
     _lq.dataUri = '/v1/Data';
 
     _lq.parent_modal_box_id;
+    _lq.CallReload1 = true;
+    _lq.CallReload2 = true;
+    _lq.CallReload3 = true;
+    _lq.InitTab;
+    _lq.InitTabState = 0;
     _lq.ajaxCallCount = 0;
 
     _lq.SessionSaveControlSelections;
@@ -1273,13 +1435,56 @@ $(function () {
         YaxisViewType: ''
     };
 
+    _lq.ControlSettingsDto = [_lq.ControlCategorySettingsDto, _lq.ControlFiltersSettingsDto, _lq.ControlXaxisSettingsDto, _lq.ControlYaxisSettingsDto];
 
-    _lq.DataCallInfoObj = {
+
+    _lq.DataCallSettings1 = {
+        CallGroup: '',
+        SelectedContestName: '',
+        SelectedCall: '',
+        SelectedStationName: '',
+        SelectedRadioType: '',
+        LogId: '',
+        Disabled: 0,
+        StationNames: '',
+        ContestNames: '',
+        RadioNames: '',
+    };
+    _lq.DataCallSettings2 = {
+        CallGroup: '',
+        SelectedContestName: '',
+        SelectedCall: '',
+        SelectedStationName: '',
+        SelectedRadioType: '',
+        LogId: '',
+        Disabled: 0,
+        StationNames: '',
+        ContestNames: '',
+        RadioNames: '',
+    };
+    _lq.DataCallSettings3 = {
+        CallGroup: '',
+        SelectedContestName: '',
+        SelectedCall: '',
+        SelectedStationName: '',
+        SelectedRadioType: '',
+        LogId: '',
+        Disabled: 0,
+        StationNames: '',
+        ContestNames: '',
+        RadioNames: '',
+    };
+
+
+    _lq.DataCallSettingsDto = [_lq.DataCallSettings1, _lq.DataCallSettings2, _lq.DataCallSettings3];
+
+
+    _lq.DataCallSettings = {
         SelectedContestName: '',
         SelectedCall: '', 
         SelectedStationName: '', 
         CallGroup: '', 
-        QsoRadioType: '', 
+        SelectedRadioType: '',
         LogId: '', 
         Disabled: 0, 
         StationNames: '', 
@@ -1287,13 +1492,66 @@ $(function () {
         RadioNames: '' ,
     };
 
+    _lq.DataCalls = {
+        CallGroup: '',
+        SelectedCall: '',
+        Calls:
+            {
+                CallsignID: '',
+                Call: ''
+            }
+    };
+
+        // use this transport for "binary" data type
+        //http://www.henryalgus.com/reading-binary-files-using-jquery-ajax/
+    $.ajaxTransport("+binary", function (options, originalOptions, jqXHR) {
+        // check for conditions and support for blob / arraybuffer response type
+        if (window.FormData && ((options.dataType && (options.dataType == 'binary')) || (options.data && ((window.ArrayBuffer && options.data instanceof ArrayBuffer) || (window.Blob && options.data instanceof Blob))))) {
+            return {
+                // create new XMLHttpRequest
+                send: function (headers, callback) {
+                    // setup all variables
+                    var xhr = new XMLHttpRequest(),
+            url = options.url,
+            type = options.type,
+            async = options.async || true,
+            // blob or arraybuffer. Default is blob
+            dataType = options.responseType || "blob",
+            data = options.data || null,
+            username = options.username || null,
+            password = options.password || null;
+
+                    xhr.addEventListener('load', function () {
+                        var data = {};
+                        data[options.dataType] = xhr.response;
+                        // make callback and send data
+                        callback(xhr.status, xhr.statusText, data, xhr.getAllResponseHeaders());
+                    });
+
+                    xhr.open(type, url, async, username, password);
+
+                    // setup custom headers
+                    for (var i in headers) {
+                        xhr.setRequestHeader(i, headers[i]);
+                    }
+
+                    xhr.responseType = dataType;
+                    xhr.send(data);
+                },
+                abort: function () {
+                    jqXHR.abort();
+                }
+            };
+        }
+    });
 
 
-    _lq.ajaxHelper = function (uri, method, data, Function) {
+    _lq.ajaxHelper = function (uri, method, datatype, processdata, data, Function) {
         $.ajax({
             type: method,
             url: uri,
-            dataType: 'json',
+            dataType: datatype,
+            processData: processdata,
             contentType: 'application/json',
             beforeSend: function () {
                 _lq.ajaxCallCount++;
@@ -1328,13 +1586,14 @@ $(function () {
         //alert(event.data.test);
         $('#' + event.data.test + ' span.ui-button-text').text(event.currentTarget.textContent);
         $(".js-modal-close, .modal-overlay").trigger('click');
+        var button = $('button[id=' + event.data.test + ']')[0].innerText = event.currentTarget.textContent;;
         //call DDL change event
         _lq.DataUpdated(event.data.test, event.currentTarget.textContent);
     };
 
 
     //function for updating graph POST
-    _lq.ControlUpdated = function (Controlid, SelectedValue) {
+    _lq.ControlUpdated = function (Controlid, SelectedValue, value) {
         //alert("Control: " + Controlid + "-->Selected:" + SelectedValue);
         var bUpdated = true;
         if (Controlid.indexOf("Cat") >= 0) {
@@ -1373,7 +1632,8 @@ $(function () {
                     //} else {
                     //    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML = SelectedValue;
                     //}
-                    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML = SelectedValue
+                    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML.value = SelectedValue;
+                    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML.key = value;
                     //_lq.ControlFiltersSettingsDto.FiltCountryIndex = $('#FiltCountry').prop("selectedIndex");
                     break;
                 case "FiltCQZone":
@@ -1417,29 +1677,29 @@ $(function () {
 
         if (bUpdated) {
             _lq.SessionSaveControlSettings();
-            _lq.SendControlSettings(false);
+            _lq.UpdateChartData(false);
         }
     }
 
 
 
-    _lq.SendControlSettings = function (save) {
-        if (save == true) {
-            _lq.SessionSaveControlSettings();
-        }
+    //_lq.SendControlSettings = function (save) {
+    //    if (save == true) {
+    //        _lq.SessionSaveControlSettings();
+    //    }
 
-        var dataObj = {
-            ControlCategorySettingsDto: _lq.ControlCategorySettingsDto,
-            ControlFiltersSettingsDto: _lq.ControlFiltersSettingsDto,
-            ControlXaxisSettingsDto: _lq.ControlXaxisSettingsDto,
-            ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
-        };
+    //    var dataObj = {
+    //        ControlCategorySettingsDto: _lq.ControlCategorySettingsDto,
+    //        ControlFiltersSettingsDto: _lq.ControlFiltersSettingsDto,
+    //        ControlXaxisSettingsDto: _lq.ControlXaxisSettingsDto,
+    //        ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
+    //    };
 
-        _lq.ajaxHelper(_lq.controlUri + "/SendControlSelections", 'POST', dataObj, UpdateControlsLoad);
-        function UpdateControlsLoad() {
-            //update controls and graph
-        };
-    }
+        //    _lq.ajaxHelper(_lq.controlUri + "/SendControlSelections", 'POST','json', true, dataObj, UpdateControlsLoad);
+    //    function UpdateControlsLoad() {
+    //        //update controls and graph
+    //    };
+    //}
 
     _lq.SessionSaveControlSettings = function () {
         var dataObj = {
@@ -1461,64 +1721,253 @@ $(function () {
         if (Controlid.indexOf("Station") >= 0) {
             switch (Controlid) {
                 case "Station1":
-                    ////_lq.ControlCategorySettingsDto.CatOperator = SelectedValue;
+                    _lq.DataCallSettingsDto[0].SelectedStationName = SelectedValue;
+                    break;
+                case "Station2":
+                    _lq.DataCallSettingsDto[1].SelectedStationName = SelectedValue;
+                    break;
+                case "Station3":
+                    _lq.DataCallSettingsDto[2].SelectedStationName = SelectedValue;
+                    break;
+                default:
                     break;
             }
         }else if (Controlid.indexOf("Radio") >= 0) {
             switch (Controlid) {
-                case "Radio11":
+                case "Radio1":
+                    _lq.DataCallSettingsDto[0].SelectedRadioType = SelectedValue;
+                    break;
+                case "Radio2":
+                    _lq.DataCallSettingsDto[1].SelectedRadioType = SelectedValue;
+                    break;
+                case "Radio3":
+                    _lq.DataCallSettingsDto[2].SelectedRadioType = SelectedValue;
+                    break;
                 default:
+                    break;
             }
 
-        }else if (Controlid.indexOf("Contest") >= 0) {
+        } else if (Controlid.indexOf("Contest") >= 0) {
+            var tabNo;
+            var actDiv;
             switch (Controlid) {
                 case "Contest1":
+                    _lq.DataCallSettingsDto[0].SelectedContestName = SelectedValue;
+                    //remove tab Ol
+                    tabNo = 'tabs1';
+                    actDiv = 'CTab' + $('button[id=Call1]')[0].innerText[0];
+                    _lq.CallReload1 = true;
+                    break;
+                case "Contest2":
+                    _lq.DataCallSettingsDto[1].SelectedContestName = SelectedValue;
+                    tabNo = 'tabs2';
+                    actDiv = 'CTab' + $('button[id=Call2]')[0].innerText[0];
+                    _lq.CallReload2 = true;
+                    break;
+                case "Contest3":
+                    _lq.DataCallSettingsDto[2].SelectedContestName = SelectedValue;
+                    tabNo = 'tabs3';
+                    actDiv = 'CTab' + $('button[id=Call3]')[0].innerText[0];
+                    _lq.CallReload3 = true;
+                    break;
                 default:
+                    break;
+            }
+            $('div[id =' + tabNo + '] div[id=' + actDiv + ']')
+            .each(function (indexInArray, valueOfElement) {
+                $(this).empty();
+            });
+
+        }
+        else if (Controlid.indexOf("Call") >= 0) {
+            switch (Controlid) {
+                case "Call1":
+                    _lq.DataCallSettingsDto[0].SelectedCall = SelectedValue;
+                    break;
+                case "Call2":
+                    _lq.DataCallSettingsDto[1].SelectedCall = SelectedValue;
+                    break;
+                case "Call3":
+                    _lq.DataCallSettingsDto[2].SelectedCall = SelectedValue;
+                    break;
+                default:
+                    break;
 
             }
-        }else {
+        } else {
             bUpdated = false;
         }
 
         if (bUpdated) {
             _lq.SessionSaveDataSettings();
-            _lq.SendDataSettings(false);
+            _lq.UpdateChartData(false);
         }
     }
 
-    _lq.SendDataSettings = function (save) {
+    _lq.UpdateChartData = function (save) {
         if (save == true) {
             _lq.SessionSaveDataSettings();
         }
 
         var dataObj = {
-            ////ControlCategorySettingsDto: _lq.ControlCategorySettingsDto,
-            ////ControlFiltersSettingsDto: _lq.ControlFiltersSettingsDto,
-            ////ControlXaxisSettingsDto: _lq.ControlXaxisSettingsDto,
-            ////ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
+            DataCallSettingsDto: _lq.DataCallSettingsDto,
+            ControlSettingsDto: _lq.ControlSettingsDto=  {
+                ControlCategorySettingsDto: _lq.ControlCategorySettingsDto,
+                ControlFiltersSettingsDto: _lq.ControlFiltersSettingsDto,
+                ControlXaxisSettingsDto: _lq.ControlXaxisSettingsDto,
+                ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
+            }
         };
 
-        ////_lq.ajaxHelper(_lq.controlUri + "/SendDataSelections", 'POST', dataObj, UpdateDatasLoad);
-        ////function UpdateDatasLoad() {
-            //update controls and graph
-        ////};
+
+
+        _lq.ajaxHelper(_lq.dataUri + "/UpdateChart", 'POST', 'binary', false, dataObj, _lq.UpdateChartLoad);
     }
+
+    _lq.UpdateChartLoad = function (data) {
+        //http://stackoverflow.com/questions/23851685/webapi-return-binary-image-to-be-displayed-using-jquery-ajax-method
+        $('#ChartRate').attr('src', window.URL.createObjectURL(data));
+
+    }
+
 
     _lq.SessionSaveDataSettings = function () {
         var dataObj = {
-            ////ControlCategorySettingsDto: _lq.ControlCategorySettingsDto,
-            ////ControlFiltersSettingsDto: _lq.ControlFiltersSettingsDto,
-            ////ControlXaxisSettingsDto: _lq.ControlXaxisSettingsDto,
-            ////ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
+            DataCallSettingsDto: _lq.DataCallSettingsDto
         };
-        //get rid of old
-        ////window.sessionStorage.removeItem(_lq.SessionSaveControlSelections);
-        ////window.sessionStorage.setItem(_lq.SessionSaveControlSelections, JSON.stringify(dataObj) );
+        window.sessionStorage.removeItem(_lq.DataCallSettingsDto);
+        window.sessionStorage.setItem(_lq.DataCallSettingsDto, JSON.stringify(dataObj));
 
     }
 
+        //get calls
+    _lq.GetCallData = function (CallGroup, SelectedTabName) {
+        var CallIndex;
+        switch (CallGroup) {
+            case 'Call1':
+                CallIndex = 0;
+                _lq.CallReload1 = false;
+                break;
+            case 'Call2':
+                CallIndex = 1;
+                _lq.CallReload2 = false;
+                break;
+            case 'Call3':
+                CallIndex = 2;
+                _lq.CallReload3 = false;
+                break;
+            default:
 
-}(window._lq = window._lq || {}, jQuery));
+        }
+        var DataCallSettings0 = _lq.DataCallSettingsDto[CallIndex];
+        if (SelectedTabName != null) {
+            DataCallSettings0.SelectedCall = SelectedTabName;
+        }
+
+        var dataObj = {
+            DataCallSetting: DataCallSettings0,
+            ControlCategorySettingsDTO: _lq.ControlCategorySettingsDto
+    }
+
+        //_lq.ajaxHelper(_lq.dataUri + '/PostCallsRequest', 'POST', 'json', false, _lq.ControlCategorySettingsDto, _lq.UpdateCallTab);
+        //_lq.ajaxHelper(_lq.dataUri + '/PostDataCallsRequest', 'POST', 'json', false, _lq.DataCallSettingsDto[CallIndex], _lq.UpdateCallTab);
+        _lq.ajaxHelper(_lq.dataUri + '/CallsRequest', 'POST', 'json', false, dataObj, _lq.UpdateCallTab);
+
+        };
+
+    _lq.UpdateCallTab = function (data) {
+        var tab;
+        switch (data.CallGroup) {
+            case 1:
+                tabNo = 'tabs1';
+                break;
+            case 2:
+                tabNo = 'tabs2';
+                break;
+            case 3:
+                tabNo = 'tabs3';
+                break;
+            default:
+
+        }
+        var actDiv = 'CTab' + data.SelectedCall.substring(0, 1);;
+        var Tabdiv = $('div[id =' + tabNo + '] div[id=' + actDiv + ']')
+        Tabdiv.addClass('TabDivLiCol');
+        var list = "list" + actDiv;
+
+
+//Vertical LIST
+        var i, k;
+        var colLiCnt;
+        var columnCnt = 5;
+        var TotalCalls = data.Calls.length;
+        if (TotalCalls > 5) {
+            colLiCnt = Math.ceil(TotalCalls / columnCnt);
+        } else {
+            colLiCnt = TotalCalls;
+        }
+        var colWidth = Math.floor(100 / columnCnt) + "%"
+        var CallIndex = 0;
+        var column = 1;
+
+        //empty previous calls
+        var TabClrOl = $('div[id =' + tabNo + '] ol[id^=' + list + ']')
+            .each(function (indexInArray, valueOfElement) {
+                $(this).empty();
+            });
+        //empty div
+        $('div[id =' + tabNo + '] div[id=' + actDiv + ']')
+            .each(function (indexInArray, valueOfElement) {
+                $(this).empty();
+            });
+
+        //$('div[id =' + tabNo + '] div[id=' + actDiv + ']')
+        //    .each(function (indexInArray, valueOfElement) {
+        //        $(this).empty();
+        //    });
+
+        if (TotalCalls != 0) {
+            for (var i = 0; i < TotalCalls; i += colLiCnt) {
+                Tabdiv.append("<ol id ='list" + actDiv + column + "' class='liCol'></ol>");
+                var TabOl = $('div[id =' + tabNo + '] ol[id=' + list + column + ']');
+                for (var k = CallIndex; k < colLiCnt * column; k++) {
+                    if (k == TotalCalls) {
+                        break;
+                    }
+                    TabOl.append('<li value = ' + data.Calls[k].CallSignID + '>' + data.Calls[k].Call + '</li>');
+                }
+                CallIndex += colLiCnt;
+                column++;
+            }
+
+        }
+
+        $(".liCol").css("width", colWidth)
+        $('div[id=' + actDiv + '] ol.liCol li').off('click').on("click",
+            {
+                test: _lq.parent_modal_box_id,
+                callNo: _lq.parent_modal_box_id
+            }, _lq.CallSelectHandler);
+
+//Horizontal LIST
+        ////Tabdiv.append("<ol id ='list" + actDiv + "' class='five-col-list'></ol>");
+        ////var TabOl = $('div[id =' + tabNo + '] ol[id=' + list + ']');
+        ////for (var i = 0; i < data.Calls.length; i++) {
+        ////    TabOl.append('<li value = ' + data.Calls[i].CallSignID + '>' +  data.Calls[i].Call + '</li>');
+        ////}
+
+
+        ////$('div[id=' + actDiv + '] ol.five-col-list li').off('click').on("click",
+        ////    {
+        ////        test: _lq.parent_modal_box_id,
+        ////        callNo: _lq.parent_modal_box_id
+        ////    }, _lq.CallSelectHandler);
+
+
+    };
+
+
+} (window._lq = window._lq || {}, jQuery));
 
 
 

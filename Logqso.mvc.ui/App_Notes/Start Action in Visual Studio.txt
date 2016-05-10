@@ -1,0 +1,17 @@
+﻿On tprojec properties=>Web+>Start Action you need to configured in a specific way
+
+The Current page raadio button can be used for the default route  (logqso)
+RouterConfif.cs
+	            routes.MapRoute(
+                name: "Default",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "logqso", action = "logqso", id = UrlParameter.Optional }
+				
+You can also specify the controller name/action," NOT THE PATH" in the Specific page radiochoicechoice
+Example LogQso
+		Home/About.
+
+//http://stackoverflow.com/questions/893552/asp-net-mvc-page-wont-load-and-says-the-resource-cannot-be-found
+http://stackoverflow.com/questions/893552/asp-net-mvc-page-wont-load-and-says-the-resource-cannot-be-found
+			
+		 

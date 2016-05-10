@@ -16,7 +16,15 @@ namespace Logqso.mvc.DataModel.LogControl.Models
         }
 
         public LogControlContext()
+ #if CONTESTQSODEBUG || CONTESTQSORELEASE
+            : base("Name=LogControlDBhostfest")
+#elif CONTESTQSO1n1DEBUG
+            : base("Name=LogControlDB1and1")
+#elif CONTESTQSOSQL2012
+            : base("Name=LogControlDBsql2012")
+#else
             : base("Name=LogControlDB")
+#endif
         {
         }
 

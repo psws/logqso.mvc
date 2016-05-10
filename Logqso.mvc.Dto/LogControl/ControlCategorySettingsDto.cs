@@ -15,6 +15,8 @@ namespace Logqso.mvc.Dto.LogControl
         public string CatPower { get; set; }
         public string CatAssisted { get; set; }
         public string CatNoOfTx { get; set; }
+        public string CatOperatorOverlay { get; set; }
+
         public bool Disabled { get; set; }
     }
 }

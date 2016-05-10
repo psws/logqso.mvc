@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - LogQsoT Application</title>
-    @*@Styles.Render("~/Content/css")*@
+    @*@Styles.Render("~/Content")*@
     @{
         var theme = Themes.CurrentTheme;
        }
@@ -12,6 +12,7 @@
     @Styles.Render(Logqso.mvc.ui.Helpers.JQueryUI.Bundle(theme))
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
    @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/logqso")
 
@@ -34,8 +35,9 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    @*<li>@Html.ActionLink("About", "About", "Home")</li>*@
+                    <li>@Html.ActionLink("About", "About", "logqso")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "logqso")</li>
                       @if (Logqso.mvc.ui.MvcApplication.IsDebug == true)
                       {
                         <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>

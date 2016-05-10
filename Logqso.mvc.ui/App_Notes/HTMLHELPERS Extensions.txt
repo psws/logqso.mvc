@@ -1,0 +1,98 @@
+﻿There are several ways to sned data int a view page.
+
+Method 1:
+http://dotnet-helpers.com/2013/08/05/how-to-create-custom-html-helpers-using-mvc-4-razor/
+http://www.asp.net/mvc/overview/older-versions-1/views/creating-custom-html-helpers-cs
+create a .cs file in the application that contains a definition for an HtmlHelper class extensions.
+Helpers/Htmlhelpers etension.cs  is an example
+namespace Logqso.mvc.ui.Helpers
+{
+    public static class HtmlHelperExtensions
+    {
+        public static MvcHtmlString AppVersion(this HtmlHelper HtmlHelper)
+        {
+            var appInstance = HtmlHelper.ViewContext.HttpContext.ApplicationInstance;
+            //given that you should then be able to do 
+            var assemblyVersion = appInstance.GetType().BaseType.Assembly.GetName().Version;
+            //note the use of the BaseType - see note below
+            //return assemblyVersion.ToString();
+
+            var builder = new TagBuilder("label");
+            builder.SetInnerText("Version:" + assemblyVersion.ToString());
+            //builder.MergeAttribute("type", "text");
+            //builder.MergeAttribute("name", "Version");
+            //builder.MergeAttribute("value", );
+            //return MvcHtmlString.Create(builder.ToString(TagRenderMode.SelfClosing));
+            return MvcHtmlString.Create(builder.ToString());
+
+        }
+    }
+}
+This static class adds an Html Label for the version.
+To use this extension you need to do the following:
+1) In Views/web.confg file add the namespace 'Logqso.mvc.ui.Helpers' of your extension file.
+	<system.web.webPages.razor>
+		<host factoryType="System.Web.Mvc.MvcWebRazorHostFactory, System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
+		<pages pageBaseType="System.Web.Mvc.WebViewPage">
+		  <namespaces>
+			<add namespace="System.Web.Mvc" />
+			<add namespace="System.Web.Mvc.Ajax" />
+			<add namespace="System.Web.Mvc.Html" />
+			<add namespace="System.Web.Optimization"/>
+			<add namespace="System.Web.Routing" />
+			<add namespace="Logqso.mvc.ui" />
+			<add namespace="Logqso.mvc.ui.Helpers" />
+		  </namespaces>
+		</pages>
+	  </system.web.webPages.razor>
+2) Exit visual studio an then relaunch Visual Studio
+3) Now in the Views/LogQso/About.cshtml you can add the following line to use the extension.
+	@Html.AppVersion()
+
+
+============================
+Method 2
+http://www.asp.net/web-pages/overview/ui-layouts-and-themes/creating-and-using-a-helper-in-an-aspnet-web-pages-site
+1.In the root folder of the website, create a folder named App_Code. This is a reserved folder name in ASP.NET where
+		 you can put code for components like helpers.
+2.In the App_Code folder create a new .cshtml file and name it MyHelpers.cshtml.
+
+
+3.Replace the existing content with the following:
+@helper MakeNote(string content) {
+  <div class="note" 
+       style="border: 1px solid black; width: 90%; padding: 5px; margin-left: 15px;">
+    <p>
+      <strong>Note</strong>&nbsp;&nbsp; @content
+    </p>
+  </div>
+}
+
+The code uses the @helper syntax to declare a new helper named MakeNote. This particular helper lets you pass
+a parameter named content that can contain a combination of text and markup. 
+The helper inserts the string into the note body using the @content variable.
+Notice that the file is named MyHelpers.cshtml, but the helper is named MakeNote. You can put multiple custom helpers into a single file.
+
+4.Save and close the file.
+
+Using the Helper in a Page
+1.In the root folder, create a new blank file called TestHelper.cshtml.
+2.Add the following code to the file:
+<!DOCTYPE html>
+  <head>
+    <title>Test Helpers Page</title>
+  </head>
+  <body>
+    <p>This is some opening paragraph text.</p>
+
+    <!-- Insert the call to your note helper here. -->
+    @MyHelpers.MakeNote("My test note content.")
+
+    <p>This is some following text.</p>
+  </body>
+</html>
+
+To call the helper you created, use @ followed by the file name where the helper is, a dot, 
+and then the helper name. (If you had multiple folders in the App_Code folder, you could use the 
+syntax @FolderName.FileName.HelperName to call your helper within any nested folder level). The text that you add in quotation marks within the parentheses is the text that the helper will display as part of the note in the web page.
+

@@ -8,7 +8,13 @@ namespace Logqso.mvc.ui
     {
         public void Configuration(IAppBuilder app)
         {
+#if CONTESTQSO1n1DEBUG
+            //no support on 1n1
             ConfigureAuth(app);
+
+#else
+            ConfigureAuth(app);
+#endif
         }
     }
 }
