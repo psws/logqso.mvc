@@ -19,9 +19,9 @@ namespace Logqso.mvc.DataModel.LogData
         {
             context.CabrilloInfo.AddOrUpdate(
             p => p.CallSignId,
-                new CabrilloInfo {  CallSignId = 1, ContestId = "CQWWSSB2015", ClaimedScore= 15000060, Club= "EA Contest Clib", Operators= "EA9LZ, W7EJ, M0DRX" },
-                new CabrilloInfo { CallSignId = 2, ContestId = "CQWWSSB2015", ClaimedScore = 10000060, Club = "ITALY Clib", Operators = "IK2QEI" },
-                new CabrilloInfo {  CallSignId = 3, ContestId = "CQWWSSB2015", ClaimedScore= 10000060, Club= "MOSCOW Clib", Operators= "RL3FT" }
+                new CabrilloInfo { CallSignId = 1, ContestId = "CQWWSSB2002", ClaimedScore = 15000060, Club = "EA Contest Clib", Operators = "EA9LZ, W7EJ, M0DRX" },
+                new CabrilloInfo { CallSignId = 2, ContestId = "CQWWSSB2002", ClaimedScore = 10000060, Club = "ITALY Clib", Operators = "IK2QEI" },
+                new CabrilloInfo { CallSignId = 3, ContestId = "CQWWSSB2002", ClaimedScore = 10000060, Club = "MOSCOW Clib", Operators = "RL3FT" }
                 );
         }
     }

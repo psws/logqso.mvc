@@ -2,31 +2,31 @@
 make sure jims9m8r is user
 
 open SSMS
-go to Database=>Logqso=>Task=>backup
+go to Database=>Contestqso=>Task=>backup
 accepy all defsaults
 select OK
 
-go to Database=>LogqsoData=>Task=>backup
+go to Database=>ContestqsoData=>Task=>backup
 accepy all defsaults
 select OK
 
 
 Next
-creaate a LogqsoTest DB that is clone of Logqso.
+creaate a ContestqsoTest DB that is clone of Contestqso.
 used for integration testing.
 in SSMS
 database=> restore
-select Logqso as the source DB
-enter LogQsoTest as the DestineationDB.
+select Contestqso as the source DB
+enter ContestqsoTest as the DestineationDB.
 Select OK
 
-creaate a LogqsoDataTest DB that is clone of LogqsoData.
+creaate a ContestqsoDataTest DB that is clone of ContestqsoData.
 used for integration testing.
 in SSMS
 database=> restore
-select LogqsoData as the source DB
-enter LogQsoDataTest as the DestineationDB.
+select ContestqsoData as the source DB
+enter ContestqsoDataTest as the DestineationDB.
 Select OK
 
-NEXT go to the Generate LogqsoTest SQL DB script for integreation testing.txt document
+NEXT go to the Generate ContestqsoTest SQL DB script for integreation testing.txt document
 Follow the procedure to creat the .sql file for the Integration tessts to use.

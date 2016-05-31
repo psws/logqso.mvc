@@ -34,7 +34,7 @@ namespace Logqso.Repository
            // registerComponent.RegisterType<IUnitOfWorkAsync, UnitOfWork>();
             //registerComponent.RegisterType<IRepositoryAsync<CatOperator>, Repository<CatOperator>>();
 
-            registerComponent.RegisterType<ILogqsoControlContext, LogControlContext>();
+            registerComponent.RegisterType<ILogqsoControlContext, ContestqsoContext>();
             registerComponent.RegisterType<IControlUnitOfWorkAsync, ControlUnitOfWork>();
             registerComponent.RegisterType<IRepositoryAsync<CatOperator>, ResposituryControl<CatOperator>>();
 
@@ -75,7 +75,7 @@ namespace Logqso.Repository
             //registerComponent.RegisterType<IUnitOfWorkAsync, UnitOfWork>();
             //registerComponent.RegisterType<IRepositoryAsync<Log>, Repository<Log>>();
             //support for multiple DB
-            registerComponent.RegisterType<ILogqsoDataContext, LogqsoDataContext>();
+            registerComponent.RegisterType<ILogqsoDataContext, ContestqsoDataContext>();
             registerComponent.RegisterType<ILogUnitOfWorkAsync, LogUnitOfWork>();
             registerComponent.RegisterType<IRepositoryAsync<Log>, ResposituryLog<Log>>();
             

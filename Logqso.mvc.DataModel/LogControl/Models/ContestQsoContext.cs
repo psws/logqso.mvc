@@ -8,15 +8,15 @@ using Infrastructure;
 
 namespace Logqso.mvc.DataModel.LogControl.Models
 {
-    public partial class LogControlContext : DataContext, ILogqsoControlContext
+    public partial class ContestqsoContext : DataContext, ILogqsoControlContext
     {
-        static LogControlContext()
+        static ContestqsoContext()
         {
-            Database.SetInitializer<LogControlContext>(null);
+            Database.SetInitializer<ContestqsoContext>(null);
         }
 
-        public LogControlContext()
- #if CONTESTQSODEBUG || CONTESTQSORELEASE
+        public ContestqsoContext()
+#if CONTESTQSODEBUG || CONTESTQSORELEASE
             : base("Name=LogControlDBhostfest")
 #elif CONTESTQSO1n1DEBUG
             : base("Name=LogControlDB1and1")

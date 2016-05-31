@@ -1,10 +1,12 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Threading;
 using System.Threading.Tasks;
 using Repository.Pattern.DataContext;
 using Infrastructure;
+using System.Configuration;
 
 namespace Repository.Pattern.Ef6
 {
@@ -152,5 +154,8 @@ namespace Repository.Pattern.Ef6
 
             base.Dispose(disposing);
         }
+
+
+
     }
 }

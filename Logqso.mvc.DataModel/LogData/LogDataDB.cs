@@ -97,7 +97,6 @@ namespace Logqso.mvc.DataModel.LogData
         //marking FK the CallsignId relationship non cascade seems to 
             //make or allow LogID to be cascade on delete
             //DONT' KNOW WHY'
-            //https://msdn.microsoft.com/en-us/data/jj591620#RequiredToRequired
             modelBuilder.Entity<LogData.DataModels.Qso>().HasRequired(p => p.CallSign)
             .WithMany().HasForeignKey(c => c.CallsignId).WillCascadeOnDelete(false);
 
@@ -105,11 +104,21 @@ namespace Logqso.mvc.DataModel.LogData
             //.WithMany().HasForeignKey(c => c.LogId).WillCascadeOnDelete(false);
 
 
-#if false
+#if true
         //need to turn off CascadeOnDelete on QSO.LogId if not a composit key
            // https://msdn.microsoft.com/en-us/data/jj591620#RequiredToRequired
-            modelBuilder.Entity<LogData.DataModels.Qso>().HasRequired(p => p.Log)
-            .WithMany().HasForeignKey(c=>c.LogId).WillCascadeOnDelete(false);
+            //modelBuilder.Entity<LogData.DataModels.Qso>().HasRequired(p => p.Log)
+            //.WithMany().HasForeignKey(c => c.LogId).WillCascadeOnDelete(false);
+            //http://stackoverflow.com/questions/9136255/ef4-1-code-first-how-to-disable-delete-cascade-for-a-relationship-without-navi
+            //reverse of above
+            //No need for Log navigation property in Qso table
+            modelBuilder.Entity<LogData.DataModels.Log>().HasMany(p => p.Qsoes)
+            .WithRequired().HasForeignKey(c => c.LogId).WillCascadeOnDelete(false);
+
+            //modelBuilder.Entity<LogData.DataModels.Station>().HasRequired(p => p.Log)
+            //.WithMany().HasForeignKey(c => c.LogId).WillCascadeOnDelete(false);
+
+
 #endif
 
 

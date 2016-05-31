@@ -1,0 +1,10 @@
+﻿You can generate EDMX  view of Control and Data
+Control: go to Logqso.mvc.DataModel.LogControl.Models
+	right click on LogQsoContext.cs
+	select EntityFramework-> View Entioty Data Model ( read only)
+	edmc view will be gernerated
+
+Data: go to Logqso.mvc.DataModel.LogData.Models
+	right click on LogqsoDataContext.cs
+	select EntityFramework-> View Entioty Data Model ( read only)
+	edmc view will be gernerated

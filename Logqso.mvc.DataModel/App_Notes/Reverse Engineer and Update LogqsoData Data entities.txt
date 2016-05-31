@@ -5,12 +5,12 @@ set server to PSS60\SQL2014
 Set sql sever account radio button
 enter User anme jims9m8r
 enter password jims9m8r
-select a database name = LogqsoData
+select a database name = ContestqsoData
 Click advanced tab
 go to  Security section
 Check persist security informatin = true
 
-A LOGQSODATA conreol models directory will be created.
+A ContestqsoData Data models directory will be created.
 Ths directory has a Sub directory Mapping
 Perform the following steps to separate the Entities project from EF6
 Move the Logqso.mvc.DataModel/Models folder to:
@@ -32,7 +32,7 @@ Move the Logqso.mvc.DataModel/Models folder to:
 		//evety file must derive from  : Entity in the LogControlEntity
 		public partial class Qso : Entity
 
-	edit the Logqso.mvs.DataModel/LogData/Models/LogDataContext file ( needs to derive from DataContext
+	edit the Logqso.mvs.DataModel/LogData/Models/ContestqsoDataContext file ( needs to derive from DataContext
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using Repository.Pattern.Ef6;
@@ -44,16 +44,23 @@ using Repository.Pattern.Extensions.interfaces;
 
 namespace Logqso.mvc.DataModel.LogData.Models
 {
-    public partial class LogqsoDataContext : DataContext, ILogqsoDataContext
+    public partial class ContestqsoDataContext : DataContext, ILogqsoDataContext
     {
-        static LogqsoDataContext()
+        static ContestqsoDataContext()
         {
-            Database.SetInitializer<LogqsoDataContext>(null);
+            Database.SetInitializer<ContestqsoDataContext>(null);
         }
 
-        public LogqsoDataContext()
+        public ContestqsoDataContext()
+#if CONTESTQSODEBUG || CONTESTQSORELEASE
+            : base("Name=LogDataDBhostfest")
+#elif CONTESTQSO1n1DEBUG
+        : base("Name=LogDataDB1and1")
+#elif CONTESTQSOSQL2012
+            : base("Name=LogDataDBsql2012")
+#else
             : base("Name=LogDataDB")
-        {
+#endif        {
         }
 
 

@@ -32,6 +32,7 @@ namespace Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB
             YaxisSeeds.SeedYaxis(context);
             XAxisSeeds.SeedXaxis(context);
             DefaultSeeds.SeedDefault(context);
+
         }
     }
 }

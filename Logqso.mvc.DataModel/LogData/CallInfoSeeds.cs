@@ -21,13 +21,13 @@ namespace Logqso.mvc.DataModel.LogData
             context.CallInfo.AddOrUpdate(
             p => p.CallInfoId,
                 new CallInfo {  CallGroup = CallGroupEnum.CALL1, CallsignId = 1,
-                                ContestId = "CQWWSSB2014", LogId = 1, SessionName = "default_cn2r_cn3a_cn2aa",
+                                ContestId = "CQWWSSB2002", LogId = 1, SessionName = "default_cn2r_cn3a_cn2aa",
                                 QsoRadioTypeEnum= common.Enum.QsoRadioTypeEnum.R1, StationName = "STN2",UserName = "default", Disabled = false},
                  new CallInfo {  CallGroup = CallGroupEnum.CALL2, CallsignId = 2, 
-                                ContestId = "CQWWSSB2014", LogId = 2, SessionName = "default_cn2r_cn3a_cn2aa",
+                                ContestId = "CQWWSSB2002", LogId = 2, SessionName = "default_cn2r_cn3a_cn2aa",
                                 QsoRadioTypeEnum= common.Enum.QsoRadioTypeEnum.R2,StationName = "STN1",UserName = "default", Disabled = false},
                   new CallInfo {  CallGroup = CallGroupEnum.CALL3, CallsignId = 3, 
-                                ContestId = "CQWWSSB2014", LogId = 3, SessionName = "default_cn2r_cn3a_cn2aa",
+                                ContestId = "CQWWSSB2002", LogId = 3, SessionName = "default_cn2r_cn3a_cn2aa",
                                 QsoRadioTypeEnum= common.Enum.QsoRadioTypeEnum.Run,UserName = "default", Disabled = false}
               );
            }

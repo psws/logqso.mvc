@@ -21,9 +21,8 @@ namespace Logqso.mvc.domain.Interfaces
             Task<IEnumerable<DataCallInfoDto>> GetDataCallInfoSelections(string Username);
             Task<IEnumerable<DataCallInfoDto>> GetDataCallInfoSelectionsAsync(string username);
             Task<MemoryStream> UpdateChartSettingsAsync(ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username);
-            Task<MemoryStream> UpdateChartSettings(ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username);
-            Task<DataCalls> GetCategorizedCallsAsync(dataCallObjDTO DataCallSetting, string Username);
- 
+            Task<DataCalls> GetCategorizedCallsAsync(dataCallObjDTO dataCallObjDTO, string Username);
+            Task<DataCallInfoDto> GetUpdatedContestCall(DataCallInfoDto dataCallObjDTO, string Username);
             
 #if false
             Task<ContestControlEntity> GetContestControlNames();

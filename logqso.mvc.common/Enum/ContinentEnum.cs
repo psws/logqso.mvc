@@ -8,12 +8,12 @@ namespace Logqso.mvc.common.Enum
 {
     public enum ContinentEnum
     {
-        ALL,
+        ALL = 0, //compat with ctyonj
         NA,
         SA,
         EU,
         AS,
         AF,
-        OC
+        OC,
     }
 }

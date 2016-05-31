@@ -16,7 +16,8 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         [DataType(DataType.Date)]
         public  DateTime ContestYear { get; set; }
         public int CallsignId { get; set; }
-        public  string ContestId { get; set; }
+        [Required]
+        public string ContestId { get; set; }
         public int LogCategoryId { get; set; }
         public short? QsoExchangeNumber { get; set; }  //ir: logs zone #
 

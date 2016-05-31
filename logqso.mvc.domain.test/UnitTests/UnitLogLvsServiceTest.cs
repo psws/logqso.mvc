@@ -38,7 +38,7 @@ namespace Logqso.mvc.domain.test.UnitTests
                 {
                     LogId = LogId,
                     ContestYear = DateTime.Now,
-                    ContestId = "CQWWSSB2015",
+                    ContestId = "CQWWSSB2002",
                 });
 
             //Badguid = Guid.NewGuid();
@@ -50,8 +50,8 @@ namespace Logqso.mvc.domain.test.UnitTests
 
             A.CallTo(() => _logRepository.GetByYear(Year))
                 .Returns(new List<Logqso.mvc.DataModel.LogData.DataModels.Log> {
-                new Logqso.mvc.DataModel.LogData.DataModels.Log() {LogId = 1,  ContestId = "CQWWSSB2015" , ContestYear = Year    },
-                new Logqso.mvc.DataModel.LogData.DataModels.Log() {LogId = 2,  ContestId = "CQWWSSB2015" , ContestYear = Year    },
+                new Logqso.mvc.DataModel.LogData.DataModels.Log() {LogId = 1,  ContestId = "CQWWSSB2002" , ContestYear = Year    },
+                new Logqso.mvc.DataModel.LogData.DataModels.Log() {LogId = 2,  ContestId = "CQWWSSB2002" , ContestYear = Year    },
                 } );
 
 

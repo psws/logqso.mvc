@@ -17,7 +17,7 @@ namespace Logqso.Repository
             //stubed out. replace by DB call
             Log.LogId = LogID;
             Log.ContestYear = DateTime.Now;
-            Log.ContestId = "CQWWSSB2015";
+            Log.ContestId = "CQWWSSB2002";
 
             return Log;
         }
@@ -27,8 +27,8 @@ namespace Logqso.Repository
 
             //stubed out. replace by DB call
             IReadOnlyList<Log> Logs = new List<Log> {
-            new Log() {LogId = 1,  ContestId = "CQWWSSB2015" , ContestYear = Year    },
-            new Log() {LogId = 2,  ContestId = "CQWWSSB2015" , ContestYear = Year    },
+            new Log() {LogId = 1,  ContestId = "CQWWSSB2002" , ContestYear = Year    },
+            new Log() {LogId = 2,  ContestId = "CQWWSSB2002" , ContestYear = Year    },
             };
 
             return Logs;

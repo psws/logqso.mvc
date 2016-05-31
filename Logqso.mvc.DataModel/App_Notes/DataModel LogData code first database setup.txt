@@ -82,14 +82,57 @@ Add any seed data in the configuration.cs file
 #if DEBUG
             QsoSeeds.SeedContest(context);
 #endif
+=====================================
+THIS STEP NOT REQUIREDALSO Before Updating DB
+this was avoided by doing 
+	         modelBuilder.Entity<LogData.DataModels.Log>().HasMany(p => p.Qsoes)
+            .WithRequired().HasForeignKey(c => c.LogId).WillCascadeOnDelete(false);
+in the LogDataDB.cs file OnModelCreating() method
+//http://stackoverflow.com/questions/9136255/ef4-1-code-first-how-to-disable-delete-cascade-for-a-relationship-without-navi
+=====================================
+We cannot set QSO.Logid to 'NoAction' on delete.
+The code in LogDataDB is not able to set false without creating Log navidation property and another Log_LogID FK in QSO table.
+I go not know what is causing this, maybe a bug.
+We have to block Cascading deletes by:
+so Do the falling in the generated file from the Add-Migrations  step   201605202329369_InitialDatabaseCreation Migration file
+	change the    .ForeignKey("dbo.Log", t => t.LogId, cascadeDelete: true)
+    to            .ForeignKey("dbo.Log", t => t.LogId, cascadeDelete: false)
 
-PM>Update-Database -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogData.Migrations.LogDataDB.Configuration -Verbose -ConnectionStringName "LogDataDB"
+		 CreateTable(
+						"dbo.Qso",
+						c => new
+							{
+								QsoNo = c.Short(nullable: false),
+								LogId = c.Int(nullable: false),
+								StationName = c.String(maxLength: 20, unicode: false),
+								Frequency = c.Decimal(nullable: false, precision: 18, scale: 2),
+								CallsignId = c.Int(nullable: false),
+								QsoDateTime = c.DateTime(nullable: false),
+								RxRst = c.Short(nullable: false),
+								TxRst = c.Short(nullable: false),
+								QsoExchangeNumber = c.Short(),
+								QsoModeTypeEnum = c.Int(nullable: false),
+								QsoRadioTypeEnum = c.Int(nullable: false),
+							})
+						.PrimaryKey(t => new { t.QsoNo, t.LogId })
+						.ForeignKey("dbo.CallSign", t => t.CallsignId)
+						.ForeignKey("dbo.QsoModeType", t => t.QsoModeTypeEnum, cascadeDelete: true)
+						.ForeignKey("dbo.QsoRadioType", t => t.QsoRadioTypeEnum, cascadeDelete: true)
+						.ForeignKey("dbo.Station", t => new { t.LogId, t.StationName })
+						.ForeignKey("dbo.Log", t => t.LogId, cascadeDelete: false)
+						.Index(t => new { t.LogId, t.StationName })
+						.Index(t => t.CallsignId)
+						.Index(t => t.QsoModeTypeEnum)
+						.Index(t => t.QsoRadioTypeEnum);
+==================================================================
+
+PM>Update-Database -Force -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogData.Migrations.LogDataDB.Configuration -Verbose -ConnectionStringName "LogDataDB"
 
 Package Model Console output
 PM> Update-Database -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogData.Migrations.LogDataDB.Configuration -Verbose -ConnectionStringName "LogDataDB"
 Using StartUp project 'Logqso.mvc.ui'.
 Specify the '-Verbose' flag to view the SQL statements being applied to the target database.
-Target database is: 'Logqso' (DataSource: PSS60\SQL2014, Provider: System.Data.SqlClient, Origin: Explicit).
+Target database is: 'ConrestqsoData' (DataSource: PSS60\SQL2014, Provider: System.Data.SqlClient, Origin: Explicit).
 Applying explicit migrations: [201507270650382_InitialDatabaseCreation].
 Applying explicit migration: 201507270650382_InitialDatabaseCreation.
 CREATE TABLE [dbo].[CallSign] (
@@ -136,6 +179,14 @@ VALUES (N'201507270650382_InitialDatabaseCreation', N'Logqso.mvc.DataModel.LogDa
 
 Running Seed method.
 PM>
+
+
+=======
+NOTE
+======
+EF codefirst migrattiom always creates Indexs for all FK table memners
+	CREATE INDEX [IX_LogId] ON [dbo].[Qso]([LogId])
+	CREATE INDEX [IX_CallsignId] ON [dbo].[Qso]([CallsignId])
 
 
 

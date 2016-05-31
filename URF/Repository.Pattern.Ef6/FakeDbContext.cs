@@ -53,5 +53,7 @@ namespace Repository.Pattern.Ef6
         }
 
         public void SyncObjectsStatePostCommit() { }
+        public void LogDatabase(string text) {}
+
     }
 }

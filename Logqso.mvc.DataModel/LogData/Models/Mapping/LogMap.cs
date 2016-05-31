@@ -13,6 +13,7 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
 
             // Properties
             this.Property(t => t.ContestId)
+                .IsRequired()
                 .HasMaxLength(35);
 
             this.Property(t => t.QsoDatabaseServerInstance)
@@ -45,7 +46,7 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
             this.HasRequired(t => t.CallSign)
                 .WithMany(t => t.Logs)
                 .HasForeignKey(d => d.CallsignId);
-            this.HasOptional(t => t.Contest)
+            this.HasRequired(t => t.Contest)
                 .WithMany(t => t.Logs)
                 .HasForeignKey(d => d.ContestId);
             this.HasRequired(t => t.LogCategory)

@@ -16,6 +16,7 @@ using Repository.Pattern.DataContext;
 using Infrastructure;
 using Repository.Pattern.Repositories;
 using Repository.Pattern.UnitOfWork;
+using System.IO;
 
 
 #endregion
@@ -249,5 +250,19 @@ namespace Repository.Pattern.Ef6
         }
 
         #endregion
+
+        public void LogDatabase(string text)
+        {
+#if DEBUGSQL
+            string Filepath = ConfigurationManager.AppSettings["SQLFileName"].ToString();
+            using (StreamWriter w = File.AppendText(Filepath))
+            {
+                w.WriteAsync(text);
+            }
+
+#endif
+        }
+
+
     }
 }

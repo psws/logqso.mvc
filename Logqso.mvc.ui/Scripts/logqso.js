@@ -28,7 +28,7 @@ $(function () {
 
     getAllControls();
     getAllData();
-    LoadCallPopupTabs();
+    _lq.LoadCallPopupTabs('All');
 
     $.widget("ui.selectmenu", $.ui.selectmenu, {
         open: function (event, ui) {
@@ -205,19 +205,19 @@ $(function () {
                 case 'chk1':
                     PropertyColorState("#Call1", "disabled", true, "#a4a3a3");
                     SelectMenuState("#Station1, #Radio1", "disable");
-                    _lq.DataCallSettingsDto[1].Disabled = true;
+                    _lq.DataCallInfoDTOs[0].Disabled = true;
                     DataUpdated = true;
                     break;
                 case 'chk2':
                     PropertyColorState("#Call2", "disabled", true, "#a4a3a3");
                     SelectMenuState("#Station2, #Radio2", "disable");
-                    _lq.DataCallSettingsDto[2].Disabled = true;
+                    _lq.DataCallInfoDTOs[1].Disabled = true;
                     DataUpdated = true;
                     break;
                 case 'chk3':
                     PropertyColorState("#Call3", "disabled", true, "#a4a3a3");
                     SelectMenuState("#Station3, #Radio3", "disable");
-                    _lq.DataCallSettingsDto[3].Disabled = true;
+                    _lq.DataCallInfoDTOs[2].Disabled = true;
                     DataUpdated = true;
                     break;
                 case 'filtercatchk':
@@ -242,19 +242,19 @@ $(function () {
                 case 'chk1':
                     PropertyColorState("#Call1", "disabled", false, "");
                     SelectMenuState("#Station1, #Radio1", "enable");
-                    _lq.DataCallSettingsDto[1].Disabled = false;
+                    _lq.DataCallInfoDTOs[0].Disabled = false;
                     DataUpdated = true;
                     break;
                 case 'chk2':
                     PropertyColorState("#Call2", "disabled", false, "");
                     SelectMenuState("#Station2, #Radio2", "enable");
-                    _lq.DataCallSettingsDto[2].Disabled = false;
+                    _lq.DataCallInfoDTOs[1].Disabled = false;
                     DataUpdated = true;
                     break;
                 case 'chk3':
                     PropertyColorState("#Call3", "disabled", false, "");
                     SelectMenuState("#Station3, #Radio3", "enable");
-                    _lq.DataCallSettingsDto[31].Disabled = false;
+                    _lq.DataCallInfoDTOs[2].Disabled = false;
                     DataUpdated = true;
                     break;
                 case 'filtercatchk':
@@ -278,7 +278,9 @@ $(function () {
             _lq.SessionSaveDataSettings();
         }
         if (ControlUpdated == true || DataUpdated == true) {
-            
+            //now update graph
+            _lq.UpdateChartData(false);
+
         }
 
 
@@ -471,18 +473,22 @@ $(function () {
     //set DDL change event
     $("select[id ^='Cat'], select[id ^='Filt'], select[id ^='Yaxis'], select[id ^='Xaxis']").
         each(function (indexInArray, valueOfElement) {
-            $(this).on("selectmenuselect", function (event, ui) {
-                id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
-                _lq.ControlUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML, id[0].value);
+            $(this).on("selectmenuchange", function (event, ui) {
+                if (_lq.ChartUpdateReqd == true) {
+                    id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
+                    _lq.ControlUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML, id[0].value);
+                }
             })
 
         });
     //set DDL Data change event
     $("select[id ^='Station'], select[id ^='Radio']").
         each(function (indexInArray, valueOfElement) {
-            $(this).on("selectmenuselect", function (event, ui) {
-                id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
-                _lq.DataUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML);
+            $(this).on("selectmenuchange", function (event, ui) {
+                if (_lq.ChartUpdateReqd == true) {
+                    id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
+                    _lq.DataUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML);
+                }
             })
 
         });
@@ -718,17 +724,29 @@ $(function () {
                 //alert(ui.newTab.attr('li', "innerHTML")[0].getElementsByTagName("a")[0].innerHTML);
                 //alert( this.text);
             }
-            });
+        });
 
         //LoadInitialCallTab() tab is only called once
         //after this first call, InitTabState is set true.
         //Whenever the call? button is pushed, getAllData will be called if the button call[0] is in the InitTab character range.
         //Without this hack the initTab initial tab is never updated again.
-        if (_lq.InitTabState == 0) {
-            _lq.InitTabState = 1;
-        } else if (_lq.InitTab == call[0]) {
-            _lq.GetCallData(_lq.parent_modal_box_id, null);
-        }
+        ////if (_lq.InitTabState == 0) {
+        ////    _lq.InitTabState = 1;
+        ////} else if (_lq.InitTab == call[0]) {
+        ////    _lq.GetCallData(_lq.parent_modal_box_id, null);
+        ////} else if (_lq.InitTabState == 2) {
+        ////    //value 2 indicates contest changed
+        ////    _lq.InitTabState = 1;
+        ////    _lq.GetCallData(_lq.parent_modal_box_id, null);
+        ////}
+
+        ////var TabdivOl = TabdivOl = $('div[id =' + tabNo + '] div[id=' + actDiv + ']')
+        ////if (TabdivOl[0].children.length == 0) {
+        ////    var tabChar = call[0];
+        ////    _lq.GetCallData(_lq.parent_modal_box_id, tabChar);
+        ////}
+
+
         //var CallTab = $("#tabs1").tabs("widget");
         $("#" + tabNo + " ul.ui-tabs-nav li a").
             each(function (indexInArray, valueOfElement) {
@@ -992,8 +1010,13 @@ $(function () {
             SetControlYaxisSettingsDefaults(data.ControlYaxisSettingsDto);
 
             _lq.SessionSaveControlSettings();
-
-        };  
+            _lq.ChartControlLoaded = true;
+            if (_lq.ChartInitialUpdateReqd == true && _lq.ChartDataLoaded == true && _lq.ChartControlLoaded == true)
+            {
+                _lq.ChartInitialUpdateReqd = false;
+                _lq.UpdateChartData(false);
+            }
+        };
     }
 
 
@@ -1010,28 +1033,38 @@ $(function () {
             //popup dialog selection box, to select whivh saved session
             //noy implemented yet
         } else {
+            SetContestinfo(1, data[0]); //only once
             for (var i = 0; i < data.length; i++) {
     
                 switch (data[i].CallGroup) {
                     case 1:
-                        SetCallinfo(1, data[i]);
+                        _lq.SetCallinfo(1, data[i]);
+                        _lq.SetDataCallInfoDTO(data[i]);
                         break;
                     case 2:
-                        SetCallinfo(2, data[i]);
+                        _lq.SetCallinfo(2, data[i]);
+                        _lq.SetDataCallInfoDTO(data[i]);
                         break;
                     case 3:
-                        SetCallinfo(3, data[i]);
+                        _lq.SetCallinfo(3, data[i]);
+                        _lq.SetDataCallInfoDTO(data[i]);
                         break;
                     default:
         
                 }
             }
         }
-        SetDataSettingsDefaults(data);
+        //SetDataSettingsDefaults(data);
+        _lq.SessionSaveDataSettings();
+        _lq.ChartDataLoaded = true;
+        if (_lq.ChartInitialUpdateReqd == true && _lq.ChartDataLoaded == true && _lq.ChartControlLoaded == true) {
+            _lq.ChartInitialUpdateReqd = false;
+            _lq.UpdateChartData(false);
+        }
 
     }
 
-    function SetCallinfo(index, data) {
+    function SetContestinfo(index, data) {
         var olWWs = $("div[id= WWssblist] ol.two-col-list")
         var olWWc = $("div[id= WWcwlist] ol.two-col-list")
         var olWPX = $("div[id= WPXlist] ol.two-col-list")
@@ -1047,41 +1080,10 @@ $(function () {
                 olWPX.append('<li value = ' + val.key +'>' + val.value + '</li>');
             }
         })
-
-        $select = $("div[id^= bdyPnl] #Station" + index)
-        $select.html('');
-        $.each(data.StationNames, function (key, val) {
-            $select.append('<option value = ' + val.key + '>' + val.value + '</option>');
-        })
-
-        $select = $("div[id^= bdyPnl] #Radio" + index)
-        $select.html('');
-        $.each(data.RadioNames, function (key, val) {
-            $select.append('<option value = ' + val.key + '>' + val.value + '</option>');
-        })
     }
 
-    function LoadCallPopupTabs() {
-        $('div[id^=tab]').each(function () {
-            var tab = this.id;
-            var TabUl = $('div[id=' + tab + '] ul');
-            var DivUl = $('div[id=' + tab + ']');
 
-            var alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            if ($('div[id=' + tab + '] ul li').length == 0) {
-
-                TabUl.append('<li ><a href="#CTab1">1-9</a></li>');
-                DivUl.append('<div id="CTab1"></div>');
-                var CTab = "CTab";
-                for (var i = 0; i < 26; i++) {
-                    TabUl.append('<li ><a href="#' + CTab + alpha[i] + '">' + alpha[i] + '</a></li>');
-                    DivUl.append('<div id="' + CTab + alpha[i] + '"></div>');
-                }
-            }
-
-        });
-
-    }
+  
 
     function LoadInitialCallTab(event, ui) {
         //function LoadCallTab(actDiv, Callgroup) {
@@ -1300,83 +1302,9 @@ $(function () {
         _lq.ControlYaxisSettingsDto = ControlYaxisSettingsDto;
     }
 
-    function SetDataSettingsDefaults(DataCallInfoObj) {
-        for (var i = 0; i < DataCallInfoObj.length; i++) {
-            _lq.DataCallSettingsDto[i].CallGroup = DataCallInfoObj[i].CallGroup;
-            _lq.DataCallSettingsDto[i].SelectedContestName = DataCallInfoObj[i].SelectedContestName;
-            _lq.DataCallSettingsDto[i].SelectedCall = DataCallInfoObj[i].SelectedCall;
-            _lq.DataCallSettingsDto[i].SelectedRadioType = DataCallInfoObj[i].QsoRadioType;
-            _lq.DataCallSettingsDto[i].Disabled = DataCallInfoObj[i].Disabled;
-            _lq.DataCallSettingsDto[i].LogId = DataCallInfoObj[i].LogId;
-
-            switch (DataCallInfoObj[i].CallGroup) {
-                case 1:
-                    //http://stackoverflow.com/questions/5580616/jquery-change-button-text
-                    $("button[id='Call1'] ").text(DataCallInfoObj[i].SelectedCall);
-                    $("button[id='Contest1'] span").text(DataCallInfoObj[i].SelectedContestName);
-                    if (DataCallInfoObj[i].SelectedStationName != null) {
-                        $select = $('#Station1').val(DataCallInfoObj[i].SelectedStationName).selectmenu("refresh");
-                        _lq.DataCallSettingsDto[i].SelectedStationName = DataCallInfoObj[i].SelectedStationName;
-                    }else {
-                        $select = $('#Station1').val("ALL").selectmenu("refresh");
-                        _lq.DataCallSettingsDto[i].SelectedStationName = "ALL";
-                    }
-                    var chk = $("input[id='chk1'] ")
-                    if (chk .length != 0) {
-                        if (DataCallInfoObj[i].Disabled == true) {
-                            chk[0].checked = true;
-                        } else {
-                            chk[0].checked = false;
-                        }
-                    }
-                    $select = $('#Radio1').prop("selectedIndex", DataCallInfoObj[i].QsoRadioType).selectmenu('refresh');
-                    break;
-                case 2:
-                    //http://stackoverflow.com/questions/5580616/jquery-change-button-text
-                    $("button[id='Call2'] ").text(DataCallInfoObj[i].SelectedCall);
-                    $("button[id='Contest2'] span").text(DataCallInfoObj[i].SelectedContestName);
-                    if (DataCallInfoObj[i].SelectedStationName != null) {
-                        $select = $('#Station2').val(DataCallInfoObj[i].SelectedStationName).selectmenu("refresh");
-                    } else {
-                        $select = $('#Station2').val("ALL").selectmenu("refresh");
-                    }
-                    var chk = $("input[id='chk2'] ")
-                    if (chk.length != 0) {
-                        if (DataCallInfoObj[i].Disabled == true) {
-                            chk[0].checked = true;
-                        } else {
-                            chk[0].checked = false;
-                        }
-                    }
-                    $select = $('#Radio2').prop("selectedIndex", DataCallInfoObj[i].QsoRadioType).selectmenu('refresh');
-                    break;
-                case 3:
-                    //http://stackoverflow.com/questions/5580616/jquery-change-button-text
-                    $("button[id='Call3'] ").text(DataCallInfoObj[i].SelectedCall);
-                    $("button[id='Contest3'] span").text(DataCallInfoObj[i].SelectedContestName);
-                    if (DataCallInfoObj[i].SelectedStationName != null) {
-                        $select = $('#Station3').val(DataCallInfoObj[i].SelectedStationName).selectmenu("refresh");
-                    }else {
-                        $select = $('#Station3').val("ALL").selectmenu("refresh");
-                    }
-                    var chk = $("input[id='chk3'] ")
-                    if (chk.length != 0) {
-                        if (DataCallInfoObj[i].Disabled == true) {
-                            chk[0].checked = true;
-                        } else {
-                            chk[0].checked = false;
-                        }
-                    }
-                    $select = $('#Radio3').prop("selectedIndex", DataCallInfoObj[i].QsoRadioType).selectmenu('refresh');
-                    break;
-                default:
-        
-            }
-        }
-        _lq.SessionSaveDataSettings();
 
 
-    }
+
  
 
 
@@ -1402,6 +1330,10 @@ $(function () {
     _lq.InitTab;
     _lq.InitTabState = 0;
     _lq.ajaxCallCount = 0;
+    _lq.ChartUpdateReqd = false;
+    _lq.ChartInitialUpdateReqd = true;
+    _lq.ChartDataLoaded = false;
+    _lq.ChartControlLoaded = false;
 
     _lq.SessionSaveControlSelections;
 
@@ -1438,7 +1370,7 @@ $(function () {
     _lq.ControlSettingsDto = [_lq.ControlCategorySettingsDto, _lq.ControlFiltersSettingsDto, _lq.ControlXaxisSettingsDto, _lq.ControlYaxisSettingsDto];
 
 
-    _lq.DataCallSettings1 = {
+    _lq.DataCallInfoDto1 = {
         CallGroup: '',
         SelectedContestName: '',
         SelectedCall: '',
@@ -1450,7 +1382,7 @@ $(function () {
         ContestNames: '',
         RadioNames: '',
     };
-    _lq.DataCallSettings2 = {
+    _lq.DataCallInfoDto2 = {
         CallGroup: '',
         SelectedContestName: '',
         SelectedCall: '',
@@ -1462,7 +1394,7 @@ $(function () {
         ContestNames: '',
         RadioNames: '',
     };
-    _lq.DataCallSettings3 = {
+    _lq.DataCallInfoDto3 = {
         CallGroup: '',
         SelectedContestName: '',
         SelectedCall: '',
@@ -1476,10 +1408,10 @@ $(function () {
     };
 
 
-    _lq.DataCallSettingsDto = [_lq.DataCallSettings1, _lq.DataCallSettings2, _lq.DataCallSettings3];
+    _lq.DataCallInfoDTOs = [_lq.DataCallInfoDto1, _lq.DataCallInfoDto2, _lq.DataCallInfoDto3];
 
 
-    _lq.DataCallSettings = {
+    _lq.DataCallInfoDTO = {
         SelectedContestName: '',
         SelectedCall: '', 
         SelectedStationName: '', 
@@ -1573,13 +1505,40 @@ $(function () {
 
     }
 
+    _lq.LoadCallPopupTabs = function (Tabsel) {
+        var tab;
+        if (Tabsel == 'All') {
+            tab = 'tab';
+        } else {
+            tab = Tabsel;
+        }
+        $('div[id^=' + tab + ']').each(function () {
+            var tab = this.id;
+            var TabUl = $('div[id=' + tab + '] ul');
+            var DivUl = $('div[id=' + tab + ']');
+
+            var alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            if ($('div[id=' + tab + '] ul li').length == 0) {
+
+                TabUl.append('<li ><a href="#CTab1">1-9</a></li>');
+                DivUl.append('<div id="CTab1"></div>');
+                var CTab = "CTab";
+                for (var i = 0; i < 26; i++) {
+                    TabUl.append('<li ><a href="#' + CTab + alpha[i] + '">' + alpha[i] + '</a></li>');
+                    DivUl.append('<div id="' + CTab + alpha[i] + '"></div>');
+                }
+            }
+        })
+    }
+
 
     _lq.ContestSelectHandler = function (event) {
         //alert(event.data.test);
         $('#' + event.data.test + ' span.ui-button-text').text(event.currentTarget.textContent);
         $(".js-modal-close, .modal-overlay").trigger('click');
         //call DDL change event
-        _lq.DataUpdated(event.data.test, event.currentTarget.textContent);
+        //_lq.DataUpdated(event.data.test, event.currentTarget.textContent);
+        _lq.PostUpdateContestCall(event.data.test, event.currentTarget.textContent);
     };
 
     _lq.CallSelectHandler = function (event) {
@@ -1616,6 +1575,10 @@ $(function () {
                 default:
 
             }
+            _lq.removeTabData('tabs1');
+            _lq.removeTabData('tabs2');
+            _lq.removeTabData('tabs3');
+
         }else if (Controlid.indexOf("Filt")>= 0)  {
             switch (Controlid) {
                 case "FiltBand":
@@ -1714,6 +1677,172 @@ $(function () {
 
     }
 
+    _lq.SetCallinfo =  function (index, data) {
+
+        $select = $("div[id^= bdyPnl] #Station" + index)
+        $select.html('');
+        $.each(data.StationNames, function (key, val) {
+            $select.append('<option value = ' + val.key + '>' + val.value + '</option>');
+        })
+
+        $select = $("div[id^= bdyPnl] #Radio" + index)
+        $select.html('');
+        $.each(data.RadioNames, function (key, val) {
+            $select.append('<option value = ' + val.key + '>' + val.value + '</option>');
+        })
+    }
+
+    _lq.SetDataCallInfoDTO = function (DataCallInfoObj) {
+        i = DataCallInfoObj.CallGroup - 1;
+        _lq.DataCallInfoDTOs[i].CallGroup = DataCallInfoObj.CallGroup;
+        _lq.DataCallInfoDTOs[i].SelectedContestName = DataCallInfoObj.SelectedContestName;
+        _lq.DataCallInfoDTOs[i].SelectedCall = DataCallInfoObj.SelectedCall;
+        _lq.DataCallInfoDTOs[i].SelectedRadioType = DataCallInfoObj.QsoRadioType;
+        _lq.DataCallInfoDTOs[i].Disabled = DataCallInfoObj.Disabled;
+        _lq.DataCallInfoDTOs[i].LogId = DataCallInfoObj.LogId;
+
+        _lq.ChartUpdateReqd = false;
+        switch (DataCallInfoObj.CallGroup) {
+            case 1:
+                //http://stackoverflow.com/questions/5580616/jquery-change-button-text
+                $("button[id='Call1'] ").text(DataCallInfoObj.SelectedCall);
+                $("button[id='Contest1'] span").text(DataCallInfoObj.SelectedContestName);
+                if (DataCallInfoObj.SelectedStationName != null) {
+                    $select = $('#Station1').val(DataCallInfoObj.SelectedStationName).selectmenu("refresh");
+                    _lq.DataCallInfoDTOs.SelectedStationName = DataCallInfoObj.SelectedStationName;
+                } else {
+                    $select = $('#Station1').val("ALL").selectmenu("refresh");
+                    _lq.DataCallInfoDTOs.SelectedStationName = "ALL";
+                }
+                var chk = $("input[id='chk1'] ")
+                if (chk.length != 0) {
+                    if (DataCallInfoObj.Disabled == true) {
+                        chk[0].checked = true;
+                    } else {
+                        chk[0].checked = false;
+                    }
+                }
+                $select = $('#Radio1').prop("selectedIndex", DataCallInfoObj.QsoRadioType).selectmenu('refresh');
+                //$select = $('#Call1').val(DataCallInfoObj.SelectedCall).selectmenu("refresh");
+                //_lq.DataCallInfoDTOs.SelectedCall = DataCallInfoObj.SelectedCall;
+
+                break;
+            case 2:
+                //http://stackoverflow.com/questions/5580616/jquery-change-button-text
+                $("button[id='Call2'] ").text(DataCallInfoObj.SelectedCall);
+                $("button[id='Contest2'] span").text(DataCallInfoObj.SelectedContestName);
+                if (DataCallInfoObj.SelectedStationName != null) {
+                    $select = $('#Station2').val(DataCallInfoObj.SelectedStationName).selectmenu("refresh");
+                } else {
+                    $select = $('#Station2').val("ALL").selectmenu("refresh");
+                }
+                var chk = $("input[id='chk2'] ")
+                if (chk.length != 0) {
+                    if (DataCallInfoObj.Disabled == true) {
+                        chk[0].checked = true;
+                    } else {
+                        chk[0].checked = false;
+                    }
+                }
+                $select = $('#Radio2').prop("selectedIndex", DataCallInfoObj.QsoRadioType).selectmenu('refresh');
+                break;
+            case 3:
+                //http://stackoverflow.com/questions/5580616/jquery-change-button-text
+                $("button[id='Call3'] ").text(DataCallInfoObj.SelectedCall);
+                $("button[id='Contest3'] span").text(DataCallInfoObj.SelectedContestName);
+                if (DataCallInfoObj.SelectedStationName != null) {
+                    $select = $('#Station3').val(DataCallInfoObj.SelectedStationName).selectmenu("refresh");
+                } else {
+                    $select = $('#Station3').val("ALL").selectmenu("refresh");
+                }
+                var chk = $("input[id='chk3'] ")
+                if (chk.length != 0) {
+                    if (DataCallInfoObj.Disabled == true) {
+                        chk[0].checked = true;
+                    } else {
+                        chk[0].checked = false;
+                    }
+                }
+                $select = $('#Radio3').prop("selectedIndex", DataCallInfoObj.QsoRadioType).selectmenu('refresh');
+                break;
+            default:
+
+        }
+        _lq.ChartUpdateReqd = true;
+
+
+    }
+
+
+
+        //function for Call info if Contest or Call Changes
+    _lq.PostUpdateContestCall = function (Controlid, SelectedValue) {
+        if (Controlid.indexOf("Contest") >= 0) {
+            var tabNo;
+            var actDiv;
+            var DataCallInfoDto1;
+            switch (Controlid) {
+                case "Contest1":
+                    _lq.DataCallInfoDTOs[0].SelectedContestName = SelectedValue;
+                    DataCallInfoDto1 = _lq.DataCallInfoDTOs[0];
+                    //remove tab Ol
+                    tabNo = 'tabs1';
+                    actDiv = 'CTab' + $('button[id=Call1]')[0].innerText[0];
+                    break;
+                case "Contest2":
+                    _lq.DataCallInfoDTOs[1].SelectedContestName = SelectedValue;
+                    DataCallInfoDto1 = _lq.DataCallInfoDTOs[1];
+                    tabNo = 'tabs2';
+                    actDiv = 'CTab' + $('button[id=Call2]')[0].innerText[0];
+                    break;
+                case "Contest3":
+                    _lq.DataCallInfoDTOs[2].SelectedContestName = SelectedValue;
+                    DataCallInfoDto1 = _lq.DataCallInfoDTOs[2];
+                    tabNo = 'tabs3';
+                    actDiv = 'CTab' + $('button[id=Call3]')[0].innerText[0];
+                    break;
+                default:
+                    break;
+            }
+
+            var dataObj = DataCallInfoDto1;
+
+
+
+            _lq.ajaxHelper(_lq.dataUri + "/GetUpdatedContestCall", 'POST', 'json', false, dataObj, _lq.UpdateContestCall);
+
+            _lq.removeTabData(tabNo);
+        }
+    }
+
+    _lq.UpdateContestCall = function (DataCallInfoDto) {
+        switch (DataCallInfoDto.CallGroup) {
+            case 1:
+                _lq.SetCallinfo(1, DataCallInfoDto);
+                _lq.SetDataCallInfoDTO(DataCallInfoDto);
+                break;
+            case 2:
+                _lq.SetCallinfo(2, DataCallInfoDto);
+                _lq.SetDataCallInfoDTO(DataCallInfoDto);
+                break;
+            case 3:
+                _lq.SetCallinfo(3, DataCallInfoDto);
+                _lq.SetDataCallInfoDTO(DataCallInfoDto);
+                break;
+            default:
+        
+        }
+        //SetDataSettingsDefaults(data);
+        _lq.SessionSaveDataSettings();
+
+        //now update graph
+        _lq.UpdateChartData(false);
+
+
+    }
+
+
+
         //function for updating graph POST
     _lq.DataUpdated = function (Controlid, SelectedValue) {
         //alert("Control: " + Controlid + "-->Selected:" + SelectedValue);
@@ -1721,13 +1850,13 @@ $(function () {
         if (Controlid.indexOf("Station") >= 0) {
             switch (Controlid) {
                 case "Station1":
-                    _lq.DataCallSettingsDto[0].SelectedStationName = SelectedValue;
+                    _lq.DataCallInfoDTOs[0].SelectedStationName = SelectedValue;
                     break;
                 case "Station2":
-                    _lq.DataCallSettingsDto[1].SelectedStationName = SelectedValue;
+                    _lq.DataCallInfoDTOs[1].SelectedStationName = SelectedValue;
                     break;
                 case "Station3":
-                    _lq.DataCallSettingsDto[2].SelectedStationName = SelectedValue;
+                    _lq.DataCallInfoDTOs[2].SelectedStationName = SelectedValue;
                     break;
                 default:
                     break;
@@ -1735,13 +1864,13 @@ $(function () {
         }else if (Controlid.indexOf("Radio") >= 0) {
             switch (Controlid) {
                 case "Radio1":
-                    _lq.DataCallSettingsDto[0].SelectedRadioType = SelectedValue;
+                    _lq.DataCallInfoDTOs[0].SelectedRadioType = SelectedValue;
                     break;
                 case "Radio2":
-                    _lq.DataCallSettingsDto[1].SelectedRadioType = SelectedValue;
+                    _lq.DataCallInfoDTOs[1].SelectedRadioType = SelectedValue;
                     break;
                 case "Radio3":
-                    _lq.DataCallSettingsDto[2].SelectedRadioType = SelectedValue;
+                    _lq.DataCallInfoDTOs[2].SelectedRadioType = SelectedValue;
                     break;
                 default:
                     break;
@@ -1752,20 +1881,20 @@ $(function () {
             var actDiv;
             switch (Controlid) {
                 case "Contest1":
-                    _lq.DataCallSettingsDto[0].SelectedContestName = SelectedValue;
+                    _lq.DataCallInfoDTOs[0].SelectedContestName = SelectedValue;
                     //remove tab Ol
                     tabNo = 'tabs1';
                     actDiv = 'CTab' + $('button[id=Call1]')[0].innerText[0];
                     _lq.CallReload1 = true;
                     break;
                 case "Contest2":
-                    _lq.DataCallSettingsDto[1].SelectedContestName = SelectedValue;
+                    _lq.DataCallInfoDTOs[1].SelectedContestName = SelectedValue;
                     tabNo = 'tabs2';
                     actDiv = 'CTab' + $('button[id=Call2]')[0].innerText[0];
                     _lq.CallReload2 = true;
                     break;
                 case "Contest3":
-                    _lq.DataCallSettingsDto[2].SelectedContestName = SelectedValue;
+                    _lq.DataCallInfoDTOs[2].SelectedContestName = SelectedValue;
                     tabNo = 'tabs3';
                     actDiv = 'CTab' + $('button[id=Call3]')[0].innerText[0];
                     _lq.CallReload3 = true;
@@ -1773,22 +1902,24 @@ $(function () {
                 default:
                     break;
             }
-            $('div[id =' + tabNo + '] div[id=' + actDiv + ']')
-            .each(function (indexInArray, valueOfElement) {
-                $(this).empty();
-            });
+            ////$('div[id =' + tabNo + '] div[id=' + actDiv + ']')
+            ////.each(function (indexInArray, valueOfElement) {
+            ////    $(this).empty();
+            ////});
+
+            _lq.removeTabData(tabNo);
 
         }
         else if (Controlid.indexOf("Call") >= 0) {
             switch (Controlid) {
                 case "Call1":
-                    _lq.DataCallSettingsDto[0].SelectedCall = SelectedValue;
+                    _lq.DataCallInfoDTOs[0].SelectedCall = SelectedValue;
                     break;
                 case "Call2":
-                    _lq.DataCallSettingsDto[1].SelectedCall = SelectedValue;
+                    _lq.DataCallInfoDTOs[1].SelectedCall = SelectedValue;
                     break;
                 case "Call3":
-                    _lq.DataCallSettingsDto[2].SelectedCall = SelectedValue;
+                    _lq.DataCallInfoDTOs[2].SelectedCall = SelectedValue;
                     break;
                 default:
                     break;
@@ -1804,13 +1935,28 @@ $(function () {
         }
     }
 
+    _lq.removeTabData = function (tabNo) {
+        var seltab = $('div[id=' + tabNo + ']');
+        if (seltab.tabs("instance") != undefined) {
+            seltab.tabs("destroy");
+            //empty all ol
+            var TabClrOl = $('div[id =' + tabNo + ']  ol ')
+                .each(function (indexInArray, valueOfElement) {
+                    $(this).remove();
+                });
+            //_lq.LoadCallPopupTabs(tabNo);
+
+        }
+    }
+
+
     _lq.UpdateChartData = function (save) {
         if (save == true) {
             _lq.SessionSaveDataSettings();
         }
 
         var dataObj = {
-            DataCallSettingsDto: _lq.DataCallSettingsDto,
+            DataCallInfoDto: _lq.DataCallInfoDTOs,
             ControlSettingsDto: _lq.ControlSettingsDto=  {
                 ControlCategorySettingsDto: _lq.ControlCategorySettingsDto,
                 ControlFiltersSettingsDto: _lq.ControlFiltersSettingsDto,
@@ -1833,10 +1979,10 @@ $(function () {
 
     _lq.SessionSaveDataSettings = function () {
         var dataObj = {
-            DataCallSettingsDto: _lq.DataCallSettingsDto
+            DataCallInfoDto: _lq.DataCallInfoDTOs
         };
-        window.sessionStorage.removeItem(_lq.DataCallSettingsDto);
-        window.sessionStorage.setItem(_lq.DataCallSettingsDto, JSON.stringify(dataObj));
+        window.sessionStorage.removeItem(_lq.DataCallInfoDTOs);
+        window.sessionStorage.setItem(_lq.DataCallInfoDTOs, JSON.stringify(dataObj));
 
     }
 
@@ -1859,18 +2005,19 @@ $(function () {
             default:
 
         }
-        var DataCallSettings0 = _lq.DataCallSettingsDto[CallIndex];
-        if (SelectedTabName != null) {
-            DataCallSettings0.SelectedCall = SelectedTabName;
+        var DataCallInfoDto0 = _lq.DataCallInfoDTOs[CallIndex];
+        if (SelectedTabName == null) {
+            SelectedTabName = DataCallInfoDto0.SelectedCall;
         }
 
         var dataObj = {
-            DataCallSetting: DataCallSettings0,
-            ControlCategorySettingsDTO: _lq.ControlCategorySettingsDto
+            DataCallInfoDto: DataCallInfoDto0,
+            ControlCategorySettingsDTO: _lq.ControlCategorySettingsDto,
+            CallTab: SelectedTabName
     }
 
         //_lq.ajaxHelper(_lq.dataUri + '/PostCallsRequest', 'POST', 'json', false, _lq.ControlCategorySettingsDto, _lq.UpdateCallTab);
-        //_lq.ajaxHelper(_lq.dataUri + '/PostDataCallsRequest', 'POST', 'json', false, _lq.DataCallSettingsDto[CallIndex], _lq.UpdateCallTab);
+        //_lq.ajaxHelper(_lq.dataUri + '/PostDataCallsRequest', 'POST', 'json', false, _lq.DataCallInfoDTOs[CallIndex], _lq.UpdateCallTab);
         _lq.ajaxHelper(_lq.dataUri + '/CallsRequest', 'POST', 'json', false, dataObj, _lq.UpdateCallTab);
 
         };
@@ -1910,21 +2057,17 @@ $(function () {
         var CallIndex = 0;
         var column = 1;
 
-        //empty previous calls
-        var TabClrOl = $('div[id =' + tabNo + '] ol[id^=' + list + ']')
-            .each(function (indexInArray, valueOfElement) {
-                $(this).empty();
-            });
-        //empty div
-        $('div[id =' + tabNo + '] div[id=' + actDiv + ']')
-            .each(function (indexInArray, valueOfElement) {
-                $(this).empty();
-            });
-
+        ////empty previous calls
+        //var TabClrOl = $('div[id =' + tabNo + '] ol[id^=' + list + ']')
+        //    .each(function (indexInArray, valueOfElement) {
+        //        $(this).empty();
+        //    });
+        ////empty div
         //$('div[id =' + tabNo + '] div[id=' + actDiv + ']')
         //    .each(function (indexInArray, valueOfElement) {
         //        $(this).empty();
         //    });
+
 
         if (TotalCalls != 0) {
             for (var i = 0; i < TotalCalls; i += colLiCnt) {

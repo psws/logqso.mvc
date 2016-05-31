@@ -165,7 +165,7 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
                         LogId = c.Int(nullable: false, identity: true),
                         ContestYear = c.DateTime(nullable: false),
                         CallsignId = c.Int(nullable: false),
-                        ContestId = c.String(maxLength: 35, unicode: false),
+                        ContestId = c.String(nullable: false, maxLength: 35, unicode: false),
                         LogCategoryId = c.Int(nullable: false),
                         QsoExchangeNumber = c.Short(),
                         QsoDatabaseServerInstance = c.String(nullable: false, maxLength: 100, unicode: false),
@@ -176,7 +176,7 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
                     })
                 .PrimaryKey(t => t.LogId)
                 .ForeignKey("dbo.CallSign", t => t.CallsignId, cascadeDelete: true)
-                .ForeignKey("dbo.Contest", t => t.ContestId)
+                .ForeignKey("dbo.Contest", t => t.ContestId, cascadeDelete: true)
                 .ForeignKey("dbo.LogCategory", t => t.LogCategoryId, cascadeDelete: true)
                 .Index(t => t.CallsignId)
                 .Index(t => t.ContestId)
@@ -217,7 +217,7 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
                 .ForeignKey("dbo.QsoModeType", t => t.QsoModeTypeEnum, cascadeDelete: true)
                 .ForeignKey("dbo.QsoRadioType", t => t.QsoRadioTypeEnum, cascadeDelete: true)
                 .ForeignKey("dbo.Station", t => new { t.LogId, t.StationName })
-                .ForeignKey("dbo.Log", t => t.LogId, cascadeDelete: true)
+                .ForeignKey("dbo.Log", t => t.LogId)
                 .Index(t => new { t.LogId, t.StationName })
                 .Index(t => t.CallsignId)
                 .Index(t => t.QsoModeTypeEnum)
@@ -262,7 +262,7 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
                     {
                         QsoNo = c.Short(nullable: false),
                         LogId = c.Int(nullable: false),
-                        CorrectCall = c.String(),
+                        CorrectCall = c.String(nullable: false, maxLength: 20, unicode: false),
                     })
                 .PrimaryKey(t => new { t.QsoNo, t.LogId });
             
@@ -272,7 +272,7 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
                     {
                         QsoNo = c.Short(nullable: false),
                         LogId = c.Int(nullable: false),
-                        CorrectExchange = c.String(),
+                        CorrectExchange = c.String(nullable: false, maxLength: 20, unicode: false),
                     })
                 .PrimaryKey(t => new { t.QsoNo, t.LogId });
             
@@ -293,6 +293,65 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
                         ContestId = c.String(nullable: false, maxLength: 35, unicode: false),
                         ContestYear = c.DateTime(nullable: false),
                         LogCategoryId = c.Int(nullable: false),
+                        DuplicateCount = c.Int(nullable: false),
+                        Claimed160Qso = c.Short(),
+                        Claimed160Points = c.Int(),
+                        Claimed160Countries = c.Short(),
+                        Claimed160Zones = c.Short(),
+                        Claimed80Qso = c.Short(),
+                        Claimed80Points = c.Int(),
+                        Claimed80Countries = c.Short(),
+                        Claimed80Zones = c.Short(),
+                        Claimed40Qso = c.Short(),
+                        Claimed40Points = c.Int(),
+                        Claimed40Countries = c.Short(),
+                        Claimed40Zones = c.Short(),
+                        Claimed20Qso = c.Short(),
+                        Claimed20Points = c.Int(),
+                        Claimed20Countries = c.Short(),
+                        Claimed20Zones = c.Short(),
+                        Claimed15Qso = c.Short(),
+                        Claimed15Points = c.Int(),
+                        Claimed15Countries = c.Short(),
+                        Claimed15Zone3 = c.Short(),
+                        Claimed10Qso = c.Short(),
+                        Claimed10Points = c.Int(),
+                        Claimed10Countries = c.Short(),
+                        Claimed10Zones = c.Short(),
+                        ClaimedTotalQSO = c.Int(),
+                        ClaimedCountries = c.Short(),
+                        ClaimedZones = c.Short(),
+                        ClaimedTotalPoints = c.Int(),
+                        ClaimedScore = c.Int(),
+                        Final160Qso = c.Short(),
+                        Final160Points = c.Int(),
+                        Final160Countries = c.Short(),
+                        Final160Zones = c.Short(),
+                        Final80Qso = c.Short(),
+                        Final80Points = c.Int(),
+                        Final80Countries = c.Short(),
+                        Final80Zones = c.Short(),
+                        Final40Qso = c.Short(),
+                        Final40Points = c.Int(),
+                        Final40Countries = c.Short(),
+                        Final40Zones = c.Short(),
+                        Final20Qso = c.Short(),
+                        Final20Points = c.Int(),
+                        Final20Countries = c.Short(),
+                        Final20Zones = c.Short(),
+                        Final15Qso = c.Int(),
+                        Final15Points = c.Int(),
+                        Final15Countries = c.Int(),
+                        Final15Zones = c.Int(),
+                        Final10Qso = c.Short(),
+                        Final10Points = c.Int(),
+                        Final10Countries = c.Short(),
+                        Final10Zones = c.Short(),
+                        FinalTotalQSO = c.Int(),
+                        FinalCountries = c.Short(),
+                        FinalZones = c.Short(),
+                        FinalTotalPoints = c.Int(),
+                        FinalScore = c.Int(),
                     })
                 .PrimaryKey(t => new { t.CallsignId, t.ContestId })
                 .ForeignKey("dbo.CallSign", t => t.CallsignId, cascadeDelete: true)

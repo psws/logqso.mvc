@@ -18,6 +18,10 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
             this.Property(t => t.LogId)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
+            this.Property(t => t.CorrectExchange)
+                .IsRequired()
+                .HasMaxLength(20);
+
             // Table & Column Mappings
             this.ToTable("UbnIncorrectExchange");
             this.Property(t => t.QsoNo).HasColumnName("QsoNo");

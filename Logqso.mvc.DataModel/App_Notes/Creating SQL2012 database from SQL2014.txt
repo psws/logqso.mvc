@@ -1,0 +1,63 @@
+﻿1n1 and Hpstingfest run SQL2012
+My original project was created in SQL2014
+SSMS import/export does not support Key copying
+
+An alternate scheme uses SQL scripts and import from SSMS.
+
+For the Control library you can just use a script that includes all Data tables.
+1) In SQL2014 select right click on Logqso DB ->Tasks->Generate scripts
+2) Select Entire Database then Next
+3) Set filepath to generate logqso2012script.sql
+4) select advanced button
+5)		script for SQL version => SQL2012
+6) Type of data to script =>schema and data
+7)		Script Check Constraints => false
+8)got to Finish
+SQL2014 indexes all FKs. This makes the DB very huge.
+Goto SQL 2012,
+Create the Contesqso daabase.
+run the logqso2012script.sql script against the Contestqso DB..
+--------
+For the Data library you can use a script that includes all Data except the huge QSO table..
+1) In SQL2014 select right click on LogqsoData DB ->Tasks->Generate scripts
+2) Select All Database tables except for the QSO table then Next
+3) Set filepath to generate logqsoData2012script.sql
+4) select advanced button
+5)		script for SQL version => SQL2012
+6) Type of data to script =>schema and data
+7)		Script Check Constraints => false
+8)got to Finish
+SQL2014 indexes all FKs. This makes the DB very huge.
+Goto SQL 2012,
+Create the ContesqsoData database.
+run the logqsoData2012script.sql script against the ContestqsoData DB.
+
+Next import QSO data
+1) right click on the SQL2012 ContestQqsoData. db
+2) select Tasks=>import data.
+3) Select Data Source 'SQL server native client 10.0'
+4) Select Server PSS60\SQL2014
+5) Select database 'LogqsoData' 
+6) Select Next and set the Data Source 'SQL server native client 10.0'  then Next
+7) The  Select Server PSS60\SQL2012
+8) Select database 'Contestqsoata' 
+9) next next
+10) select only the Qso table then Next
+11) finally finish
+
+After the data is copied add indexes to the Call and Log tables
+	IX_Call index Callsign.Call unique and non-clustered
+	IX_Callsignid index Log.callsignid non-unique and no clustered.
+Right click on each of thes indexes and select Rebuild
+
+To test the results, selecting a Call in Call1, call2 orcall3 should return the list of calls quickly in the tab
+
+
+
+
+
+
+
+
+
+Add indexes for Callsign.call and Log.Callsignid.

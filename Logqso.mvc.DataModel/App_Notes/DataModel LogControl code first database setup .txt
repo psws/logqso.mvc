@@ -12,7 +12,7 @@
     }
 }
 setup configuration string in web.config
-    <add name="LogqsoDB" connectionString="Data Source=PSS60\SQL2014; Initial Catalog=Logqso; persist security info=True;user id=jims9m8r;password=jims9m8r;MultipleActiveResultSets=True;App=EntityFramework"
+    <add name="LogControlDB" connectionString="Data Source=PSS60\SQL2014; Initial Catalog=Contestqso; persist security info=True;user id=jims9m8r;password=jims9m8r;MultipleActiveResultSets=True;App=EntityFramework"
 
 
 NOTE: Make sure your class derives from LogControlDB : DbContext
@@ -24,7 +24,7 @@ namespace Logqso.mvc.DataModel.LogControl
     {
 
         public LogControlDB()
-            : base("name=LogDataDB")
+            : base("name=LogControlDB")
         {
         }
 

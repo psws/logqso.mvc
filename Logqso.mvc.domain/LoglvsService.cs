@@ -58,8 +58,8 @@ namespace Logqso.mvc.domain
             //    new Log() {   };
             //    ;
             IReadOnlyList<Log> LogEntitiess = new List<Log> {
-            new Log() {LogId = 1, ContestId = "CQWWSSB2015",  ContestYear = Year    },
-            new Log() {LogId = 2, ContestId = "CQWWSSB2015",  ContestYear = Year    },
+            new Log() {LogId = 1, ContestId = "CQWWSSB2002",  ContestYear = Year    },
+            new Log() {LogId = 2, ContestId = "CQWWSSB2002",  ContestYear = Year    },
             };
 
             return LogEntitiess;

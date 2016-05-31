@@ -97,7 +97,7 @@ namespace Logqso.WebApi
 
 
         //one selection group
-        [HttpPost]
+        [HttpGet]
         [ResponseType(typeof(HttpResponseMessage))]
         [Route("GetControlSelection/{Selection}")]
         public async Task<IHttpActionResult> GetControlSelection(string Selection)

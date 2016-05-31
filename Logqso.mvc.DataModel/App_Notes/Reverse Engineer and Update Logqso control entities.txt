@@ -1,21 +1,21 @@
 ﻿Using installed extendion Microsoft entity power toos beta 4
-right click on Logqsomvc.DataModel project
+right click on Logqso mvc.DataModel project
 select entity framework select reverse engineer code first
 set server to PSS60\SQL2014
 Set sql sever account radio button
 enter User anme jims9m8r
 enter password jims9m8r
-select a database name = Logqso
+select a database name = Contestqso
 Click advanced tab
 go to  Security section
 Check persist security informatin = true
 
-A LOGQSO conreol models directory will be created.
+A ContestQSO conreol models directory will be created.
 Ths directory has a Sub directory Mapping
-Perform yhe following steps to separate the Entities project from EF6
+Perform the following steps to separate the Entities project from EF6
 Move the Logqso.mvc.DataModel/Models folder to:
 	Logqso.mvs.DataModel/LogControl foldeer
-	Leave the LogControlContext.cs file in the Logqso.mvs.DataModel/LogControl/Models foldeer
+	Leave the ContestqsoContext.cs file in the Logqso.mvs.DataModel/LogControl/Models foldeer
 	Move all the remaining files, in the Models folder to the Logqso.mvc.Entities/LogControlEntity foldeer.
 	Leave the Logqso.mvs.DataModel/LogControl/Models/Mapping folder in the Logqso.mvs.DataModel/LogControl/Models folder.
 		be sure to change its namespace to Logqso.mvc.DataModel.LogControl.Models.
@@ -24,14 +24,14 @@ Move the Logqso.mvc.DataModel/Models folder to:
 		using Logqso.mvc.Entities.LogControlEntity;
 
 		namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
-		onpmtrolEntity folder change/add the following:
+	edit every file in the Logqso.mvc.Entities/LogControlEntity folder change/add the following:
 		using Infrastructure;
 
 		namespace Logqso.mvc.Entities.LogControlEntity
 		//evety file must derive from  : Entity in the LogControlEntity
 		public partial class YaxisViewType : Entity
 
-	edit the Logqso.mvs.DataModel/LogControl/Models/LogControlContext file (needs to derive from DataContext)
+	edit the Logqso.mvs.DataModel/LogControl/Models/ContestqsoContext file (needs to derive from DataContext)
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using Repository.Pattern.Ef6;
@@ -42,15 +42,23 @@ using Infrastructure;
 
 namespace Logqso.mvc.DataModel.LogControl.Models
 {
-    public partial class LogControlContext : DataContext, ILogqsoControlContext
+    public partial class ContestqsoContext : DataContext, ILogqsoControlContext
     {
-        static LogControlContext()
+        static ContestqsoContext()
         {
-            Database.SetInitializer<LogControlContext>(null);
+            Database.SetInitializer<ContestqsoContext>(null);
         }
 
-        public LogControlContext()
+        public ContestqsoContext()
+ #if CONTESTQSODEBUG || CONTESTQSORELEASE
+            : base("Name=LogControlDBhostfest")
+#elif CONTESTQSO1n1DEBUG
+            : base("Name=LogControlDB1and1")
+#elif CONTESTQSOSQL2012
+            : base("Name=LogControlDBsql2012")
+#else
             : base("Name=LogControlDB")
+#endif
         {
         }
 

@@ -80,6 +80,15 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ContestQsoSql2012Rel|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ContestQsoSql2012Rel\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper">
       <HintPath>..\packages\AutoMapper.4.0.0-ci1046\lib\net45\AutoMapper.dll</HintPath>
@@ -123,6 +132,7 @@
     <Compile Include="IntegrationTests\Data\IntegrationDataRepositoryTests.cs" />
     <Compile Include="IntegrationTests\Data\IntegrationDataLogServiceTests.cs" />
     <Compile Include="IntegrationTests\Data\IntegrationURFQuertable.cs" />
+    <Compile Include="IntegrationTests\Data\IntegrationURFSQL.cs" />
     <Compile Include="UnitTests\Automap\AutomapTest.cs" />
     <Compile Include="UnitTests\UnitCallSignServiceTest.cs" />
     <Compile Include="IntegrationTests\Control\IntegrationControlRepositoryTests.cs" />
@@ -221,8 +231,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Sql\Fin_loggedin_user_kill.sql" />
-    <Content Include="Sql\logqsoDataTest.sql" />
-    <Content Include="Sql\logqsoTest.sql" />
+    <Content Include="Sql\ContestqsoDataTest.sql" />
+    <Content Include="Sql\ContestqsoTest.sql" />
   </ItemGroup>
   <ItemGroup />
   <Choose>

@@ -27,7 +27,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Control
         [TestInitialize]
         public void Initialize()
         {
-            Utility.CreateSeededTestDatabase("LogControlDB", "Sql\\logqsoTest.sql");
+            Utility.CreateSeededTestDatabase("LogControlDB", "Sql\\ContestqsoTest.sql");
         }
 
         [TestMethod]
@@ -36,7 +36,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Control
 
             // Create new customer
             // context object LogControlContext matches the same name used for Logqso DB
-            using (IDataContextAsync context = new LogControlContext())
+            using (IDataContextAsync context = new ContestqsoContext())
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 bool caught = false;
@@ -76,7 +76,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Control
 
             // Create new customer
             // context object LogControlContext matches the same name used for Logqso DB
-            using (IDataContextAsync context = new LogControlContext())
+            using (IDataContextAsync context = new ContestqsoContext())
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 bool caught = false;
@@ -135,7 +135,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Control
         [TestMethod]
         public void Integration_ControlService_GetContestControlNamesAsync()
         {
-            using (IDataContextAsync context = new LogControlContext())
+            using (IDataContextAsync context = new ContestqsoContext())
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 IRepositoryAsync<CatOperator> CatOperatorRepository = new Repository<CatOperator>(context, unitOfWork);
@@ -166,7 +166,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Control
         }
         public void Integration_ControlService_GetsAsync()
         {
-            using (IDataContextAsync context = new LogControlContext())
+            using (IDataContextAsync context = new ContestqsoContext())
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 IRepositoryAsync<FiltPrefix> FiltCountryRepository = new Repository<FiltPrefix>(context, unitOfWork);

@@ -48,7 +48,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         [TestInitialize]
         public void Initialize()
         {
-            Utility.CreateSeededTestDatabase("LogDataDB", "Sql\\logqsoDataTest.sql");
+            Utility.CreateSeededTestDatabase("LogDataDB", "Sql\\ContestqsoDataTest.sql");
         }
 
         [TestMethod]
@@ -56,7 +56,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         {
             Logqso.mvc.Entities.LogDataEntity.Log Log1 = null;
             // context object LogDataContext matches the same name used for LogqsoData DB
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
@@ -88,7 +88,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         {
             Logqso.mvc.Entities.LogDataEntity.Log Log1 = null;
             // context object LogDataContext matches the same name used for LogqsoData DB
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
@@ -122,7 +122,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         {
             //List<Logqso.mvc.Entities.LogDataEntity.Log> LogforId1s = null;
             // context object LogDataContext matches the same name used for LogqsoData DB
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {

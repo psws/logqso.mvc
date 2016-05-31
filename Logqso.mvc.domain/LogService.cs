@@ -22,6 +22,8 @@ using System.IO;
 using System.Drawing;
 using System.Diagnostics;
 
+using Logqso.mvc.domain.Charting;
+
 
 
 namespace Logqso.mvc.domain
@@ -72,41 +74,26 @@ namespace Logqso.mvc.domain
             return DataCallInfoDtos;
         }
 
+
         public async Task<MemoryStream> UpdateChartSettingsAsync(ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username)
         {
-            MemoryStream MemoryStream = new MemoryStream();
-            //MemoryStream = await _repository.GenerateChartAsync(ChartCtlDataSettingsDto, username);
-//temporary
-            String filePath = HostingEnvironment.MapPath("~/Image/chart.png");
-
-            using (FileStream fs = File.OpenRead(filePath))
-            {
-                fs.CopyTo(MemoryStream);
-            }
-
-
-            //MemoryStream memoryStream = new MemoryStream();
-
-            //string path = Server.MapPath("~/ChartImages/chart.png");
-            //QSORateChart.SaveImage(path, ChartImageFormat.Png);
-
-            //return Task.FromResult(DataCallInfoDtos);
-            return MemoryStream;
-        }
-
-        public async Task<MemoryStream> UpdateChartSettings(ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username)
-        {
             MemoryStream MemoryStream = null;
+#if true
+            Chart RateChart = new Chart();
+            MemoryStream = await RateChart.LoadQSORateChart(ChartCtlDataSettingsDto, this._repository, username);
+            
+            
+#else
             //MemoryStream = await _repository.GenerateChart(ChartCtlDataSettingsDto, username);
 
-            //temporary
+           //temporary
             String filePath = HostingEnvironment.MapPath("~/Image/chart.png");
 
             using (FileStream fs = File.OpenRead(filePath))
             {
                 fs.CopyTo(MemoryStream);
             }
-
+#endif
             //return Task.FromResult(DataCallInfoDtos);
             return MemoryStream;
         }
@@ -118,16 +105,26 @@ namespace Logqso.mvc.domain
             LogCategory LogCategory = new LogCategory();
             SetLogCategory( LogCategory,  dataCallObjDTO.ControlCategorySettingsDto);
 
-            Logqso.mvc.common.Enum.CallGroupEnum CallGroup;
-            //Enum.TryParse<CallGroupEnum>(dataCallObjDTO.DataCallSetting.CallGroup.ToString(), out CallGroup);
+            //Logqso.mvc.common.Enum.CallGroupEnum CallGroup;
+            //Enum.TryParse<CallGroupEnum>(dataCallObjDTO.DataCallInfoDto.CallGroup.ToString(), out CallGroup);
 
 
-            DataCalls = await _repository.GetCategorizedCallsAsync(LogCategory, dataCallObjDTO.DataCallSetting.SelectedContestName,
-                dataCallObjDTO.DataCallSetting.SelectedCall, (CallGroupEnum)dataCallObjDTO.DataCallSetting.CallGroup, Username);
+            DataCalls = await _repository.GetCategorizedCallsAsync(LogCategory, dataCallObjDTO.DataCallInfoDto.SelectedContestName,
+                dataCallObjDTO.CallTab, (CallGroupEnum)dataCallObjDTO.DataCallInfoDto.CallGroup, Username);
 
             return DataCalls;
 
         }
+
+        public async Task<DataCallInfoDto> GetUpdatedContestCall(DataCallInfoDto DataCallInfoDto, string Username)
+        {
+
+            DataCallInfoDto = await _repository.GetUpdatedDataCallInfoDto(DataCallInfoDto, Username);
+
+            return DataCallInfoDto;
+
+        }
+
 
         public override void Insert(Log entity)
         {
@@ -142,7 +139,7 @@ namespace Logqso.mvc.domain
         }
 
 
-        private void SetLogCategory(LogCategory LogCategory, ControlCategorySettingsDto ControlCategorySettingsDto)
+        public static void SetLogCategory(LogCategory LogCategory, ControlCategorySettingsDto ControlCategorySettingsDto)
         {
             //ALL HAVE TO BE CAST AS INT BECAUSE OF EF BUG
             //ALL names SHOULD MATCH 

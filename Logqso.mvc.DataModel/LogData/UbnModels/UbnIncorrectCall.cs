@@ -17,6 +17,9 @@ namespace Logqso.mvc.DataModel.LogData.UbnModels
         [Column(Order = 2)]
         //[ForeignKey("Log")]
         public int LogId { get; set; }
+        [Column(TypeName = "varchar")]
+        [MaxLength(20)]
+        [Required]
         public string CorrectCall { get; set; }
     }
 }

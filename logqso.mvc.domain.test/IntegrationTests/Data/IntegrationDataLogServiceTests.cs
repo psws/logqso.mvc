@@ -34,7 +34,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         [TestInitialize]
         public void Initialize()
         {
-            Utility.CreateSeededTestDatabase("LogDataDB", "Sql\\logqsoDataTest.sql");
+            Utility.CreateSeededTestDatabase("LogDataDB", "Sql\\ContestqsoDataTest.sql");
         }
 
         [TestMethod]
@@ -42,7 +42,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         {
             Logqso.mvc.Entities.LogDataEntity.Log LogforId1 = null;
             // context object LogDataContext matches the same name used for LogqsoData DB
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
             using (IUnitOfWorkAsync unitOfWorkData = new UnitOfWork(context))
             {
@@ -76,7 +76,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         {
             List<Logqso.mvc.Entities.LogDataEntity.Log> LogforId1s = null;
             // context object LogDataContext matches the same name used for LogqsoData DB
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
@@ -115,7 +115,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         {
             bool caught = false;
             // context object LogDataContext matches the same name used for LogqsoData DB
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
@@ -162,7 +162,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         {
             bool caught = false;
             // context object LogDataContext matches the same name used for LogqsoData DB
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
 
@@ -207,7 +207,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         {
             bool caught = false;
             // context object LogDataContext matches the same name used for LogqsoData DB
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
@@ -254,7 +254,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         {
             bool caught = false;
             // context object LogDataContext matches the same name used for LogqsoData DB
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
@@ -280,12 +280,13 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                             CatPower = Enum.GetName( typeof(CatPowerEnum), CatPowerEnum.HIGH ),
                             CatOperatorOverlay = Enum.GetName( typeof(CatOperatorOverlayEnum), CatOperatorOverlayEnum.NONE )
                         },
-                        DataCallSetting = new DataCallSetting()
+                        DataCallInfoDto = new DataCallInfoDto()
                         {
                             CallGroup =   CallGroupEnum.CALL1,
                             SelectedCall =  SelectedCall,
-                            SelectedContestName = "CQWWSSB2015"
-                        }
+                            SelectedContestName = "Cqww Ssb 2002"
+                        },
+                        CallTab = "C"
                     };
 
                     DataCalls = await logService.GetCategorizedCallsAsync(dataCallObjDTO, "default");
@@ -297,7 +298,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                     Assert.IsNotNull(DataCalls);
                     Assert.IsInstanceOfType(DataCalls, typeof(DataCalls) );
                     Assert.AreEqual(DataCalls.CallGroup, CallGroupEnum.CALL1 );
-                    Assert.AreEqual(DataCalls.SelectedCall, "CN2R");
+                    Assert.AreEqual(DataCalls.SelectedCall, "C");
                     Assert.IsInstanceOfType(DataCalls.Calls, typeof(ICollection<CallGroupCall>));
                     Assert.AreNotEqual(DataCalls.Calls.Count(), 0);
                     Assert.AreEqual(DataCalls.Calls.ElementAt(0).Call.Substring(0,1), SelectedCall.Substring(0,1) );

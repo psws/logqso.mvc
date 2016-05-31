@@ -9,14 +9,15 @@ using Repository.Pattern.Extensions.interfaces;
 
 namespace Logqso.mvc.DataModel.LogData.Models
 {
-    public partial class LogqsoDataContext : DataContext, ILogqsoDataContext
+    public partial class ContestqsoDataContext : DataContext, ILogqsoDataContext
     {
-        static LogqsoDataContext()
+        static ContestqsoDataContext()
         {
-            Database.SetInitializer<LogqsoDataContext>(null);
+            Database.SetInitializer<ContestqsoDataContext>(null);
         }
 
-        public LogqsoDataContext()
+
+        public ContestqsoDataContext()
 #if CONTESTQSODEBUG || CONTESTQSORELEASE
             : base("Name=LogDataDBhostfest")
 #elif CONTESTQSO1n1DEBUG

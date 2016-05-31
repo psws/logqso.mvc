@@ -18,15 +18,15 @@ namespace Logqso.mvc.DataModel.LogData
         {
             context.Log.AddOrUpdate(
             p => p.LogId,
-                new Log {  LogId = 1, CallsignId = 1,  ContestId = "CQWWSSB2015", ContestYear = DateTime.Parse("10/23/2015 00:00:00"),
+                new Log {  LogId = 1, CallsignId = 1,  ContestId = "CQWWSSB2002", ContestYear = DateTime.Parse("10/26/2002 00:00:00"),
                                     LogCategoryId = 2, QsoExchangeNumber = 33,
-                                    QsoDatabaseServerInstance =@"PSS60\SQL2014",QsoDatabaseInstance = "LogqsoData", QsoDatabaseTableName = "Qso"},
-                new Log {   LogId = 2, CallsignId = 2 , ContestId = "CQWWSSB2015", ContestYear = DateTime.Parse("10/23/2015 00:00:00"),
+                                    QsoDatabaseServerInstance =@"PSS60\SQL2014",QsoDatabaseInstance = "ContestqsoData", QsoDatabaseTableName = "Qso"},
+                new Log {   LogId = 2, CallsignId = 2 , ContestId = "CQWWSSB2002", ContestYear = DateTime.Parse("10/26/2002 00:00:00"),
                                     LogCategoryId = 2, QsoExchangeNumber = 33, 
-                                    QsoDatabaseServerInstance =@"PSS60\SQL2014",  QsoDatabaseInstance = "LogqsoData",QsoDatabaseTableName = "Qso"},
-                new Log {   LogId = 3, CallsignId = 3,  ContestId = "CQWWSSB2015", ContestYear = DateTime.Parse("10/23/2015 00:00:00"),
+                                    QsoDatabaseServerInstance =@"PSS60\SQL2014",  QsoDatabaseInstance = "ContestqsoData",QsoDatabaseTableName = "Qso"},
+                new Log {   LogId = 3, CallsignId = 3,  ContestId = "CQWWSSB2002", ContestYear = DateTime.Parse("10/26/2002 00:00:00"),
                                     LogCategoryId = 1, QsoExchangeNumber = 33,
-                                    QsoDatabaseServerInstance =@"PSS60\SQL2014", QsoDatabaseInstance = "LogqsoData", QsoDatabaseTableName = "Qso"}
+                                    QsoDatabaseServerInstance =@"PSS60\SQL2014", QsoDatabaseInstance = "ContestqsoData", QsoDatabaseTableName = "Qso"}
 
                                     
             );

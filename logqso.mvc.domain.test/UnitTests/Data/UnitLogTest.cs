@@ -33,10 +33,10 @@ namespace Logqso.mvc.domain.test.UnitTests.Data
                     LogId = 1,
                     CallsignId = 1,
                     ContestYear = DateTime.Now,
-                    ContestId = "CQWWSSB2015",
+                    ContestId = "CQWWSSB2002",
                     LogCategoryId = 2,
                     QsoDatabaseServerInstance = @"PSS60\SQL2014",
-                    QsoDatabaseInstance = "LogqsoData",
+                    QsoDatabaseInstance = "ContestqsoData",
                     QsoDatabaseTableName = "Qso"
                     
                 });

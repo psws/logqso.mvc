@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Infrastructure;
+using Repository.Pattern.DataContext;
+
 
 namespace Repository.Pattern.Repositories
 {
@@ -27,5 +29,7 @@ namespace Repository.Pattern.Repositories
         IQueryable<TEntity> QueryableNoTracking();
         bool GetEntityTrackingState(TEntity Entityc);
         IQueryable<TEntity> QueryableTrack(bool? track, Expression<Func<TEntity, bool>> wherePredicate, params Expression<Func<TEntity, object>>[] includeProperties);
+        void SetSQLLogging(bool On);
+        IDataContextAsync GetDbContext();
     }
 }

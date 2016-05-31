@@ -1,0 +1,117 @@
+﻿The DEBUGSQL build define is set Configuration ConestQSoSQL2012 build
+This turns on the selective tracking of EF6 SQL access.
+
+The ui project web.config file contins the SQL log file info
+	    <add key="SQLFileName" value="C:\AppErrors\logqso\SQLTrace.txt"/>
+
+In the Repository.pattern.ef6 project, the DEBUGSQL directive is set.
+
+The unitofWork.cs contains then method LogDatabase() for writing to the SQL query operations in the SQLTrace.txt file
+        public void LogDatabase(string text)
+        {
+#if DEBUGSQL
+            string Filepath = ConfigurationManager.AppSettings["SQLFileName"].ToString();
+            using (StreamWriter w = File.AppendText(Filepath))
+            {
+                w.WriteAsync(text);
+            }
+
+#endif
+        }
+
+The repository project has the on/off SetSQLLogging method for SQL trace
+This method maps the function to _unitOfWork.LogDatabase
+        //Jims
+        public void SetSQLLogging(bool On)
+        {
+#if DEBUGSQL
+            if (On ==true)
+	        {
+                (_context as DbContext).Database.Log = _unitOfWork.LogDatabase;
+	 
+	        }else
+	        {
+                (_context as DbContext).Database.Log = null;
+	        }
+#endif
+
+        }
+
+
+
+Logging is enabled or disabled by calling the method
+
+The Logqso.repository projrct method GetCategorizedCalls() makes the following 2 calls to trace activity
+            CallSignRepository.SetSQLLogging(true);
+            CallSignRepository.SetSQLLogging(fa
+==================================================================
+
+EXAMPLE Log file for querying the 'C' calls for CQWWSSB2014
+The first Open/close sequence is for the following code, This generates the IQueryable
+	var CallGroupCalls1 = (from lc in CallSignQ
+                                               join lq in LogQ1 on lc.CallSignId equals lq.CallsignId
+                                               where (lc.Call.Substring(0, 1) == CallChar)
+                                               where new[] { CallChar }.Contains(lc.Call.Substring(0, 1))
+                                               select new CallGroupCall
+                                               {
+                                                   CallSignID = lc.CallSignId,
+                                                   Call = lc.Call
+
+                                               }
+                                        ).OrderBy(x => x.Call);
+The last Open/close is for getting the actual data from SQL
+	                        var CallGroupCalls = CallGroupCalls1.ToList();
+
+Opened connection at 5/16/2016 10:17:20 PM -07:00
+	SELECT TOP (1) 
+		[Extent1].[ContestId] AS [ContestId], 
+		[Extent1].[ContestName] AS [ContestName], 
+		[Extent1].[ContestTypeEnum] AS [ContestTypeEnum], 
+		[Extent1].[QsoModeTypeEnum] AS [QsoModeTypeEnum], 
+		[Extent1].[StartDateTime] AS [StartDateTime], 
+		[Extent1].[EndDateTime] AS [EndDateTime], 
+		[Extent1].[Active] AS [Active]
+		FROM [dbo].[Contest] AS [Extent1]
+		WHERE [Extent1].[ContestName] = @p__linq__0
+	-- p__linq__0: 'Cqww Ssb 2014' (Type = String, Size = 4000)
+	-- Executing at 5/16/2016 10:17:20 PM -07:00
+	-- Completed in 2 ms with result: SqlDataReader
+
+	Closed connection at 5/16/2016 10:17:20 PM -07:00
+	Opened connection at 5/16/2016 10:17:20 PM -07:00
+	SELECT 
+		[Project1].[CallSignId] AS [CallSignId], 
+		[Project1].[Call] AS [Call]
+		FROM ( SELECT 
+			[Extent1].[CallSignId] AS [CallSignId], 
+			[Extent1].[Call] AS [Call]
+			FROM  [dbo].[CallSign] AS [Extent1]
+			INNER JOIN [dbo].[Log] AS [Extent2] ON [Extent1].[CallSignId] = [Extent2].[CallsignId]
+			WHERE (([Extent2].[ContestId] = @p__linq__0) OR (([Extent2].[ContestId] IS NULL) AND (@p__linq__0 IS NULL))) AND (((SUBSTRING([Extent1].[Call], 0 + 1, 1)) = @p__linq__1) OR ((SUBSTRING([Extent1].[Call], 0 + 1, 1) IS NULL) AND (@p__linq__1 IS NULL)))
+		)  AS [Project1]
+		ORDER BY [Project1].[Call] ASC
+	-- p__linq__0: 'CQWWSSB2014' (Type = String, Size = 4000)
+	-- p__linq__1: 'C' (Type = String, Size = 4000)
+	-- Executing at 5/16/2016 10:17:21 PM -07:00
+	-- Completed in 70 ms with result: SqlDataReader
+
+	Closed connection at 5/16/2016 10:17:21 PM -07:00
+=============================================================
+The eqivalent SQL query is:
+	declare @p__linq__0 varchar(50)
+	set  @p__linq__0  = 'CQWWSSB2014'
+	declare @p__linq__1 varchar(50)
+	set  @p__linq__1  = 'C'
+	SELECT 
+		[Project1].[CallSignId] AS [CallSignId], 
+		[Project1].[Call] AS [Call]
+		FROM ( SELECT 
+			[Extent1].[CallSignId] AS [CallSignId], 
+			[Extent1].[Call] AS [Call]
+			FROM  [dbo].[CallSign] AS [Extent1]
+			INNER JOIN [dbo].[Log] AS [Extent2] ON [Extent1].[CallSignId] = [Extent2].[CallsignId]
+			WHERE (([Extent2].[ContestId] = @p__linq__0) OR (([Extent2].[ContestId] IS NULL) AND (@p__linq__0 IS NULL))) AND (((SUBSTRING([Extent1].[Call], 0 + 1, 1)) = @p__linq__1) OR ((SUBSTRING([Extent1].[Call], 0 + 1, 1) IS NULL) AND (@p__linq__1 IS NULL)))
+		)  AS [Project1]
+		ORDER BY [Project1].[Call] ASC
+	-- p__linq__0: 'CQWWSSB2014' (Type = String, Size = 4000)
+	-- p__linq__1: 'C' (Type = String, Size = 4000)

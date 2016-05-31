@@ -28,7 +28,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         [TestInitialize]
         public void Initialize()
         {
-            Utility.CreateSeededTestDatabase("LogDataDB", "Sql\\logqsoDataTest.sql");
+            Utility.CreateSeededTestDatabase("LogDataDB", "Sql\\ContestqsoDataTest.sql");
         }
 
         [TestMethod]
@@ -36,7 +36,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         {
             List<CallInfo> callis = null;
 
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             using (IUnitOfWorkAsync unitOfWorkData = new UnitOfWork(context))
             {
                 bool caught = false;
@@ -73,7 +73,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
             List<CallInfo> callis = null;
             IQueryable<CallInfo> CallInfo1 = null;
 
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 bool caught = false;
@@ -108,7 +108,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
             List<CallInfo> callis = null;
             IQueryable<CallInfo> CallInfo1 = null;
 
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             using (IUnitOfWorkAsync unitOfWork= new UnitOfWork(context))
             {
                 bool caught = false;
@@ -147,7 +147,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         {
             List<CallInfo> callis = null;
 
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 bool caught = false;
@@ -186,7 +186,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
         {
             List<DataCallInfoDto> DataCallInfoDtos = null;
             bool Active = true;
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 bool caught = false;
@@ -285,7 +285,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
             List<DataCallInfoDto> DataCallInfoDtos = null;
             bool Active = true;
 
-            using (IDataContextAsync context = new LogqsoDataContext())
+            using (IDataContextAsync context = new ContestqsoDataContext())
             using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
             {
                 bool caught = false;

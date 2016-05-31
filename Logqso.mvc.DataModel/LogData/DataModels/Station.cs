@@ -27,6 +27,7 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         public string StationName { get; set; }
         ////[System.ComponentModel.DataAnnotations.Schema.DatabaseGenerated(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.Identity)]
         ////public int StationId { get; set; }
+        //public virtual Log Log { get; set; }
 
     }
 

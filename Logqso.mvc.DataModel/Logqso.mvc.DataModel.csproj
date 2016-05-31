@@ -75,6 +75,16 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ContestQsoSql2012Rel|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ContestQsoSql2012Rel\</OutputPath>
+    <DefineConstants>CONTESTQSOSQL2012</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -97,9 +107,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LogControl\Migrations\LogControlDB\201604061709021_InitialDatabaseCreation.cs" />
-    <Compile Include="LogControl\Migrations\LogControlDB\201604061709021_InitialDatabaseCreation.Designer.cs">
-      <DependentUpon>201604061709021_InitialDatabaseCreation.cs</DependentUpon>
+    <Compile Include="LogControl\Migrations\LogControlDB\201605210637388_InitialDatabaseCreation.cs" />
+    <Compile Include="LogControl\Migrations\LogControlDB\201605210637388_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201605210637388_InitialDatabaseCreation.cs</DependentUpon>
     </Compile>
     <Compile Include="LogControl\Migrations\LogControlDB\Configuration.cs" />
     <Compile Include="LogData\CabrilloInfoSeed.cs" />
@@ -132,9 +142,9 @@
     <Compile Include="LogData\DataModels\QsoExchangeAlpha.cs" />
     <Compile Include="LogData\ContestTypeSeeds.cs" />
     <Compile Include="LogData\DataModels\QsoRadioType.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201604111750351_InitialDatabaseCreation.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201604111750351_InitialDatabaseCreation.Designer.cs">
-      <DependentUpon>201604111750351_InitialDatabaseCreation.cs</DependentUpon>
+    <Compile Include="LogData\Migrations\LogDataDB\201605221739558_InitialDatabaseCreation.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201605221739558_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201605221739558_InitialDatabaseCreation.cs</DependentUpon>
     </Compile>
     <Compile Include="LogData\Migrations\LogDataDB\Configuration.cs" />
     <Compile Include="LogData\QsoExchangeTypeSeeds.cs" />
@@ -175,7 +185,8 @@
     <Compile Include="LogData\UbnModels\UbnUniques.cs" />
     <Compile Include="ControlUnitOfWork.cs" />
     <Compile Include="LogUnitOfWork.cs" />
-    <Compile Include="LogControl\Models\LogqsoContext.cs" />
+    <Compile Include="LogData\Models\ContestqsoDataContext.cs" />
+    <Compile Include="LogControl\Models\ContestQsoContext.cs" />
     <Compile Include="LogControl\Models\Mapping\CatAssistedMap.cs" />
     <Compile Include="LogControl\Models\Mapping\CatBandMap.cs" />
     <Compile Include="LogControl\Models\Mapping\CatDefaultMap.cs" />
@@ -194,7 +205,6 @@
     <Compile Include="LogControl\Models\Mapping\YaxisFunctionMap.cs" />
     <Compile Include="LogControl\Models\Mapping\YaxisIntervalMap.cs" />
     <Compile Include="LogControl\Models\Mapping\YaxisViewTypeMap.cs" />
-    <Compile Include="LogData\Models\LogqsoDataContext.cs" />
     <Compile Include="LogData\Models\Mapping\CabrilloInfoMap.cs" />
     <Compile Include="LogData\Models\Mapping\CallInfoMap.cs" />
     <Compile Include="LogData\Models\Mapping\CallSignMap.cs" />
@@ -251,18 +261,20 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201604061709021_InitialDatabaseCreation.resx">
-      <DependentUpon>201604061709021_InitialDatabaseCreation.cs</DependentUpon>
+    <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201605210637388_InitialDatabaseCreation.resx">
+      <DependentUpon>201605210637388_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201604111750351_InitialDatabaseCreation.resx">
-      <DependentUpon>201604111750351_InitialDatabaseCreation.cs</DependentUpon>
+    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201605221739558_InitialDatabaseCreation.resx">
+      <DependentUpon>201605221739558_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Notes\2 or more FK to same table.txt" />
     <Content Include="App_Notes\Apperror logginng.txt" />
+    <Content Include="App_Notes\Creating SQL2012 database from SQL2014.txt" />
     <Content Include="App_Notes\DataModel LogControl code first database setup .txt" />
     <Content Include="App_Notes\DataModel LogData code first database setup.txt" />
+    <Content Include="App_Notes\Generate edmx View.txt" />
     <Content Include="App_Notes\Removing old migrations.txt" />
     <Content Include="App_Notes\Reverse Engineer and Update LogqsoData Data entities.txt" />
     <Content Include="App_Notes\Settng up DB user jims9mr in SQL DB.txt" />

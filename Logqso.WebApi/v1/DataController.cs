@@ -104,7 +104,7 @@ namespace Logqso.WebApi
         [HttpPost]
         [ResponseType(typeof(HttpResponseMessage))]
         [Route("PostDataCallsRequest")]
-        public async Task<IHttpActionResult> PostDataCallsRequest(DataCallSetting DataCallSetting)
+        public async Task<IHttpActionResult> PostDataCallsRequest(DataCallInfoDto DataCallInfoDto)
         {
             DataCalls DataCalls = null;
             if (DataCalls == null)
@@ -121,7 +121,7 @@ namespace Logqso.WebApi
         [HttpPost]
         [ResponseType(typeof(HttpResponseMessage))]
         [Route("CallsRequest")]
-        public async Task<IHttpActionResult> CallsRequest(dataCallObjDTO dataCallObjDTO)
+        public async Task<IHttpActionResult> CallsRequest(dataCallObjDTO dataCallObjDTO )
         {
             string Username = Logqso.mvc.common.definitions.Username;
             bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
@@ -170,6 +170,7 @@ namespace Logqso.WebApi
                 //HttpResponseMessage = new HttpResponseMessage(HttpStatusCode.OK);
                 HttpResponseMessage = Request.CreateResponse(HttpStatusCode.OK);
                 //String filePath = HostingEnvironment.MapPath("~/Images/HT.jpg");
+
                 //FileStream fileStream = new FileStream(filePath, FileMode.Open);
                 //Image image = System.Drawing.Image.FromStream(fileStream);
                 //MemoryStream memoryStream = new MemoryStream();
@@ -201,6 +202,33 @@ namespace Logqso.WebApi
                 return Ok(false);
 
             }
+        }
+
+        [HttpPost]
+        [ResponseType(typeof(HttpResponseMessage))]
+        [Route("GetUpdatedContestCall")]
+        public async Task<IHttpActionResult> GetUpdatedContestCall(DataCallInfoDto DataCallInfoDto)
+        {
+            string Username = Logqso.mvc.common.definitions.Username;
+            bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+            if (val1)
+            {
+                Username = System.Web.HttpContext.Current.User.Identity.Name;
+            }
+
+
+            DataCallInfoDto = await _LogService.GetUpdatedContestCall(DataCallInfoDto, Username);
+
+
+            if (DataCallInfoDto == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(DataCallInfoDto);
+            }
+
         }
 
     }

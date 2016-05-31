@@ -59,6 +59,26 @@ namespace Repository.Pattern.Ef6
         }
 
 
+        //Jims
+        public void SetSQLLogging(bool On)
+        {
+#if DEBUGSQL
+            if (On ==true)
+	        {
+                (_context as DbContext).Database.Log = _unitOfWork.LogDatabase;
+	 
+	        }else
+	        {
+                (_context as DbContext).Database.Log = null;
+	        }
+#endif
+
+        }
+
+        //Jims
+        public IDataContextAsync GetDbContext() {
+            return _context;
+        }
 
         //Jims
         public bool GetEntityTrackingState(TEntity Entityc)
@@ -251,7 +271,7 @@ namespace Repository.Pattern.Ef6
             int? pageSize = null)
         {
             IQueryable<TEntity> query;
-            if (tracking != null)
+            if (tracking == true)
             {
                 query = _dbSet.AsNoTracking();
             }

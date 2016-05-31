@@ -1,11 +1,11 @@
 ﻿Open SQLServeerManagementStudio
-Select  database  logqsoTest->right click tasks-> right click generate scriptsd
+Select  database  ContestqsoTest->right click tasks-> right click generate scripts
 
 The Generate and publish scripts dialog appears
 click next
 select script entire database
 click next
-Set filename to D:\vwd projects mvc\Logqso.mvc\logqso.mvc.domain.test\Sql\logqsoTest.sql
+Set filename to D:\vwd projects mvc\Logqso.mvc\logqso.mvc.domain.test\Sql\ContestqsoTest.sql
 Click Advanced
 In Beneral section
 	Check for object existance = true
@@ -19,18 +19,20 @@ click Next
 clcik Next
 clcik finish
 
-delete logqsoTest DB
-you  have to run script logqsoTest.sql in ssms once to get rid of vs2013 connection
+delete ContestqsoTest DB
+create empty ContestqsoDataTest
+
+you  have to run script ContestqsoTest.sql in ssms once to get rid of vs2013 connection
 
 ______
 Open SQLServeerManagementStudio
-Select  database  logqsoDataTest->right click tasks-> right click generate scriptsd
+Select  database  ContestqsoDataTest->right click tasks-> right click generate scriptsd
 
 The Generate and publish scripts dialog appears
 click next
 select script entire database
 click next
-Set filename to D:\vwd projects mvc\Logqso.mvc\logqso.mvc.domain.test\Sql\logqsoDataTest.sql
+Set filename to D:\vwd projects mvc\Logqso.mvc\logqso.mvc.domain.test\Sql\ContestqsoDataTest.sql
 Click Advanced
 In Beneral section
 	Check for object existance = true
@@ -44,8 +46,9 @@ click Next
 clcik Next
 clcik finish
 
-delete logqsoDataTest DB
-you  have to run script logqsoTest.sql in ssms once to get rid of vs2013 connection
+delete ContestqsoDataTest DB
+create empty ContestqsoDataTest
+you  have to run script ContestqsoDataTest.sql in ssms once to get rid of vs2013 connection
 
 
 

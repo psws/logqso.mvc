@@ -30,7 +30,7 @@ namespace Logqso.mvc.domain.test.UnitTests
                 {
                     LogId = LogId,
                     ContestYear = DateTime.Now,
-                    ContestId = "CQWWSSB2015",
+                    ContestId = "CQWWSSB2002",
                 });
 
             //automapper

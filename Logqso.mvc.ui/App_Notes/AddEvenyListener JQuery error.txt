@@ -1,7 +1,0 @@
-﻿http://stackoverflow.com/questions/5000415/call-a-function-after-previous-function-is-complete
-Jquery 2.1.1 in IE9 get error: 0x800a01b6 - Microsoft JScript runtime error: Object doesn't support property or method 'addEventListener'
-
-I was getting the same error with a brand new web app in VS2013 Ultimate. Turns out IE11 was running in compatibility mode - turning that off got rid of the error
-
-fix: remove localhost from compatability list in IE11
-Removing will break debuging GoogleEarth in localhoat.

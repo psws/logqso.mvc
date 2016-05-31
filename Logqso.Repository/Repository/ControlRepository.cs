@@ -41,12 +41,20 @@ namespace Logqso.Repository
         public static IEnumerable<string> GetContestCategoryNames(this IRepository<CatOperator> repository)
         {
             var CatOperators = repository.Queryable();
+            try
+            {
+                //var stuff = CatOperators.FirstOrDefault(c => c.CatOprName == "SINGLE-OP");
+                var query = CatOperators.Select(c => c.CatOprName).ToList();
+                //var query = (from c in CatOperators.
+                //            select c.CatOprName).ToList();
+                return query;
 
-            //var stuff = CatOperators.FirstOrDefault(c => c.CatOprName == "SINGLE-OP");
-            var query = CatOperators.Select(c=>c.CatOprName).ToList();
-            //var query = (from c in CatOperators.
-            //            select c.CatOprName).ToList();
-            return query;
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
         }
 #if false
         public static List<CatOperator> GetContestCategorys(this IRepository<CatOperator> repository)
