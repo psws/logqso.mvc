@@ -90,7 +90,7 @@ namespace Logqso.mvc.domain.Charting
                              " FROM (SELECT   convert(datetime, Format(" + colTime + ",'d') + ' ' " +
                              "+ Format(DatePart(hh," + colTime + "),'00') + ':' " +
                              "+ Format((DatePart(n," + colTime + ")/" + ChartAreaDto.ChartPointtInterval + ")*" +
-                             ChartAreaDto.ChartPointtInterval + ",'00'),120 )AS [Time1] , Count(*) AS N" +
+                             ChartAreaDto.ChartPointtInterval + ",'00') )AS [Time1] , Count(*) AS N" +
                               " FROM " + ContestInfoDTO.QsoDatabaseTableName +
                                " INNER JOIN Log ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[LogId] = [Log].[LogId] " +
                                "INNER JOIN CallSign ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[CallsignId] = [CallSign].[CallSignId]" +
@@ -278,7 +278,7 @@ namespace Logqso.mvc.domain.Charting
              " FROM (SELECT   convert(datetime, Format(" + colTime + ",'d') + ' ' " +
              "+ Format(DatePart(hh," + colTime + "),'00') + ':' " +
              "+ Format((DatePart(n," + colTime + ")/" + ChartAreaDto.ChartPointtInterval + ")*" +
-             ChartAreaDto.ChartPointtInterval + ",'00'),120 )AS [Time1] ,  Sum([" + ContestInfoDTO.QsoDatabaseTableName + "].[" + sumField + "]) AS N" +
+             ChartAreaDto.ChartPointtInterval + ",'00') )AS [Time1] ,  Sum([" + ContestInfoDTO.QsoDatabaseTableName + "].[" + sumField + "]) AS N" +
               " FROM " + ContestInfoDTO.QsoDatabaseTableName +
                " INNER JOIN Log ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[LogId] = [Log].[LogId] " +
                "INNER JOIN CallSign ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[CallsignId] = [CallSign].[CallSignId]" +

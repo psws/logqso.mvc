@@ -1232,6 +1232,8 @@ $(function () {
             _lq.ControlCategorySettingsDto.Disabled = false;
         }
         _lq.ControlCategorySettingsDto = ControlCategorySettingsDto;
+        _lq.UpdateChartData(false);
+
     }
 
     function SetControlFiltersSettingsDefaults(ControlFiltersSettingsDto) {
@@ -1277,6 +1279,7 @@ $(function () {
             _lq.ControlFiltersSettingsDto.Disabled = false;
         }
         _lq.ControlFiltersSettingsDto = ControlFiltersSettingsDto;
+        _lq.UpdateChartData(false);
 
     }
 
@@ -1288,6 +1291,8 @@ $(function () {
         $select = $('#XaxisDuration').val(ControlXaxisSettingsDto.XaxisDuration);
         $select.selectmenu("refresh");
         _lq.ControlXaxisSettingsDto = ControlXaxisSettingsDto;
+        _lq.UpdateChartData(false);
+
     }
 
     function SetControlYaxisSettingsDefaults(ControlYaxisSettingsDto) {
@@ -1300,6 +1305,8 @@ $(function () {
         $select = $('#YaxisViewType').val(ControlYaxisSettingsDto.YaxisViewType);
         $select.selectmenu("refresh");
         _lq.ControlYaxisSettingsDto = ControlYaxisSettingsDto;
+        _lq.UpdateChartData(false);
+
     }
 
 

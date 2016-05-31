@@ -700,8 +700,16 @@ namespace Logqso.Repository.Repository
             IEnumerable<ChartQsoRateDTO> ChartQsoRateDTO;
             var QsoRepository = _LogRepository.GetRepository<Qso>();
            // var QsoRates = QsoRepository.GetSqlQueryResults<ChartQsoRateDTO>(ContestViewParmsDTO.sQSOQuery);
-            DbContext DbContext = QsoRepository.GetDbContext() as DbContext;
-            ChartQsoRateDTO = DbContext.Database.SqlQuery<ChartQsoRateDTO>(ContestViewParmsDTO.sQSOQuery).ToList();
+            try
+            {
+                DbContext DbContext = QsoRepository.GetDbContext() as DbContext;
+                ChartQsoRateDTO = DbContext.Database.SqlQuery<ChartQsoRateDTO>(ContestViewParmsDTO.sQSOQuery).ToList();
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
 
             //IQueryFluent<Qso> Qsoss = QsoRepository.Query();
             //var QsoQ1 = Qsoss.SqlQuery(ContestViewParmsDTO.sQSOQuery);
