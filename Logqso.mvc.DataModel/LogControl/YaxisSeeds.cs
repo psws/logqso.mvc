@@ -55,7 +55,7 @@ namespace Logqso.mvc.DataModel.LogControl
                 new YaxisViewType { YaxisViewTypeName = "Area", Index = 5 },
                 new YaxisViewType { YaxisViewTypeName = "Area 3D", Index = 6 },
                 new YaxisViewType { YaxisViewTypeName = "Point", Index = 7 },
-                new YaxisViewType { YaxisViewTypeName = "Stacked Column", Index = 8 }
+                new YaxisViewType { YaxisViewTypeName = "StackedColumn", Index = 8 }
            );
 
         }

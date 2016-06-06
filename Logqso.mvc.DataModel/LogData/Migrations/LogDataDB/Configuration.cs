@@ -11,6 +11,9 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
         {
             AutomaticMigrationsEnabled = false;
             MigrationsDirectory = @"LogData\Migrations\LogDataDB";
+            // New timeout in seconds
+            this.CommandTimeout = 0; 
+
         }
 
         protected override void Seed(Logqso.mvc.DataModel.LogData.LogDataDB context)

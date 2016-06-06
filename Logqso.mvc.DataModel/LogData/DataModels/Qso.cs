@@ -11,6 +11,18 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
     // [Table("Qso")]
     public class Qso
     {
+        public Qso()
+        {
+            QZoneMult = false;
+            QCtyMult = false;
+            QPrefixMult = false;
+
+            QPts1 = false;
+            QPts2 = false;
+            QPts4 = false;
+            QPts8 = false;
+        }
+
         //http://go.microsoft.com/fwlink/?LinkId=386388
         [Key]
         [Column(Order = 1)]
@@ -77,6 +89,20 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
         public Logqso.mvc.common.Enum.QsoModeTypeEnum QsoModeTypeEnum { get; set; }
         [Required]
         public Logqso.mvc.common.Enum.QsoRadioTypeEnum QsoRadioTypeEnum { get; set; }
+
+        [Required]
+        public bool QZoneMult { get; set; }
+        [Required]
+        public bool QCtyMult { get; set; }
+        [Required]
+        public bool QPrefixMult { get; set; }
+
+        //points is 4 bits to allow mults tp be combined for one additional byte
+        [Required]
+        public bool QPts1 { get; set; }
+        public bool QPts2 { get; set; }
+        public bool QPts4 { get; set; }
+        public bool QPts8 { get; set; }
 
 
 

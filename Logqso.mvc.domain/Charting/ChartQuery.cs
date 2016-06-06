@@ -18,7 +18,9 @@ namespace Logqso.mvc.domain.Charting
 {
     class ChartQuery
     {
-        public void GetQuery(IRepositoryAsync<Log> LogRepository, string ChartID, QSOLogFilter QSOFilter, DataCallInfoDto DataCallInfoDto, ControlSettingsDto ControlSettingsDto, ContestInfoDTO ContestInfoDTO, ChartAreaDto ChartAreaDto, string sChartFunction, out ContestViewParmsDTO ContestViewParmsDTO, string Username)
+        public void GetQuery(IRepositoryAsync<Log> LogRepository, string ChartID, QSOLogFilter QSOFilter, DataCallInfoDto DataCallInfoDto, 
+            ControlSettingsDto ControlSettingsDto, ContestInfoDTO ContestInfoDTO, ChartAreaDto ChartAreaDto, string sChartFunction,
+            out ContestViewParmsDTO ContestViewParmsDTO, string Username)
         {
             string sIntvTime = "IntvTime";
             string sQCnt = "N";
@@ -28,6 +30,7 @@ namespace Logqso.mvc.domain.Charting
 
 
             ContestViewParmsDTO = null;
+            ContestTypeEnum ContestTypeEnum = (ContestTypeEnum)Enum.Parse(typeof(ContestTypeEnum), ContestInfoDTO.ContestType);
 
             string whereClause = string.Empty;
             SerTablename = ContestInfoDTO.Call + ChartID + ContestInfoDTO.ContestID + "_S" + ContestInfoDTO.basedstartTime.ToOADate() + "_E" +
@@ -102,22 +105,22 @@ namespace Logqso.mvc.domain.Charting
                     ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "QSO Rate",
                     "QSOs Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, false);
                     break;
-#if fase
-                    case "QSO  Sum":
+               case "QSO  Sum":
                     QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) AS " + sQCnt +
-                             " FROM (SELECT   Format([" + colTime + "],'Short Date') & ' ' " +
-                             "& Format(DatePart('h',[" + colTime + "]),'00') & ':' " +
-                             "& Format(Int(DatePart('n',[" + colTime + "])/" + ChartAreaInfo.ChartPointtInterval + ")*" +
-                             ChartAreaInfo.ChartPointtInterval + ",'00')AS [Time1] , Count(*) AS N" +
-                              " FROM " + CtestLogInfo.ContestInfo.ContestTblName +
-                               " INNER JOIN QCountries ON " + CtestLogInfo.ContestInfo.ContestTblName + ".ID = QCountries.ID " +
-                              whereClause +
-                              " GROUP BY  [" + colTime + "] ) AS Qry5minintervals" +
-                              " GROUP BY [Time1] ";
-                    ContestViewParms = new ContestViewParms(sChartFunction, SerTablename, sIntvTime, sQCnt, "QSO Sum",
-                    "QSOs Per " + ChartAreaInfo.ChartPointtInterval.ToString() + " Minures", QSOQuery, true);
+                            " FROM (SELECT   convert(datetime, Format(" + colTime + ",'d') + ' ' " +
+                            "+ Format(DatePart(hh," + colTime + "),'00') + ':' " +
+                            "+ Format((DatePart(n," + colTime + ")/" + ChartAreaDto.ChartPointtInterval + ")*" +
+                            ChartAreaDto.ChartPointtInterval + ",'00') )AS [Time1] , Count(*) AS N" +
+                             " FROM " + ContestInfoDTO.QsoDatabaseTableName +
+                              " INNER JOIN Log ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[LogId] = [Log].[LogId] " +
+                              "INNER JOIN CallSign ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[CallsignId] = [CallSign].[CallSignId]" +
+                              " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
+                             whereClause +
+                             " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
+                             " GROUP BY [Time1] ";
+                    ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "QSO Sum",
+                    "QSOs Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, true);
                     break;
-#endif
                 case "Zone  Rate":
                     //if (whereClause == string.Empty) 
                     //{
@@ -138,11 +141,10 @@ namespace Logqso.mvc.domain.Charting
                     ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Zone Rate",
                         "Zones Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, false);
                     break;
-#if false
                 case "Zone  Sum":
-                    QSOQuery = GenerateQuery(CtestLogInfo, ChartAreaInfo, sIntvTime, sQCnt, colTime, whereClause, "QZoneMult");
-                    ContestViewParms = new ContestViewParms(sChartFunction, SerTablename, sIntvTime, sQCnt, "Zone Sum",
-                        "Zones Per " + ChartAreaInfo.ChartPointtInterval.ToString() + " Minures", QSOQuery, true);
+                     QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QZoneMult");
+                     ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Zone Sum",
+                        "Zones Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, true);
                     break;
                 case "Country  Rate":
                     // if (whereClause == string.Empty) 
@@ -153,118 +155,224 @@ namespace Logqso.mvc.domain.Charting
                     //    whereClause += " AND " + CtestLogInfo.ContestInfo.ContestTblName + ".QCountryMult= 1";
 
                     //}
-                    QSOQuery = GenerateQuery(CtestLogInfo, ChartAreaInfo, sIntvTime, sQCnt, colTime, whereClause, "QCountryMult");
-                    //QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) AS " + sQCnt +
-                    //        " FROM (SELECT   Format([" + colTime + "],'Short Date') & ' ' " +
-                    //        "& Format(DatePart('h',[" + colTime + "]),'00') & ':' " +
-                    //        "& Format(Int(DatePart('n',[" + colTime + "])/" + ChartAreaInfo.ChartPointtInterval + ")*" +
-                    //        ChartAreaInfo.ChartPointtInterval + ",'00')AS [Time1] , Count(*) AS N" +
-                    //         " FROM " + CtestLogInfo.ContestInfo.ContestTblName +
-                    //          " INNER JOIN QCountries ON " + CtestLogInfo.ContestInfo.ContestTblName + ".ID = QCountries.ID " +
-                    //         whereClause +
-                    //    //" WHERE (((" + colContestID + ")='" + CtestLogInfo.ContestInfo.ContestID + "'))" +
-                    //         " GROUP BY  [" + colTime + "], [" + CtestLogInfo.ContestInfo.ContestTblName + ".QCountryMult] ) AS Qry5minintervals" +
-                    //         " GROUP BY [Time1] ";
-                    ContestViewParms = new ContestViewParms(sChartFunction, SerTablename, sIntvTime, "N", "Country Rate",
-                       "Countries Per " + ChartAreaInfo.ChartPointtInterval.ToString() + " Mins", QSOQuery, false);
+                    QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QCtyMult");
+                    ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Country Rate",
+                        "Countries Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Mins", QSOQuery, false);
                     break;
                 case "Country  Sum":
-                    QSOQuery = GenerateQuery(CtestLogInfo, ChartAreaInfo, sIntvTime, sQCnt, colTime, whereClause, "QCountryMult");
-                    ContestViewParms = new ContestViewParms(sChartFunction, SerTablename, sIntvTime, "N", "Country Sum",
-                       "Countries Per " + ChartAreaInfo.ChartPointtInterval.ToString() + " Mins", QSOQuery, true);
+                    QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QCtyMult");
+                    ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Country Sum",
+                        "Countries Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Mins", QSOQuery, false);
                     break;
                 case "Point  Rate":
-                    QSOQuery = GenerateQuery(CtestLogInfo, ChartAreaInfo, sIntvTime, sQCnt, colTime, whereClause, "QPoints");
-                    //QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) AS " + sQCnt +
-                    //        " FROM (SELECT   Format([" + colTime + "],'Short Date') & ' ' " +
-                    //        "& Format(DatePart('h',[" + colTime + "]),'00') & ':' " +
-                    //        "& Format(Int(DatePart('n',[" + colTime + "])/" + ChartAreaInfo.ChartPointtInterval + ")*" +
-                    //        ChartAreaInfo.ChartPointtInterval + ",'00')AS [Time1] , Sum([" + CtestLogInfo.ContestInfo.ContestTblName + ".QPoints]) AS N" +
-                    //         " FROM " + CtestLogInfo.ContestInfo.ContestTblName +
-                    //          " INNER JOIN QCountries ON " + CtestLogInfo.ContestInfo.ContestTblName + ".ID = QCountries.ID " +
-                    //         whereClause +
-                    //   //" WHERE (((" + colContestID + ")='" + CtestLogInfo.ContestInfo.ContestID + "'))" +
-                    //         " GROUP BY  [" + colTime + "] ) AS Qry5minintervals" +
-                    //         " GROUP BY [Time1] ";
-                    ContestViewParms = new ContestViewParms(sChartFunction, SerTablename, sIntvTime, sQCnt, "Point Rate",
-                       "Points Per " + ChartAreaInfo.ChartPointtInterval.ToString() + " Minures", QSOQuery, false);
+                    QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QPoints");
+                    ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Point Rate",
+                        "Points Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, false);
                     break;
-                case "Point  Sum":
-                    QSOQuery = GenerateQuery(CtestLogInfo, ChartAreaInfo, sIntvTime, sQCnt, colTime, whereClause, "QPoints");
-                    ContestViewParms = new ContestViewParms(sChartFunction, SerTablename, sIntvTime, sQCnt, "Point Sum",
-                       "Points Per " + ChartAreaInfo.ChartPointtInterval.ToString() + " Minures", QSOQuery, true);
+               case "Point  Sum":
+                    QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QPoints");
+                    ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Point  Sum",
+                        "Points Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, true);
                     break;
                 case "Mult  Rate":
-                    QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) AS " + sQCnt +
-                            " FROM (SELECT   Format([" + colTime + "],'Short Date') & ' ' " +
-                            "& Format(DatePart('h',[" + colTime + "]),'00') & ':' " +
-                            "& Format(Int(DatePart('n',[" + colTime + "])/" + ChartAreaInfo.ChartPointtInterval + ")*" +
-                            ChartAreaInfo.ChartPointtInterval + ",'00')AS [Time1] ," +
-                             " SUM([" + CtestLogInfo.ContestInfo.ContestTblName + ".QZoneMult]  + [" + CtestLogInfo.ContestInfo.ContestTblName + ".QCountryMult] ) AS N" +
-                             " FROM " + CtestLogInfo.ContestInfo.ContestTblName +
-                              " INNER JOIN QCountries ON " + CtestLogInfo.ContestInfo.ContestTblName + ".ID = QCountries.ID " +
-                             whereClause +
-                        //" WHERE (((" + colContestID + ")='" + CtestLogInfo.ContestInfo.ContestID + "'))" +
-                             " GROUP BY  [" + colTime + "] ) AS Qry5minintervals" +
-                             " GROUP BY [Time1] ";
-                    ContestViewParms = new ContestViewParms(sChartFunction, SerTablename, sIntvTime, sQCnt, "Mult Rate",
-                       "Mults Per " + ChartAreaInfo.ChartPointtInterval.ToString() + " Minures", QSOQuery, false);
+                    switch (ContestTypeEnum)
+	                {
+                        case ContestTypeEnum.CQWW:
+                            //Zones + Countries
+                            QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) AS " + sQCnt +
+                                     " FROM (SELECT   convert(datetime, Format(" + colTime + ",'d') + ' ' " +
+                                     "+ Format(DatePart(hh," + colTime + "),'00') + ':' " +
+                                     "+ Format((DatePart(n," + colTime + ")/" + ChartAreaDto.ChartPointtInterval + ")*" +
+                                     ChartAreaDto.ChartPointtInterval + ",'00') )AS [Time1] , " +
+                                                    "Sum(convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QZoneMult]) + " + 
+                                                         "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QCtyMult]) " + 
+                                                        ") AS N" +
+                                      " FROM " + ContestInfoDTO.QsoDatabaseTableName +
+                                       " INNER JOIN Log ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[LogId] = [Log].[LogId] " +
+                                       "INNER JOIN CallSign ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[CallsignId] = [CallSign].[CallSignId] " +
+                                       " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
+                                      whereClause +
+                                      " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
+                                      " GROUP BY [Time1] ";
+                           break;
+                        case ContestTypeEnum.CQWPX:
+                           QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QPrefixMult");
+                            //prefixes
+                            break;
+                        case ContestTypeEnum.CQ160:
+                            break;
+                        case ContestTypeEnum.RUSDXC:
+                            //oblasts plus countries
+                            break;
+                        default:
+                            break;
+	                }
+                    ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Mult Rate",
+                    "Mults Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, false);
                     break;
                 case "Mult  Sum":
-                    QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) AS " + sQCnt +
-                            " FROM (SELECT   Format([" + colTime + "],'Short Date') & ' ' " +
-                            "& Format(DatePart('h',[" + colTime + "]),'00') & ':' " +
-                            "& Format(Int(DatePart('n',[" + colTime + "])/" + ChartAreaInfo.ChartPointtInterval + ")*" +
-                            ChartAreaInfo.ChartPointtInterval + ",'00')AS [Time1] ," +
-                             " SUM([" + CtestLogInfo.ContestInfo.ContestTblName + ".QZoneMult]  + [" + CtestLogInfo.ContestInfo.ContestTblName + ".QCountryMult] ) AS N" +
-                             " FROM " + CtestLogInfo.ContestInfo.ContestTblName +
-                              " INNER JOIN QCountries ON " + CtestLogInfo.ContestInfo.ContestTblName + ".ID = QCountries.ID " +
-                             whereClause +
-                        //" WHERE (((" + colContestID + ")='" + CtestLogInfo.ContestInfo.ContestID + "'))" +
-                             " GROUP BY  [" + colTime + "] ) AS Qry5minintervals" +
-                             " GROUP BY [Time1] ";
-                    ContestViewParms = new ContestViewParms(sChartFunction, SerTablename, sIntvTime, sQCnt, "Mult Sum",
-                       "Mults Per " + ChartAreaInfo.ChartPointtInterval.ToString() + " Minures", QSOQuery, true);
+                    switch (ContestTypeEnum)
+	                {
+                        case ContestTypeEnum.CQWW:
+                            //Zones + Countries
+                            QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) AS " + sQCnt +
+                                     " FROM (SELECT   convert(datetime, Format(" + colTime + ",'d') + ' ' " +
+                                     "+ Format(DatePart(hh," + colTime + "),'00') + ':' " +
+                                     "+ Format((DatePart(n," + colTime + ")/" + ChartAreaDto.ChartPointtInterval + ")*" +
+                                     ChartAreaDto.ChartPointtInterval + ",'00') )AS [Time1] , " +
+                                                    "Sum(convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QZoneMult]) + " + 
+                                                         "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QCtyMult]) " + 
+                                                        ") AS N" +
+                                      " FROM " + ContestInfoDTO.QsoDatabaseTableName +
+                                       " INNER JOIN Log ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[LogId] = [Log].[LogId] " +
+                                       "INNER JOIN CallSign ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[CallsignId] = [CallSign].[CallSignId] " +
+                                       " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
+                                      whereClause +
+                                      " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
+                                      " GROUP BY [Time1] ";
+                           break;
+                        case ContestTypeEnum.CQWPX:
+                           QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QPrefixMult");
+                            //prefixes
+                            break;
+                        case ContestTypeEnum.CQ160:
+                            break;
+                        case ContestTypeEnum.RUSDXC:
+                            //oblasts plus countries
+                            break;
+                        default:
+                            break;
+	                }
+                    ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Mult Sum",
+                    "Mults Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, true);
                     break;
-                case "Score  Rate":
-                    QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) * Sum(Qry5minintervals.Pts) AS " + sQCnt +
-                            " FROM (SELECT   Format([" + colTime + "],'Short Date') & ' ' " +
-                            "& Format(DatePart('h',[" + colTime + "]),'00') & ':' " +
-                            "& Format(Int(DatePart('n',[" + colTime + "])/" + ChartAreaInfo.ChartPointtInterval + ")*" +
-                            ChartAreaInfo.ChartPointtInterval + ",'00')AS [Time1] ," +
-                             " SUM([" + CtestLogInfo.ContestInfo.ContestTblName + ".QZoneMult]  + [" + CtestLogInfo.ContestInfo.ContestTblName + ".QCountryMult] ) AS N," +
-                             " SUM([" + CtestLogInfo.ContestInfo.ContestTblName + ".QPoints]) AS Pts " +
-                             " FROM " + CtestLogInfo.ContestInfo.ContestTblName +
-                              " INNER JOIN QCountries ON " + CtestLogInfo.ContestInfo.ContestTblName + ".ID = QCountries.ID " +
-                             whereClause +
-                        //" WHERE (((" + colContestID + ")='" + CtestLogInfo.ContestInfo.ContestID + "'))" +
-                             " GROUP BY  [" + colTime + "] ) AS Qry5minintervals" +
-                             " GROUP BY [Time1] ";
-                    ContestViewParms = new ContestViewParms(sChartFunction, SerTablename, sIntvTime, sQCnt, "Score Rate",
-                       "Score Per " + ChartAreaInfo.ChartPointtInterval.ToString() + " Mins", QSOQuery, false);
+               case "Score  Rate":
+                    switch (ContestTypeEnum)
+                    {
+                        case ContestTypeEnum.CQWW:
+                            //(Zones + Countries) * pts
+                            QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) * Sum(Qry5minintervals.Mults) AS " + sQCnt +
+                                     " FROM (SELECT   convert(datetime, Format(" + colTime + ",'d') + ' ' " +
+                                     "+ Format(DatePart(hh," + colTime + "),'00') + ':' " +
+                                     "+ Format((DatePart(n," + colTime + ")/" + ChartAreaDto.ChartPointtInterval + ")*" +
+                                     ChartAreaDto.ChartPointtInterval + ",'00') )AS [Time1] , " +
+                                            "Sum( " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts1])  + " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts2])*2  + " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts4])*4  + " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts8])*8 )  AS N,"   +
+                                             "Sum( " + 
+                                             "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QZoneMult]) + " +
+                                                     "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QCtyMult]) )" +
+                                            "AS Mults" +
+                                      " FROM " + ContestInfoDTO.QsoDatabaseTableName +
+                                       " INNER JOIN Log ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[LogId] = [Log].[LogId] " +
+                                       "INNER JOIN CallSign ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[CallsignId] = [CallSign].[CallSignId]" +
+                                       " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
+                                      whereClause +
+                                      " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
+                                      " GROUP BY [Time1] ";
+                            break;
+                        case ContestTypeEnum.CQWPX:
+                            //prefix * pts
+                            QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) * Sum(Qry5minintervals.Mults) AS  AS " + sQCnt +
+                                    " FROM (SELECT   convert(datetime, Format(" + colTime + ",'d') + ' ' " +
+                                    "+ Format(DatePart(hh," + colTime + "),'00') + ':' " +
+                                    "+ Format((DatePart(n," + colTime + ")/" + ChartAreaDto.ChartPointtInterval + ")*" +
+                                    ChartAreaDto.ChartPointtInterval + ",'00') )AS [Time1] , " +
+                                            "Sum( " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts1])  + " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts2])*2  + " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts4])*4  + " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts8])*8 )  AS N,"   +
+                                             "Sum( " +
+                                               "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPrefixMult])    )" +
+                                            "AS Mults" +
+                                     " FROM " + ContestInfoDTO.QsoDatabaseTableName +
+                                      " INNER JOIN Log ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[LogId] = [Log].[LogId] " +
+                                      "INNER JOIN CallSign ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[CallsignId] = [CallSign].[CallSignId]" +
+                                      " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
+                                     whereClause +
+                                     " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
+                                     " GROUP BY [Time1] ";
+                            QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QPrefixMult");
+                            //prefixes
+                            break;
+                        case ContestTypeEnum.CQ160:
+                            break;
+                        case ContestTypeEnum.RUSDXC:
+                            //oblasts plus countries
+                            break;
+                        default:
+                            break;
+                    }
+                    ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Score Rate",
+                    "Score Per" + ChartAreaDto.ChartPointtInterval.ToString() + " Mins", QSOQuery, false);
+
                     break;
                 case "Score  Sum":
-                    sQCnt2 = "Mults";
-                    sQCnt3 = "Points";
-                    QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) AS " + sQCnt2 + ", Sum(Qry5minintervals.Pts) AS " + sQCnt3 +
-                        " FROM (SELECT   Format([" + colTime + "],'Short Date') & ' ' " +
-                        "& Format(DatePart('h',[" + colTime + "]),'00') & ':' " +
-                        "& Format(Int(DatePart('n',[" + colTime + "])/" + ChartAreaInfo.ChartPointtInterval + ")*" +
-                        ChartAreaInfo.ChartPointtInterval + ",'00')AS [Time1] ," +
-                         " SUM([" + CtestLogInfo.ContestInfo.ContestTblName + ".QZoneMult]  + [" + CtestLogInfo.ContestInfo.ContestTblName + ".QCountryMult] ) AS N," +
-                         " SUM([" + CtestLogInfo.ContestInfo.ContestTblName + ".QPoints]) AS Pts " +
-                         " FROM " + CtestLogInfo.ContestInfo.ContestTblName +
-                          " INNER JOIN QCountries ON " + CtestLogInfo.ContestInfo.ContestTblName + ".ID = QCountries.ID " +
-                         whereClause +
-                        //" WHERE (((" + colContestID + ")='" + CtestLogInfo.ContestInfo.ContestID + "'))" +
-                         " GROUP BY  [" + colTime + "] ) AS Qry5minintervals" +
-                         " GROUP BY [Time1] ";
-                    ContestViewParms = new ContestViewParms(sChartFunction, SerTablename, sIntvTime, sQCnt, "Score Sum",
-                        "Score Per " + ChartAreaInfo.ChartPointtInterval.ToString() + " Mins", QSOQuery, true);
-                    ContestViewParms.sQCnt2 = sQCnt2;
-                    ContestViewParms.sQCnt3 = sQCnt3;
+                    switch (ContestTypeEnum)
+	                {
+                        case ContestTypeEnum.CQWW:
+                            //(Zones + Countries) * pts
+                            QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) As 'Points', Sum(Qry5minintervals.Mults)  AS Mults " +
+                                     " FROM (SELECT   convert(datetime, Format(" + colTime + ",'d') + ' ' " +
+                                     "+ Format(DatePart(hh," + colTime + "),'00') + ':' " +
+                                     "+ Format((DatePart(n," + colTime + ")/" + ChartAreaDto.ChartPointtInterval + ")*" +
+                                     ChartAreaDto.ChartPointtInterval + ",'00') )AS [Time1] , " +
+                                            "Sum( " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts1])  + " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts2])*2  + " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts4])*4  + " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts8])*8 )  AS N," +
+                                             "Sum( " +
+                                             "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QZoneMult]) + " +
+                                                     "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QCtyMult]) )" +
+                                            "AS Mults" +
+                                      " FROM " + ContestInfoDTO.QsoDatabaseTableName +
+                                       " INNER JOIN Log ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[LogId] = [Log].[LogId] " +
+                                       "INNER JOIN CallSign ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[CallsignId] = [CallSign].[CallSignId]" +
+                                       " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
+                                      whereClause +
+                                      " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
+                                      " GROUP BY [Time1] ";
+                          break;
+                        case ContestTypeEnum.CQWPX:
+                           //prefix * pts
+                          QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) As 'Points', Sum(Qry5minintervals.Mults) AS Mults " +
+                                     " FROM (SELECT   convert(datetime, Format(" + colTime + ",'d') + ' ' " +
+                                     "+ Format(DatePart(hh," + colTime + "),'00') + ':' " +
+                                     "+ Format((DatePart(n," + colTime + ")/" + ChartAreaDto.ChartPointtInterval + ")*" +
+                                     ChartAreaDto.ChartPointtInterval + ",'00') )AS [Time1] , " +
+                                            "Sum( " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts1])  + " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts2])*2  + " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts4])*4  + " +
+                                                "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts8])*8 )  AS N," +
+                                             "Sum( " +
+                                               "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPrefixMult])    )" +
+                                            "AS Mults" +
+                                      " FROM " + ContestInfoDTO.QsoDatabaseTableName +
+                                       " INNER JOIN Log ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[LogId] = [Log].[LogId] " +
+                                       "INNER JOIN CallSign ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[CallsignId] = [CallSign].[CallSignId]" +
+                                       " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
+                                      whereClause +
+                                      " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
+                                      " GROUP BY [Time1] ";
+                          QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "Score  Sum");
+                            //prefixes
+                            break;
+                        case ContestTypeEnum.CQ160:
+                            break;
+                        case ContestTypeEnum.RUSDXC:
+                            //oblasts plus countries
+                            break;
+                        default:
+                            break;
+                    }
+                    ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Score Sum",
+                    "Score Per" + ChartAreaDto.ChartPointtInterval.ToString() + " Mins", QSOQuery, true);
                     break;
-#endif
                 default:
                     break;
             }
@@ -273,21 +381,47 @@ namespace Logqso.mvc.domain.Charting
         public string GenerateQuery(ContestInfoDTO ContestInfoDTO, ChartAreaDto ChartAreaDto, string sIntvTime,
             string sQCnt, string colTime, string whereClause, string sumField)
         {
+            //sumfield is biy field
             string QSOQuery = string.Empty;
-            QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) AS " + sQCnt +
-             " FROM (SELECT   convert(datetime, Format(" + colTime + ",'d') + ' ' " +
-             "+ Format(DatePart(hh," + colTime + "),'00') + ':' " +
-             "+ Format((DatePart(n," + colTime + ")/" + ChartAreaDto.ChartPointtInterval + ")*" +
-             ChartAreaDto.ChartPointtInterval + ",'00') )AS [Time1] ,  Sum([" + ContestInfoDTO.QsoDatabaseTableName + "].[" + sumField + "]) AS N" +
-              " FROM " + ContestInfoDTO.QsoDatabaseTableName +
-               " INNER JOIN Log ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[LogId] = [Log].[LogId] " +
-               "INNER JOIN CallSign ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[CallsignId] = [CallSign].[CallSignId]" +
-               " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
-              whereClause +
-                    //" WHERE (((" + colContestID + ")='" + CtestLogInfo.ContestInfo.ContestID + "'))" +
-              " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
-              " GROUP BY [Time1] ";
+            if (sumField == "QPoints")
+            {//sum 4 fields
+                QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) AS " + sQCnt +
+                         " FROM (SELECT   convert(datetime, Format(" + colTime + ",'d') + ' ' " +
+                         "+ Format(DatePart(hh," + colTime + "),'00') + ':' " +
+                         "+ Format((DatePart(n," + colTime + ")/" + ChartAreaDto.ChartPointtInterval + ")*" +
+                         ChartAreaDto.ChartPointtInterval + ",'00') )AS [Time1] , " +
+                                "Sum( " +
+                                    "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts1])  + " +
+                                    "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts2])*2  + " +
+                                    "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts4])*4  + " +
+                                    "convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[QPts8])*8 )  " +
+                                "AS N" +
+                          " FROM " + ContestInfoDTO.QsoDatabaseTableName +
+                           " INNER JOIN Log ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[LogId] = [Log].[LogId] " +
+                           "INNER JOIN CallSign ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[CallsignId] = [CallSign].[CallSignId]" +
+                           " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
+                          whereClause +
+                          " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
+                          " GROUP BY [Time1] ";
 
+            }
+            else
+            {
+
+                QSOQuery = @"SELECT [Time1] AS " + sIntvTime + ", Sum(Qry5minintervals.N) AS " + sQCnt +
+                         " FROM (SELECT   convert(datetime, Format(" + colTime + ",'d') + ' ' " +
+                         "+ Format(DatePart(hh," + colTime + "),'00') + ':' " +
+                         "+ Format((DatePart(n," + colTime + ")/" + ChartAreaDto.ChartPointtInterval + ")*" +
+                         ChartAreaDto.ChartPointtInterval + ",'00') )AS [Time1] , " +
+                                        "Sum(convert(int,[" + ContestInfoDTO.QsoDatabaseTableName + "].[" + sumField + "]) ) AS N" +
+                          " FROM " + ContestInfoDTO.QsoDatabaseTableName +
+                           " INNER JOIN Log ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[LogId] = [Log].[LogId] " +
+                           "INNER JOIN CallSign ON [" + ContestInfoDTO.QsoDatabaseTableName + "].[CallsignId] = [CallSign].[CallSignId]" +
+                           " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
+                          whereClause +
+                          " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
+                          " GROUP BY [Time1] ";
+            }
             return QSOQuery;
         }
 
@@ -298,6 +432,27 @@ namespace Logqso.mvc.domain.Charting
             ChartQsoRateDTOs = LogRepository.GetChartDataTableAsync(ContestViewParmsDTO, Username).Result;
 
             IList<ChartQsoRateDTO> ChartQsoRateDTOList = ChartQsoRateDTOs as List<ChartQsoRateDTO>;
+            if (ContestViewParmsDTO.sChartFunction == "Score  Sum")
+            {
+                int sumMults = 0;
+                int sumPoints = 0;
+                foreach (var item in ChartQsoRateDTOList)
+                {
+                    sumMults +=item.Mults;
+                    sumPoints += item.Points;
+                    item.N = sumMults * sumPoints;
+                }
+               
+            }
+            else if (ContestViewParmsDTO.sChartFunction.Contains("Sum") )
+            { //sum qso count
+                int sum = 0;
+                foreach (var item in ChartQsoRateDTOList)
+	            {
+                    sum += item.N;
+                    item.N = sum;
+	            }
+            }
 
             //oRS.Columns.Add(ContestViewParmsDTO.sIntvTime, typeof(DateTime));
             //oRS.Columns.Add(ContestViewParmsDTO.sQCnt, typeof(int));

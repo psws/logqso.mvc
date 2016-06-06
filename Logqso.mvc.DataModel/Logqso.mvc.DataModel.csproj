@@ -146,6 +146,10 @@
     <Compile Include="LogData\Migrations\LogDataDB\201605221739558_InitialDatabaseCreation.Designer.cs">
       <DependentUpon>201605221739558_InitialDatabaseCreation.cs</DependentUpon>
     </Compile>
+    <Compile Include="LogData\Migrations\LogDataDB\201606010730408_multsPtsDatabaseCreation.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201606010730408_multsPtsDatabaseCreation.Designer.cs">
+      <DependentUpon>201606010730408_multsPtsDatabaseCreation.cs</DependentUpon>
+    </Compile>
     <Compile Include="LogData\Migrations\LogDataDB\Configuration.cs" />
     <Compile Include="LogData\QsoExchangeTypeSeeds.cs" />
     <Compile Include="LogData\QsoModeTypeSeeds.cs" />
@@ -266,6 +270,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LogData\Migrations\LogDataDB\201605221739558_InitialDatabaseCreation.resx">
       <DependentUpon>201605221739558_InitialDatabaseCreation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201606010730408_multsPtsDatabaseCreation.resx">
+      <DependentUpon>201606010730408_multsPtsDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

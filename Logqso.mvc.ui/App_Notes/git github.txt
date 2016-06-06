@@ -1,4 +1,6 @@
-﻿Using Git and GitHub with Visual Studio
+﻿YOU HAVE TO USE CHROME.  IE11 does not work
+
+Using Git and GitHub with Visual Studio
 It can be a bit confusing to get Visual Studio connected to your GitHub repository. If you are having problems you can try and follow these steps. 
  The easiest way to do things is to create an empty repository in GitHub. It must be empty (no auto generated README or .gitignore files) otherwise Visual Studio will complain. I have some steps further down the page if you want to try and use Visual Studio with a Github repo that already has some files in it.
  Log in to your github account and look for the little plus sign near the top of the page. 

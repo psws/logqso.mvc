@@ -473,9 +473,12 @@ $(function () {
     //set DDL change event
     $("select[id ^='Cat'], select[id ^='Filt'], select[id ^='Yaxis'], select[id ^='Xaxis']").
         each(function (indexInArray, valueOfElement) {
-            $(this).on("selectmenuchange", function (event, ui) {
+            //$(this).on("selectmenuopen", function (event, ui) {
+            //    _lq.ChartUpdateReqd == true
+            //});
+            $(this).on("selectmenuselect", function (event, ui) {
+                id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
                 if (_lq.ChartUpdateReqd == true) {
-                    id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
                     _lq.ControlUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML, id[0].value);
                 }
             })
@@ -485,10 +488,10 @@ $(function () {
     $("select[id ^='Station'], select[id ^='Radio']").
         each(function (indexInArray, valueOfElement) {
             $(this).on("selectmenuchange", function (event, ui) {
-                if (_lq.ChartUpdateReqd == true) {
                     id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
-                    _lq.DataUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML);
-                }
+                    if (_lq.ChartUpdateReqd == true) {
+                        _lq.DataUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML);
+                    }
             })
 
         });
@@ -983,10 +986,10 @@ $(function () {
             dataobj = window.sessionStorage.getItem(_lq.SessionSaveControlSelections);
             SessionSaveControlSettings = JSON.parse(dataobj);
             if (SessionSaveControlSettings != null) {
-                SetControlCategorySettingsDefaults(SessionSaveControlSettings.ControlCategorySettingsDto);
-                SetControlFiltersSettingsDefaults(SessionSaveControlSettings.ControlFiltersSettingsDto);
-                SetControlXaxisSettingsDefaults(SessionSaveControlSettings.ControlXaxisSettingsDto);
-                SetControlYaxisSettingsDefaults(SessionSaveControlSettings.ControlYaxisSettingsDto);
+                SetControlCategorySettings(SessionSaveControlSettings.ControlCategorySettingsDto, false);
+                SetControlFiltersSettings(SessionSaveControlSettings.ControlFiltersSettingsDto, false);
+                SetControlXaxisSettings(SessionSaveControlSettings.ControlXaxisSettingsDto, false);
+                SetControlYaxisSettings(SessionSaveControlSettings.ControlYaxisSettingsDto, false);
                 _lq.SessionSaveControlSettings();
 
                 //SetControlDefaults(SessionSaveControlSettings);
@@ -1004,10 +1007,10 @@ $(function () {
     function GetControlSelections() {
         _lq.ajaxHelper(_lq.controlUri + "/GetControlSelections", 'GET', 'json', true, null, GetControlSelectionsLoad);
         function GetControlSelectionsLoad(data) {
-            SetControlCategorySettingsDefaults(data.ControlCategorySettingsDto);
-            SetControlFiltersSettingsDefaults(data.ControlFiltersSettingsDto);
-            SetControlXaxisSettingsDefaults(data.ControlXaxisSettingsDto);
-            SetControlYaxisSettingsDefaults(data.ControlYaxisSettingsDto);
+            SetControlCategorySettings(data.ControlCategorySettingsDto, false);
+            SetControlFiltersSettings(data.ControlFiltersSettingsDto, false);
+            SetControlXaxisSettings(data.ControlXaxisSettingsDto, false);
+            SetControlYaxisSettings(data.ControlYaxisSettingsDto, false);
 
             _lq.SessionSaveControlSettings();
             _lq.ChartControlLoaded = true;
@@ -1174,14 +1177,14 @@ $(function () {
                 ReqUri += "ControlCategorySettingsDto";
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, ControlCategorySettingsDtoLoad);
                 function ControlCategorySettingsDtoLoad(ControlCategorySettingsDto) {
-                       SetControlCategorySettingsDefaults(ControlCategorySettingsDto);
+                       SetControlCategorySettings(ControlCategorySettingsDto, true);
                    };
                 break;
             case "QsoDft":
                 ReqUri += "ControlFiltersSettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, SetControlFiltersSettingsDefaultsLoad);
-                function SetControlFiltersSettingsDefaultsLoad(ControlFiltersSettingsDto) {
-                       SetControlFiltersSettingsDefaults(ControlFiltersSettingsDto);
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, SetControlFiltersSettingsDtoLoad);
+                function SetControlFiltersSettingsDtoLoad(ControlFiltersSettingsDto) {
+                    SetControlFiltersSettings(ControlFiltersSettingsDto, true);
 
                    };
                 break;
@@ -1189,14 +1192,14 @@ $(function () {
                 ReqUri += "ControlYaxisSettingsDto";
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, ControlYaxisSettingsDtoLoad);
                 function ControlYaxisSettingsDtoLoad(ControlYaxisSettingsDto) {
-                      SetControlYaxisSettingsDefaults(ControlYaxisSettingsDto);
+                    SetControlYaxisSettings(ControlYaxisSettingsDto, true);
                   };
                 break;
             case "XAxisDft":
                 ReqUri += "ControlXaxisSettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, SetControlXaxisSettingsDefaultsLoad);
-                function SetControlXaxisSettingsDefaultsLoad(ControlXaxisSettingsDto) {
-                      SetControlXaxisSettingsDefaults(ControlXaxisSettingsDto);
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, SetControlXaxisSettingsDtoLoad);
+                function SetControlXaxisSettingsDtoLoad(ControlXaxisSettingsDto) {
+                    SetControlXaxisSettings(ControlXaxisSettingsDto, true);
                   };
                 break;
             default:
@@ -1207,7 +1210,8 @@ $(function () {
 
     })
 
-    function SetControlCategorySettingsDefaults(ControlCategorySettingsDto) {
+    function SetControlCategorySettings(ControlCategorySettingsDto, bUpdateChart) {
+        _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
         $select = $('#CatOp').val(ControlCategorySettingsDto.CatOperator);
         $select.selectmenu("refresh");
         $select = $('#CatBnd').val(ControlCategorySettingsDto.CatBand);
@@ -1232,11 +1236,16 @@ $(function () {
             _lq.ControlCategorySettingsDto.Disabled = false;
         }
         _lq.ControlCategorySettingsDto = ControlCategorySettingsDto;
-        _lq.UpdateChartData(false);
+        if (bUpdateChart) {
+            _lq.UpdateChartData(false);
+        }
+        _lq.ChartUpdateReqd = true;
+
 
     }
 
-    function SetControlFiltersSettingsDefaults(ControlFiltersSettingsDto) {
+    function SetControlFiltersSettings(ControlFiltersSettingsDto, bUpdateChart) {
+        _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
         $select = $('#FiltBand').val(ControlFiltersSettingsDto.FiltBand);
         $select.selectmenu("refresh");
         $select = $('#FiltContinent').val(ControlFiltersSettingsDto.FiltContinent);
@@ -1263,7 +1272,7 @@ $(function () {
 
 
 
-        $select = $('#FiltCQZone').val(ControlFiltersSettingsDto.FiltCQZone);
+        $select = $('#FiltCQZone').val(ControlFiltersSettingsDto.FiltCQZone, bUpdateChart);
         $select.selectmenu("refresh");
         if (ControlFiltersSettingsDto.Disabled) {
             PropertyColorState("#filterQsochk", "checked", true, "#a4a3a3");
@@ -1279,25 +1288,34 @@ $(function () {
             _lq.ControlFiltersSettingsDto.Disabled = false;
         }
         _lq.ControlFiltersSettingsDto = ControlFiltersSettingsDto;
-        _lq.UpdateChartData(false);
+        if (bUpdateChart) {
+            _lq.UpdateChartData(false);
+        }
+
+        _lq.ChartUpdateReqd = true;
 
     }
 
-    function SetControlXaxisSettingsDefaults(ControlXaxisSettingsDto) {
-        $('#XaxisStarttime').prop("selectedIndex", ControlXaxisSettingsDto.XaxisStarttimeIndex).selectmenu('refresh');
+    function SetControlXaxisSettings(ControlXaxisSettingsDto, bUpdateChart) {
+        _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
 
+        $('#XaxisStarttime').prop("selectedIndex", ControlXaxisSettingsDto.XaxisStarttimeIndex).selectmenu('refresh');
         //$select = $('#XaxisStarttime').val(ControlXaxisSettingsDto.XaxisStarttime);
         //$select.selectmenu("refresh");
         $select = $('#XaxisDuration').val(ControlXaxisSettingsDto.XaxisDuration);
         $select.selectmenu("refresh");
         _lq.ControlXaxisSettingsDto = ControlXaxisSettingsDto;
-        _lq.UpdateChartData(false);
+        if (bUpdateChart) {
+            _lq.UpdateChartData(false);
+        }
+        _lq.ChartUpdateReqd = true;
 
     }
 
-    function SetControlYaxisSettingsDefaults(ControlYaxisSettingsDto) {
-        $('#YaxisFunction').prop("selectedIndex", ControlYaxisSettingsDto.YaxisFunctionIndex).selectmenu('refresh');
+    function SetControlYaxisSettings(ControlYaxisSettingsDto, bUpdateChart) {
+        _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
 
+        $('#YaxisFunction').prop("selectedIndex", ControlYaxisSettingsDto.YaxisFunctionIndex).selectmenu('refresh');
         //$select = $('#YaxisFunction').val(ControlYaxisSettingsDto.YaxisFunction);
         //$select.selectmenu("refresh");
         $select = $('#YaxisInterval').val(ControlYaxisSettingsDto.YaxisInterval);
@@ -1305,7 +1323,10 @@ $(function () {
         $select = $('#YaxisViewType').val(ControlYaxisSettingsDto.YaxisViewType);
         $select.selectmenu("refresh");
         _lq.ControlYaxisSettingsDto = ControlYaxisSettingsDto;
-        _lq.UpdateChartData(false);
+        if (bUpdateChart) {
+            _lq.UpdateChartData(false);
+        }
+        _lq.ChartUpdateReqd = true;
 
     }
 
@@ -1615,7 +1636,7 @@ $(function () {
         }else if (Controlid.indexOf("Xaxis")>= 0)  {
             switch (Controlid) {
                 case "XaxisStarttime":
-                    _lq.ControlXaxisSettingsDto.XaxisStarttime = SelectedValue
+                    _lq.ControlXaxisSettingsDto.XaxisStarttime = value
                     _lq.ControlXaxisSettingsDto.XaxisStarttimeIndex = $('#XaxisStarttime').prop("selectedIndex");
                     break;
                 case "XaxisDuration":
@@ -1628,7 +1649,12 @@ $(function () {
         } else if (Controlid.indexOf("Yaxis") >= 0)   {
             switch (Controlid) {
                 case "YaxisFunction":
-                    _lq.ControlYaxisSettingsDto.YaxisFunction = SelectedValue;
+                    _lq.ControlYaxisSettingsDto.YaxisFunction = value;
+                    if (value.indexOf('Sum' ) != -1) {
+                        _lq.ControlYaxisSettingsDto.YaxisViewType = '  Spline';
+                    }else {
+                        _lq.ControlYaxisSettingsDto.YaxisViewType = '  Column';
+                    }
                     _lq.ControlYaxisSettingsDto.YaxisFunctionIndex = $('#YaxisFunction').prop("selectedIndex");
                     break;
                 case "YaxisInterval":
