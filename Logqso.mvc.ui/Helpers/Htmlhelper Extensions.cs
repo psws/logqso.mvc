@@ -26,5 +26,39 @@ namespace Logqso.mvc.ui.Helpers
             return MvcHtmlString;
 
         }
+
+        public static MvcHtmlString TabViewInitialSelector(this HtmlHelper HtmlHelper)
+        {
+            string TabView = "TabViewChart"; //default
+            var value = HtmlHelper.ViewContext.HttpContext.Request.QueryString.Get("View");
+            if (value == null)
+            {
+                value = "0";
+            }
+            else
+            {
+                switch (value)
+                {
+                    case "0":
+                        TabView = "TabViewChart";
+                        break;
+                    case "1":
+                        TabView = "TabViewLog";
+                        break;
+                   default:
+                        break;
+                }
+            }
+           // <input id="TabViewInit" type="hidden" value="TabViewChart" />
+           var builder = new TagBuilder("input");
+            builder.MergeAttribute("id", "TabViewInit");
+            builder.MergeAttribute("type", "hidden");
+            builder.MergeAttribute("value", TabView);
+            MvcHtmlString MvcHtmlString = MvcHtmlString.Create(builder.ToString());
+
+            return MvcHtmlString;
+
+        }
+
     }
 }

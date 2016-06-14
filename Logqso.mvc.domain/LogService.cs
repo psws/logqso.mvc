@@ -110,7 +110,7 @@ namespace Logqso.mvc.domain
 
 
             DataCalls = await _repository.GetCategorizedCallsAsync(LogCategory, dataCallObjDTO.DataCallInfoDto.SelectedContestName,
-                dataCallObjDTO.CallTab, (CallGroupEnum)dataCallObjDTO.DataCallInfoDto.CallGroup, Username);
+                dataCallObjDTO.CallTab, (CallGroupEnum)dataCallObjDTO.DataCallInfoDto.CallGroup, dataCallObjDTO.ControlCategorySettingsDto.Disabled,  Username);
 
             return DataCalls;
 

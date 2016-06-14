@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "LogQso";
+    ViewBag.Title = "Contest Qso";
 }
 
 @*@Html.Label("Window size:", new { id = "size" });
@@ -199,8 +199,29 @@
     <div class="container">
         <div class="row">
 
-            <div class="col-md-12 " id="graph">
-                <img id="ChartRate" @*src="~/image/ChartImg.png"*@ class="img-responsive lq-graph" alt="Missimg">
+            <div class="col-lg-12 col-md-12 col-sm-12  " id="graph">
+                @*<input id="TabViewInitialSelector" type="hidden" value="TabViewChart" />*@
+                @Html.TabViewInitialSelector()
+                <div id="TabViews">
+                    <ul style="margin-left: 5px;">
+                        <li><a href="#TabViewChart">Chart</a></li>
+                        <li><a href="#TabViewLog">Log</a></li>
+                        <li><a href="#TabViewUpUBN">Upload UBN</a></li>
+                        <li><a href="#TabViewUpWT">Upload Wintest </a></li>
+                    </ul>
+                    <div id="TabViewChart">
+                        <img id="ChartRate" @*src="~/image/ChartImg.png"*@ class="img-responsive lq-graph" alt="Standby">
+                    </div>
+                    <div id="TabViewLog">
+                        Hello
+                    </div>
+                    <div id="TabViewUpUBN">
+                        World
+                    </div>
+                    <div id="TabViewUpWT">
+                        World
+                    </div>
+                </div>
             </div>
         </div>
     </div>

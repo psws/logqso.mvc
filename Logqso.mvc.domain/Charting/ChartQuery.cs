@@ -101,7 +101,8 @@ namespace Logqso.mvc.domain.Charting
                               whereClause +
                         //" WHERE (((" + colContestID + ")='" + CtestLogInfo.ContestInfo.ContestID + "'))" +
                               " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
-                              " GROUP BY [Time1] ";
+                              " GROUP BY [Time1] " + 
+                               "ORDER By 1 asc";
                     ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "QSO Rate",
                     "QSOs Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, false);
                     break;
@@ -117,7 +118,8 @@ namespace Logqso.mvc.domain.Charting
                               " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
                              whereClause +
                              " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
-                             " GROUP BY [Time1] ";
+                             " GROUP BY [Time1] " +
+                               "ORDER By 1 asc";
                     ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "QSO Sum",
                     "QSOs Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, true);
                     break;
@@ -147,14 +149,6 @@ namespace Logqso.mvc.domain.Charting
                         "Zones Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, true);
                     break;
                 case "Country  Rate":
-                    // if (whereClause == string.Empty) 
-                    //{
-                    //    whereClause = " WHERE " + CtestLogInfo.ContestInfo.ContestTblName + ".QCountryMult= 1";
-                    //}else
-                    //{
-                    //    whereClause += " AND " + CtestLogInfo.ContestInfo.ContestTblName + ".QCountryMult= 1";
-
-                    //}
                     QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QCtyMult");
                     ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Country Rate",
                         "Countries Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Mins", QSOQuery, false);
@@ -162,7 +156,7 @@ namespace Logqso.mvc.domain.Charting
                 case "Country  Sum":
                     QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QCtyMult");
                     ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Country Sum",
-                        "Countries Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Mins", QSOQuery, false);
+                        "Countries Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Mins", QSOQuery, true);
                     break;
                 case "Point  Rate":
                     QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QPoints");
@@ -174,7 +168,17 @@ namespace Logqso.mvc.domain.Charting
                     ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Point  Sum",
                         "Points Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, true);
                     break;
-                case "Mult  Rate":
+               case "Prefix  Rate":
+                    QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QPrefixMult");
+                    ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Prefix Rate",
+                        "Prefixess Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, false);
+                    break;
+               case "Prefix  Sum":
+                    QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QPrefixMult");
+                    ContestViewParmsDTO = new ContestViewParmsDTO(sChartFunction, SerTablename, sIntvTime, sQCnt, "Prefix Sum",
+                        "Prefixes Per " + ChartAreaDto.ChartPointtInterval.ToString() + " Minutes", QSOQuery, true);
+                    break;
+               case "Mult  Rate":
                     switch (ContestTypeEnum)
 	                {
                         case ContestTypeEnum.CQWW:
@@ -193,7 +197,8 @@ namespace Logqso.mvc.domain.Charting
                                        " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
                                       whereClause +
                                       " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
-                                      " GROUP BY [Time1] ";
+                                      " GROUP BY [Time1] " +
+                                        "ORDER By 1 asc";
                            break;
                         case ContestTypeEnum.CQWPX:
                            QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QPrefixMult");
@@ -229,7 +234,8 @@ namespace Logqso.mvc.domain.Charting
                                        " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
                                       whereClause +
                                       " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
-                                      " GROUP BY [Time1] ";
+                                      " GROUP BY [Time1] " +
+                                        "ORDER By 1 asc";
                            break;
                         case ContestTypeEnum.CQWPX:
                            QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QPrefixMult");
@@ -271,7 +277,8 @@ namespace Logqso.mvc.domain.Charting
                                        " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
                                       whereClause +
                                       " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
-                                      " GROUP BY [Time1] ";
+                                      " GROUP BY [Time1] " +
+                                        "ORDER By 1 asc";
                             break;
                         case ContestTypeEnum.CQWPX:
                             //prefix * pts
@@ -294,7 +301,8 @@ namespace Logqso.mvc.domain.Charting
                                       " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
                                      whereClause +
                                      " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
-                                     " GROUP BY [Time1] ";
+                                     " GROUP BY [Time1] " +
+                                        "ORDER By 1 asc";
                             QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "QPrefixMult");
                             //prefixes
                             break;
@@ -335,7 +343,8 @@ namespace Logqso.mvc.domain.Charting
                                        " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
                                       whereClause +
                                       " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
-                                      " GROUP BY [Time1] ";
+                                      " GROUP BY [Time1] " +
+                                        "ORDER By 1 asc";
                           break;
                         case ContestTypeEnum.CQWPX:
                            //prefix * pts
@@ -358,7 +367,8 @@ namespace Logqso.mvc.domain.Charting
                                        " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
                                       whereClause +
                                       " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
-                                      " GROUP BY [Time1] ";
+                                      " GROUP BY [Time1] " +
+                                        "ORDER By 1 asc";
                           QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "Score  Sum");
                             //prefixes
                             break;
@@ -402,7 +412,8 @@ namespace Logqso.mvc.domain.Charting
                            " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
                           whereClause +
                           " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
-                          " GROUP BY [Time1] ";
+                          " GROUP BY [Time1] " +
+                            "ORDER By 1 asc";
 
             }
             else
@@ -420,7 +431,8 @@ namespace Logqso.mvc.domain.Charting
                            " AND [Log].[LogId] = " + ContestInfoDTO.LogId +
                           whereClause +
                           " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
-                          " GROUP BY [Time1] ";
+                          " GROUP BY [Time1] " +
+                          "ORDER By 1 asc";
             }
             return QSOQuery;
         }

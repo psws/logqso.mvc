@@ -5,9 +5,6 @@ $(function () {
     _lq.SessionSaveControlSelections = "SessionSaveControlSettings";
     var btn = $.fn.button.noConflict();
 
-    //$("select[name^='Contest']").selectmenu();
-    //$("select[name^='Contest']").selectmenu('menuWidget').addClass('lq-dropdwn');
-    //get control data
 
     // Fetch the initial data.
     //var controlUri = '/api/control/';
@@ -27,7 +24,8 @@ $(function () {
     } );
 
     getAllControls();
-    getAllData();
+    //getAllData();
+    _lq.LoadViewTabs("ALL");
     _lq.LoadCallPopupTabs('All');
 
     $.widget("ui.selectmenu", $.ui.selectmenu, {
@@ -51,15 +49,6 @@ $(function () {
 
 
 
-            //ok slower
-            //$("li:contains(CQ)").filter(".ui-menu-divider").css("border", "3px solid red");
-            //has 2 classes on one object
-            //$(".ui-selectmenu-optgroup.ui-menu-divider").css("border", "3px solid red");
-            //OR operator with comma
-            //$(".ui-menu ,.ui-menu-divider").css("border", "3px solid red");
-            //or with AND
-            //$(".ui-menu ,li:contains(CQ).ui-menu-divider").css("border", "3px solid red");
-            //$("[li:contains(CQ)] [.ui-menu-divider]").css("border", "3px solid red");
             $(".ui-menu-divider").css("color", "green");
             //$(".ui-menu").css("width", "115px");
             //$(".ui-menu").addClass("lq-call-text");
@@ -183,17 +172,7 @@ $(function () {
     });
 
 
-    function PropertyColorState(Selector, property, state, color) {
-        $(Selector).prop(property, state);
-        $(Selector).css("color", color);
-    }
 
-    function SelectMenuState(Selector, property) {
-        $Select = $(Selector);
-        $.each($Select, function (indexInArray, valueOfElement) {
-            $(this).selectmenu(property);
-        });
-    }
 
     $("span[id^='enb_dis'] input").click(function (e) {
         if (e.currentTarget.checked) {
@@ -203,32 +182,35 @@ $(function () {
             e.currentTarget.parentNode.style.color = "red";
             switch (e.currentTarget.id) {
                 case 'chk1':
-                    PropertyColorState("#Call1", "disabled", true, "#a4a3a3");
-                    SelectMenuState("#Station1, #Radio1", "disable");
+                    _lq.PropertyColorState("#Call1", "disabled", true, "#a4a3a3");
+                    _lq.SelectMenuState("#Station1, #Radio1", "disable");
                     _lq.DataCallInfoDTOs[0].Disabled = true;
                     DataUpdated = true;
                     break;
                 case 'chk2':
-                    PropertyColorState("#Call2", "disabled", true, "#a4a3a3");
-                    SelectMenuState("#Station2, #Radio2", "disable");
+                    _lq.PropertyColorState("#Call2", "disabled", true, "#a4a3a3");
+                    _lq.SelectMenuState("#Station2, #Radio2", "disable");
                     _lq.DataCallInfoDTOs[1].Disabled = true;
                     DataUpdated = true;
                     break;
                 case 'chk3':
-                    PropertyColorState("#Call3", "disabled", true, "#a4a3a3");
-                    SelectMenuState("#Station3, #Radio3", "disable");
+                    _lq.PropertyColorState("#Call3", "disabled", true, "#a4a3a3");
+                    _lq.SelectMenuState("#Station3, #Radio3", "disable");
                     _lq.DataCallInfoDTOs[2].Disabled = true;
                     DataUpdated = true;
                     break;
                 case 'filtercatchk':
-                    PropertyColorState("#filtercatchk", "checked", true, "#a4a3a3");
-                    SelectMenuState("Select[id^='Cat']", "disable");
+                    _lq.PropertyColorState("#filtercatchk", "checked", true, "#a4a3a3");
+                    _lq.SelectMenuState("Select[id^='Cat']", "disable");
                     _lq.ControlCategorySettingsDto.Disabled = true;
+                    _lq.removeTabData('tabs1');
+                    _lq.removeTabData('tabs2');
+                    _lq.removeTabData('tabs3');
                     ControlUpdated = true;
                     break;
                 case 'filterQsochk':
-                    PropertyColorState("#filterQsochk", "checked", true, "#a4a3a3");
-                    SelectMenuState("Select[id^='Filt']", "disable");
+                    _lq.PropertyColorState("#filterQsochk", "checked", true, "#a4a3a3");
+                    _lq.SelectMenuState("Select[id^='Filt']", "disable");
                     _lq.ControlFiltersSettingsDto.Disabled = true;
                     ControlUpdated = true;
                     break;
@@ -240,30 +222,34 @@ $(function () {
             e.currentTarget.parentNode.style.color = "";
             switch (e.currentTarget.id) {
                 case 'chk1':
-                    PropertyColorState("#Call1", "disabled", false, "");
-                    SelectMenuState("#Station1, #Radio1", "enable");
+                    _lq.PropertyColorState("#Call1", "disabled", false, "");
+                    _lq.SelectMenuState("#Station1, #Radio1", "enable");
                     _lq.DataCallInfoDTOs[0].Disabled = false;
                     DataUpdated = true;
                     break;
                 case 'chk2':
-                    PropertyColorState("#Call2", "disabled", false, "");
-                    SelectMenuState("#Station2, #Radio2", "enable");
+                    _lq.PropertyColorState("#Call2", "disabled", false, "");
+                    _lq.SelectMenuState("#Station2, #Radio2", "enable");
                     _lq.DataCallInfoDTOs[1].Disabled = false;
                     DataUpdated = true;
                     break;
                 case 'chk3':
-                    PropertyColorState("#Call3", "disabled", false, "");
-                    SelectMenuState("#Station3, #Radio3", "enable");
+                    _lq.PropertyColorState("#Call3", "disabled", false, "");
+                    _lq.SelectMenuState("#Station3, #Radio3", "enable");
                     _lq.DataCallInfoDTOs[2].Disabled = false;
                     DataUpdated = true;
                     break;
                 case 'filtercatchk':
-                    SelectMenuState("Select[id^='Cat']", "enable");
+                    _lq.SelectMenuState("Select[id^='Cat']", "enable");
                     _lq.ControlCategorySettingsDto.Disabled = false;
+                    _lq.removeTabData('tabs1');
+                    _lq.removeTabData('tabs2');
+                    _lq.removeTabData('tabs3');
+                    _lq.AdjustControlCategorySettings(_lq.ControlCategorySettingsDto);
                     ControlUpdated = true;
                     break;
                 case 'filterQsochk':
-                    SelectMenuState("Select[id^='Filt']", "enable");
+                    _lq.SelectMenuState("Select[id^='Filt']", "enable");
                     _lq.ControlFiltersSettingsDto.Disabled = false;
                     ControlUpdated = true;
                 default:
@@ -286,76 +272,7 @@ $(function () {
 
     });
 
-    //$(".panel-heading").css({
-    //    "color": "black",
-    //    "background-color": "blue"
-    //});
 
-
-
-
-    // {
-
-    //$.widget( "ui.selectmenu", $.ui.selectmenu, {
-    //    _renderItem: function( ul, item ) {
-    //    return $( '<li>' )
-    //       .attr( 'data-value', item.value )
-    //       .append( $( '<a>' ).html( '<small>'+item.label+'</small>' ) )
-    //       .appendTo( ul );
-    //},
-
-    //_renderMenu: function( ul, items ) {
-    //    var that = this;
-    //    $.each( items, function( index, item ) {
-    //        that._renderItemData( ul, item );
-    //    });
-    //    $( ul )
-    //       .attr( 'tabindex', -1 )
-    //       .addClass( 'dropdown-menu' );
-    //},
-    //});
-
-
-
-    //var widget = $("select[name^='Contest']").selectmenu();
-    //$.each(widget, function (indexInArray, valueOfElement) {
-    //    //console.log(indexInArray + ": " + valueOfElement);
-    //    $(this).selectmenu('menuWidget').addClass('lq-dropdwn');
-    //    //$(this).selectmenu('menuWidget').css("line-height", "30px");
-    //    //$(this).selectmenu("option", "line-height", "10px");
-    //    $(this).selectmenu("option", "width", 110);
-    //    $(this).selectmenu('widget').addClass('lq-dropdwn');
-    //    //$(this).selectmenu('widget').css("line-height", "30px");
-
-    //    //$(this).selectmenu('widget').on("click", { foo: "jim" }, function (event) {
-
-    //    //    alert("were here" + event.data.foo);
-
-    //    //});
-
-    //    ////sets all li to pink except selected
-    //    //var sm_inst = $(this).data('ui-selectmenu'),
-    //    //old_renderMenu = sm_inst._renderMenu;
-
-    //    //sm_inst._renderMenu = function (ul, items) {
-    //    //    $(ul).addClass('test');
-
-    //    //    old_renderMenu.call(this, ul, items)
-    //    //};
-
-
-
-
-
-
-    //    //var options = $(this).selectmenu('menuWidget').selectmenu().selectmenu("option")
-    //    //$.each(options, function (indexInArray, valueOfElement) {
-    //    //    console.log(indexInArray + ": " + valueOfElement);
-    //    //    //$(this).css("background-color", "green");
-    //    //});
-
-    //});
-    //$(" div.panel-body[id^='CtestPnl']").css("padding", "15px 4px 15px 4px");
     $("div.panel-body button[id^='Contest'], button[id^=Call]").addClass('lq-contest-selector')
    .button({
        icons: {
@@ -447,22 +364,9 @@ $(function () {
 
         });
 
+    _lq.DataDropdownSelectMenu("Station", 80);
+    _lq.DataDropdownSelectMenu("Radio", 60);
 
-    $("select[name^='Station']").selectmenu().
-        each(function (indexInArray, valueOfElement) {
-            $(this).selectmenu('menuWidget').addClass('lq-dropdwn');
-            $(this).selectmenu("option", "width", 80);
-            $(this).selectmenu('widget').addClass('lq-dropdwn');
-
-        });
-
-    $("select[name^='Radio']").selectmenu().
-        each(function (indexInArray, valueOfElement) {
-            $(this).selectmenu('menuWidget').addClass('lq-dropdwn');
-            $(this).selectmenu("option", "width", 60);
-            $(this).selectmenu('widget').addClass('lq-dropdwn');
-
-        });
 
 
     //ElementCount = 5;
@@ -497,33 +401,6 @@ $(function () {
         });
 
 
-    //$("ul[id^='Axis'] ").
-    //    each( function (indexInArray, valueOfElement) { 
-    //        $(this).data();
-    //        ElementCount = valueOfElement.childElementCount;
-
-    //        $(this).css({
-    //            'margin-top': -(ElementCount * 25)
-    //        });
-
-    //    });
-
-
-    //tm = -(5 * 20);
-    //AxisFunc.css({
-    //    'margin-top': tm
-    //});
-
-    //$("ul#AxisFunction-menu li").each(function (indexInArray, valueOfElement) {
-    //    if (valueOfElement.childElementCount > 10) {
-    //    }
-    //});
-
-    //$("select#Contest1").selectmenu('widget').on("click", { foo: "jim" }, function (event) {
-    //    $("select#Contest1").find('option').length;
-    //    //alert("were here" + event.data.foo);
-
-    //});
 
 
 
@@ -534,57 +411,8 @@ $(function () {
         $(this).selectmenu('widget').addClass('lq-dropdwn');
     });
 
-
-
-    ////$("[name^='Contest']").selectmenu('menuWidget').addClass('lq-dropdwn');
-    ////$("[name^='Contest']").selectmenu('widget').addClass('lq-dropdwn');
-    ////$("[name^='Contest']").selectmenu();
-    ////$("[name^='Contest']").selectmenu('menuWidget').addClass('lq-dropdwn');
-    ////$("[name^='Contest']").selectmenu('widget').addClass('lq-dropdwn');
-    //$('#Call1').selectmenu();
-    //$('#Call1').selectmenu('menuWidget').addClass('lq-dropdwn');
-    //$('#Call1').selectmenu('widget').addClass('lq-dropdwn');
-    ////$(selector).addClass(className);
-    //$('#test').tooltip();
-    //$('#Call3').selectmenu();
-    //$('#Call3').selectmenu('menuWidget').addClass('overflow-contest-select');
-
-
-
-
-    //$("#ContestName1")
-    //      .button()
-    //      .click(function () {
-    //          alert("Running the last action");
-    //      })
-    //      .next()
-    //        .button({
-    //            text: false,
-    //            icons: {
-    //                primary: "ui-icon-triangle-1-s"
-    //            }
-    //        })
-    //        .click(function () {
-    //            var menu = $(this).parent().next().show().position({
-
-    //                my: "left top",
-    //                at: "left bottom",
-    //                of: this
-
-    //            }).click(function (e) {
-    //                alert("Running the menu action");
-    //                $("#ContestName1").text = 'CqwwSSB2014';
-    //            })
-    //            $(document).one("click", function () {
-    //                menu.hide();
-    //            });
-    //            return false;
-    //        })
-    //        .parent()
-    //          .buttonset()
-    //          .next()
-    //            .hide()
-    //            .menu();
+    //all data selectmenu's are complete, get setinngs for selected valyes from cache if available
+    getAllData();
 
 
     //Modal support
@@ -984,13 +812,18 @@ $(function () {
 
             //check if cached
             dataobj = window.sessionStorage.getItem(_lq.SessionSaveControlSelections);
-            SessionSaveControlSettings = JSON.parse(dataobj);
-            if (SessionSaveControlSettings != null) {
-                SetControlCategorySettings(SessionSaveControlSettings.ControlCategorySettingsDto, false);
+            if (dataobj != null) {
+                SessionSaveControlSettings = JSON.parse(dataobj);
+                _lq.SetControlCategorySettings(SessionSaveControlSettings.ControlCategorySettingsDto, false);
                 SetControlFiltersSettings(SessionSaveControlSettings.ControlFiltersSettingsDto, false);
                 SetControlXaxisSettings(SessionSaveControlSettings.ControlXaxisSettingsDto, false);
                 SetControlYaxisSettings(SessionSaveControlSettings.ControlYaxisSettingsDto, false);
                 _lq.SessionSaveControlSettings();
+                _lq.ChartControlLoaded = true;
+                if ((_lq.ChartInitialUpdateReqd == true && _lq.ChartDataLoaded == true && _lq.ChartControlLoaded == true)) {
+                    _lq.ChartInitialUpdateReqd = false;
+                    _lq.UpdateChartData(false);
+                }
 
                 //SetControlDefaults(SessionSaveControlSettings);
             }else {
@@ -1007,14 +840,14 @@ $(function () {
     function GetControlSelections() {
         _lq.ajaxHelper(_lq.controlUri + "/GetControlSelections", 'GET', 'json', true, null, GetControlSelectionsLoad);
         function GetControlSelectionsLoad(data) {
-            SetControlCategorySettings(data.ControlCategorySettingsDto, false);
+            _lq.SetControlCategorySettings(data.ControlCategorySettingsDto, false);
             SetControlFiltersSettings(data.ControlFiltersSettingsDto, false);
             SetControlXaxisSettings(data.ControlXaxisSettingsDto, false);
             SetControlYaxisSettings(data.ControlYaxisSettingsDto, false);
 
             _lq.SessionSaveControlSettings();
             _lq.ChartControlLoaded = true;
-            if (_lq.ChartInitialUpdateReqd == true && _lq.ChartDataLoaded == true && _lq.ChartControlLoaded == true)
+            if ( (_lq.ChartInitialUpdateReqd == true && _lq.ChartDataLoaded == true && _lq.ChartControlLoaded == true) ) 
             {
                 _lq.ChartInitialUpdateReqd = false;
                 _lq.UpdateChartData(false);
@@ -1026,7 +859,16 @@ $(function () {
 
 
     function getAllData() {
-        _lq.ajaxHelper(_lq.dataUri + "/GetDataCallInfoSelections", 'GET', 'json', true, null, SetCallInfoObjDataSettings);
+        //check if cached
+
+        dataobj = window.sessionStorage.getItem(_lq.DataCallInfoDTOs);
+        if (dataobj != null) {
+            _lq.DataCallInfoDTOs = JSON.parse(dataobj);
+            SetCallInfoObjDataSettings(_lq.DataCallInfoDTOs);
+        }else {
+            _lq.ajaxHelper(_lq.dataUri + "/GetDataCallInfoSelections", 'GET', 'json', true, null, SetCallInfoObjDataSettings);
+        }
+
     }
 
 
@@ -1038,7 +880,9 @@ $(function () {
         } else {
             SetContestinfo(1, data[0]); //only once
             for (var i = 0; i < data.length; i++) {
-    
+                _lq.DataCallInfoDTOs[i].ContestNames = data[i].ContestNames;
+                _lq.DataCallInfoDTOs[i].StationNames = data[i].StationNames;
+                _lq.DataCallInfoDTOs[i].RadioNames = data[i].RadioNames;
                 switch (data[i].CallGroup) {
                     case 1:
                         _lq.SetCallinfo(1, data[i]);
@@ -1060,7 +904,7 @@ $(function () {
         //SetDataSettingsDefaults(data);
         _lq.SessionSaveDataSettings();
         _lq.ChartDataLoaded = true;
-        if (_lq.ChartInitialUpdateReqd == true && _lq.ChartDataLoaded == true && _lq.ChartControlLoaded == true) {
+        if ( (_lq.ChartInitialUpdateReqd == true && _lq.ChartDataLoaded == true && _lq.ChartControlLoaded == true) ) {
             _lq.ChartInitialUpdateReqd = false;
             _lq.UpdateChartData(false);
         }
@@ -1177,7 +1021,7 @@ $(function () {
                 ReqUri += "ControlCategorySettingsDto";
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, ControlCategorySettingsDtoLoad);
                 function ControlCategorySettingsDtoLoad(ControlCategorySettingsDto) {
-                       SetControlCategorySettings(ControlCategorySettingsDto, true);
+                    _lq.SetControlCategorySettings(ControlCategorySettingsDto, true);
                    };
                 break;
             case "QsoDft":
@@ -1210,39 +1054,7 @@ $(function () {
 
     })
 
-    function SetControlCategorySettings(ControlCategorySettingsDto, bUpdateChart) {
-        _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
-        $select = $('#CatOp').val(ControlCategorySettingsDto.CatOperator);
-        $select.selectmenu("refresh");
-        $select = $('#CatBnd').val(ControlCategorySettingsDto.CatBand);
-        $select.selectmenu("refresh");
-        $select = $('#CatPower').val(ControlCategorySettingsDto.CatPower);
-        $select.selectmenu("refresh");
-        $select = $('#CatAssist').val(ControlCategorySettingsDto.CatAssisted);
-        $select.selectmenu("refresh");
-        $select = $('#CatTX').val(ControlCategorySettingsDto.CatNoOfTx);
-        $select.selectmenu("refresh");
-        if (ControlCategorySettingsDto.Disabled) {
-            PropertyColorState("#filtercatchk", "checked", true, "#a4a3a3");
-            $("#filtercatchk").prev("label").css(
-                 { "color": "red" });
-            SelectMenuState("Select[id^='Cat']", "disable");
-            _lq.ControlCategorySettingsDto.Disabled = true;
-        } else {
-            PropertyColorState("#filtercatchk", "checked", false, "");
-            $("#filtercatchk").prev("label").css(
-                { "color": "" });
-            SelectMenuState("Select[id^='Cat']", "enable");
-            _lq.ControlCategorySettingsDto.Disabled = false;
-        }
-        _lq.ControlCategorySettingsDto = ControlCategorySettingsDto;
-        if (bUpdateChart) {
-            _lq.UpdateChartData(false);
-        }
-        _lq.ChartUpdateReqd = true;
 
-
-    }
 
     function SetControlFiltersSettings(ControlFiltersSettingsDto, bUpdateChart) {
         _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
@@ -1275,16 +1087,16 @@ $(function () {
         $select = $('#FiltCQZone').val(ControlFiltersSettingsDto.FiltCQZone, bUpdateChart);
         $select.selectmenu("refresh");
         if (ControlFiltersSettingsDto.Disabled) {
-            PropertyColorState("#filterQsochk", "checked", true, "#a4a3a3");
+            _lq.PropertyColorState("#filterQsochk", "checked", true, "#a4a3a3");
             $("#filterQsochk").prev("label").css(
                  { "color": "red" });
-            SelectMenuState("Select[id^='Filt']", "disable");
+            _lq.SelectMenuState("Select[id^='Filt']", "disable");
             _lq.ControlFiltersSettingsDto.Disabled = true;
         } else {
-            PropertyColorState("#filterQsochk", "checked", false, "");
+            _lq.PropertyColorState("#filterQsochk", "checked", false, "");
             $("#filterQsochk").prev("label").css(
                 { "color": "" });
-            SelectMenuState("Select[id^='Filt']", "enable");
+            _lq.SelectMenuState("Select[id^='Filt']", "enable");
             _lq.ControlFiltersSettingsDto.Disabled = false;
         }
         _lq.ControlFiltersSettingsDto = ControlFiltersSettingsDto;
@@ -1362,6 +1174,7 @@ $(function () {
     _lq.ChartInitialUpdateReqd = true;
     _lq.ChartDataLoaded = false;
     _lq.ChartControlLoaded = false;
+    _lq.ActiveView;
 
     _lq.SessionSaveControlSelections;
 
@@ -1560,6 +1373,89 @@ $(function () {
     }
 
 
+    _lq.LoadViewTabs = function (Tabsel) {
+        var tab;
+        var tdiv;
+        if (Tabsel == 'ALL') {
+            tab = 'TabViews';
+            tdiv = $('div[id=TabViews]');
+
+        } else {
+            tab = Tabsel;
+        }
+        _lq.ActiveView = $('#TabViewInit')[0].value;
+
+        //$('div[id^=' + tab + ']').each(function () {
+        //    var tab = this.id;
+        //    var TabUl = $('div[id=' + tab + '] ul');
+        //    var DivUl = $('div[id=' + tab + ']');
+
+        //    if ($('div[id=' + tab + '] ul li').length == 0) {
+
+        //        TabUl.append('<li ><a href="#TabViewchart">View Chart</a></li>');
+        //        DivUl.append('<div id="TabViewchart"></div>');
+
+        //    }
+        //})
+        $('div[id^=' + tab + ']').each(function () {
+            tdiv.tabs({
+                //width: 1170,
+                //height: 600,
+                active: _lq.ActiveView,
+                create: function (event, ui) {
+                    //_lq.InitTab = ui.tab[0].innerText;
+                    _lq.LoadInitialViewTab(event, ui);
+
+                },
+                activate: function (event, ui) {
+                    _lq.LoadViewTab(event, ui);
+                }
+
+            });
+            $(this).css({
+                'margin-top': -20,
+                'padding': '0px',
+                'background': '#aed7ff'
+             });
+        })
+
+        $("#" + tab + " ul.ui-tabs-nav li a").
+            each(function (indexInArray, valueOfElement) {
+                //console.log(indexInArray + ": " + valueOfElement);
+                $(this).addClass('Viewtabs-tab-button');
+                $(this).css('padding', '1px 1px 1px 1px');
+            });
+        $("#" + tab + " ul.ui-tabs-nav li").
+         each(function (indexInArray, valueOfElement) {
+             $(this).css('margin', '0');
+         });
+        $("#TabViewChart").
+             each(function (indexInArray, valueOfElement) {
+                 $(this).css('padding', '0');
+             });
+
+
+    }
+
+    _lq.LoadInitialViewTab = function (event, ui) {
+        var x = 5;
+
+    }
+
+    _lq.LoadViewTab = function (event, ui) {
+        if (ui.newTab[0].textContent != 'Chart') {
+            //var div = $('#TabViewChart');
+            //var img = $('#ChartRate');
+            //if (img != null) {
+
+            //}
+            var text = ui.newTab[0].innerText;
+            ui.newPanel[0].innerText = text;
+        }
+
+    }
+
+
     _lq.ContestSelectHandler = function (event) {
         //alert(event.data.test);
         $('#' + event.data.test + ' span.ui-button-text').text(event.currentTarget.textContent);
@@ -1606,6 +1502,7 @@ $(function () {
             _lq.removeTabData('tabs1');
             _lq.removeTabData('tabs2');
             _lq.removeTabData('tabs3');
+            _lq.AdjustControlCategorySettings(_lq.ControlCategorySettingsDto);
 
         }else if (Controlid.indexOf("Filt")>= 0)  {
             switch (Controlid) {
@@ -1677,7 +1574,78 @@ $(function () {
         }
     }
 
+    _lq.AdjustControlCategorySettings = function (ControlCategorySettingsDto) {
+        if (ControlCategorySettingsDto.Disabled == false) {
+            if (ControlCategorySettingsDto.CatOperator == 'SINGLE-OP') {
+                _lq.SelectMenuState("#CatBnd, #CatPower, #CatAssist", "enable");
+                _lq.SelectMenuState("#CatTX", "disable");
 
+            } else if (ControlCategorySettingsDto.CatOperator == 'MULTI-OP') {
+                _lq.SelectMenuState("#CatBnd, #CatAssist", "disable");
+                if (ControlCategorySettingsDto.CatNoOfTx == 'ONE') {
+                    _lq.SelectMenuState("#CatPower", "enable");
+                } else {
+                    _lq.SelectMenuState("#CatPower", "disable");
+                }
+                _lq.SelectMenuState("#CatTX", "enable");
+            }
+            else if (ControlCategorySettingsDto.CatOperator == 'CHECKLOG') {
+                _lq.SelectMenuState("#CatBnd, #CatPower, #CatAssist, #CatTX", "disable");
+            }
+            else {
+                _lq.SelectMenuState("#CatBnd, #CatPower, #CatAssist, #CatTX", "enable");
+
+            }
+        }
+
+    }
+
+    _lq.SetControlCategorySettings = function (ControlCategorySettingsDto, bUpdateChart) {
+        _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
+        _lq.AdjustControlCategorySettings(ControlCategorySettingsDto);
+        $select = $('#CatOp').val(ControlCategorySettingsDto.CatOperator);
+        $select.selectmenu("refresh");
+        $select = $('#CatBnd').val(ControlCategorySettingsDto.CatBand);
+        $select.selectmenu("refresh");
+        $select = $('#CatPower').val(ControlCategorySettingsDto.CatPower);
+        $select.selectmenu("refresh");
+        $select = $('#CatAssist').val(ControlCategorySettingsDto.CatAssisted);
+        $select.selectmenu("refresh");
+        $select = $('#CatTX').val(ControlCategorySettingsDto.CatNoOfTx);
+        $select.selectmenu("refresh");
+        if (ControlCategorySettingsDto.Disabled) {
+            _lq.PropertyColorState("#filtercatchk", "checked", true, "#a4a3a3");
+            $("#filtercatchk").prev("label").css(
+                 { "color": "red" });
+            _lq.SelectMenuState("Select[id^='Cat']", "disable");
+            _lq.ControlCategorySettingsDto.Disabled = true;
+        } else {
+            _lq.PropertyColorState("#filtercatchk", "checked", false, "");
+            $("#filtercatchk").prev("label").css(
+                { "color": "" });
+            _lq.SelectMenuState("Select[id^='Cat']", "enable");
+            _lq.ControlCategorySettingsDto.Disabled = false;
+        }
+        _lq.ControlCategorySettingsDto = ControlCategorySettingsDto;
+        if (bUpdateChart) {
+            _lq.UpdateChartData(false);
+        }
+        _lq.ChartUpdateReqd = true;
+
+
+    }
+
+    _lq.PropertyColorState = function (Selector, property, state, color) {
+        $(Selector).prop(property, state);
+        $(Selector).css("color", color);
+    }
+
+    _lq.SelectMenuState = function (Selector, property) {
+        $Select = $(Selector);
+        $.each($Select, function (indexInArray, valueOfElement) {
+            $(this).selectmenu(property);
+        });
+    }
 
     //_lq.SendControlSettings = function (save) {
     //    if (save == true) {
@@ -1742,10 +1710,10 @@ $(function () {
                 $("button[id='Contest1'] span").text(DataCallInfoObj.SelectedContestName);
                 if (DataCallInfoObj.SelectedStationName != null) {
                     $select = $('#Station1').val(DataCallInfoObj.SelectedStationName).selectmenu("refresh");
-                    _lq.DataCallInfoDTOs.SelectedStationName = DataCallInfoObj.SelectedStationName;
+                    _lq.DataCallInfoDTOs[0].SelectedStationName = DataCallInfoObj.SelectedStationName;
                 } else {
                     $select = $('#Station1').val("ALL").selectmenu("refresh");
-                    _lq.DataCallInfoDTOs.SelectedStationName = "ALL";
+                    _lq.DataCallInfoDTOs[0].SelectedStationName = "ALL";
                 }
                 var chk = $("input[id='chk1'] ")
                 if (chk.length != 0) {
@@ -1766,8 +1734,10 @@ $(function () {
                 $("button[id='Contest2'] span").text(DataCallInfoObj.SelectedContestName);
                 if (DataCallInfoObj.SelectedStationName != null) {
                     $select = $('#Station2').val(DataCallInfoObj.SelectedStationName).selectmenu("refresh");
+                    _lq.DataCallInfoDTOs[1].SelectedStationName = DataCallInfoObj.SelectedStationName;
                 } else {
                     $select = $('#Station2').val("ALL").selectmenu("refresh");
+                    _lq.DataCallInfoDTOs[1].SelectedStationName = DataCallInfoObj.SelectedStationName;
                 }
                 var chk = $("input[id='chk2'] ")
                 if (chk.length != 0) {
@@ -1785,8 +1755,10 @@ $(function () {
                 $("button[id='Contest3'] span").text(DataCallInfoObj.SelectedContestName);
                 if (DataCallInfoObj.SelectedStationName != null) {
                     $select = $('#Station3').val(DataCallInfoObj.SelectedStationName).selectmenu("refresh");
+                    _lq.DataCallInfoDTOs[2].SelectedStationName = DataCallInfoObj.SelectedStationName;
                 } else {
                     $select = $('#Station3').val("ALL").selectmenu("refresh");
+                    _lq.DataCallInfoDTOs[2].SelectedStationName = DataCallInfoObj.SelectedStationName;
                 }
                 var chk = $("input[id='chk3'] ")
                 if (chk.length != 0) {
@@ -1997,9 +1969,6 @@ $(function () {
                 ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
             }
         };
-
-
-
         _lq.ajaxHelper(_lq.dataUri + "/UpdateChart", 'POST', 'binary', false, dataObj, _lq.UpdateChartLoad);
     }
 
@@ -2011,13 +1980,33 @@ $(function () {
 
 
     _lq.SessionSaveDataSettings = function () {
-        var dataObj = {
-            DataCallInfoDto: _lq.DataCallInfoDTOs
-        };
+        var dataObj = _lq.DataCallInfoDTOs;
         window.sessionStorage.removeItem(_lq.DataCallInfoDTOs);
         window.sessionStorage.setItem(_lq.DataCallInfoDTOs, JSON.stringify(dataObj));
 
     }
+
+    _lq.DataDropdownSelectMenu = function (control) {
+        var width;
+        switch (control) {
+            case "Station":
+                width = 80;
+                break;
+            case "Radio":
+                width = 60;
+                break;
+            default:
+
+        }
+        $("select[name^='" + control + "']").selectmenu().
+        each(function (indexInArray, valueOfElement) {
+            $(this).selectmenu('menuWidget').addClass('lq-dropdwn');
+            $(this).selectmenu("option", "width", width);
+            $(this).selectmenu('widget').addClass('lq-dropdwn');
+
+        });
+    }
+
 
         //get calls
     _lq.GetCallData = function (CallGroup, SelectedTabName) {

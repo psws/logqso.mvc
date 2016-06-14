@@ -240,16 +240,16 @@ namespace Logqso.Repository.Repository
 
 
         public static async Task<DataCalls> GetCategorizedCallsAsync(this IRepositoryAsync<Log> LogRepository, LogCategory LogCategory,
-            string SelectedContestName, string CallChar, Logqso.mvc.common.Enum.CallGroupEnum CallGroup, string Username)
+            string SelectedContestName, string CallChar, Logqso.mvc.common.Enum.CallGroupEnum CallGroup, bool Disabled, string Username)
         {
-            return await GetCategorizedCalls(LogRepository, LogCategory, SelectedContestName, CallChar, CallGroup, Username);
+            return await GetCategorizedCalls(LogRepository, LogCategory, SelectedContestName, CallChar, CallGroup, Disabled, Username);
         }
 
         //both GetCategorizedCalls and GetCategorizedCall2 methoda work.
         //GetCategorizedCalls2 uses the predicate builder along with asExpandable()
         //GetCategorizedCalls uses the Where extensions in DynamicLibrary.cs in the using System.Data.Entity namespace
         public static Task<DataCalls> GetCategorizedCalls(this IRepositoryAsync<Log> _LogRepository, LogCategory LogCategory,
-            string SelectedContestName, string SelectedCall, Logqso.mvc.common.Enum.CallGroupEnum CallGroup, string Username)
+            string SelectedContestName, string SelectedCall, Logqso.mvc.common.Enum.CallGroupEnum CallGroup, bool Disabled, string Username)
         {
             //The passed in _LogRepository has a DataContext from Dependency resolver
             //The Unit of work DataContext does not match the DataContext of the _Logrespository
@@ -265,6 +265,42 @@ namespace Logqso.Repository.Repository
             IQueryFluent<LogCategory> LogCategorys = LogCategoryRepository.Query();
             var LogCategoryQ = LogCategorys.SelectQueryable(false);
 
+            if (Disabled == false)
+            {// business rules
+                if (LogCategory.CatOperatorEnum == (int)CatOperatorEnum.SINGLE_OP)
+                {
+                    LogCategory.CatNoOfTxEnum = (int)CatNoOfTxEnum.ALL;
+
+                }
+                else if (LogCategory.CatOperatorEnum == (int)CatOperatorEnum.MULTI_OP)
+                {
+                    LogCategory.CatBandEnum = (int)CatBandEnum.ALL;
+                    if (LogCategory.CatNoOfTxEnum != (int)CatNoOfTxEnum.ONE)
+                    {
+                        LogCategory.CatPowerEnum = (int)CatPowerEnum.ALL;
+                    }
+                    LogCategory.CatAssistedEnum = (int)CatAssistedEnum.ALL;
+                }
+                else if (LogCategory.CatOperatorEnum == (int)CatOperatorEnum.CHECKLOG)
+                {
+                    LogCategory.CatBandEnum = (int)CatBandEnum.ALL;
+                    LogCategory.CatPowerEnum = (int)CatPowerEnum.ALL;
+                    LogCategory.CatAssistedEnum = (int)CatAssistedEnum.ALL;
+                    LogCategory.CatNoOfTxEnum = (int)CatNoOfTxEnum.ALL;
+                }
+                else
+                { //all
+
+                }
+            }
+            else
+            {//all disabled
+                LogCategory.CatOperatorEnum = (int)CatOperatorEnum.ALL;
+                LogCategory.CatBandEnum = (int)CatBandEnum.ALL;
+                LogCategory.CatPowerEnum = (int)CatPowerEnum.ALL;
+                LogCategory.CatAssistedEnum = (int)CatAssistedEnum.ALL;
+                LogCategory.CatNoOfTxEnum = (int)CatNoOfTxEnum.ALL;
+            }
 
             //Using Predicate
             var Predicate = PredicateBuilder.True<LogCategory>();
@@ -374,7 +410,7 @@ namespace Logqso.Repository.Repository
         //GetCategorizedCalls2 uses the predicate builder along with asExpandable()
         //GetCategorizedCalls uses the Where extensions in DynamicLibrary.cs in the using System.Data.Entity namespace
         public static Task<DataCalls> GetCategorizedCalls2(this IRepository<Log> _LogRepository, LogCategory LogCategory,
-            string SelectedContestName, string SelectedCall, Logqso.mvc.common.Enum.CallGroupEnum CallGroup, string Username)
+            string SelectedContestName, string SelectedCall, Logqso.mvc.common.Enum.CallGroupEnum CallGroup, bool Disabled, string Username)
         {
             //The passed in _LogRepository has a DataContext from Dependency resolver
             //The Unit of work DataContext does not match the DataContext of the _Logrespository
@@ -423,6 +459,42 @@ namespace Logqso.Repository.Repository
                 .SelectQueryable(false).Where(x => x.ContestId == ContestQ.ContestId);
 
             String LogCategoryPredicate = "true "; //string.Empty;
+            if (Disabled == false)
+            {// business rules
+                if (LogCategory.CatOperatorEnum == (int)CatOperatorEnum.SINGLE_OP)
+                {
+                    LogCategory.CatNoOfTxEnum = (int)CatNoOfTxEnum.ALL;
+
+                }
+                else if (LogCategory.CatOperatorEnum == (int)CatOperatorEnum.MULTI_OP)
+                {
+                    LogCategory.CatBandEnum = (int)CatBandEnum.ALL;
+                    if (LogCategory.CatNoOfTxEnum != (int)CatNoOfTxEnum.ONE)
+                    {
+                        LogCategory.CatPowerEnum = (int)CatPowerEnum.ALL;
+                    }
+                    LogCategory.CatAssistedEnum = (int)CatAssistedEnum.ALL;
+                }
+                else if (LogCategory.CatOperatorEnum == (int)CatOperatorEnum.CHECKLOG)
+                {
+                    LogCategory.CatBandEnum = (int)CatBandEnum.ALL;
+                    LogCategory.CatPowerEnum = (int)CatPowerEnum.ALL;
+                    LogCategory.CatAssistedEnum = (int)CatAssistedEnum.ALL;
+                    LogCategory.CatNoOfTxEnum = (int)CatNoOfTxEnum.ALL;
+                }
+                else
+                { //all
+
+                }
+            }
+            else
+            {//all disabled
+                LogCategory.CatBandEnum = (int)CatBandEnum.ALL;
+                LogCategory.CatPowerEnum = (int)CatPowerEnum.ALL;
+                LogCategory.CatAssistedEnum = (int)CatAssistedEnum.ALL;
+                LogCategory.CatNoOfTxEnum = (int)CatNoOfTxEnum.ALL;
+            }
+
 
             if (LogCategory.CatAssistedEnum != (int)CatAssistedEnum.ALL)
             {

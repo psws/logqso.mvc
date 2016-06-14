@@ -134,7 +134,7 @@ span[id^='enb_dis']{
 .lq-graph {
     width:100%;
     margin-top:-20px;
-    vertical-align: top;  
+    vertical-align: top;
 }
 
 
@@ -327,6 +327,18 @@ span[id^='enb_dis']{
     max-height:70px;*/
 
 }
+
+.Viewtabs-tab-button{
+    font-size:60%;
+    text-align:left;
+    line-height:18px;
+    /*padding:1px 1px 1px 1px;*/
+    width:80px;
+    /*min-height:15px;
+    max-height:70px;*/
+
+}
+
 
 /*modal support*/
 .modal-box {

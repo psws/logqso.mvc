@@ -31,8 +31,10 @@ namespace Logqso.mvc.DataModel.LogControl
                 new YaxisFunction { YaxisFuncName = "Point  Rate",  Index = 9 },
                 new YaxisFunction { YaxisFuncName = "Point  Sum",  Index = 10 },
                  new YaxisFunction { YaxisFuncName = "Mult  Rate",  Index = 11 },
-                new YaxisFunction { YaxisFuncName = "Mult  Sum",  Index = 12 }
-           );
+                new YaxisFunction { YaxisFuncName = "Mult  Sum",  Index = 12 },
+                new YaxisFunction { YaxisFuncName = "Prefix  Rate", Index = 13 },
+                new YaxisFunction { YaxisFuncName = "Prefix  Sum",  Index = 14 }
+          );
 
             context.YaxisInterval.AddOrUpdate(
             p => p.YaxisIntvVal,

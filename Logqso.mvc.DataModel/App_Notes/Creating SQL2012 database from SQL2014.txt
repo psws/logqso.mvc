@@ -7,7 +7,7 @@ An alternate scheme uses SQL scripts and import from SSMS.
 For the Control library you can just use a script that includes all Data tables.
 1) In SQL2014 select right click on Logqso DB ->Tasks->Generate scripts
 2) Select Entire Database then Next
-3) Set filepath to generate logqso2012script.sql
+3) Set filepath to generate Contestqso SQL2014 to 2012script.sql
 4) select advanced button
 5)		script for SQL version => SQL2012
 6) Type of data to script =>schema and data
@@ -52,8 +52,22 @@ Right click on each of thes indexes and select Rebuild
 
 To test the results, selecting a Call in Call1, call2 orcall3 should return the list of calls quickly in the tab
 
+To transfer to Hostinfest via a 2012 backup:
+	Make sure that the Contestqso and ContestqsoData
+	1) open the jims9m8r (db)->Security->User->select jims9m8r ->General
+	2) Make sure the User Type box says 'SQL user with  Login''
+		if not delete and add jims9m8r again with sql login
+	3) Username: jims9m8r
+	4) Login: jims9m8r
+	5) schema; dbo
 
-
+Create .bak backup files for bith Contestqso and CortestqsoData DBs
+go to Hostingfest cp for logqsp.com
+Navigate to databases
+Looks like the big ContestqsoData.bak file needs to be uploaded to the contesstqsoData/dsta directory
+	The file appears to be to big if you try to do the backup via file upload.
+	Filezilla takes 5 minutet to upoad this dil.
+Select database and restore with .bak files.
 
 
 
