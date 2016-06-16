@@ -26,12 +26,12 @@ div.row{
 .clear {
     clear:both;
 }
-div[id^='hdgPnl'], div[id^='hdgAxis']{
+div[id^='hdgPnl'], div[id^='hdgAxis'], div[id^='FhdgPnl']{
     height:20px;
     padding:2px 2px 2px 2px;
     border:0;
 }
-div[id^='Pnl']{
+div[id^='Pnl'], div[id^='FPnl']{
     height:70px;
     max-width:90%;
     min-width:470px;

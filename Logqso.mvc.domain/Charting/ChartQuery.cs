@@ -492,6 +492,25 @@ namespace Logqso.mvc.domain.Charting
             Qfilter.Filter = string.Empty;
             Qfilter.QsoCB = ControlFiltersSettingsDto.Disabled;
 
+            if (!Qfilter.QsoCB)
+            {
+                //rules
+                if (ControlFiltersSettingsDto.FiltContinent != "ALL")
+                {
+                    ControlFiltersSettingsDto.FiltCountryInnerHTML.value = "ALL&";
+                    ControlFiltersSettingsDto.FiltCQZone = "ALL";
+                }
+                if (ControlFiltersSettingsDto.FiltCountryInnerHTML.value.Contains("ALL&") == false)
+                {
+                    ControlFiltersSettingsDto.FiltContinent = "ALL";
+                    ControlFiltersSettingsDto.FiltCQZone = "ALL";
+                }
+                if (ControlFiltersSettingsDto.FiltCQZone != "ALL")
+                {
+                    ControlFiltersSettingsDto.FiltCountryInnerHTML.value = "ALL&";
+                    ControlFiltersSettingsDto.FiltContinent = "ALL";
+                }
+            }
 
             if (!Qfilter.QsoCB)
             {
@@ -519,7 +538,7 @@ namespace Logqso.mvc.domain.Charting
                                 Qfilter.Filter = "([Qso].[Frequency] >= 21000.0 AND [Qso].[Frequency] <= 21450.0)";
                                 break;
                             case CatBandEnum._10M:
-                                Qfilter.Filter = "([Qso].[Frequency] >= 28000.0 AND [Qso].[Frequency] <= 20700.0)";
+                                Qfilter.Filter = "([Qso].[Frequency] >= 28000.0 AND [Qso].[Frequency] <= 28700.0)";
                                 break;
                             default:
                                 break;

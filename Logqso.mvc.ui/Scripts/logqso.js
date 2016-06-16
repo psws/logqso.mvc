@@ -104,7 +104,7 @@ $(function () {
       $(this).addClass('lq-button');
   });
 
-    $("div[id^='hdgPnl'].panel-heading").
+    $("div[id^='hdgPnl'].panel-heading, div[id^='FhdgPnl'].panel-heading").
     each(function (indexInArray, valueOfElement) {
         //significance
         //$(this).css('border-color', '#aed7ff');
@@ -135,9 +135,17 @@ $(function () {
             'background-color': '#aed7ff'
         })
     });
+    $("div.panel[id^='FPnl'], div.panel-heading[id^='FhdgPnl'],  div.panel-body[id^='FbdyPnl']").
+    each(function (indexInArray, valueOfElement) {
+        //$(this).prop('background-color', '#aed7ff');
+        $(this).css({
+            'background-color': '#cbfcda',
+        })
+    });
 
 
-    $("div.panel-body[id^='bdyPnl']").
+
+    $("div.panel-body[id^='bdyPnl'], div.panel-body[id^='FbdyPnl']").
     each(function (indexInArray, valueOfElement) {
         //$(this).prop('background-color', '#aed7ff');
         $(this).css({
@@ -251,6 +259,7 @@ $(function () {
                 case 'filterQsochk':
                     _lq.SelectMenuState("Select[id^='Filt']", "enable");
                     _lq.ControlFiltersSettingsDto.Disabled = false;
+                    _lq.AdjustControlFiltersSettings(_lq.ControlFiltersSettingsDto);
                     ControlUpdated = true;
                 default:
 
@@ -815,9 +824,9 @@ $(function () {
             if (dataobj != null) {
                 SessionSaveControlSettings = JSON.parse(dataobj);
                 _lq.SetControlCategorySettings(SessionSaveControlSettings.ControlCategorySettingsDto, false);
-                SetControlFiltersSettings(SessionSaveControlSettings.ControlFiltersSettingsDto, false);
-                SetControlXaxisSettings(SessionSaveControlSettings.ControlXaxisSettingsDto, false);
-                SetControlYaxisSettings(SessionSaveControlSettings.ControlYaxisSettingsDto, false);
+                _lq.SetControlFiltersSettings(SessionSaveControlSettings.ControlFiltersSettingsDto, false);
+                _lq.SetControlXaxisSettings(SessionSaveControlSettings.ControlXaxisSettingsDto, false);
+                _lq.SetControlYaxisSettings(SessionSaveControlSettings.ControlYaxisSettingsDto, false);
                 _lq.SessionSaveControlSettings();
                 _lq.ChartControlLoaded = true;
                 if ((_lq.ChartInitialUpdateReqd == true && _lq.ChartDataLoaded == true && _lq.ChartControlLoaded == true)) {
@@ -841,9 +850,9 @@ $(function () {
         _lq.ajaxHelper(_lq.controlUri + "/GetControlSelections", 'GET', 'json', true, null, GetControlSelectionsLoad);
         function GetControlSelectionsLoad(data) {
             _lq.SetControlCategorySettings(data.ControlCategorySettingsDto, false);
-            SetControlFiltersSettings(data.ControlFiltersSettingsDto, false);
-            SetControlXaxisSettings(data.ControlXaxisSettingsDto, false);
-            SetControlYaxisSettings(data.ControlYaxisSettingsDto, false);
+            _lq.SetControlFiltersSettings(data.ControlFiltersSettingsDto, false);
+            _lq.SetControlXaxisSettings(data.ControlXaxisSettingsDto, false);
+            _lq.SetControlYaxisSettings(data.ControlYaxisSettingsDto, false);
 
             _lq.SessionSaveControlSettings();
             _lq.ChartControlLoaded = true;
@@ -1028,7 +1037,7 @@ $(function () {
                 ReqUri += "ControlFiltersSettingsDto";
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, SetControlFiltersSettingsDtoLoad);
                 function SetControlFiltersSettingsDtoLoad(ControlFiltersSettingsDto) {
-                    SetControlFiltersSettings(ControlFiltersSettingsDto, true);
+                    _lq.SetControlFiltersSettings(ControlFiltersSettingsDto, true);
 
                    };
                 break;
@@ -1036,14 +1045,14 @@ $(function () {
                 ReqUri += "ControlYaxisSettingsDto";
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, ControlYaxisSettingsDtoLoad);
                 function ControlYaxisSettingsDtoLoad(ControlYaxisSettingsDto) {
-                    SetControlYaxisSettings(ControlYaxisSettingsDto, true);
+                    _lq.SetControlYaxisSettings (ControlYaxisSettingsDto, true);
                   };
                 break;
             case "XAxisDft":
                 ReqUri += "ControlXaxisSettingsDto";
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, SetControlXaxisSettingsDtoLoad);
                 function SetControlXaxisSettingsDtoLoad(ControlXaxisSettingsDto) {
-                    SetControlXaxisSettings(ControlXaxisSettingsDto, true);
+                    _lq.SetControlXaxisSettings(ControlXaxisSettingsDto, true);
                   };
                 break;
             default:
@@ -1056,8 +1065,583 @@ $(function () {
 
 
 
-    function SetControlFiltersSettings(ControlFiltersSettingsDto, bUpdateChart) {
+
+
+
+
+ 
+
+
+
+    $(window).resize();
+    document.getElementById("body").style.visibility = "visible";
+
+
+    });
+
+
+//END OF $FUNCTION
+
+// encapsuleted _lq class
+    (function (_lq, $, undefined) {
+        _lq.controlUri = '/v1/Control';
+        _lq.dataUri = '/v1/Data';
+
+        _lq.parent_modal_box_id;
+        _lq.CallReload1 = true;
+        _lq.CallReload2 = true;
+        _lq.CallReload3 = true;
+        _lq.InitTab;
+        _lq.InitTabState = 0;
+        _lq.ajaxCallCount = 0;
+        _lq.ChartUpdateReqd = false;
+        _lq.ChartInitialUpdateReqd = true;
+        _lq.ChartDataLoaded = false;
+        _lq.ChartControlLoaded = false;
+        _lq.ActiveView;
+
+        _lq.SessionSaveControlSelections;
+
+        _lq.ControlCategorySettingsDto =  {
+            CatOperator: '',
+            CatBand: '',
+            CatPower: '',
+            CatAssisted: '',
+            CatNoOfTx: '',
+            Disabled: 0
+        };
+
+        _lq.ControlFiltersSettingsDto = {
+            FiltBand: '',
+            FiltContinent: '',
+            FiltCountryInnerHTML: '',
+            FiltCQZone: '',
+            Disabled: 0
+        };
+
+        _lq.ControlXaxisSettingsDto = {
+            XaxisDuration: '',
+            XaxisStarttime: '',
+            XaxisStarttimeIndex: ''
+        };
+
+        _lq.ControlYaxisSettingsDto = {
+            YaxisFunction: '',
+            YaxisFunctionIndex: '',
+            YaxisInterval: '',
+            YaxisViewType: ''
+        };
+
+        _lq.ControlSettingsDto = [_lq.ControlCategorySettingsDto, _lq.ControlFiltersSettingsDto, _lq.ControlXaxisSettingsDto, _lq.ControlYaxisSettingsDto];
+
+
+        _lq.DataCallInfoDto1 = {
+            CallGroup: '',
+            SelectedContestName: '',
+            SelectedCall: '',
+            SelectedStationName: '',
+            SelectedRadioType: '',
+            LogId: '',
+            Disabled: 0,
+            StationNames: '',
+            ContestNames: '',
+            RadioNames: '',
+        };
+        _lq.DataCallInfoDto2 = {
+            CallGroup: '',
+            SelectedContestName: '',
+            SelectedCall: '',
+            SelectedStationName: '',
+            SelectedRadioType: '',
+            LogId: '',
+            Disabled: 0,
+            StationNames: '',
+            ContestNames: '',
+            RadioNames: '',
+        };
+        _lq.DataCallInfoDto3 = {
+            CallGroup: '',
+            SelectedContestName: '',
+            SelectedCall: '',
+            SelectedStationName: '',
+            SelectedRadioType: '',
+            LogId: '',
+            Disabled: 0,
+            StationNames: '',
+            ContestNames: '',
+            RadioNames: '',
+        };
+
+
+        _lq.DataCallInfoDTOs = [_lq.DataCallInfoDto1, _lq.DataCallInfoDto2, _lq.DataCallInfoDto3];
+
+
+        _lq.DataCallInfoDTO = {
+            SelectedContestName: '',
+            SelectedCall: '', 
+            SelectedStationName: '', 
+            CallGroup: '', 
+            SelectedRadioType: '',
+            LogId: '', 
+            Disabled: 0, 
+            StationNames: '', 
+            ContestNames: '',
+            RadioNames: '' ,
+        };
+
+        _lq.DataCalls = {
+            CallGroup: '',
+            SelectedCall: '',
+            Calls:
+                {
+                    CallsignID: '',
+                    Call: ''
+                }
+        };
+
+        // use this transport for "binary" data type
+        //http://www.henryalgus.com/reading-binary-files-using-jquery-ajax/
+        $.ajaxTransport("+binary", function (options, originalOptions, jqXHR) {
+            // check for conditions and support for blob / arraybuffer response type
+            if (window.FormData && ((options.dataType && (options.dataType == 'binary')) || (options.data && ((window.ArrayBuffer && options.data instanceof ArrayBuffer) || (window.Blob && options.data instanceof Blob))))) {
+                return {
+                    // create new XMLHttpRequest
+                    send: function (headers, callback) {
+                        // setup all variables
+                        var xhr = new XMLHttpRequest(),
+                url = options.url,
+                type = options.type,
+                async = options.async || true,
+                // blob or arraybuffer. Default is blob
+                dataType = options.responseType || "blob",
+                data = options.data || null,
+                username = options.username || null,
+                password = options.password || null;
+
+                        xhr.addEventListener('load', function () {
+                            var data = {};
+                            data[options.dataType] = xhr.response;
+                            // make callback and send data
+                            callback(xhr.status, xhr.statusText, data, xhr.getAllResponseHeaders());
+                        });
+
+                        xhr.open(type, url, async, username, password);
+
+                        // setup custom headers
+                        for (var i in headers) {
+                            xhr.setRequestHeader(i, headers[i]);
+                        }
+
+                        xhr.responseType = dataType;
+                        xhr.send(data);
+                    },
+                    abort: function () {
+                        jqXHR.abort();
+                    }
+                };
+            }
+        });
+
+
+        _lq.ajaxHelper = function (uri, method, datatype, processdata, data, Function) {
+            $.ajax({
+                type: method,
+                url: uri,
+                dataType: datatype,
+                processData: processdata,
+                contentType: 'application/json',
+                beforeSend: function () {
+                    _lq.ajaxCallCount++;
+                    $('#updateProgressDiv').show();
+                },
+                complete: function () {
+                    _lq.ajaxCallCount--;
+                    if (_lq.ajaxCallCount == 0) {
+                        $('#updateProgressDiv').hide();
+                    }
+                },
+
+                data: data ? JSON.stringify(data) : null,
+            })
+           .done(Function)
+           .fail(function (jqXHR, textStatus, errorThrown) {
+               console.log(errorThrown);
+           });
+
+        }
+
+        _lq.LoadCallPopupTabs = function (Tabsel) {
+            var tab;
+            if (Tabsel == 'All') {
+                tab = 'tab';
+            } else {
+                tab = Tabsel;
+            }
+            $('div[id^=' + tab + ']').each(function () {
+                var tab = this.id;
+                var TabUl = $('div[id=' + tab + '] ul');
+                var DivUl = $('div[id=' + tab + ']');
+
+                var alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                if ($('div[id=' + tab + '] ul li').length == 0) {
+
+                    TabUl.append('<li ><a href="#CTab1">1-9</a></li>');
+                    DivUl.append('<div id="CTab1"></div>');
+                    var CTab = "CTab";
+                    for (var i = 0; i < 26; i++) {
+                        TabUl.append('<li ><a href="#' + CTab + alpha[i] + '">' + alpha[i] + '</a></li>');
+                        DivUl.append('<div id="' + CTab + alpha[i] + '"></div>');
+                    }
+                }
+            })
+        }
+
+
+        _lq.LoadViewTabs = function (Tabsel) {
+            var tab;
+            var tdiv;
+            if (Tabsel == 'ALL') {
+                tab = 'TabViews';
+                tdiv = $('div[id=TabViews]');
+
+            } else {
+                tab = Tabsel;
+            }
+            _lq.ActiveView = $('#TabViewInit')[0].value;
+
+            //$('div[id^=' + tab + ']').each(function () {
+            //    var tab = this.id;
+            //    var TabUl = $('div[id=' + tab + '] ul');
+            //    var DivUl = $('div[id=' + tab + ']');
+
+            //    if ($('div[id=' + tab + '] ul li').length == 0) {
+
+            //        TabUl.append('<li ><a href="#TabViewchart">View Chart</a></li>');
+            //        DivUl.append('<div id="TabViewchart"></div>');
+
+            //    }
+            //})
+            $('div[id^=' + tab + ']').each(function () {
+                tdiv.tabs({
+                    //width: 1170,
+                    //height: 600,
+                    active: _lq.ActiveView,
+                    create: function (event, ui) {
+                        //_lq.InitTab = ui.tab[0].innerText;
+                        _lq.LoadInitialViewTab(event, ui);
+
+                    },
+                    activate: function (event, ui) {
+                        _lq.LoadViewTab(event, ui);
+                    }
+
+                });
+                $(this).css({
+                    'margin-top': -20,
+                    'padding': '0px',
+                    'background': '#aed7ff'
+                });
+            })
+
+            $("#" + tab + " ul.ui-tabs-nav li a").
+                each(function (indexInArray, valueOfElement) {
+                    //console.log(indexInArray + ": " + valueOfElement);
+                    $(this).addClass('Viewtabs-tab-button');
+                    $(this).css('padding', '1px 1px 1px 1px');
+                });
+            $("#" + tab + " ul.ui-tabs-nav li").
+             each(function (indexInArray, valueOfElement) {
+                 $(this).css('margin', '0');
+             });
+            $("#TabViewChart").
+                 each(function (indexInArray, valueOfElement) {
+                     $(this).css('padding', '0');
+                 });
+
+
+        }
+
+        _lq.LoadInitialViewTab = function (event, ui) {
+            var x = 5;
+
+        }
+
+        _lq.LoadViewTab = function (event, ui) {
+            if (ui.newTab[0].textContent != 'Chart') {
+                //var div = $('#TabViewChart');
+                //var img = $('#ChartRate');
+                //if (img != null) {
+
+                //}
+                var text = ui.newTab[0].innerText;
+                ui.newPanel[0].innerText = text;
+            }
+
+        }
+
+
+        _lq.ContestSelectHandler = function (event) {
+            //alert(event.data.test);
+            $('#' + event.data.test + ' span.ui-button-text').text(event.currentTarget.textContent);
+            $(".js-modal-close, .modal-overlay").trigger('click');
+            //call DDL change event
+            //_lq.DataUpdated(event.data.test, event.currentTarget.textContent);
+            _lq.PostUpdateContestCall(event.data.test, event.currentTarget.textContent);
+        };
+
+        _lq.CallSelectHandler = function (event) {
+            //alert(event.data.test);
+            $('#' + event.data.test + ' span.ui-button-text').text(event.currentTarget.textContent);
+            $(".js-modal-close, .modal-overlay").trigger('click');
+            var button = $('button[id=' + event.data.test + ']')[0].innerText = event.currentTarget.textContent;;
+            //call DDL change event
+            _lq.DataUpdated(event.data.test, event.currentTarget.textContent);
+        };
+
+
+        //function for updating graph POST
+        _lq.ControlUpdated = function (Controlid, SelectedValue, value) {
+            //alert("Control: " + Controlid + "-->Selected:" + SelectedValue);
+            var bUpdated = true;
+            if (Controlid.indexOf("Cat") >= 0) {
+                switch (Controlid) {
+                    case "CatOp":
+                        _lq.ControlCategorySettingsDto.CatOperator = SelectedValue;
+                        break;
+                    case "CatBnd":
+                        _lq.ControlCategorySettingsDto.CatBand = SelectedValue;
+                        break;
+                    case "CatPower":
+                        _lq.ControlCategorySettingsDto.CatPower = SelectedValue;
+                        break;
+                    case "CatAssist":
+                        _lq.ControlCategorySettingsDto.CatAssisted = SelectedValue;
+                        break;
+                    case "CatTX":
+                        _lq.ControlCategorySettingsDto.CatNoOfTx = SelectedValue;
+                        break;
+                    default:
+
+                }
+                _lq.removeTabData('tabs1');
+                _lq.removeTabData('tabs2');
+                _lq.removeTabData('tabs3');
+                _lq.AdjustControlCategorySettings(_lq.ControlCategorySettingsDto);
+
+            }else if (Controlid.indexOf("Filt")>= 0)  {
+                switch (Controlid) {
+                    case "FiltBand":
+                        _lq.ControlFiltersSettingsDto.FiltBand = SelectedValue;
+                        break;
+                    case "FiltContinent":
+                        _lq.ControlFiltersSettingsDto.FiltContinent = SelectedValue;
+                        break;
+                    case "FiltCountry":
+                        //if (SelectedValue.indexOf("&nbsp") == -1) {
+                        //    var val = SelectedValue.IndexOf(" ");
+                        //    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML = SelectedValue.replace(/ /g, '+');
+                        //    //_lq.ControlFiltersSettingsDto.FiltCountryInnerHTML = SelectedValue.replace(" ", String.fromCharCode(160) );
+                        //} else {
+                        //    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML = SelectedValue;
+                        //}
+                        _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML.value = SelectedValue;
+                        _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML.key = value;
+                        //_lq.ControlFiltersSettingsDto.FiltCountryIndex = $('#FiltCountry').prop("selectedIndex");
+                        break;
+                    case "FiltCQZone":
+                        _lq.ControlFiltersSettingsDto.FiltCQZone = SelectedValue;
+                        break;
+                    default:
+        
+                }
+                _lq.AdjustControlFiltersSettings(_lq.ControlFiltersSettingsDto);
+            }else if (Controlid.indexOf("Xaxis")>= 0)  {
+                switch (Controlid) {
+                    case "XaxisStarttime":
+                        _lq.ControlXaxisSettingsDto.XaxisStarttime = value
+                        _lq.ControlXaxisSettingsDto.XaxisStarttimeIndex = $('#XaxisStarttime').prop("selectedIndex");
+                        break;
+                    case "XaxisDuration":
+                        _lq.ControlXaxisSettingsDto.XaxisDuration = SelectedValue;
+                        break;
+                    default:
+        
+                }
+                var save = _lq.ChartUpdateReqd;
+                _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
+                _lq.AdjustControlXaxisSettings(_lq.ControlXaxisSettingsDto, true);
+                _lq.ChartUpdateReqd = save;
+            } else if (Controlid.indexOf("Yaxis") >= 0)   {
+                switch (Controlid) {
+                    case "YaxisFunction":
+                        _lq.ControlYaxisSettingsDto.YaxisFunction = value;
+                        _lq.ControlYaxisSettingsDto.YaxisFunctionIndex = $('#YaxisFunction').prop("selectedIndex");
+                        break;
+                    case "YaxisInterval":
+                        _lq.ControlYaxisSettingsDto.YaxisInterval = SelectedValue;
+                        break;
+                    case "YaxisViewType":
+                        _lq.ControlYaxisSettingsDto.YaxisViewType = SelectedValue;
+                        break;
+                    default:
+        
+                }
+                var save = _lq.ChartUpdateReqd;
+                _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
+                _lq.AdjustControlYaxisSettings(_lq.ControlYaxisSettingsDto, true);
+                _lq.ChartUpdateReqd = save;
+            }
+            else {
+                bUpdated = false;
+            }
+
+            if (bUpdated) {
+                _lq.SessionSaveControlSettings();
+                _lq.UpdateChartData(false);
+            }
+        }
+
+        _lq.AdjustControlCategorySettings = function (ControlCategorySettingsDto) {
+            if (ControlCategorySettingsDto.Disabled == false) {
+                if (ControlCategorySettingsDto.CatOperator == 'SINGLE-OP') {
+                    _lq.SelectMenuState("#CatBnd, #CatPower, #CatAssist", "enable");
+                    _lq.SelectMenuState("#CatTX", "disable");
+
+                } else if (ControlCategorySettingsDto.CatOperator == 'MULTI-OP') {
+                    _lq.SelectMenuState("#CatBnd, #CatAssist", "disable");
+                    if (ControlCategorySettingsDto.CatNoOfTx == 'ONE') {
+                        _lq.SelectMenuState("#CatPower", "enable");
+                    } else {
+                        _lq.SelectMenuState("#CatPower", "disable");
+                    }
+                    _lq.SelectMenuState("#CatTX", "enable");
+                }
+                else if (ControlCategorySettingsDto.CatOperator == 'CHECKLOG') {
+                    _lq.SelectMenuState("#CatBnd, #CatPower, #CatAssist, #CatTX", "disable");
+                }
+                else {
+                    _lq.SelectMenuState("#CatBnd, #CatPower, #CatAssist, #CatTX", "enable");
+
+                }
+            }
+
+        }
+
+        _lq.AdjustControlFiltersSettings = function (ControlFiltersSettingsDto) {
+            if (ControlFiltersSettingsDto.Disabled == false) {
+                _lq.SelectMenuState("#FiltBand, #FiltContinent, #FiltCountry, #FiltCQZone", "enable");
+                if (ControlFiltersSettingsDto.FiltContinent != 'ALL') {
+                    _lq.SelectMenuState("#FiltCountry, #FiltCQZone", "disable");
+                } 
+                if (ControlFiltersSettingsDto.FiltCountryInnerHTML.value.indexOf("ALL&") == -1) {
+                    _lq.SelectMenuState("#FiltContinent,#FiltCQZone", "disable");
+                }
+                if (ControlFiltersSettingsDto.FiltCQZone != 'ALL') {
+                    _lq.SelectMenuState("#FiltCountry, #FiltContinent", "disable");
+                }
+            } 
+        }
+
+        _lq.AdjustControlXaxisSettings = function (ControlXaxisSettingsDto, ctlUpdate) {
+            var starttime = ControlXaxisSettingsDto.XaxisStarttime;
+            var dur = ControlXaxisSettingsDto.XaxisDuration;
+            var val = Number(starttime.substring(0, 2));
+            var day2;
+            if (starttime.indexOf('Day2') != -1) {
+                day2= true;
+            }
+            if (day2 == true) {
+                if (val == 0) {
+                    if (dur > 24) {
+                        dur = '24';
+                    }
+                } else if(val >= 4 && val < 8) {
+                    if (dur > 20) {
+                        dur = '20';
+                    }
+                } else if(val >= 8 && val < 12) {
+                    if (dur > 16) {
+                        dur = '16';
+                    }
+                } else if (val >= 12 && val < 16) {
+                    if (dur > 12) {
+                        dur = '12';
+                    }
+                }else if (val >= 16 && val < 20) {
+                    if (dur > 8) {
+                        dur = '8';
+                    }
+                } else if (val >= 20 && val < 22) {
+                    if (dur > 4) {
+                        dur = '4';
+                    }
+                } else if (val >= 22 ) {
+                    if (dur > 2) {
+                        dur = '2';
+                    }
+                }
+                ControlXaxisSettingsDto.XaxisDuration = dur;
+                if (ctlUpdate == true) {
+                    $select = $('#XaxisDuration').val(ControlXaxisSettingsDto.XaxisDuration);
+                    $select.selectmenu("refresh");
+                }
+
+
+            }
+        }
+
+
+        _lq.AdjustControlYaxisSettings = function (ControlYaxisSettingsDto, ctlUpdate) {
+            var value = ControlYaxisSettingsDto.YaxisFunction;
+            if (value.indexOf('Sum') != -1 && ControlYaxisSettingsDto.YaxisViewType == 'Column') {
+                ControlYaxisSettingsDto.YaxisViewType = 'Spline';
+            } else if (value.indexOf('Sum') == -1 && ControlYaxisSettingsDto.YaxisViewType == 'Spline') {
+                ControlYaxisSettingsDto.YaxisViewType = 'Column';
+            }
+            if (ctlUpdate == true) {
+                $select = $('#YaxisViewType').val(ControlYaxisSettingsDto.YaxisViewType);
+                $select.selectmenu("refresh");
+            }
+        }
+
+    _lq.SetControlCategorySettings = function (ControlCategorySettingsDto, bUpdateChart) {
         _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
+        _lq.AdjustControlCategorySettings(ControlCategorySettingsDto);
+        $select = $('#CatOp').val(ControlCategorySettingsDto.CatOperator);
+        $select.selectmenu("refresh");
+        $select = $('#CatBnd').val(ControlCategorySettingsDto.CatBand);
+        $select.selectmenu("refresh");
+        $select = $('#CatPower').val(ControlCategorySettingsDto.CatPower);
+        $select.selectmenu("refresh");
+        $select = $('#CatAssist').val(ControlCategorySettingsDto.CatAssisted);
+        $select.selectmenu("refresh");
+        $select = $('#CatTX').val(ControlCategorySettingsDto.CatNoOfTx);
+        $select.selectmenu("refresh");
+        if (ControlCategorySettingsDto.Disabled) {
+            _lq.PropertyColorState("#filtercatchk", "checked", true, "#a4a3a3");
+            $("#filtercatchk").prev("label").css(
+                 { "color": "red" });
+            _lq.SelectMenuState("Select[id^='Cat']", "disable");
+            _lq.ControlCategorySettingsDto.Disabled = true;
+        } else {
+            _lq.PropertyColorState("#filtercatchk", "checked", false, "");
+            $("#filtercatchk").prev("label").css(
+                { "color": "" });
+            _lq.SelectMenuState("Select[id^='Cat']", "enable");
+            _lq.ControlCategorySettingsDto.Disabled = false;
+        }
+        _lq.ControlCategorySettingsDto = ControlCategorySettingsDto;
+        if (bUpdateChart) {
+            _lq.UpdateChartData(false);
+        }
+        _lq.ChartUpdateReqd = true;
+
+
+    }
+
+    _lq.SetControlFiltersSettings =  function(ControlFiltersSettingsDto, bUpdateChart) {
+        _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
+        _lq.AdjustControlFiltersSettings(ControlFiltersSettingsDto);
         $select = $('#FiltBand').val(ControlFiltersSettingsDto.FiltBand);
         $select.selectmenu("refresh");
         $select = $('#FiltContinent').val(ControlFiltersSettingsDto.FiltContinent);
@@ -1108,9 +1692,10 @@ $(function () {
 
     }
 
-    function SetControlXaxisSettings(ControlXaxisSettingsDto, bUpdateChart) {
-        _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
 
+    _lq.SetControlXaxisSettings = function (ControlXaxisSettingsDto, bUpdateChart) {
+        _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
+        _lq.AdjustControlXaxisSettings(ControlXaxisSettingsDto, false);
         $('#XaxisStarttime').prop("selectedIndex", ControlXaxisSettingsDto.XaxisStarttimeIndex).selectmenu('refresh');
         //$select = $('#XaxisStarttime').val(ControlXaxisSettingsDto.XaxisStarttime);
         //$select.selectmenu("refresh");
@@ -1124,8 +1709,10 @@ $(function () {
 
     }
 
-    function SetControlYaxisSettings(ControlYaxisSettingsDto, bUpdateChart) {
+
+    _lq.SetControlYaxisSettings = function (ControlYaxisSettingsDto, bUpdateChart) {
         _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
+        _lq.AdjustControlYaxisSettings(ControlYaxisSettingsDto, false);
 
         $('#YaxisFunction').prop("selectedIndex", ControlYaxisSettingsDto.YaxisFunctionIndex).selectmenu('refresh');
         //$select = $('#YaxisFunction').val(ControlYaxisSettingsDto.YaxisFunction);
@@ -1144,496 +1731,6 @@ $(function () {
 
 
 
-
- 
-
-
-
-    $(window).resize();
-    document.getElementById("body").style.visibility = "visible";
-
-
-    });
-
-
-//END OF $FUNCTION
-
-// encapsuleted _lq class
-    (function (_lq, $, undefined) {
-    _lq.controlUri = '/v1/Control';
-    _lq.dataUri = '/v1/Data';
-
-    _lq.parent_modal_box_id;
-    _lq.CallReload1 = true;
-    _lq.CallReload2 = true;
-    _lq.CallReload3 = true;
-    _lq.InitTab;
-    _lq.InitTabState = 0;
-    _lq.ajaxCallCount = 0;
-    _lq.ChartUpdateReqd = false;
-    _lq.ChartInitialUpdateReqd = true;
-    _lq.ChartDataLoaded = false;
-    _lq.ChartControlLoaded = false;
-    _lq.ActiveView;
-
-    _lq.SessionSaveControlSelections;
-
-    _lq.ControlCategorySettingsDto =  {
-        CatOperator: '',
-        CatBand: '',
-        CatPower: '',
-        CatAssisted: '',
-        CatNoOfTx: '',
-        Disabled: 0
-    };
-
-    _lq.ControlFiltersSettingsDto = {
-        FiltBand: '',
-        FiltContinent: '',
-        FiltCountryInnerHTML: '',
-        FiltCQZone: '',
-        Disabled: 0
-    };
-
-    _lq.ControlXaxisSettingsDto = {
-        XaxisDuration: '',
-        XaxisStarttime: '',
-        XaxisStarttimeIndex: ''
-    };
-
-    _lq.ControlYaxisSettingsDto = {
-        YaxisFunction: '',
-        YaxisFunctionIndex: '',
-        YaxisInterval: '',
-        YaxisViewType: ''
-    };
-
-    _lq.ControlSettingsDto = [_lq.ControlCategorySettingsDto, _lq.ControlFiltersSettingsDto, _lq.ControlXaxisSettingsDto, _lq.ControlYaxisSettingsDto];
-
-
-    _lq.DataCallInfoDto1 = {
-        CallGroup: '',
-        SelectedContestName: '',
-        SelectedCall: '',
-        SelectedStationName: '',
-        SelectedRadioType: '',
-        LogId: '',
-        Disabled: 0,
-        StationNames: '',
-        ContestNames: '',
-        RadioNames: '',
-    };
-    _lq.DataCallInfoDto2 = {
-        CallGroup: '',
-        SelectedContestName: '',
-        SelectedCall: '',
-        SelectedStationName: '',
-        SelectedRadioType: '',
-        LogId: '',
-        Disabled: 0,
-        StationNames: '',
-        ContestNames: '',
-        RadioNames: '',
-    };
-    _lq.DataCallInfoDto3 = {
-        CallGroup: '',
-        SelectedContestName: '',
-        SelectedCall: '',
-        SelectedStationName: '',
-        SelectedRadioType: '',
-        LogId: '',
-        Disabled: 0,
-        StationNames: '',
-        ContestNames: '',
-        RadioNames: '',
-    };
-
-
-    _lq.DataCallInfoDTOs = [_lq.DataCallInfoDto1, _lq.DataCallInfoDto2, _lq.DataCallInfoDto3];
-
-
-    _lq.DataCallInfoDTO = {
-        SelectedContestName: '',
-        SelectedCall: '', 
-        SelectedStationName: '', 
-        CallGroup: '', 
-        SelectedRadioType: '',
-        LogId: '', 
-        Disabled: 0, 
-        StationNames: '', 
-        ContestNames: '',
-        RadioNames: '' ,
-    };
-
-    _lq.DataCalls = {
-        CallGroup: '',
-        SelectedCall: '',
-        Calls:
-            {
-                CallsignID: '',
-                Call: ''
-            }
-    };
-
-        // use this transport for "binary" data type
-        //http://www.henryalgus.com/reading-binary-files-using-jquery-ajax/
-    $.ajaxTransport("+binary", function (options, originalOptions, jqXHR) {
-        // check for conditions and support for blob / arraybuffer response type
-        if (window.FormData && ((options.dataType && (options.dataType == 'binary')) || (options.data && ((window.ArrayBuffer && options.data instanceof ArrayBuffer) || (window.Blob && options.data instanceof Blob))))) {
-            return {
-                // create new XMLHttpRequest
-                send: function (headers, callback) {
-                    // setup all variables
-                    var xhr = new XMLHttpRequest(),
-            url = options.url,
-            type = options.type,
-            async = options.async || true,
-            // blob or arraybuffer. Default is blob
-            dataType = options.responseType || "blob",
-            data = options.data || null,
-            username = options.username || null,
-            password = options.password || null;
-
-                    xhr.addEventListener('load', function () {
-                        var data = {};
-                        data[options.dataType] = xhr.response;
-                        // make callback and send data
-                        callback(xhr.status, xhr.statusText, data, xhr.getAllResponseHeaders());
-                    });
-
-                    xhr.open(type, url, async, username, password);
-
-                    // setup custom headers
-                    for (var i in headers) {
-                        xhr.setRequestHeader(i, headers[i]);
-                    }
-
-                    xhr.responseType = dataType;
-                    xhr.send(data);
-                },
-                abort: function () {
-                    jqXHR.abort();
-                }
-            };
-        }
-    });
-
-
-    _lq.ajaxHelper = function (uri, method, datatype, processdata, data, Function) {
-        $.ajax({
-            type: method,
-            url: uri,
-            dataType: datatype,
-            processData: processdata,
-            contentType: 'application/json',
-            beforeSend: function () {
-                _lq.ajaxCallCount++;
-                $('#updateProgressDiv').show();
-            },
-            complete: function () {
-                _lq.ajaxCallCount--;
-                if (_lq.ajaxCallCount == 0) {
-                    $('#updateProgressDiv').hide();
-                }
-            },
-
-            data: data ? JSON.stringify(data) : null,
-        })
-       .done(Function)
-       .fail(function (jqXHR, textStatus, errorThrown) {
-           console.log(errorThrown);
-       });
-
-    }
-
-    _lq.LoadCallPopupTabs = function (Tabsel) {
-        var tab;
-        if (Tabsel == 'All') {
-            tab = 'tab';
-        } else {
-            tab = Tabsel;
-        }
-        $('div[id^=' + tab + ']').each(function () {
-            var tab = this.id;
-            var TabUl = $('div[id=' + tab + '] ul');
-            var DivUl = $('div[id=' + tab + ']');
-
-            var alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            if ($('div[id=' + tab + '] ul li').length == 0) {
-
-                TabUl.append('<li ><a href="#CTab1">1-9</a></li>');
-                DivUl.append('<div id="CTab1"></div>');
-                var CTab = "CTab";
-                for (var i = 0; i < 26; i++) {
-                    TabUl.append('<li ><a href="#' + CTab + alpha[i] + '">' + alpha[i] + '</a></li>');
-                    DivUl.append('<div id="' + CTab + alpha[i] + '"></div>');
-                }
-            }
-        })
-    }
-
-
-    _lq.LoadViewTabs = function (Tabsel) {
-        var tab;
-        var tdiv;
-        if (Tabsel == 'ALL') {
-            tab = 'TabViews';
-            tdiv = $('div[id=TabViews]');
-
-        } else {
-            tab = Tabsel;
-        }
-        _lq.ActiveView = $('#TabViewInit')[0].value;
-
-        //$('div[id^=' + tab + ']').each(function () {
-        //    var tab = this.id;
-        //    var TabUl = $('div[id=' + tab + '] ul');
-        //    var DivUl = $('div[id=' + tab + ']');
-
-        //    if ($('div[id=' + tab + '] ul li').length == 0) {
-
-        //        TabUl.append('<li ><a href="#TabViewchart">View Chart</a></li>');
-        //        DivUl.append('<div id="TabViewchart"></div>');
-
-        //    }
-        //})
-        $('div[id^=' + tab + ']').each(function () {
-            tdiv.tabs({
-                //width: 1170,
-                //height: 600,
-                active: _lq.ActiveView,
-                create: function (event, ui) {
-                    //_lq.InitTab = ui.tab[0].innerText;
-                    _lq.LoadInitialViewTab(event, ui);
-
-                },
-                activate: function (event, ui) {
-                    _lq.LoadViewTab(event, ui);
-                }
-
-            });
-            $(this).css({
-                'margin-top': -20,
-                'padding': '0px',
-                'background': '#aed7ff'
-             });
-        })
-
-        $("#" + tab + " ul.ui-tabs-nav li a").
-            each(function (indexInArray, valueOfElement) {
-                //console.log(indexInArray + ": " + valueOfElement);
-                $(this).addClass('Viewtabs-tab-button');
-                $(this).css('padding', '1px 1px 1px 1px');
-            });
-        $("#" + tab + " ul.ui-tabs-nav li").
-         each(function (indexInArray, valueOfElement) {
-             $(this).css('margin', '0');
-         });
-        $("#TabViewChart").
-             each(function (indexInArray, valueOfElement) {
-                 $(this).css('padding', '0');
-             });
-
-
-    }
-
-    _lq.LoadInitialViewTab = function (event, ui) {
-        var x = 5;
-
-    }
-
-    _lq.LoadViewTab = function (event, ui) {
-        if (ui.newTab[0].textContent != 'Chart') {
-            //var div = $('#TabViewChart');
-            //var img = $('#ChartRate');
-            //if (img != null) {
-
-            //}
-            var text = ui.newTab[0].innerText;
-            ui.newPanel[0].innerText = text;
-        }
-
-    }
-
-
-    _lq.ContestSelectHandler = function (event) {
-        //alert(event.data.test);
-        $('#' + event.data.test + ' span.ui-button-text').text(event.currentTarget.textContent);
-        $(".js-modal-close, .modal-overlay").trigger('click');
-        //call DDL change event
-        //_lq.DataUpdated(event.data.test, event.currentTarget.textContent);
-        _lq.PostUpdateContestCall(event.data.test, event.currentTarget.textContent);
-    };
-
-    _lq.CallSelectHandler = function (event) {
-        //alert(event.data.test);
-        $('#' + event.data.test + ' span.ui-button-text').text(event.currentTarget.textContent);
-        $(".js-modal-close, .modal-overlay").trigger('click');
-        var button = $('button[id=' + event.data.test + ']')[0].innerText = event.currentTarget.textContent;;
-        //call DDL change event
-        _lq.DataUpdated(event.data.test, event.currentTarget.textContent);
-    };
-
-
-    //function for updating graph POST
-    _lq.ControlUpdated = function (Controlid, SelectedValue, value) {
-        //alert("Control: " + Controlid + "-->Selected:" + SelectedValue);
-        var bUpdated = true;
-        if (Controlid.indexOf("Cat") >= 0) {
-            switch (Controlid) {
-                case "CatOp":
-                    _lq.ControlCategorySettingsDto.CatOperator = SelectedValue;
-                    break;
-                case "CatBnd":
-                    _lq.ControlCategorySettingsDto.CatBand = SelectedValue;
-                    break;
-                case "CatPower":
-                    _lq.ControlCategorySettingsDto.CatPower = SelectedValue;
-                    break;
-                case "CatAssist":
-                    _lq.ControlCategorySettingsDto.CatAssisted = SelectedValue;
-                    break;
-                case "CatTX":
-                    _lq.ControlCategorySettingsDto.CatNoOfTx = SelectedValue;
-                    break;
-                default:
-
-            }
-            _lq.removeTabData('tabs1');
-            _lq.removeTabData('tabs2');
-            _lq.removeTabData('tabs3');
-            _lq.AdjustControlCategorySettings(_lq.ControlCategorySettingsDto);
-
-        }else if (Controlid.indexOf("Filt")>= 0)  {
-            switch (Controlid) {
-                case "FiltBand":
-                    _lq.ControlFiltersSettingsDto.FiltBand = SelectedValue;
-                    break;
-                case "FiltContinent":
-                    _lq.ControlFiltersSettingsDto.FiltContinent = SelectedValue;
-                    break;
-                case "FiltCountry":
-                    //if (SelectedValue.indexOf("&nbsp") == -1) {
-                    //    var val = SelectedValue.IndexOf(" ");
-                    //    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML = SelectedValue.replace(/ /g, '+');
-                    //    //_lq.ControlFiltersSettingsDto.FiltCountryInnerHTML = SelectedValue.replace(" ", String.fromCharCode(160) );
-                    //} else {
-                    //    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML = SelectedValue;
-                    //}
-                    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML.value = SelectedValue;
-                    _lq.ControlFiltersSettingsDto.FiltCountryInnerHTML.key = value;
-                    //_lq.ControlFiltersSettingsDto.FiltCountryIndex = $('#FiltCountry').prop("selectedIndex");
-                    break;
-                case "FiltCQZone":
-                    _lq.ControlFiltersSettingsDto.FiltCQZone = SelectedValue;
-                    break;
-                default:
-        
-            }
-        }else if (Controlid.indexOf("Xaxis")>= 0)  {
-            switch (Controlid) {
-                case "XaxisStarttime":
-                    _lq.ControlXaxisSettingsDto.XaxisStarttime = value
-                    _lq.ControlXaxisSettingsDto.XaxisStarttimeIndex = $('#XaxisStarttime').prop("selectedIndex");
-                    break;
-                case "XaxisDuration":
-                    _lq.ControlXaxisSettingsDto.XaxisDuration = SelectedValue;
-                    break;
-                default:
-        
-            }
-    
-        } else if (Controlid.indexOf("Yaxis") >= 0)   {
-            switch (Controlid) {
-                case "YaxisFunction":
-                    _lq.ControlYaxisSettingsDto.YaxisFunction = value;
-                    if (value.indexOf('Sum' ) != -1) {
-                        _lq.ControlYaxisSettingsDto.YaxisViewType = '  Spline';
-                    }else {
-                        _lq.ControlYaxisSettingsDto.YaxisViewType = '  Column';
-                    }
-                    _lq.ControlYaxisSettingsDto.YaxisFunctionIndex = $('#YaxisFunction').prop("selectedIndex");
-                    break;
-                case "YaxisInterval":
-                    _lq.ControlYaxisSettingsDto.YaxisInterval = SelectedValue;
-                    break;
-                case "YaxisViewType":
-                    _lq.ControlYaxisSettingsDto.YaxisViewType = SelectedValue;
-                    break;
-                default:
-        
-            }
-        } 
-        else {
-            bUpdated = false;
-        }
-
-        if (bUpdated) {
-            _lq.SessionSaveControlSettings();
-            _lq.UpdateChartData(false);
-        }
-    }
-
-    _lq.AdjustControlCategorySettings = function (ControlCategorySettingsDto) {
-        if (ControlCategorySettingsDto.Disabled == false) {
-            if (ControlCategorySettingsDto.CatOperator == 'SINGLE-OP') {
-                _lq.SelectMenuState("#CatBnd, #CatPower, #CatAssist", "enable");
-                _lq.SelectMenuState("#CatTX", "disable");
-
-            } else if (ControlCategorySettingsDto.CatOperator == 'MULTI-OP') {
-                _lq.SelectMenuState("#CatBnd, #CatAssist", "disable");
-                if (ControlCategorySettingsDto.CatNoOfTx == 'ONE') {
-                    _lq.SelectMenuState("#CatPower", "enable");
-                } else {
-                    _lq.SelectMenuState("#CatPower", "disable");
-                }
-                _lq.SelectMenuState("#CatTX", "enable");
-            }
-            else if (ControlCategorySettingsDto.CatOperator == 'CHECKLOG') {
-                _lq.SelectMenuState("#CatBnd, #CatPower, #CatAssist, #CatTX", "disable");
-            }
-            else {
-                _lq.SelectMenuState("#CatBnd, #CatPower, #CatAssist, #CatTX", "enable");
-
-            }
-        }
-
-    }
-
-    _lq.SetControlCategorySettings = function (ControlCategorySettingsDto, bUpdateChart) {
-        _lq.ChartUpdateReqd = false;//hold off selectmenu chart load
-        _lq.AdjustControlCategorySettings(ControlCategorySettingsDto);
-        $select = $('#CatOp').val(ControlCategorySettingsDto.CatOperator);
-        $select.selectmenu("refresh");
-        $select = $('#CatBnd').val(ControlCategorySettingsDto.CatBand);
-        $select.selectmenu("refresh");
-        $select = $('#CatPower').val(ControlCategorySettingsDto.CatPower);
-        $select.selectmenu("refresh");
-        $select = $('#CatAssist').val(ControlCategorySettingsDto.CatAssisted);
-        $select.selectmenu("refresh");
-        $select = $('#CatTX').val(ControlCategorySettingsDto.CatNoOfTx);
-        $select.selectmenu("refresh");
-        if (ControlCategorySettingsDto.Disabled) {
-            _lq.PropertyColorState("#filtercatchk", "checked", true, "#a4a3a3");
-            $("#filtercatchk").prev("label").css(
-                 { "color": "red" });
-            _lq.SelectMenuState("Select[id^='Cat']", "disable");
-            _lq.ControlCategorySettingsDto.Disabled = true;
-        } else {
-            _lq.PropertyColorState("#filtercatchk", "checked", false, "");
-            $("#filtercatchk").prev("label").css(
-                { "color": "" });
-            _lq.SelectMenuState("Select[id^='Cat']", "enable");
-            _lq.ControlCategorySettingsDto.Disabled = false;
-        }
-        _lq.ControlCategorySettingsDto = ControlCategorySettingsDto;
-        if (bUpdateChart) {
-            _lq.UpdateChartData(false);
-        }
-        _lq.ChartUpdateReqd = true;
-
-
-    }
 
     _lq.PropertyColorState = function (Selector, property, state, color) {
         $(Selector).prop(property, state);
