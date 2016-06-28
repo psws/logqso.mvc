@@ -7,13 +7,13 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class multsPtsDatabaseCreation : IMigrationMetadata
+    public sealed partial class InitialDatabaseCreation : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(multsPtsDatabaseCreation));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialDatabaseCreation));
         
         string IMigrationMetadata.Id
         {
-            get { return "201606010730408_multsPtsDatabaseCreation"; }
+            get { return "201606162129195_InitialDatabaseCreation"; }
         }
         
         string IMigrationMetadata.Source

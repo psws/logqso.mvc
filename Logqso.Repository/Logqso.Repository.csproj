@@ -138,7 +138,7 @@
     <Compile Include="Repository\LogRepository.cs" />
     <Compile Include="Repository\QsoRepository.cs" />
     <Compile Include="Repository\ResposituryControl.cs" />
-    <Compile Include="Repository\ResposituryLog.cs" />
+    <Compile Include="Repository\RespositoryLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -194,6 +194,9 @@
   <ItemGroup>
     <Content Include="App_Notes\Logging EF6 SQL access.txt" />
     <Content Include="App_Notes\URF DataContext Initialization Flow.txt" />
+    <Content Include="SQL\Contestqso SQL 2014 to 2012script.sql" />
+    <Content Include="SQL\ContestqsoData SQL 2014 to 2012script Data No Qso.sql" />
+    <Content Include="SQL\ContestqsoData SQL 2014 to 2012script Shema.sql" />
     <Content Include="SQL\EF6 query for _C_ and CQWWSSB2014 calls.sql" />
     <Content Include="SQL\QSOQuery test.sql" />
   </ItemGroup>

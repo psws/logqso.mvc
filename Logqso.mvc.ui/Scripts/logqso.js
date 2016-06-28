@@ -400,7 +400,7 @@ $(function () {
     //set DDL Data change event
     $("select[id ^='Station'], select[id ^='Radio']").
         each(function (indexInArray, valueOfElement) {
-            $(this).on("selectmenuchange", function (event, ui) {
+            $(this).on("selectmenuselect", function (event, ui) {
                     id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
                     if (_lq.ChartUpdateReqd == true) {
                         _lq.DataUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML);
@@ -1017,7 +1017,6 @@ $(function () {
             //                callNo: _lq.parent_modal_box_id
             //            }, _lq.CallSelectHandler);
         }
-
     }
 
 
@@ -1064,6 +1063,9 @@ $(function () {
     })
 
 
+    //jqgrid
+    _lq.LogViewInit();
+
 
 
 
@@ -1075,6 +1077,12 @@ $(function () {
 
     $(window).resize();
     document.getElementById("body").style.visibility = "visible";
+
+    $(window).on("resize", function () {
+        var $grid = $("#jqGridLog"),
+            newWidth = $grid.closest(".ui-jqgrid").parent().width()*.99;
+        $grid.jqGrid("setGridWidth", newWidth, true);
+    });
 
 
     });
@@ -1140,7 +1148,7 @@ $(function () {
             SelectedContestName: '',
             SelectedCall: '',
             SelectedStationName: '',
-            SelectedRadioType: '',
+            QsoRadioType: '',
             LogId: '',
             Disabled: 0,
             StationNames: '',
@@ -1152,7 +1160,7 @@ $(function () {
             SelectedContestName: '',
             SelectedCall: '',
             SelectedStationName: '',
-            SelectedRadioType: '',
+            QsoRadioType: '',
             LogId: '',
             Disabled: 0,
             StationNames: '',
@@ -1164,7 +1172,7 @@ $(function () {
             SelectedContestName: '',
             SelectedCall: '',
             SelectedStationName: '',
-            SelectedRadioType: '',
+            QsoRadioType: '',
             LogId: '',
             Disabled: 0,
             StationNames: '',
@@ -1181,7 +1189,7 @@ $(function () {
             SelectedCall: '', 
             SelectedStationName: '', 
             CallGroup: '', 
-            SelectedRadioType: '',
+            QsoRadioType: '',
             LogId: '', 
             Disabled: 0, 
             StationNames: '', 
@@ -1337,11 +1345,20 @@ $(function () {
 
                 });
                 $(this).css({
-                    'margin-top': -20,
+                    //'margin-top': '-20px',
                     'padding': '0px',
                     'background': '#aed7ff'
                 });
             })
+
+            $('#graph').css({
+                'margin-top': '-20px',
+                'width': '100%'
+            });
+            $('#graphcon').css({
+                 'max-width' : '100%' // for s2 tablet
+
+            });
 
             $("#" + tab + " ul.ui-tabs-nav li a").
                 each(function (indexInArray, valueOfElement) {
@@ -1353,7 +1370,7 @@ $(function () {
              each(function (indexInArray, valueOfElement) {
                  $(this).css('margin', '0');
              });
-            $("#TabViewChart").
+            $("#TabViewChart, #TabViewLog").
                  each(function (indexInArray, valueOfElement) {
                      $(this).css('padding', '0');
                  });
@@ -1366,18 +1383,552 @@ $(function () {
 
         }
 
+
         _lq.LoadViewTab = function (event, ui) {
-            if (ui.newTab[0].textContent != 'Chart') {
+            if (ui.newTab[0].textContent == 'Chart') {
                 //var div = $('#TabViewChart');
                 //var img = $('#ChartRate');
                 //if (img != null) {
 
                 //}
-                var text = ui.newTab[0].innerText;
-                ui.newPanel[0].innerText = text;
+                //var text = ui.newTab[0].innerText;
+                //ui.newPanel[0].innerText = text;
+            }
+            if (ui.newTab[0].textContent == 'Log') {
+                //$.jgrid.defaults.width = 900;
+                $.jgrid.defaults.responsive = true;
+                $.jgrid.defaults.styleUI = 'Bootstrap';
+
+                //set to current call
+                var dataobj = window.sessionStorage.getItem(_lq.DataCallInfoDTOs);
+                if (dataobj != null) {
+                    _lq.DataCallInfoDTOs = JSON.parse(dataobj);
+                    $("#LCall1")[0].innerText = _lq.DataCallInfoDTOs[0].SelectedCall;
+                    $("#LCall2")[0].innerText = _lq.DataCallInfoDTOs[1].SelectedCall;
+                    $("#LCall3")[0].innerText = _lq.DataCallInfoDTOs[2].SelectedCall;
+                }
+
+
+                //_lq.LogViewDraw();
+
+                var $grid = $("#jqGridLog");
+                var newWidth = $grid.closest(".ui-jqgrid").parent().width();
+                $grid.jqGrid("setGridWidth", newWidth, true);
+
+                _lq.LogViewDraw2();
+
             }
 
         }
+
+        _lq.mydata = [
+                { D: "1", Time: "00:00", Call1: "DL0HQ", Freq1: "14170", C1: "1", Z1: "0", U1:"1", B1:"1", N1:"1", 
+                                            Call2: "DL1UBZ", Freq2: "14170", C2: "1", Z2: "0",
+                                            Call3: "HB9DUR/HB0", Freq3: "14170", C3: "1", Z3: "1",
+                },
+                { D: "1", Time: "00:00", Call1: "F6ARC", Freq1: "14171", C1: "0", Z1: "1", 
+                                            //Call2: "DL0HQ", Freq2: "14170", C2: "1", Z2: "0",
+                                            Call3: "DL0HQ", Freq3: "14172", C3: "1", Z3: "1",
+                } ,
+                { D: "1", Time: "00:00", Call1: "PY2NB", Freq1: "14170", C1: "1", Z1: "0", 
+                                        Call2: "ZS1AA", Freq2: "7170", C2: "1", Z2: "0",
+                                        Call3: "9M8r", Freq3: "3770", C3: "0", Z3: "1",
+                }
+
+                //{ day: "1", Time: "00:00", Call1: "DL0HQ", Freq1: "14170.2", C1: "1", Z1: "0", },
+                //{ day: "1", Time: "00:00", Call1: "DL0HQ", Freq1: "14170.2", C1: "1", Z1: "0", },
+                //{ day: "1", Time: "00:00", Call1: "DL0HQ", Freq1: "14170.2", C1: "0", Z1: "0", },
+                //{ day: "1", Time: "00:00", Call1: "DL0HQ", Freq1: "14170.2", C1: "1", Z1: "0", },
+                //{ day: "1", Time: "00:00", Call1: "DL0HQ", Freq1: "14170.2", C1: "0", Z1: "0", },
+                //{ day: "1", Time: "00:01", Call1: "DL0HQ", Freq1: "14170.2", C1: "1", Z1: "0", },
+                //{ day: "1", Time: "00:01", Call1: "DL0HQ", Freq1: "14170.2", C1: "1", Z1: "0", }
+        ];
+
+        _lq.LogViewInit = function () {
+            $("#jqGridLog").jqGrid({
+                colModel: [
+                      {
+                        label: 'D',
+                        name: 'D',
+                        width: 10,
+                        align: 'center'
+                    },
+
+                    {
+                        label: 'Time',
+                        name: 'Time',
+                        width: 18,
+                        align: 'center'
+                    },
+                    {
+                        label: 'Call',
+                        name: 'Call1',
+                        cellattr: _lq.cellBrdr,
+                        width: 35
+                    },
+                    {
+                        label: 'Freq',
+                        name: 'Freq1',
+                        width: 20,
+                        cellattr: _lq.cellF,
+                        align: 'left'
+                    },
+                    {
+                        label: 'C',
+                        name: 'C1',
+                        width: 7,
+                        formatter: _lq.formatTF,
+                        cellattr: _lq.cellTF,
+                        align: 'center'
+                    },
+                     {
+                        label: 'Z',
+                        name: 'Z1',
+                        width: 7,
+                        formatter: _lq.formatTF,
+                        cellattr: _lq.cellTF,
+                        align: 'center'
+                     },
+
+                     {
+                         label: 'U',
+                         name: 'U1',
+                         width: 7,
+                         formatter: _lq.formatUTF,
+                         cellattr: _lq.cellU,
+                         align: 'center'
+                     },
+                     {
+                         label: 'B',
+                         name: 'B1',
+                         width: 7,
+                         formatter: _lq.formatBNTF,
+                         cellattr: _lq.cellBN,
+                         align: 'center'
+                     },
+                      {
+                          label: 'N',
+                          name: 'N1',
+                          width: 7,
+                          formatter: _lq.formatBNTF,
+                          cellattr: _lq.cellBN,
+                          align: 'center'
+                      },
+                   {
+                        label: 'Call',
+                        name: 'Call2',
+                        cellattr: _lq.cellBrdr,
+                        width: 35
+                    },
+                    {
+                        label: 'Freq',
+                        name: 'Freq2',
+                        width: 20,
+                        cellattr: _lq.cellF,
+                        align: 'left'
+                    },
+                    {
+                        label: 'C',
+                        name: 'C2',
+                        width: 7,
+                        formatter: _lq.formatTF,
+                        cellattr: _lq.cellTF,
+                        align: 'center'
+                    },
+                     {
+                        label: 'Z',
+                        name: 'Z2',
+                        width: 7,
+                        formatter: _lq.formatTF,
+                        cellattr: _lq.cellTF,
+                        align: 'center'
+                     },
+                     {
+                         label: 'U',
+                         name: 'U2',
+                         width: 7,
+                         formatter: _lq.formatUTF,
+                         cellattr: _lq.cellU,
+                         align: 'center'
+                     },
+                     {
+                         label: 'B',
+                         name: 'B2',
+                         width: 7,
+                         formatter: _lq.formatBNTF,
+                         cellattr: _lq.cellBN,
+                         align: 'center'
+                     },
+                      {
+                          label: 'N',
+                          name: 'N2',
+                          width: 7,
+                          formatter: _lq.formatBNTF,
+                          cellattr: _lq.cellBN,
+                          align: 'center'
+                      },
+
+                    {
+                        label: 'Call',
+                        name: 'Call3',
+                        cellattr: _lq.cellBrdr,
+                        width: 35
+                    },
+                    {
+                        label: 'Freq',
+                        name: 'Freq3',
+                        width: 20,
+                        cellattr: _lq.cellF,
+                        align: 'left'
+                    },
+                    {
+                        label: 'C',
+                        name: 'C3',
+                        width: 7,
+                        formatter: _lq.formatTF,
+                        cellattr: _lq.cellTF,
+                        align: 'center'
+                    },
+                     {
+                         label: 'Z',
+                         name: 'Z3',
+                         width: 7,
+                         formatter: _lq.formatTF,
+                         cellattr: _lq.cellTF,
+                         align: 'center'
+                     },
+                     {
+                         label: 'U',
+                         name: 'U3',
+                         width: 7,
+                         formatter: _lq.formatUTF,
+                         cellattr: _lq.cellTF,
+                         align: 'center'
+                     },
+                     {
+                         label: 'B',
+                         name: 'B3',
+                         width: 7,
+                         formatter: _lq.formatBNTF,
+                         cellattr: _lq.cellBN,
+                         align: 'center'
+                     },
+                      {
+                          label: 'N',
+                          name: 'N3',
+                          width: 7,
+                          formatter: _lq.formatBNTF,
+                          cellattr: _lq.cellBN,
+                          align: 'center'
+                      }
+
+              ],
+
+                viewrecords: true, // show the current page, data rang and total records on the toolbar
+                //scroll: 'true',
+                width: '100%',
+                height: 370,
+                rowNum: 12,
+                datatype: 'local',
+                //data:_lq.mydata,
+                pager: "#jqGridPager",
+                pgbuttons: true,
+                pginput: true,
+                //autowidth: true,
+                //height: "auto",
+                //caption: "Load live data from stackoverflow"
+            });
+        }
+
+        _lq.LogViewDraw2 = function () {
+
+            var gridArrayData = [];
+            var grid = $("#jqGridLog");
+            for (var i = 0; i < _lq.mydata.length; i++) {
+                var item = _lq.mydata[i];
+                gridArrayData.push({
+                    D: item.D,
+                    Time: item.Time,
+                    Call1: item.Call1,
+                    Freq1: item.Freq1,
+                    C1: item.C1,
+                    Z1: item.Z1,
+                    U1: item.U1,
+                    B1: item.B1,
+                    N1: item.N1,
+                    Call2: item.Call2,
+                    Freq2: item.Freq2,
+                    C2: item.C2,
+                    Z2: item.Z2,
+                    U2: item.U2,
+                    B2: item.B2,
+                    N2: item.N2,
+                    Call3: item.Call3,
+                    Freq3: item.Freq3,
+                    C3: item.C3,
+                    Z3: item.Z3,
+                    U3: item.U3,
+                    B3: item.B3,
+                    N3: item.N3
+                });
+            }
+            
+            grid.jqGrid('setLabel', 'D', '', { 'text-align': 'center' },
+            { 'title': '1st or 2nd day of contest' });
+
+            grid.jqGrid('setLabel', 'Call1', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'Call2', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'Call3', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'Freq1', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'Freq2', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'Freq3', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'C1', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'C2', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'C3', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'Z1', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'Z2', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'Z3', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'U1', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'U2', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'U3', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'B1', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'B2', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'B3', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'N1', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'N2', '', { 'text-align': 'center' });
+            grid.jqGrid('setLabel', 'N3', '', { 'text-align': 'center' });
+            //change label for wpx
+            //grid.jqGrid('setLabel', 'Freq2', 'Freq', { 'text-align': 'center' },
+            // { 'title': 'My ToolTip for the product name column header' });
+
+
+
+            // set the new data
+            grid.jqGrid('setGridParam', { data: gridArrayData });
+            // hide the show message
+            grid[0].grid.endReq();
+            //refresh the grid
+            grid.trigger('reloadGrid');
+
+
+
+        }
+        _lq.formatTF = function (cellValue, options, rowObject) {
+            if (cellValue == 1) {
+                cellValue = "<span style='background: limegreen; '>" + "<input type ='radio'  checked /></span>";
+
+                //$("#jqGridLog").setCell(options.rowId, options.colModel.Name, '', { 'background': '#ff0000' });
+            } else {
+                cellValue = "";
+            }
+            return cellValue;
+        };
+
+        _lq.formatUTF = function (cellValue, options, rowObject) {
+            if (cellValue == 1) {
+                cellValue = "<span style='background: yellow; '>" + "<input type ='radio'  checked /></span>";
+            } else {
+                cellValue = "";
+            }
+            return cellValue;
+        };
+
+        _lq.formatBNTF = function (cellValue, options, rowObject) {
+            if (cellValue == 1) {
+                cellValue = "<span style='background: red; '>" + "<input type ='radio'  checked /></span>";
+            } else {
+                cellValue = "";
+            }
+            return cellValue;
+        };
+
+        _lq.cellTF = function (rowid, val, rawObject, cm, rdata) {
+            var name = cm.name;
+            var val= 0;
+            switch (cm.name) {
+                case 'C1':
+                    val = rdata.C1;
+                    break;
+                case 'C2':
+                    val = rdata.C2;
+                    break;
+                case 'C3':
+                    val = rdata.C3;
+                    break;
+                case 'Z1':
+                    val = rdata.Z1;
+                    break;
+                case 'Z2':
+                    val = rdata.Z2;
+                    break;
+                case 'Z3':
+                    val = rdata.Z3;
+                    break;
+                default:
+
+            }
+            if (val == 1) {
+                cellValue = ' class="lq-LogTF lq-LogMltBrdr " ';
+            } else {
+                cellValue = ' class="lq-LogMltBrdr " ';;
+            }
+            return cellValue;
+        };
+
+        _lq.cellBrdr = function (rowid, val, rawObject, cm, rdata) {
+            return cellValue = ' class="lq-LogVBrdr" ';
+        }
+
+        _lq.cellF = function (rowid, val, rawObject, cm, rdata) {
+            return cellValue = ' class="lq-LogF" ';
+        }
+
+        _lq.cellU = function (rowid, val, rawObject, cm, rdata) {
+            var name = cm.name;
+            var val= 0;
+            switch (cm.name) {
+                case 'U1':
+                    val = rdata.U1;
+                    break;
+                case 'U2':
+                    val = rdata.U2;
+                    break;
+                case 'U3':
+                    val = rdata.U3;
+                    break;
+                default:
+
+            }
+            if (val == 1) {
+                cellValue = ' class="lq-LogU lq-LogMltBrdr " ';
+            } else {
+                cellValue = ' class="lq-LogMltBrdr " ';;
+            }
+            return cellValue;
+
+        }
+
+        _lq.cellBN = function (rowid, val, rawObject, cm, rdata) {
+            var name = cm.name;
+            var val = 0;
+            switch (cm.name) {
+                case 'B1':
+                    val = rdata.B1;
+                    break;
+                case 'B2':
+                    val = rdata.B2;
+                    break;
+                case 'B3':
+                    val = rdata.B3;
+                    break;
+                case 'N1':
+                    val = rdata.N1;
+                    break;
+                case 'N2':
+                    val = rdata.N2;
+                    break;
+                case 'N3':
+                    val = rdata.N3;
+                    break;
+                default:
+
+            }
+            if (val == 1) {
+                cellValue = ' class="lq-LogBN lq-LogMltBrdr " ';
+            } else {
+                cellValue = ' class="lq-LogMltBrdr " ';;
+            }
+            return cellValue;
+
+        }
+
+
+        //_lq.LogViewInit = function() {
+        //    $("#jqGridLog").jqGrid({
+        //        colModel: [
+        //            {
+        //                label: 'Title',
+        //                name: 'Title',
+        //                width: 130,
+        //                formatter: _lq.formatTitle
+        //            },
+        //            {
+        //                label: 'Link',
+        //                name: 'Link',
+        //                width: 80,
+        //                formatter: _lq.formatLink
+        //            },
+        //            {
+        //                label: 'View Count',
+        //                name: 'ViewCount',
+        //                width: 35,
+        //                sorttype:'integer',
+        //                formatter: 'number',
+        //                align: 'right'
+        //            },
+        //            {
+        //                label: 'Answer Count',
+        //                name: 'AnswerCount',
+        //                width: 45
+        //            }
+        //        ],
+
+        //        viewrecords: true, // show the current page, data rang and total records on the toolbar
+        //        //scroll: 'true',
+        //        width: '100%',
+        //        height: 370,
+        //        rowNum: 12,
+        //        datatype: 'local',
+        //        pager: "#jqGridPager",
+        //        pgbuttons: true,
+        //        pginput: true,
+        //        //autowidth: true,
+        //        //height: "auto",
+        //        //caption: "Load live data from stackoverflow"
+        //    });
+        //}
+
+
+        _lq.LogViewDraw = function () {
+                
+            var gridArrayData = [];
+            // show loading message
+            $("#jqGridLog")[0].grid.beginReq();
+            $.ajax({
+                url: "http://api.stackexchange.com/2.2/questions?order=desc&sort=activity&tagged=jqgrid&site=stackoverflow",
+                success: function (result) {
+                    for (var i = 0; i < result.items.length; i++) {
+                        var item = result.items[i];
+                        gridArrayData.push({
+                            Title: item.title,
+                            Link: item.link,
+                            CreationDate: item.creation_date,
+                            ViewCount: item.view_count,
+                            AnswerCount: item.answer_count
+                        });                            
+                    }
+                    // set the new data
+                    $("#jqGridLog").jqGrid('setGridParam', { data: gridArrayData });
+                    // hide the show message
+                    $("#jqGridLog")[0].grid.endReq();
+                     //refresh the grid
+                    $("#jqGridLog").trigger('reloadGrid');
+                }
+            });
+            var $grid = $("#jqGridLog"),
+            newWidth = $grid.closest(".ui-jqgrid").parent().width();
+            $grid.jqGrid("setGridWidth", newWidth, true);
+
+        }
+
+        _lq.formatTitle = function(cellValue, options, rowObject) {
+            return cellValue.substring(0, 50) + "...";
+        };
+
+        _lq.formatLink = function(cellValue, options, rowObject) {
+            return "<a href='" + cellValue + "'>" + cellValue.substring(0, 25) + "..." + "</a>";
+        };
+
 
 
         _lq.ContestSelectHandler = function (event) {
@@ -1395,7 +1946,7 @@ $(function () {
             $(".js-modal-close, .modal-overlay").trigger('click');
             var button = $('button[id=' + event.data.test + ']')[0].innerText = event.currentTarget.textContent;;
             //call DDL change event
-            _lq.DataUpdated(event.data.test, event.currentTarget.textContent);
+            _lq.PostUpdateContestCall(event.data.test, event.currentTarget.textContent);
         };
 
 
@@ -1427,6 +1978,7 @@ $(function () {
                 _lq.removeTabData('tabs2');
                 _lq.removeTabData('tabs3');
                 _lq.AdjustControlCategorySettings(_lq.ControlCategorySettingsDto);
+                bUpdated = false; // no server trip
 
             }else if (Controlid.indexOf("Filt")>= 0)  {
                 switch (Controlid) {
@@ -1780,13 +2332,13 @@ $(function () {
         $select = $("div[id^= bdyPnl] #Station" + index)
         $select.html('');
         $.each(data.StationNames, function (key, val) {
-            $select.append('<option value = ' + val.key + '>' + val.value + '</option>');
+            $select.append('<option value = ' + val.value + '>' + val.value + '</option>');
         })
 
         $select = $("div[id^= bdyPnl] #Radio" + index)
         $select.html('');
         $.each(data.RadioNames, function (key, val) {
-            $select.append('<option value = ' + val.key + '>' + val.value + '</option>');
+            $select.append('<option value = ' + val.value + '>' + val.value + '</option>');
         })
     }
 
@@ -1795,7 +2347,7 @@ $(function () {
         _lq.DataCallInfoDTOs[i].CallGroup = DataCallInfoObj.CallGroup;
         _lq.DataCallInfoDTOs[i].SelectedContestName = DataCallInfoObj.SelectedContestName;
         _lq.DataCallInfoDTOs[i].SelectedCall = DataCallInfoObj.SelectedCall;
-        _lq.DataCallInfoDTOs[i].SelectedRadioType = DataCallInfoObj.QsoRadioType;
+        _lq.DataCallInfoDTOs[i].QsoRadioType = DataCallInfoObj.QsoRadioType;
         _lq.DataCallInfoDTOs[i].Disabled = DataCallInfoObj.Disabled;
         _lq.DataCallInfoDTOs[i].LogId = DataCallInfoObj.LogId;
 
@@ -1820,9 +2372,21 @@ $(function () {
                         chk[0].checked = false;
                     }
                 }
-                $select = $('#Radio1').prop("selectedIndex", DataCallInfoObj.QsoRadioType).selectmenu('refresh');
-                //$select = $('#Call1').val(DataCallInfoObj.SelectedCall).selectmenu("refresh");
-                //_lq.DataCallInfoDTOs.SelectedCall = DataCallInfoObj.SelectedCall;
+                var bfound = false;
+                for (var j = 0;j < DataCallInfoObj.RadioNames.length; j++) {
+                    if (DataCallInfoObj.RadioNames[j].key == DataCallInfoObj.QsoRadioType) {
+                        bfound = true;
+                        break;
+                    }       
+                }
+                if (bfound == true) {
+                    $select = $('#Radio1').val(DataCallInfoObj.RadioNames[j].value).selectmenu("refresh");
+                    //$select = $('#Radio1').prop("selectedIndex", DataCallInfoObj.QsoRadioType).selectmenu('refresh');
+                    //$select = $('#Call1').val(DataCallInfoObj.SelectedCall).selectmenu("refresh");
+                    //_lq.DataCallInfoDTOs.SelectedCall = DataCallInfoObj.SelectedCall;
+                } else {
+                    $select = $('#Radio1').val("ALL").selectmenu("refresh");
+                }
 
                 break;
             case 2:
@@ -1844,7 +2408,18 @@ $(function () {
                         chk[0].checked = false;
                     }
                 }
-                $select = $('#Radio2').prop("selectedIndex", DataCallInfoObj.QsoRadioType).selectmenu('refresh');
+                var bfound = false;
+                for (var j = 0; j < DataCallInfoObj.RadioNames.length; j++) {
+                    if (DataCallInfoObj.RadioNames[j].key == DataCallInfoObj.QsoRadioType) {
+                        bfound = true;
+                        break;
+                    }
+                }
+                if (bfound == true) {
+                    $select = $('#Radio2').val(DataCallInfoObj.RadioNames[j].value).selectmenu("refresh");
+                } else {
+                    $select = $('#Radio2').val("ALL").selectmenu("refresh");
+                }
                 break;
             case 3:
                 //http://stackoverflow.com/questions/5580616/jquery-change-button-text
@@ -1865,7 +2440,18 @@ $(function () {
                         chk[0].checked = false;
                     }
                 }
-                $select = $('#Radio3').prop("selectedIndex", DataCallInfoObj.QsoRadioType).selectmenu('refresh');
+                var bfound = false;
+                for (var j = 0; j < DataCallInfoObj.RadioNames.length; j++) {
+                    if (DataCallInfoObj.RadioNames[j].key == DataCallInfoObj.QsoRadioType) {
+                        bfound = true;
+                        break;
+                    }
+                }
+                if (bfound == true) {
+                    $select = $('#Radio3').val(DataCallInfoObj.RadioNames[j].value).selectmenu("refresh");
+                } else {
+                    $select = $('#Radio3').val("ALL").selectmenu("refresh");
+                }
                 break;
             default:
 
@@ -1879,7 +2465,7 @@ $(function () {
 
         //function for Call info if Contest or Call Changes
     _lq.PostUpdateContestCall = function (Controlid, SelectedValue) {
-        if (Controlid.indexOf("Contest") >= 0) {
+        if (Controlid.indexOf("Contest") >= 0 || Controlid.indexOf("Call") >= 0) {
             var tabNo;
             var actDiv;
             var DataCallInfoDto1;
@@ -1889,19 +2475,38 @@ $(function () {
                     DataCallInfoDto1 = _lq.DataCallInfoDTOs[0];
                     //remove tab Ol
                     tabNo = 'tabs1';
-                    actDiv = 'CTab' + $('button[id=Call1]')[0].innerText[0];
+                    //actDiv = 'CTab' + $('button[id=Call1]')[0].innerText[0];
                     break;
                 case "Contest2":
                     _lq.DataCallInfoDTOs[1].SelectedContestName = SelectedValue;
                     DataCallInfoDto1 = _lq.DataCallInfoDTOs[1];
                     tabNo = 'tabs2';
-                    actDiv = 'CTab' + $('button[id=Call2]')[0].innerText[0];
+                    //actDiv = 'CTab' + $('button[id=Call2]')[0].innerText[0];
                     break;
                 case "Contest3":
                     _lq.DataCallInfoDTOs[2].SelectedContestName = SelectedValue;
                     DataCallInfoDto1 = _lq.DataCallInfoDTOs[2];
                     tabNo = 'tabs3';
-                    actDiv = 'CTab' + $('button[id=Call3]')[0].innerText[0];
+                    //actDiv = 'CTab' + $('button[id=Call3]')[0].innerText[0];
+                    break;
+                case "Call1":
+                    _lq.DataCallInfoDTOs[0].SelectedCall = SelectedValue;
+                    DataCallInfoDto1 = _lq.DataCallInfoDTOs[0];
+                    //remove tab Ol
+                    tabNo = 'tabs1';
+                    //actDiv = 'CTab' + $('button[id=Call1]')[0].innerText[0];
+                    break;
+                case "Call2":
+                    _lq.DataCallInfoDTOs[1].SelectedCall = SelectedValue;
+                    DataCallInfoDto1 = _lq.DataCallInfoDTOs[1];
+                    tabNo = 'tabs2';
+                   // actDiv = 'CTab' + $('button[id=Call2]')[0].innerText[0];
+                    break;
+                case "Call3":
+                    _lq.DataCallInfoDTOs[2].SelectedCall = SelectedValue;
+                    DataCallInfoDto1 = _lq.DataCallInfoDTOs[2];
+                    tabNo = 'tabs3';
+                    //actDiv = 'CTab' + $('button[id=Call3]')[0].innerText[0];
                     break;
                 default:
                     break;
@@ -1966,13 +2571,13 @@ $(function () {
         }else if (Controlid.indexOf("Radio") >= 0) {
             switch (Controlid) {
                 case "Radio1":
-                    _lq.DataCallInfoDTOs[0].SelectedRadioType = SelectedValue;
+                    _lq.DataCallInfoDTOs[0].QsoRadioType = SelectedValue;
                     break;
                 case "Radio2":
-                    _lq.DataCallInfoDTOs[1].SelectedRadioType = SelectedValue;
+                    _lq.DataCallInfoDTOs[1].QsoRadioType = SelectedValue;
                     break;
                 case "Radio3":
-                    _lq.DataCallInfoDTOs[2].SelectedRadioType = SelectedValue;
+                    _lq.DataCallInfoDTOs[2].QsoRadioType = SelectedValue;
                     break;
                 default:
                     break;
@@ -2126,7 +2731,11 @@ $(function () {
         }
         var DataCallInfoDto0 = _lq.DataCallInfoDTOs[CallIndex];
         if (SelectedTabName == null) {
-            SelectedTabName = DataCallInfoDto0.SelectedCall;
+            if (DataCallInfoDto0.SelectedCall == "") {
+                SelectedTabName = "1";
+            } else {
+                SelectedTabName = DataCallInfoDto0.SelectedCall;
+            }
         }
 
         var dataObj = {
@@ -2166,65 +2775,67 @@ $(function () {
         var i, k;
         var colLiCnt;
         var columnCnt = 5;
-        var TotalCalls = data.Calls.length;
-        if (TotalCalls > 5) {
-            colLiCnt = Math.ceil(TotalCalls / columnCnt);
-        } else {
-            colLiCnt = TotalCalls;
-        }
-        var colWidth = Math.floor(100 / columnCnt) + "%"
-        var CallIndex = 0;
-        var column = 1;
+        if (data.Calls != null) {
 
-        ////empty previous calls
-        //var TabClrOl = $('div[id =' + tabNo + '] ol[id^=' + list + ']')
-        //    .each(function (indexInArray, valueOfElement) {
-        //        $(this).empty();
-        //    });
-        ////empty div
-        //$('div[id =' + tabNo + '] div[id=' + actDiv + ']')
-        //    .each(function (indexInArray, valueOfElement) {
-        //        $(this).empty();
-        //    });
+            var TotalCalls = data.Calls.length;
+            if (TotalCalls > 5) {
+                colLiCnt = Math.ceil(TotalCalls / columnCnt);
+            } else {
+                colLiCnt = TotalCalls;
+            }
+            var colWidth = Math.floor(100 / columnCnt) + "%"
+            var CallIndex = 0;
+            var column = 1;
+
+            ////empty previous calls
+            //var TabClrOl = $('div[id =' + tabNo + '] ol[id^=' + list + ']')
+            //    .each(function (indexInArray, valueOfElement) {
+            //        $(this).empty();
+            //    });
+            ////empty div
+            //$('div[id =' + tabNo + '] div[id=' + actDiv + ']')
+            //    .each(function (indexInArray, valueOfElement) {
+            //        $(this).empty();
+            //    });
 
 
-        if (TotalCalls != 0) {
-            for (var i = 0; i < TotalCalls; i += colLiCnt) {
-                Tabdiv.append("<ol id ='list" + actDiv + column + "' class='liCol'></ol>");
-                var TabOl = $('div[id =' + tabNo + '] ol[id=' + list + column + ']');
-                for (var k = CallIndex; k < colLiCnt * column; k++) {
-                    if (k == TotalCalls) {
-                        break;
+            if (TotalCalls != 0) {
+                for (var i = 0; i < TotalCalls; i += colLiCnt) {
+                    Tabdiv.append("<ol id ='list" + actDiv + column + "' class='liCol'></ol>");
+                    var TabOl = $('div[id =' + tabNo + '] ol[id=' + list + column + ']');
+                    for (var k = CallIndex; k < colLiCnt * column; k++) {
+                        if (k == TotalCalls) {
+                            break;
+                        }
+                        TabOl.append('<li value = ' + data.Calls[k].CallSignID + '>' + data.Calls[k].Call + '</li>');
                     }
-                    TabOl.append('<li value = ' + data.Calls[k].CallSignID + '>' + data.Calls[k].Call + '</li>');
+                    CallIndex += colLiCnt;
+                    column++;
                 }
-                CallIndex += colLiCnt;
-                column++;
+
             }
 
+            $(".liCol").css("width", colWidth)
+            $('div[id=' + actDiv + '] ol.liCol li').off('click').on("click",
+                {
+                    test: _lq.parent_modal_box_id,
+                    callNo: _lq.parent_modal_box_id
+                }, _lq.CallSelectHandler);
+
+            //Horizontal LIST
+            ////Tabdiv.append("<ol id ='list" + actDiv + "' class='five-col-list'></ol>");
+            ////var TabOl = $('div[id =' + tabNo + '] ol[id=' + list + ']');
+            ////for (var i = 0; i < data.Calls.length; i++) {
+            ////    TabOl.append('<li value = ' + data.Calls[i].CallSignID + '>' +  data.Calls[i].Call + '</li>');
+            ////}
+
+
+            ////$('div[id=' + actDiv + '] ol.five-col-list li').off('click').on("click",
+            ////    {
+            ////        test: _lq.parent_modal_box_id,
+            ////        callNo: _lq.parent_modal_box_id
+            ////    }, _lq.CallSelectHandler);
         }
-
-        $(".liCol").css("width", colWidth)
-        $('div[id=' + actDiv + '] ol.liCol li').off('click').on("click",
-            {
-                test: _lq.parent_modal_box_id,
-                callNo: _lq.parent_modal_box_id
-            }, _lq.CallSelectHandler);
-
-//Horizontal LIST
-        ////Tabdiv.append("<ol id ='list" + actDiv + "' class='five-col-list'></ol>");
-        ////var TabOl = $('div[id =' + tabNo + '] ol[id=' + list + ']');
-        ////for (var i = 0; i < data.Calls.length; i++) {
-        ////    TabOl.append('<li value = ' + data.Calls[i].CallSignID + '>' +  data.Calls[i].Call + '</li>');
-        ////}
-
-
-        ////$('div[id=' + actDiv + '] ol.five-col-list li').off('click').on("click",
-        ////    {
-        ////        test: _lq.parent_modal_box_id,
-        ////        callNo: _lq.parent_modal_box_id
-        ////    }, _lq.CallSelectHandler);
-
 
     };
 

@@ -53,4 +53,18 @@ namespace Logqso.mvc.Dto.Chart
             QsoCB = false;
         }
     }
+
+    [Serializable()]
+    public class QsoRadioStationFilter
+    {
+        public QsoRadioTypeEnum QsoRadioTypeEnum { get; set; }
+        public string StationFilter { get; set; }
+        public QsoRadioStationFilter()
+        {
+            QsoRadioTypeEnum = common.Enum.QsoRadioTypeEnum.ALL;
+            StationFilter = "ALL";
+        }
+
+    }
+
 }

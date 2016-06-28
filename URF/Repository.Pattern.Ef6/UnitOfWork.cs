@@ -257,7 +257,19 @@ namespace Repository.Pattern.Ef6
             string Filepath = ConfigurationManager.AppSettings["SQLFileName"].ToString();
             using (StreamWriter w = File.AppendText(Filepath))
             {
-                w.WriteAsync(text);
+                try
+                {
+                   // w.WriteAsync(text);
+                    w.Write(text);
+                    w.Flush();
+                    w.Close();
+                    w.Dispose();
+                }
+                catch (Exception)
+                {
+                    
+                    throw;
+                }
             }
 
 #endif

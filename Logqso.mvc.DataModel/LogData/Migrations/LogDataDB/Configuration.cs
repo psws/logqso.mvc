@@ -11,9 +11,6 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
         {
             AutomaticMigrationsEnabled = false;
             MigrationsDirectory = @"LogData\Migrations\LogDataDB";
-            // New timeout in seconds
-            this.CommandTimeout = 0; 
-
         }
 
         protected override void Seed(Logqso.mvc.DataModel.LogData.LogDataDB context)
@@ -42,10 +39,11 @@ namespace Logqso.mvc.DataModel.LogData.Migrations.LogDataDB
             StationSeeds.SeedContest(context);
             SessionSeeds.SeedContest(context);
             CallInfoSeeds.SeedContest(context);
+            QsoExchangeNumberSeeds.SeedQsoExchangeNumber(context);
+
 #if DEBUG
             QsoSeeds.SeedContest(context);
 #endif
-
         }
     }
 }

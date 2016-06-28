@@ -23,7 +23,15 @@ namespace Logqso.mvc.DataModel.LogData
                 new Station {  LogId = 1,  StationName = "STN3" },
                 new Station {  LogId = 1,  StationName = "STN4" },
                 new Station {  LogId = 2,  StationName = "STN1" },
-                new Station {  LogId = 2,  StationName = "STN2" }
+                new Station {  LogId = 2,  StationName = "STN2" },
+                //WPX
+                new Station { LogId = 5, StationName = "STN1" },
+                new Station { LogId = 5, StationName = "STN2" },
+                new Station { LogId = 5, StationName = "STN3" },
+                new Station { LogId = 5, StationName = "STN4" },
+                new Station { LogId = 6, StationName = "STN1" },
+                new Station { LogId = 6, StationName = "STN2" }
+
                                     
             );
 

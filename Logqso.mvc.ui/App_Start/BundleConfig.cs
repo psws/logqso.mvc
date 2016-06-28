@@ -15,9 +15,13 @@ namespace Logqso.mvc.ui
                         "~/Scripts/jquery-{version}.js",
                         "~/Scripts/jquery-ui-{version}.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jqgrid").Include(
+                        "~/Scripts/i18n/grid.locale-en.js",
+                       "~/Scripts/jquery.jqGrid.src.js"));
+            
             bundles.Add(new ScriptBundle("~/bundles/logqso").Include(
                         "~/Scripts/jqxcore.js",
-                        "~/Scripts/jqxtabs.js",
+                        //"~/Scripts/jqxtabs.js",
                         "~/Scripts/logqso.js"));
 
 
@@ -37,6 +41,7 @@ namespace Logqso.mvc.ui
                      "~/Content/bootstrap.css",
                     "~/Content/Themes/Stock/jquery-ui.css",
                      "~/Content/site.css",
+                     "~/Content/jquery.jqGrid/ui.jqgrid-bootstrap.css",
                        "~/Content/themes/jqx.base.css",
                       "~/Content/themes/jqx.energyblue.css",
                         "~/Content/logqso.css"));
@@ -57,7 +62,8 @@ namespace Logqso.mvc.ui
                      bundles.Add(new StyleBundle(Logqso.mvc.ui.Helpers.JQueryUI.Bundle(theme)).Include(
                                "~/Content/bootstrap.css",
                                stylePath,
-                              "~/Content/site.css",
+                      "~/Content/jquery.jqGrid/ui.jqgrid-bootstrap.css",
+                             "~/Content/site.css",
                             "~/Content/themes/jqx.base.css",
                             "~/Content/themes/jqx.energyblue.css",
                               "~/Content/logqso.css"));
@@ -69,10 +75,24 @@ namespace Logqso.mvc.ui
                                "~/Content/bootstrap.css",
                                 "~/Content/themes/Stock/jquery-ui.css",
                               stylePath,
-                              "~/Content/site.css",
+                       "~/Content/jquery.jqGrid/ui.jqgrid-bootstrap.css",
+                            "~/Content/site.css",
                              "~/Content/themes/jqx.base.css",
                              "~/Content/themes/jqx.energyblue.css",
                             "~/Content/logqso.css"));
+                  break;
+                case JQueryUI.eTheme.Cupertino:
+                  //https://www.nuget.org/packages/Microsoft.AspNet.WebHelpers/
+                  stylePath = string.Format("~/Content/Themes/{0}/jquery-ui.cupertino.css", theme);
+                  bundles.Add(new StyleBundle(Logqso.mvc.ui.Helpers.JQueryUI.Bundle(theme)).Include(
+                            "~/Content/bootstrap.css",
+                             "~/Content/themes/Stock/jquery-ui.css",
+                           stylePath,
+                    "~/Content/jquery.jqGrid/ui.jqgrid-bootstrap.css",
+                         "~/Content/site.css",
+                          "~/Content/themes/jqx.base.css",
+                          "~/Content/themes/jqx.energyblue.css",
+                         "~/Content/logqso.css"));
                   break;
                 default:
                      stylePath = string.Format("~/Content/Themes/{0}/jquery-ui.css", theme);

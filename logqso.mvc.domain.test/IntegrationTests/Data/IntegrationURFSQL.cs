@@ -44,19 +44,18 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 List<ChartQsoRateDTO> ChartQsoRateDTOList = null;
                 try
                 {
-                    string sQSOQuery =
-                        "use ContestqsoDataTest " +
-                        "SELECT [Time1] AS IntvTime, Sum(Qry5minintervals.N) AS N " +
-                        " FROM (SELECT   convert(datetime, Format([Qso].[QsoDateTime],'d') " +
-                         " + ' ' + Format(DatePart(hh,[Qso].[QsoDateTime]),'00') " +
-                          " + ':' + Format((DatePart(n,[Qso].[QsoDateTime])/60)*60,'00') )AS [Time1] , " +
-                       " Count(*) AS N " +
-                          " FROM Qso INNER JOIN Log ON Qso.LogId = log.LogId " +
-                          "  INNER JOIN CallSign ON [Qso].[CallsignId] = [CallSign].[CallSignId] " +
-                           "  AND Log.LogId = 1 " +
-                            "  GROUP BY  [Qso].[QsoDateTime] ) AS Qry5minintervals  " +
-                            "  GROUP BY [Time1] ";
-
+                    string sQSOQuery =  "use ContestqsoDataTest " +
+                    //"SELECT [Time1] AS IntvTime, Sum(Qry5minintervals.N) AS N FROM (SELECT   convert(datetime, Format([Qso].[QsoDateTime],'d') + ' ' + Format(DatePart(hh,[Qso].[QsoDateTime]),'00') + ':' + Format((DatePart(n,[Qso].[QsoDateTime])/60)*60,'00') )AS [Time1] , Count(*) AS N FROM Qso INNER JOIN Log ON [Qso].[LogId] = [Log].[LogId] INNER JOIN CallSign ON [Qso].[CallsignId] = [CallSign].[CallSignId] AND [Log].[LogId] = 1 GROUP BY  [Qso].[QsoDateTime] ) AS Qry5minintervals GROUP BY [Time1] ORDER By 1 asc";
+                    "SELECT [Time1] AS IntvTime, Sum(Qry5minintervals.N) AS N " +
+                        " FROM (SELECT  convert(datetime, Format([Qso].[QsoDateTime],'d') + ' ' + " +
+                        "Format(DatePart(hh,[Qso].[QsoDateTime]),'00') + ':' +" +
+                        "Format((DatePart(n,[Qso].[QsoDateTime])/60)*60,'00') )" +
+                        "AS [Time1] , Count(*) AS N " +
+                        "FROM Qso INNER JOIN Log ON [Qso].[LogId] = [Log].[LogId] " +
+                        "INNER JOIN CallSign ON [Qso].[CallsignId] = [CallSign].[CallSignId] AND " +
+                        "[Log].[LogId] = 1 " +
+                        "GROUP BY  [Qso].[QsoDateTime] ) AS Qry5minintervals " +
+                        "GROUP BY [Time1] ORDER By 1 asc";
 
                     TestContext.WriteLine("Integration_LogDataContext_URF_GetDbContext_SqlQuery_ChartQsoRateDTO_Return_ChartQsoRateDTOList");
 #if false
@@ -131,7 +130,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsFalse(caught);  //exception
                 Assert.IsNotNull(ChartQsoRateDTOList);
                 Assert.IsInstanceOfType(ChartQsoRateDTOList, typeof(List<ChartQsoRateDTO>));
-                Assert.AreEqual(ChartQsoRateDTOList.Count, 2);
+                Assert.AreEqual(ChartQsoRateDTOList.Count, 1);
                 Assert.IsNotNull(ChartQsoRateDTOList[0].IntvTime == DateTime.Parse("10/26/2002 00:00") );
                 Assert.IsNotNull(ChartQsoRateDTOList[0].N == 2);
 

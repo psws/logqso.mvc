@@ -106,12 +106,12 @@ namespace Logqso.mvc.DataModel.LogData.DataModels
 
 
 
-        public  CallSign CallSign { get; set; }
+        public virtual CallSign CallSign { get; set; }
         //public Station Station { get; set; }
         [ForeignKey("QsoModeTypeEnum")]
-        public  QsoModeType QsoModeType { get; set; }
+        public virtual QsoModeType QsoModeType { get; set; }
         [ForeignKey("QsoRadioTypeEnum")]
-        public  QsoRadioType QsoRadioType { get; set; }
+        public virtual QsoRadioType QsoRadioType { get; set; }
         public virtual Station Station { get; set; }
         //public virtual Log Log { get; set; }
 

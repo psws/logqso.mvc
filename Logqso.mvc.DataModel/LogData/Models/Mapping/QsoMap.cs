@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Logqso.mvc.Entities.LogDataEntity;
 
-namespace Logqso.mvc.DataModel.LogData.Models.Mapping
+namespace  Logqso.mvc.DataModel.LogData.Models.Mapping
 {
     public class QsoMap : EntityTypeConfiguration<Qso>
     {
@@ -34,6 +34,13 @@ namespace Logqso.mvc.DataModel.LogData.Models.Mapping
             this.Property(t => t.QsoExchangeNumber).HasColumnName("QsoExchangeNumber");
             this.Property(t => t.QsoModeTypeEnum).HasColumnName("QsoModeTypeEnum");
             this.Property(t => t.QsoRadioTypeEnum).HasColumnName("QsoRadioTypeEnum");
+            this.Property(t => t.QZoneMult).HasColumnName("QZoneMult");
+            this.Property(t => t.QCtyMult).HasColumnName("QCtyMult");
+            this.Property(t => t.QPrefixMult).HasColumnName("QPrefixMult");
+            this.Property(t => t.QPts1).HasColumnName("QPts1");
+            this.Property(t => t.QPts2).HasColumnName("QPts2");
+            this.Property(t => t.QPts4).HasColumnName("QPts4");
+            this.Property(t => t.QPts8).HasColumnName("QPts8");
 
             // Relationships
             this.HasRequired(t => t.CallSign)

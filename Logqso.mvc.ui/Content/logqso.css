@@ -81,7 +81,7 @@ div[id^='bdyPnlSel'], div[id^='bdyYaxis'],  div[id^='bdyXaxis']{
 
 .lq-contest-selector {
     font-size: 80%;
-    width: 120px;
+    width: 130px;
     height:25px;
     display: inline;
 }
@@ -133,13 +133,56 @@ span[id^='enb_dis']{
 }
 .lq-graph {
     width:100%;
-    margin-top:-20px;
+    /*margin-top:-20px;*/
     vertical-align: top;
+}
+
+.lq-LogTitle {
+     width:29.5%;
+     text-align:center;
+     color: white;
+}
+.lq-LogTime {
+     width:8.7%;
+     text-align:center;
+     color: white;
+}
+
+.lq-LogTF {
+     background-color: #cff3c1;
+}
+
+.lq-LogF {
+     padding-left: 5px;
+}
+
+.lq-LogU {
+     background-color: lightyellow; 
+}
+
+.lq-LogBN {
+     background-color: lightcoral; 
+}
+
+
+.lq-LogVBrdr {
+     border-left-color:black;
+     border-left-width:medium; 
+     border-left-style:double; 
+     padding-left: 5px;
+     background-color: #eee; 
+}
+
+.lq-LogMltBrdr {
+     border-left-color:red;
+     border-left-width:thin; 
+     border-left-style:solid; 
+     padding-left: 5px;
 }
 
 
 #warning-message { display: none; }
-@media only screen and (max-width:480px)  {
+@media only screen and (max-width:480px)   {
     #wrapper { display:none; }
     #warning-message { display:block; }
 }

@@ -12,6 +12,8 @@ namespace Logqso.mvc.Entities.LogDataEntity
             this.CallInfoes = new List<CallInfo>();
             this.Logs = new List<Log>();
             this.Qsoes = new List<Qso>();
+            this.Spots = new List<Spot>();
+            this.Spots1 = new List<Spot>();
             this.UbnSummaries = new List<UbnSummary>();
         }
 
@@ -27,6 +29,8 @@ namespace Logqso.mvc.Entities.LogDataEntity
         public virtual ICollection<CallInfo> CallInfoes { get; set; }
         public virtual ICollection<Log> Logs { get; set; }
         public virtual ICollection<Qso> Qsoes { get; set; }
+        public virtual ICollection<Spot> Spots { get; set; }
+        public virtual ICollection<Spot> Spots1 { get; set; }
         public virtual ICollection<UbnSummary> UbnSummaries { get; set; }
     }
 }

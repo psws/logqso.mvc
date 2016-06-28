@@ -18,14 +18,14 @@ namespace Logqso.mvc.domain.Charting
 {
     class ChartQuery
     {
-        public void GetQuery(IRepositoryAsync<Log> LogRepository, string ChartID, QSOLogFilter QSOFilter, DataCallInfoDto DataCallInfoDto, 
-            ControlSettingsDto ControlSettingsDto, ContestInfoDTO ContestInfoDTO, ChartAreaDto ChartAreaDto, string sChartFunction,
-            out ContestViewParmsDTO ContestViewParmsDTO, string Username)
+        public void GetQuery(IRepositoryAsync<Log> LogRepository, string ChartID, QSOLogFilter QSOFilter,QsoRadioStationFilter QsoRadioStationFilter,
+            DataCallInfoDto DataCallInfoDto, ControlSettingsDto ControlSettingsDto, ContestInfoDTO ContestInfoDTO, 
+            ChartAreaDto ChartAreaDto, string sChartFunction, out ContestViewParmsDTO ContestViewParmsDTO, string Username)
         {
             string sIntvTime = "IntvTime";
             string sQCnt = "N";
-            string sQCnt2;
-            string sQCnt3;
+            //string sQCnt2;
+            //string sQCnt3;
             string SerTablename = string.Empty;
 
 
@@ -47,7 +47,28 @@ namespace Logqso.mvc.domain.Charting
                     QSOFilter.QsoCB);
                 whereClause = " WHERE " + QSOFilter.Filter;
             }
-
+            if (QsoRadioStationFilter.QsoRadioTypeEnum != QsoRadioTypeEnum.ALL)
+            {
+                if (whereClause != string.Empty)
+                {
+                    whereClause += " AND [Qso].[QsoRadioTypeEnum] = " + (int)QsoRadioStationFilter.QsoRadioTypeEnum;
+                }
+                else
+                {
+                    whereClause += " WHERE  [Qso].[QsoRadioTypeEnum] = " + (int)QsoRadioStationFilter.QsoRadioTypeEnum;
+                }
+            }
+            if (QsoRadioStationFilter.StationFilter != null && QsoRadioStationFilter.StationFilter != "ALL")
+            {
+                if (whereClause != string.Empty)
+                {
+                    whereClause += " AND [Qso].[StationName] = '" + QsoRadioStationFilter.StationFilter + "' ";
+                }
+                else
+                {
+                    whereClause += " WHERE   [Qso].[StationName] = '" + QsoRadioStationFilter.StationFilter + "' ";
+                }
+            }
 
             string colTime = string.Format("[{0}].[QsoDateTime]", ContestInfoDTO.QsoDatabaseTableName);
             string QSOQuery = string.Empty;
@@ -369,7 +390,6 @@ namespace Logqso.mvc.domain.Charting
                                       " GROUP BY  " + colTime + " ) AS Qry5minintervals" +
                                       " GROUP BY [Time1] " +
                                         "ORDER By 1 asc";
-                          QSOQuery = GenerateQuery(ContestInfoDTO, ChartAreaDto, sIntvTime, sQCnt, colTime, whereClause, "Score  Sum");
                             //prefixes
                             break;
                         case ContestTypeEnum.CQ160:
@@ -585,5 +605,20 @@ namespace Logqso.mvc.domain.Charting
             return Qfilter;
         }
 
+
+        public QsoRadioStationFilter GetQsoRadioStationFilter(DataCallInfoDto DataCallInfoDto)
+        {
+            QsoRadioStationFilter QsoRadioStationFilter = new QsoRadioStationFilter();
+            if (DataCallInfoDto.QsoRadioType != QsoRadioTypeEnum.ALL)
+            {
+                QsoRadioStationFilter.QsoRadioTypeEnum = DataCallInfoDto.QsoRadioType;
+            }
+            if (DataCallInfoDto.SelectedStationName != "ALL")
+            {
+                QsoRadioStationFilter.StationFilter = DataCallInfoDto.SelectedStationName;
+            }
+
+            return QsoRadioStationFilter;
+        }
     }
 }

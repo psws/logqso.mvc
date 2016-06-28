@@ -11,6 +11,7 @@ namespace Logqso.mvc.Entities.LogDataEntity
             this.CabrilloInfoes = new List<CabrilloInfo>();
             this.CallInfoes = new List<CallInfo>();
             this.Logs = new List<Log>();
+            this.Spots = new List<Spot>();
             this.UbnSummaries = new List<UbnSummary>();
         }
 
@@ -26,6 +27,7 @@ namespace Logqso.mvc.Entities.LogDataEntity
         public virtual ContestType ContestType { get; set; }
         public virtual QsoModeType QsoModeType { get; set; }
         public virtual ICollection<Log> Logs { get; set; }
+        public virtual ICollection<Spot> Spots { get; set; }
         public virtual ICollection<UbnSummary> UbnSummaries { get; set; }
     }
 }

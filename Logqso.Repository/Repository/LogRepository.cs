@@ -233,7 +233,7 @@ namespace Logqso.Repository.Repository
 
         public static Task<DataTable> GenerateChart(this IRepositoryAsync<Log> _LogRepository, ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username)
         {
-            string filepath = "chart.png";
+            //string filepath = "chart.png";
             DataTable DataTable = new DataTable();
             return Task.FromResult(DataTable);
         }
@@ -895,6 +895,12 @@ namespace Logqso.Repository.Repository
                     //add ALL default to Stations
                     StationNamestype StationNamestype = new StationNamestype(0, "ALL");
                     DataCallInfoDtoResult.StationNames.Add(StationNamestype);
+                    //fixup SelectedStationName
+                    StationNamestype = DataCallInfoDtoResult.StationNames.Where(p=>p.value == DataCallInfoDtoResult.SelectedStationName).FirstOrDefault();
+                    if (StationNamestype == null)
+                    {
+                        DataCallInfoDtoResult.SelectedStationName = "ALL";
+                    }
                     //var Resuls = item.StationNames.OrderBy(i => i.key == 0 ? 0 : 1).ThenBy(i => i.key).ThenBy(x => x.value);
                     DataCallInfoDtoResult.StationNames = DataCallInfoDtoResult.StationNames.OrderBy(i => i.key).ThenBy(x => x.value).ToList();
 
@@ -949,6 +955,12 @@ namespace Logqso.Repository.Repository
                                 break;
                         }
                         DataCallInfoDtoResult.RadioNames = Validnames;
+                        RadioNamestype RadioNamestype  = DataCallInfoDtoResult.RadioNames.Where(p => p.value == Enum.GetName(typeof(QsoRadioTypeEnum), DataCallInfoDtoResult.QsoRadioType)).FirstOrDefault();
+                        if (RadioNamestype == null)
+                        {
+                            DataCallInfoDtoResult.QsoRadioType = QsoRadioTypeEnum.ALL;
+                        }
+
                     }
 
 

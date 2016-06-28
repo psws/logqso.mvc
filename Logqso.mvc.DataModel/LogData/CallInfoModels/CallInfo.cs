@@ -19,11 +19,17 @@ namespace Logqso.mvc.DataModel.LogData.CallInfoModels
 
 
         [Key]
-        [Column(Order = 1)]
+        [Column(Order = 5)]
         public int CallInfoId { get; set; }  //descriminator for multiple sets of username/callgrou-p
         [Key]
-        [Column(Order = 2)]
+        [Column(Order = 6)]
         public Logqso.mvc.common.Enum.CallGroupEnum CallGroup { get; set; }
+        [Key]
+        [Column(Order = 7, TypeName = "varchar")]
+        [MaxLength(256)]
+        [Required]
+        public string UserName { get; set; } //// UserName can have 3 entries/sessionname
+
         [Column(TypeName = "varchar")]
         [MaxLength(35)]
         [Required]
@@ -32,11 +38,6 @@ namespace Logqso.mvc.DataModel.LogData.CallInfoModels
         //////[MaxLength(25)]
         //////public string SelectedCall { get; set; }
         public  int CallsignId { get; set; }
-        [Key]
-        [Column(Order = 3, TypeName = "varchar")]
-        [MaxLength(256)]
-        [Required]
-        public string UserName { get; set; } //// UserName can have 3 entries/sessionname
         [Column(TypeName = "varchar")]
         [MaxLength(256)]
         ////[Index(IsUnique = true)]  // Session can have 3 entries

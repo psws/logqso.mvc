@@ -12,6 +12,7 @@
     @Styles.Render(Logqso.mvc.ui.Helpers.JQueryUI.Bundle(theme))
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqgrid")
     @Scripts.Render("~/bundles/jqueryval")
    @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/logqso")
@@ -30,7 +31,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("LogQso", "logqso", "logqso", new { area = "" }, new { @class = "navbar-brand"} )
+                @Html.ActionLink("ContestQso", "logqso", "logqso", new { area = "" }, new { @class = "navbar-brand"} )
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

@@ -79,6 +79,8 @@ Add any seed data in the configuration.cs file
             StationSeeds.SeedContest(context);
             SessionSeeds.SeedContest(context);
             CallInfoSeeds.SeedContest(context);
+			 QsoExchangeNumberSeeds.SeedQsoExchangeNumber(context);
+
 #if DEBUG
             QsoSeeds.SeedContest(context);
 #endif

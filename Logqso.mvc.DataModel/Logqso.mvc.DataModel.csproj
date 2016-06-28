@@ -142,15 +142,12 @@
     <Compile Include="LogData\DataModels\QsoExchangeAlpha.cs" />
     <Compile Include="LogData\ContestTypeSeeds.cs" />
     <Compile Include="LogData\DataModels\QsoRadioType.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201605221739558_InitialDatabaseCreation.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201605221739558_InitialDatabaseCreation.Designer.cs">
-      <DependentUpon>201605221739558_InitialDatabaseCreation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LogData\Migrations\LogDataDB\201606010730408_multsPtsDatabaseCreation.cs" />
-    <Compile Include="LogData\Migrations\LogDataDB\201606010730408_multsPtsDatabaseCreation.Designer.cs">
-      <DependentUpon>201606010730408_multsPtsDatabaseCreation.cs</DependentUpon>
+    <Compile Include="LogData\Migrations\LogDataDB\201606162129195_InitialDatabaseCreation.cs" />
+    <Compile Include="LogData\Migrations\LogDataDB\201606162129195_InitialDatabaseCreation.Designer.cs">
+      <DependentUpon>201606162129195_InitialDatabaseCreation.cs</DependentUpon>
     </Compile>
     <Compile Include="LogData\Migrations\LogDataDB\Configuration.cs" />
+    <Compile Include="LogData\QsoExchangeNumberSeeds.cs" />
     <Compile Include="LogData\QsoExchangeTypeSeeds.cs" />
     <Compile Include="LogData\QsoModeTypeSeeds.cs" />
     <Compile Include="LogData\DataModels\QsoModeType.cs" />
@@ -159,6 +156,7 @@
     <Compile Include="LogData\QsoRadioTypeSeeds.cs" />
     <Compile Include="LogData\QsoSeeds.cs" />
     <Compile Include="LogData\SessionSeeds.cs" />
+    <Compile Include="LogData\SpotModels\Spot.cs" />
     <Compile Include="LogData\StationSeeds.cs" />
     <Compile Include="LogData\LogSeeds.cs" />
     <Compile Include="LogData\LogCategorySeeds.cs" />
@@ -189,7 +187,6 @@
     <Compile Include="LogData\UbnModels\UbnUniques.cs" />
     <Compile Include="ControlUnitOfWork.cs" />
     <Compile Include="LogUnitOfWork.cs" />
-    <Compile Include="LogData\Models\ContestqsoDataContext.cs" />
     <Compile Include="LogControl\Models\ContestQsoContext.cs" />
     <Compile Include="LogControl\Models\Mapping\CatAssistedMap.cs" />
     <Compile Include="LogControl\Models\Mapping\CatBandMap.cs" />
@@ -209,6 +206,7 @@
     <Compile Include="LogControl\Models\Mapping\YaxisFunctionMap.cs" />
     <Compile Include="LogControl\Models\Mapping\YaxisIntervalMap.cs" />
     <Compile Include="LogControl\Models\Mapping\YaxisViewTypeMap.cs" />
+    <Compile Include="LogData\Models\ContestqsoDataContext.cs" />
     <Compile Include="LogData\Models\Mapping\CabrilloInfoMap.cs" />
     <Compile Include="LogData\Models\Mapping\CallInfoMap.cs" />
     <Compile Include="LogData\Models\Mapping\CallSignMap.cs" />
@@ -217,12 +215,14 @@
     <Compile Include="LogData\Models\Mapping\LogCategoryMap.cs" />
     <Compile Include="LogData\Models\Mapping\LogMap.cs" />
     <Compile Include="LogData\Models\Mapping\QsoExchangeAlphaMap.cs" />
+    <Compile Include="LogData\Models\Mapping\QsoExchangeNumberMap.cs" />
     <Compile Include="LogData\Models\Mapping\QsoExchangeTypeMap.cs" />
     <Compile Include="LogData\Models\Mapping\QsoExtraDataMap.cs" />
     <Compile Include="LogData\Models\Mapping\QsoMap.cs" />
     <Compile Include="LogData\Models\Mapping\QsoModeTypeMap.cs" />
     <Compile Include="LogData\Models\Mapping\QsoRadioTypeMap.cs" />
     <Compile Include="LogData\Models\Mapping\SessionMap.cs" />
+    <Compile Include="LogData\Models\Mapping\SpotMap.cs" />
     <Compile Include="LogData\Models\Mapping\StationMap.cs" />
     <Compile Include="LogData\Models\Mapping\UbnDupeMap.cs" />
     <Compile Include="LogData\Models\Mapping\UbnIncorrectCallMap.cs" />
@@ -268,11 +268,8 @@
     <EmbeddedResource Include="LogControl\Migrations\LogControlDB\201605210637388_InitialDatabaseCreation.resx">
       <DependentUpon>201605210637388_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201605221739558_InitialDatabaseCreation.resx">
-      <DependentUpon>201605221739558_InitialDatabaseCreation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201606010730408_multsPtsDatabaseCreation.resx">
-      <DependentUpon>201606010730408_multsPtsDatabaseCreation.cs</DependentUpon>
+    <EmbeddedResource Include="LogData\Migrations\LogDataDB\201606162129195_InitialDatabaseCreation.resx">
+      <DependentUpon>201606162129195_InitialDatabaseCreation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

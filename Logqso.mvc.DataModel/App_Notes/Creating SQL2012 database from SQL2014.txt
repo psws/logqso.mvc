@@ -18,10 +18,21 @@ Goto SQL 2012,
 Create the Contesqso daabase.
 run the logqso2012script.sql script against the Contestqso DB..
 --------
+For the Data library you can use a script that includes all schema..
+1) In SQL2014 select right click on ContestqsoData DB ->Tasks->Generate scripts
+2) Select All Database tables then Next
+3) Set filepath to generate D:\vwd projects mvc\Logqso.mvc\Logqso.Repository\SQL\ContestqsoData SQL 2014 to 2012script Shema.sql
+4) select advanced button
+		Schema only
+5)		script for SQL version => SQL2012
+6) Type of data to script =>schema and data
+7)		Script Check Constraints => false
+8)got to Finish
+
 For the Data library you can use a script that includes all Data except the huge QSO table..
-1) In SQL2014 select right click on LogqsoData DB ->Tasks->Generate scripts
+1) In SQL2014 select right click on ContestqsoData DB ->Tasks->Generate scripts
 2) Select All Database tables except for the QSO table then Next
-3) Set filepath to generate logqsoData2012script.sql
+3) Set filepath to generate ContestqsoData2012script.sql
 4) select advanced button
 5)		script for SQL version => SQL2012
 6) Type of data to script =>schema and data
@@ -37,7 +48,7 @@ Next import QSO data
 2) select Tasks=>import data.
 3) Select Data Source 'SQL server native client 10.0'
 4) Select Server PSS60\SQL2014
-5) Select database 'LogqsoData' 
+5) Select database 'ContestqsoData' 
 6) Select Next and set the Data Source 'SQL server native client 10.0'  then Next
 7) The  Select Server PSS60\SQL2012
 8) Select database 'Contestqsoata' 

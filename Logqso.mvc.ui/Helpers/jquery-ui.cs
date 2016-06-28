@@ -25,6 +25,7 @@ namespace Logqso.mvc.ui.Helpers
         {
             Stock,
             Flick,
+            Cupertino,
         }
 
         public static string Bundle(string themename)

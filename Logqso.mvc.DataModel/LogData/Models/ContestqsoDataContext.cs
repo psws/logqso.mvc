@@ -16,7 +16,6 @@ namespace Logqso.mvc.DataModel.LogData.Models
             Database.SetInitializer<ContestqsoDataContext>(null);
         }
 
-
         public ContestqsoDataContext()
 #if CONTESTQSODEBUG || CONTESTQSORELEASE
             : base("Name=LogDataDBhostfest")
@@ -26,7 +25,7 @@ namespace Logqso.mvc.DataModel.LogData.Models
             : base("Name=LogDataDBsql2012")
 #else
             : base("Name=LogDataDB")
-#endif
+#endif  
         {
         }
 
@@ -39,11 +38,13 @@ namespace Logqso.mvc.DataModel.LogData.Models
         public DbSet<LogCategory> LogCategories { get; set; }
         public DbSet<Qso> Qsoes { get; set; }
         public DbSet<QsoExchangeAlpha> QsoExchangeAlphas { get; set; }
+        public DbSet<QsoExchangeNumber> QsoExchangeNumbers { get; set; }
         public DbSet<QsoExchangeType> QsoExchangeTypes { get; set; }
         public DbSet<QsoExtraData> QsoExtraDatas { get; set; }
         public DbSet<QsoModeType> QsoModeTypes { get; set; }
         public DbSet<QsoRadioType> QsoRadioTypes { get; set; }
         public DbSet<Session> Sessions { get; set; }
+        public DbSet<Spot> Spots { get; set; }
         public DbSet<Station> Stations { get; set; }
         public DbSet<UbnDupe> UbnDupes { get; set; }
         public DbSet<UbnIncorrectCall> UbnIncorrectCalls { get; set; }
@@ -63,11 +64,13 @@ namespace Logqso.mvc.DataModel.LogData.Models
             modelBuilder.Configurations.Add(new LogCategoryMap());
             modelBuilder.Configurations.Add(new QsoMap());
             modelBuilder.Configurations.Add(new QsoExchangeAlphaMap());
+            modelBuilder.Configurations.Add(new QsoExchangeNumberMap());
             modelBuilder.Configurations.Add(new QsoExchangeTypeMap());
             modelBuilder.Configurations.Add(new QsoExtraDataMap());
             modelBuilder.Configurations.Add(new QsoModeTypeMap());
             modelBuilder.Configurations.Add(new QsoRadioTypeMap());
             modelBuilder.Configurations.Add(new SessionMap());
+            modelBuilder.Configurations.Add(new SpotMap());
             modelBuilder.Configurations.Add(new StationMap());
             modelBuilder.Configurations.Add(new UbnDupeMap());
             modelBuilder.Configurations.Add(new UbnIncorrectCallMap());

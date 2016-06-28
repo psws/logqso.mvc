@@ -122,11 +122,13 @@
     <Compile Include="LogDataEntity\LogCategory.cs" />
     <Compile Include="LogDataEntity\Qso.cs" />
     <Compile Include="LogDataEntity\QsoExchangeAlpha.cs" />
+    <Compile Include="LogDataEntity\QsoExchangeNumber.cs" />
     <Compile Include="LogDataEntity\QsoExchangeType.cs" />
     <Compile Include="LogDataEntity\QsoExtraData.cs" />
     <Compile Include="LogDataEntity\QsoModeType.cs" />
     <Compile Include="LogDataEntity\QsoRadioType.cs" />
     <Compile Include="LogDataEntity\Session.cs" />
+    <Compile Include="LogDataEntity\Spot.cs" />
     <Compile Include="LogDataEntity\Station.cs" />
     <Compile Include="LogDataEntity\UbnDupe.cs" />
     <Compile Include="LogDataEntity\UbnIncorrectCall.cs" />

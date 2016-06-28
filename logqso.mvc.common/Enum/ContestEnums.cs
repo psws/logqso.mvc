@@ -37,8 +37,8 @@ namespace Logqso.mvc.common.Enum
         ALL = 1,
         R1 = 2,
         R2 = 3,
-        Run,
-        Mult,
-        S_P
+        Run = 4,
+        Mult = 5,
+        S_P= 6
     }
 }

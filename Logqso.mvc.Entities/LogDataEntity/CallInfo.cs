@@ -6,13 +6,13 @@ namespace Logqso.mvc.Entities.LogDataEntity
 {
     public partial class CallInfo : Entity
     {
-        public int CallInfoId { get; set; }
-        public int CallGroup { get; set; }
         public int LogId { get; set; }
         public string StationName { get; set; }
+        public int CallInfoId { get; set; }
+        public int CallGroup { get; set; }
+        public string UserName { get; set; }
         public string ContestId { get; set; }
         public int CallsignId { get; set; }
-        public string UserName { get; set; }
         public string SessionName { get; set; }
         public bool Disabled { get; set; }
         public int QsoRadioTypeEnum { get; set; }

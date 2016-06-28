@@ -38,8 +38,9 @@ namespace Logqso.mvc.ui
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             GlobalConfiguration.Configure(WebApiConfig.Register); 
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            Themes.Initialize("~/Content/Themes/", "Flick"); 
-           BundleConfig.RegisterBundles(BundleTable.Bundles);
+            Themes.Initialize("~/Content/Themes/", "Cupertino");
+            //Themes.Initialize("~/Content/Themes/", "Flick");
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
 }

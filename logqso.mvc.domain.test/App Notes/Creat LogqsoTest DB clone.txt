@@ -22,6 +22,7 @@ Select OK
 
 creaate a ContestqsoDataTest DB that is clone of ContestqsoData.
 used for integration testing.
+Do not create ContestqsoData, the restore will create it.
 in SSMS
 database=> restore
 select ContestqsoData as the source DB

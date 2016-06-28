@@ -28,7 +28,7 @@ namespace Logqso.mvc.DataModel.LogData
         public DbSet<Logqso.mvc.DataModel.LogData.DataModels.QsoRadioType> QsoRadioType { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogData.DataModels.QsoExchangeType> QsoExchangeType { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogData.DataModels.QsoExchangeAlpha> QsoExchangeAlpha { get; set; }
-        //public DbSet<Logqso.mvc.DataModel.LogData.DataModels.QsoExchangeNumber> QsoExchangeNumber { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.DataModels.QsoExchangeNumber> QsoExchangeNumber { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogData.DataModels.QsoExtraData> QsoExtraData { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogData.DataModels.CabrilloInfo> CabrilloInfo { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogData.DataModels.Log> Log { get; set; }
@@ -47,6 +47,8 @@ namespace Logqso.mvc.DataModel.LogData
         public DbSet<Logqso.mvc.DataModel.LogData.UbnModels.UbnUniques> UbnUniques { get; set; }
 
         public DbSet<Logqso.mvc.DataModel.LogData.CallInfoModels.CallInfo> CallInfo { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogData.SpotModels.Spot> Spot { get; set; }
+
         //public DbSet<Logqso.mvc.DataModel.LogData.CallInfoModels.CallInfoDefault> CallInfoDefault { get; set; }
 
         /* 
@@ -62,6 +64,8 @@ namespace Logqso.mvc.DataModel.LogData
                     StationSeeds.SeedContest(context);
                     SessionSeeds.SeedContest(context); 
                   CallInfoSeeds.SeedContest(context);
+                 QsoExchangeNumberSeeds.SeedQsoExchangeNumber(context);
+
          #if DEBUG
                 QsoSeeds.SeedContest(context);
         #endif
@@ -99,6 +103,10 @@ namespace Logqso.mvc.DataModel.LogData
             //DONT' KNOW WHY'
             modelBuilder.Entity<LogData.DataModels.Qso>().HasRequired(p => p.CallSign)
             .WithMany().HasForeignKey(c => c.CallsignId).WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<LogData.SpotModels.Spot>().HasRequired(p => p.SpoterCallSign)
+            .WithMany().HasForeignKey(c => c.SpoterCallSignId).WillCascadeOnDelete(false);
+
 
             //modelBuilder.Entity<LogData.CallInfoModels.CallInfo>().HasRequired(p => p.Log)
             //.WithMany().HasForeignKey(c => c.LogId).WillCascadeOnDelete(false);
