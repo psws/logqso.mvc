@@ -165,52 +165,52 @@ namespace Logqso.Repository.Repository
 
 
                 foreach (var item in DataCallInfoDtos)
-	            {
-                  //Log log  = LogQ.Where(p=>p.LogId ==item.LogId ).FirstOrDefault();
-                  //LogCategory LogCategory = LogCategoryQ.Where(p => p.LogCategoryId == log.LogCategoryId).FirstOrDefault();
-                  LogCategory LogCategory = (from lc in LogCategoryQ
-                                              join ll in LogQ on lc.LogCategoryId equals ll.LogCategoryId
-                                              where ll.LogId == item.LogId
-                                              select lc).FirstOrDefault();
-                  CatOperatorEnum CatOperatorEnum;
+                {
+                    //Log log  = LogQ.Where(p=>p.LogId ==item.LogId ).FirstOrDefault();
+                    //LogCategory LogCategory = LogCategoryQ.Where(p => p.LogCategoryId == log.LogCategoryId).FirstOrDefault();
+                    LogCategory LogCategory = (from lc in LogCategoryQ
+                                               join ll in LogQ on lc.LogCategoryId equals ll.LogCategoryId
+                                               where ll.LogId == item.LogId
+                                               select lc).FirstOrDefault();
+                    CatOperatorEnum CatOperatorEnum;
                     ICollection<RadioNamestype> Validnames = new Collection<RadioNamestype>();
                     List<RadioNamestype> RadioNamelist = item.RadioNames.Cast<RadioNamestype>().ToList();
 
-                    Validnames.Add(RadioNamelist.Where(p=>p.value == "ALL").FirstOrDefault() );
+                    Validnames.Add(RadioNamelist.Where(p => p.value == "ALL").FirstOrDefault());
 
-                  if (CatOperatorEnum.TryParse(LogCategory.CatOperatorEnum.ToString(), true, out CatOperatorEnum) == true)
-                  {
-                      switch (CatOperatorEnum)
-                      {
-                          case CatOperatorEnum.ALL:
-                              break;
-                          case CatOperatorEnum.SINGLE_OP:
-                                    Validnames.Add(RadioNamelist.Where(p=>p.value == "Run").FirstOrDefault() );
-                                    Validnames.Add(RadioNamelist.Where(p=>p.value == "S_P").FirstOrDefault() );
-                              break;
-                          case CatOperatorEnum.MULTI_OP:
+                    if (CatOperatorEnum.TryParse(LogCategory.CatOperatorEnum.ToString(), true, out CatOperatorEnum) == true)
+                    {
+                        switch (CatOperatorEnum)
+                        {
+                            case CatOperatorEnum.ALL:
+                                break;
+                            case CatOperatorEnum.SINGLE_OP:
+                                Validnames.Add(RadioNamelist.Where(p => p.value == "Run").FirstOrDefault());
+                                Validnames.Add(RadioNamelist.Where(p => p.value == "S_P").FirstOrDefault());
+                                break;
+                            case CatOperatorEnum.MULTI_OP:
                                 if (LogCategory.CatNoOfTxEnum == (int)CatNoOfTxEnum.ONE)
                                 {
-                                    Validnames.Add(RadioNamelist.Where(p=>p.value == "Mult").FirstOrDefault() );
-                                    Validnames.Add(RadioNamelist.Where(p=>p.value == "Run").FirstOrDefault() );
+                                    Validnames.Add(RadioNamelist.Where(p => p.value == "Mult").FirstOrDefault());
+                                    Validnames.Add(RadioNamelist.Where(p => p.value == "Run").FirstOrDefault());
                                 }
                                 else if (LogCategory.CatNoOfTxEnum == (int)CatNoOfTxEnum.TWO)
-	                            {
-                                   Validnames.Add(RadioNamelist.Where(p=>p.value == "R1").FirstOrDefault() );
-                                   Validnames.Add(RadioNamelist.Where(p=>p.value == "R2").FirstOrDefault() );
-	                            }
+                                {
+                                    Validnames.Add(RadioNamelist.Where(p => p.value == "R1").FirstOrDefault());
+                                    Validnames.Add(RadioNamelist.Where(p => p.value == "R2").FirstOrDefault());
+                                }
                                 else
                                 {
                                 }
                                 break;
-                          case CatOperatorEnum.CHECKLOG:
-                              break;
-                          default:
-                              break;
-                      }
-                      item.RadioNames = Validnames;
-                  }
-	            }
+                            case CatOperatorEnum.CHECKLOG:
+                                break;
+                            default:
+                                break;
+                        }
+                        item.RadioNames = Validnames;
+                    }
+                }
 
 #endif
 
@@ -730,36 +730,36 @@ namespace Logqso.Repository.Repository
             var ContestInfoDTO = (from ll in LogQ1
                                   join lc in ContestQ on ll.ContestId equals lc.ContestId
                                   join lq in ContestTypeQ on lc.ContestTypeEnum equals lq.ContestTypeEnum
-                                     join ls in CallSignQ on ll.CallsignId equals ls.CallSignId
-                                     join lx in LogCategoryQ1 on ll.LogCategoryId equals lx.LogCategoryId
-                                     where lc.ContestName == DataCallInfoDto.SelectedContestName
-                                        && ls.Call == DataCallInfoDto.SelectedCall
-                                    select new ContestInfoDTO
-                                    {
-                                        startTime = lc.StartDateTime,
-                                        endTime = lc.EndDateTime,
-                                        ContestID = lc.ContestId,
-                                        ContestType = lq.ContestTypeEnumName,
-                                        CallGroup = DataCallInfoDto.CallGroup,
-                                        ContestName = lc.ContestName,
-                                        CatOperatorEnum = (CatOperatorEnum)lx.CatOperatorEnum,
-                                        CatBandEnum = (CatBandEnum)lx.CatBandEnum,
-                                        CatAssistedEnum = (CatAssistedEnum)lx.CatAssistedEnum,
-                                        CatNoOfTxEnum = (CatNoOfTxEnum)lx.CatNoOfTxEnum,
-                                        CatPowerEnum = (CatPowerEnum)lx.CatPowerEnum,
-                                        CatOperatorOverlayEnum = (CatOperatorOverlayEnum)lx.CatOperatorOverlayEnum,
-                                        Disabled = DataCallInfoDto.Disabled,
-                                        QsoDatabaseServerInstance = ll.QsoDatabaseServerInstance,
-                                        QsoDatabaseInstance = ll.QsoDatabaseInstance,
-                                        QsoDatabaseTableName = ll.QsoDatabaseTableName,
-                                        Call = DataCallInfoDto.SelectedCall,
-                                        LogId = ll.LogId
-                            
-                            
+                                  join ls in CallSignQ on ll.CallsignId equals ls.CallSignId
+                                  join lx in LogCategoryQ1 on ll.LogCategoryId equals lx.LogCategoryId
+                                  where lc.ContestName == DataCallInfoDto.SelectedContestName
+                                     && ls.Call == DataCallInfoDto.SelectedCall
+                                  select new ContestInfoDTO
+                                  {
+                                      startTime = lc.StartDateTime,
+                                      endTime = lc.EndDateTime,
+                                      ContestID = lc.ContestId,
+                                      ContestType = lq.ContestTypeEnumName,
+                                      CallGroup = DataCallInfoDto.CallGroup,
+                                      ContestName = lc.ContestName,
+                                      CatOperatorEnum = (CatOperatorEnum)lx.CatOperatorEnum,
+                                      CatBandEnum = (CatBandEnum)lx.CatBandEnum,
+                                      CatAssistedEnum = (CatAssistedEnum)lx.CatAssistedEnum,
+                                      CatNoOfTxEnum = (CatNoOfTxEnum)lx.CatNoOfTxEnum,
+                                      CatPowerEnum = (CatPowerEnum)lx.CatPowerEnum,
+                                      CatOperatorOverlayEnum = (CatOperatorOverlayEnum)lx.CatOperatorOverlayEnum,
+                                      Disabled = DataCallInfoDto.Disabled,
+                                      QsoDatabaseServerInstance = ll.QsoDatabaseServerInstance,
+                                      QsoDatabaseInstance = ll.QsoDatabaseInstance,
+                                      QsoDatabaseTableName = ll.QsoDatabaseTableName,
+                                      Call = DataCallInfoDto.SelectedCall,
+                                      LogId = ll.LogId
 
-                                    }).FirstOrDefault();
 
-            return Task.FromResult( ContestInfoDTO);
+
+                                  }).FirstOrDefault();
+
+            return Task.FromResult(ContestInfoDTO);
         }
 
         public static async Task<IEnumerable<ChartQsoRateDTO>> GetChartDataTableAsync(this IRepositoryAsync<Log> _LogRepository, ContestViewParmsDTO ContestViewParmsDTO, string Username)
@@ -771,7 +771,7 @@ namespace Logqso.Repository.Repository
         {
             IEnumerable<ChartQsoRateDTO> ChartQsoRateDTO;
             var QsoRepository = _LogRepository.GetRepository<Qso>();
-           // var QsoRates = QsoRepository.GetSqlQueryResults<ChartQsoRateDTO>(ContestViewParmsDTO.sQSOQuery);
+            // var QsoRates = QsoRepository.GetSqlQueryResults<ChartQsoRateDTO>(ContestViewParmsDTO.sQSOQuery);
             try
             {
                 DbContext DbContext = QsoRepository.GetDbContext() as DbContext;
@@ -779,7 +779,7 @@ namespace Logqso.Repository.Repository
             }
             catch (Exception ex)
             {
-                
+
                 throw;
             }
 
@@ -823,50 +823,50 @@ namespace Logqso.Repository.Repository
 
 
                 DataCallInfoDtoResult = (from lq in LogQ
-                                    join lc in CallSignQ on lq.CallsignId equals lc.CallSignId
-                                    join ls in ContestQ on lq.ContestId equals ls.ContestId
-                                    where lc.Call == DataCallInfoDto.SelectedCall &&
-                                        ls.ContestName == DataCallInfoDto.SelectedContestName
-                                    select new DataCallInfoDto
-                                    {
-                                        CallGroup = (CallGroupEnum)DataCallInfoDto.CallGroup,
-                                        SelectedContestName = DataCallInfoDto.SelectedContestName,
-                                        SelectedCall = DataCallInfoDto.SelectedCall,
-                                        SelectedStationName = DataCallInfoDto.SelectedStationName,
-                                        QsoRadioType = (QsoRadioTypeEnum)DataCallInfoDto.QsoRadioType,
-                                        //Selecct() flattens
-                                        //StationNames = lq.Stations.Select(x => x.StationName).ToList(),
-                                        StationNames = (from cn in lq.Stations
-                                                        select new StationNamestype
-                                                        {
-                                                            key = cn.LogId,
-                                                            value = cn.StationName
-                                                        }).ToList(),
+                                         join lc in CallSignQ on lq.CallsignId equals lc.CallSignId
+                                         join ls in ContestQ on lq.ContestId equals ls.ContestId
+                                         where lc.Call == DataCallInfoDto.SelectedCall &&
+                                             ls.ContestName == DataCallInfoDto.SelectedContestName
+                                         select new DataCallInfoDto
+                                         {
+                                             CallGroup = (CallGroupEnum)DataCallInfoDto.CallGroup,
+                                             SelectedContestName = DataCallInfoDto.SelectedContestName,
+                                             SelectedCall = DataCallInfoDto.SelectedCall,
+                                             SelectedStationName = DataCallInfoDto.SelectedStationName,
+                                             QsoRadioType = (QsoRadioTypeEnum)DataCallInfoDto.QsoRadioType,
+                                             //Selecct() flattens
+                                             //StationNames = lq.Stations.Select(x => x.StationName).ToList(),
+                                             StationNames = (from cn in lq.Stations
+                                                             select new StationNamestype
+                                                             {
+                                                                 key = cn.LogId,
+                                                                 value = cn.StationName
+                                                             }).ToList(),
 
-                                        LogId = lq.LogId,
+                                             LogId = lq.LogId,
 
 
-                                        ContestNames = (from cn in ContestQ
-                                                        select new ContestNamestype
-                                                        {
-                                                            key = cn.ContestId,
-                                                            value = cn.ContestName
-                                                        }).ToList(),
+                                             ContestNames = (from cn in ContestQ
+                                                             select new ContestNamestype
+                                                             {
+                                                                 key = cn.ContestId,
+                                                                 value = cn.ContestName
+                                                             }).ToList(),
 
-                                        //return all WPX contests in Db table ordered  by name
-                                        //ContestNames = ContestQ.SelectMany(x => x.Contests).Where(x => x.ContestName.StartsWith("Cqwpx")).OrderBy(x => x.ContestName).Select(x => x.ContestName).ToList(),
+                                             //return all WPX contests in Db table ordered  by name
+                                             //ContestNames = ContestQ.SelectMany(x => x.Contests).Where(x => x.ContestName.StartsWith("Cqwpx")).OrderBy(x => x.ContestName).Select(x => x.ContestName).ToList(),
 
-                                        //return all contests in Db table 
-                                        //RadioNames = RadioQ.Select(x => x.QsoRadioTypeName).ToList(),
-                                        RadioNames = (from cn in RadioQ
-                                                      select new RadioNamestype
-                                                      {
-                                                          key = cn.QsoRadioTypeEnum,
-                                                          value = cn.QsoRadioTypeName
-                                                      }).ToList(),
+                                             //return all contests in Db table 
+                                             //RadioNames = RadioQ.Select(x => x.QsoRadioTypeName).ToList(),
+                                             RadioNames = (from cn in RadioQ
+                                                           select new RadioNamestype
+                                                           {
+                                                               key = cn.QsoRadioTypeEnum,
+                                                               value = cn.QsoRadioTypeName
+                                                           }).ToList(),
 
-                                        Disabled = DataCallInfoDto.Disabled
-                                    }).FirstOrDefault();
+                                             Disabled = DataCallInfoDto.Disabled
+                                         }).FirstOrDefault();
 
                 if (DataCallInfoDtoResult == null)
                 {
@@ -896,7 +896,7 @@ namespace Logqso.Repository.Repository
                     StationNamestype StationNamestype = new StationNamestype(0, "ALL");
                     DataCallInfoDtoResult.StationNames.Add(StationNamestype);
                     //fixup SelectedStationName
-                    StationNamestype = DataCallInfoDtoResult.StationNames.Where(p=>p.value == DataCallInfoDtoResult.SelectedStationName).FirstOrDefault();
+                    StationNamestype = DataCallInfoDtoResult.StationNames.Where(p => p.value == DataCallInfoDtoResult.SelectedStationName).FirstOrDefault();
                     if (StationNamestype == null)
                     {
                         DataCallInfoDtoResult.SelectedStationName = "ALL";
@@ -955,7 +955,7 @@ namespace Logqso.Repository.Repository
                                 break;
                         }
                         DataCallInfoDtoResult.RadioNames = Validnames;
-                        RadioNamestype RadioNamestype  = DataCallInfoDtoResult.RadioNames.Where(p => p.value == Enum.GetName(typeof(QsoRadioTypeEnum), DataCallInfoDtoResult.QsoRadioType)).FirstOrDefault();
+                        RadioNamestype RadioNamestype = DataCallInfoDtoResult.RadioNames.Where(p => p.value == Enum.GetName(typeof(QsoRadioTypeEnum), DataCallInfoDtoResult.QsoRadioType)).FirstOrDefault();
                         if (RadioNamestype == null)
                         {
                             DataCallInfoDtoResult.QsoRadioType = QsoRadioTypeEnum.ALL;
@@ -975,13 +975,180 @@ namespace Logqso.Repository.Repository
             return Task.FromResult(DataCallInfoDtoResult);
         }
 
+
+        public static async Task<LogPageDTO> GetContestLogsAsync(this IRepositoryAsync<Log> LogRepository, LogCtlDataSettingsDto LogCtlDataSettingsDto, string username)
+        {
+            return await GetContestLogs(LogRepository, LogCtlDataSettingsDto, username);
+        }
+
+        public static Task<LogPageDTO> GetContestLogs(this IRepositoryAsync<Log> _LogRepository, LogCtlDataSettingsDto LogCtlDataSettingsDto, string username)
+        {
+            LogPageDTO LogPageDTO = null;
+
+            var LogRepository = _LogRepository.GetRepository<Log>();
+            var CallSignRepository = LogRepository.GetRepository<CallSign>();
+            IQueryFluent<CallSign> CallSigns = CallSignRepository.Query();
+            var CallSignQ = CallSigns.SelectQueryable(true);
+
+            var QsoRepository = LogRepository.GetRepository<Qso>();
+            IQueryFluent<Qso> Qsos = QsoRepository.Query();
+            var QsoQ = Qsos.SelectQueryable(true);
+
+            var UniqueRepository = LogRepository.GetRepository<UbnUnique>();
+            IQueryFluent<UbnUnique> Uniques = UniqueRepository.Query();
+            var UniquesQ = Uniques.SelectQueryable(true);
+
+            var BadRepository = LogRepository.GetRepository<UbnIncorrectCall>(); //not in log
+            IQueryFluent<UbnIncorrectCall> Bads = BadRepository.Query();
+            var BadQ = Bads.SelectQueryable(true);
+
+            var NilRepository = LogRepository.GetRepository<UbnNotInLog>(); //not in log
+            IQueryFluent<UbnNotInLog> Nils = NilRepository.Query();
+            var NilQ = Nils.SelectQueryable(true);
+
+            var DupeRepository = LogRepository.GetRepository<UbnDupe>();
+            IQueryFluent<UbnDupe> Dupes = DupeRepository.Query();
+            var DupesQ = Dupes.SelectQueryable(true);
+
+            var XchgRepository = LogRepository.GetRepository<UbnIncorrectExchange>();
+            IQueryFluent<UbnIncorrectExchange> Xchngs = XchgRepository.Query();
+            var XchgsQ = Xchngs.SelectQueryable(true);
+            try
+            {
+                var logid = LogCtlDataSettingsDto.DataCallInfoDtos[0].LogId;
+                var temp2 = from lq in QsoQ
+                            .Where(x => x.LogId == logid)
+                            from lu in UniquesQ
+                                    .Where(x => x.QsoNo == lq.QsoNo)
+                                    .Where(x => x.LogId == lq.LogId)
+                            //.DefaultIfEmpty()
+                            select lu into luq
+                            select luq;
+                var t2 = temp2.ToList();
+
+                var temp3 = from lq1 in QsoQ
+                    .Where(x => x.LogId == logid).OrderBy(x => x.QsoDateTime).ThenBy(x => x.QsoNo)
+                            from lc in CallSignQ
+                         .Where(x => x.CallSignId == lq1.CallsignId)
+                            select new LogPageRecord
+                               {
+                                   Cal1 = lc.Call,
+                                   Freq = (short)lq1.Frequency,
+                                   C = lq1.QCtyMult,
+                                   Z = lq1.QZoneMult,
+                                   P = lq1.QPrefixMult,
+                                   //U = luq.QsoNo == lq1.QsoNo,
+                                   //B = lb.QsoNo == lq.QsoNo || lx.QsoNo == lq.QsoNo,
+                                   //N = ln.QsoNo == lq.QsoNo,
+                                   //D = ld.QsoNo == lq.QsoNo,
+                                   //X = lx.QsoNo == lq.QsoNo,
+                                   R = lq1.QsoRadioTypeEnum,
+                                   S = lq1.StationName
+                               };
+                var t3 = temp3.ToList();
+
+
+
+                var temp = from lq in QsoQ
+                              .Where(x => x.LogId == logid)
+                           from lu in UniquesQ
+                                   .Where(x => x.QsoNo == lq.QsoNo)  
+                                   .Where(x => x.LogId == lq.LogId)
+                           //.DefaultIfEmpty()
+                           select lu into luq
+
+                           //join lu in UniquesQ on lq.LogId equals lu.LogId
+                           from lq1 in QsoQ
+             .Where(x => x.LogId == logid).OrderBy(x => x.QsoDateTime).ThenBy(x => x.QsoNo)
+                           from lc in CallSignQ
+                        .Where(x => x.CallSignId == lq1.CallsignId)
+                           select new LogPageRecord
+                              {
+                                  Cal1 = lc.Call,
+                                  Freq = (short)lq1.Frequency,
+                                  C = lq1.QCtyMult,
+                                  Z = lq1.QZoneMult,
+                                  P = lq1.QPrefixMult,
+                                  U = luq.QsoNo == lq1.QsoNo,
+                                  //B = lb.QsoNo == lq.QsoNo || lx.QsoNo == lq.QsoNo,
+                                  //N = ln.QsoNo == lq.QsoNo,
+                                  //D = ld.QsoNo == lq.QsoNo,
+                                  //X = lx.QsoNo == lq.QsoNo,
+                                  R = lq1.QsoRadioTypeEnum,
+                                  S = lq1.StationName
+                              };
+                var t = temp.ToList();
+
+                //var temp = from lq in QsoQ
+                //              .Where(x => x.LogId == logid) 
+                //              select lq into lqq
+                //           from lu in UniquesQ
+                //               .Where(x => x.QsoNo == lqq.QsoNo)
+                //               .Where(x => x.LogId == lqq.LogId)
+                //           //select lu into luq
+
+                //           from lb in BadQ
+                //           .Where(x => x.QsoNo == lqq.QsoNo)
+                //           .Where(y => y.LogId == lqq.LogId)
+                //           //select lb into lbq
+                //           select lu into luq
+
+
+                //           //.DefaultIfEmpty()
+                //           //from lq in QsoQ
+                //           //   .Where(x => x.LogId == logid)
+                //           //from lb in BadQ
+                //           //.Where(x => x.QsoNo == lq.QsoNo)
+                //           //.Where(y => y.LogId == lq.LogId)
+                //           //select lb into lbq
+
+                //           //join lu in UniquesQ on lq.LogId equals lu.LogId
+                //           from lq1 in QsoQ
+                //             .Where(x => x.LogId == logid).OrderBy(x => x.QsoDateTime).ThenBy(x => x.QsoNo)
+                //           from lc in CallSignQ
+                //        .Where(x => x.CallSignId == lq1.CallsignId)
+                //           select new LogPageRecord
+                //              {
+                //                  QsoDateTime = lq1.QsoDateTime,
+                //                  QsoNo = lq1.QsoNo,
+                //                  Cal1 = lc.Call,
+                //                  Freq = (short)lq1.Frequency,
+                //                  C = lq1.QCtyMult,
+                //                  Z = lq1.QZoneMult,
+                //                  P = lq1.QPrefixMult,
+                //                  U = luq.QsoNo == lq1.QsoNo,
+                //                  //B = lb.QsoNo == lq1.QsoNo ,//|| lx.QsoNo == lq.QsoNo,
+                //                  //N = ln.QsoNo == lq.QsoNo,
+                //                  //D = ld.QsoNo == lq.QsoNo,
+                //                  //X = lx.QsoNo == lq.QsoNo,
+                //                  R = lq1.QsoRadioTypeEnum,
+                //                  S = lq1.StationName
+                //              };
+                //List<LogPageRecord> LogPageRecords1 = temp.ToList();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            LogPageDTO = new mvc.Dto.LogData.LogPageDTO()
+            {
+            };
+
+
+
+            return Task.FromResult(LogPageDTO);
+        }
+
+
     }
 
 
-        public class test9
-        {
-            string key;
-            string value;
-        };
+    public class test9
+    {
+        string key;
+        string value;
+    };
 
 }
