@@ -27,8 +27,16 @@ namespace   Logqso.mvc.domain.test.IntegrationTests
             {
                 SqlConnection.ClearPool(connection); //clears SSMS connection
                 var server = new Server(new ServerConnection(connection));
-                
-                server.ConnectionContext.ExecuteNonQuery(script);
+
+                try
+                {
+                    server.ConnectionContext.ExecuteNonQuery(script);
+                }
+                catch (Exception ex)
+                {
+                    connection.Dispose();
+                    throw;
+                }
             }
         }
         //public void CloseAllSQLConnections(string Connection)()

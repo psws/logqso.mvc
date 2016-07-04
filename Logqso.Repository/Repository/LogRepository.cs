@@ -17,6 +17,7 @@ using Repository.Pattern.DataContext;
 using System.Linq.Dynamic;
 using Logqso.mvc.Dto.Chart;
 using System.Collections.ObjectModel;
+using System.Data.Entity.Infrastructure;
 
 namespace Logqso.Repository.Repository
 {
@@ -1013,71 +1014,198 @@ namespace Logqso.Repository.Repository
             var XchgRepository = LogRepository.GetRepository<UbnIncorrectExchange>();
             IQueryFluent<UbnIncorrectExchange> Xchngs = XchgRepository.Query();
             var XchgsQ = Xchngs.SelectQueryable(true);
+
+        //https://msdn.microsoft.com/en-us/data/jj691402.aspx
+            DbContext DbContext = QsoRepository.GetDbContext() as DbContext;
+            var command = DbContext.Database.Connection.CreateCommand();
+            command.CommandText = string.Format("EXEC [dbo].[CQD_sp_GetContestLogs] @Logid1 = {0}, @Logid2 = {1}, @Logid3 = {2} ",
+                LogCtlDataSettingsDto.DataCallInfoDtos[0].LogId,
+                LogCtlDataSettingsDto.DataCallInfoDtos[1].LogId,
+                LogCtlDataSettingsDto.DataCallInfoDtos[2].LogId);
+
+            List<LogPageRecord> LogPageRecords;
+            List<LogPageUBNRecord> LogPageUniqueRecords;
+            List<LogPageUBNRecord> LogPageNileRecords;
+            List<LogPageUBNRecord> LogPageDupeRecords;
+            List<LogPageUbnIncorrectCallRecord> LogPageUbnIncorrectCallRecords;
+            List<LogPageUbnIncorrectExchangeRecord> LogPageUbnIncorrectExchangeRecords;
+            int LogPageRecords1Count = 0;
+            int LogPageRecords2Count = 0;
+            int LogPageRecords3Count = 0;
             try
             {
-                var logid = LogCtlDataSettingsDto.DataCallInfoDtos[0].LogId;
-                var temp2 = from lq in QsoQ
-                            .Where(x => x.LogId == logid)
-                            from lu in UniquesQ
-                                    .Where(x => x.QsoNo == lq.QsoNo)
-                                    .Where(x => x.LogId == lq.LogId)
-                            //.DefaultIfEmpty()
-                            select lu into luq
-                            select luq;
-                var t2 = temp2.ToList();
+                DbContext.Database.Connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    LogPageRecords =
+                        ((IObjectContextAdapter)DbContext)
+                            .ObjectContext
+                            .Translate<LogPageRecord>(reader)
+                            .ToList();
 
-                var temp3 = from lq1 in QsoQ
-                    .Where(x => x.LogId == logid).OrderBy(x => x.QsoDateTime).ThenBy(x => x.QsoNo)
-                            from lc in CallSignQ
-                         .Where(x => x.CallSignId == lq1.CallsignId)
-                            select new LogPageRecord
-                               {
-                                   Cal1 = lc.Call,
-                                   Freq = (short)lq1.Frequency,
-                                   C = lq1.QCtyMult,
-                                   Z = lq1.QZoneMult,
-                                   P = lq1.QPrefixMult,
-                                   //U = luq.QsoNo == lq1.QsoNo,
-                                   //B = lb.QsoNo == lq.QsoNo || lx.QsoNo == lq.QsoNo,
-                                   //N = ln.QsoNo == lq.QsoNo,
-                                   //D = ld.QsoNo == lq.QsoNo,
-                                   //X = lx.QsoNo == lq.QsoNo,
-                                   R = lq1.QsoRadioTypeEnum,
-                                   S = lq1.StationName
-                               };
-                var t3 = temp3.ToList();
+                    reader.NextResult();
+
+                    LogPageUniqueRecords =
+                        ((IObjectContextAdapter)DbContext)
+                            .ObjectContext
+                            .Translate<LogPageUBNRecord>(reader)
+                            .ToList();
+
+                    reader.NextResult();
+
+                    LogPageNileRecords =
+                        ((IObjectContextAdapter)DbContext)
+                            .ObjectContext
+                            .Translate<LogPageUBNRecord>(reader)
+                            .ToList();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                    
+                throw;
+            }
+            finally
+            {
+                DbContext.Database.Connection.Close();
+            }
 
 
 
-                var temp = from lq in QsoQ
-                              .Where(x => x.LogId == logid)
-                           from lu in UniquesQ
-                                   .Where(x => x.QsoNo == lq.QsoNo)  
-                                   .Where(x => x.LogId == lq.LogId)
-                           //.DefaultIfEmpty()
-                           select lu into luq
+             LogPageDTO = new mvc.Dto.LogData.LogPageDTO()
+             {
+             };
 
-                           //join lu in UniquesQ on lq.LogId equals lu.LogId
-                           from lq1 in QsoQ
-             .Where(x => x.LogId == logid).OrderBy(x => x.QsoDateTime).ThenBy(x => x.QsoNo)
-                           from lc in CallSignQ
-                        .Where(x => x.CallSignId == lq1.CallsignId)
-                           select new LogPageRecord
-                              {
-                                  Cal1 = lc.Call,
-                                  Freq = (short)lq1.Frequency,
-                                  C = lq1.QCtyMult,
-                                  Z = lq1.QZoneMult,
-                                  P = lq1.QPrefixMult,
-                                  U = luq.QsoNo == lq1.QsoNo,
-                                  //B = lb.QsoNo == lq.QsoNo || lx.QsoNo == lq.QsoNo,
-                                  //N = ln.QsoNo == lq.QsoNo,
-                                  //D = ld.QsoNo == lq.QsoNo,
-                                  //X = lx.QsoNo == lq.QsoNo,
-                                  R = lq1.QsoRadioTypeEnum,
-                                  S = lq1.StationName
-                              };
-                var t = temp.ToList();
+#if false
+            try
+            {
+                var logid1 = LogCtlDataSettingsDto.DataCallInfoDtos[0].LogId;
+                var logid2 = LogCtlDataSettingsDto.DataCallInfoDtos[1].LogId;
+                var logid3 = LogCtlDataSettingsDto.DataCallInfoDtos[2].LogId;
+                var LogPageRecordDTO = (from lqq in QsoQ
+                                        select new 
+                                       {
+                                            Call1 = (from lq in QsoQ
+                                                join lc in CallSignQ on lqq.CallsignId equals lc.CallSignId
+                                                where lq.LogId == logid1
+                                                select new LogPageRecord
+                                                   {
+                                                       logId = lq.LogId,
+                                                       QsoDateTime = lq.QsoDateTime,
+                                                       QsoNo = lq.QsoNo,
+                                                       Call = lc.Call,
+                                                       Freq = (short)lq.Frequency,
+                                                       C = lq.QCtyMult,
+                                                       Z = lq.QZoneMult,
+                                                       P = lq.QPrefixMult,
+                                                       //U = luq.QsoNo == lq1.QsoNo,
+                                                       //B = lb.QsoNo == lq.QsoNo || lx.QsoNo == lq.QsoNo,
+                                                       //N = ln.QsoNo == lq.QsoNo,
+                                                       //D = ld.QsoNo == lq.QsoNo,
+                                                       //X = lx.QsoNo == lq.QsoNo,
+                                                       R = lq.QsoRadioTypeEnum,
+                                                       S = lq.StationName
+                                                   })//,
+                                             //Call2 = (from lq in QsoQ
+                                             //   join lc in CallSignQ on lq.CallsignId equals lc.CallSignId
+                                             //   where lq.LogId == logid2
+                                             //   select new LogPageRecord
+                                             //      {
+                                             //          QsoDateTime = lq.QsoDateTime,
+                                             //          QsoNo = lq.QsoNo,
+                                             //          Call = lc.Call,
+                                             //          Freq = (short)lq.Frequency,
+                                             //          C = lq.QCtyMult,
+                                             //          Z = lq.QZoneMult,
+                                             //          P = lq.QPrefixMult,
+                                             //          //U = luq.QsoNo == lq1.QsoNo,
+                                             //          //B = lb.QsoNo == lq.QsoNo || lx.QsoNo == lq.QsoNo,
+                                             //          //N = ln.QsoNo == lq.QsoNo,
+                                             //          //D = ld.QsoNo == lq.QsoNo,
+                                             //          //X = lx.QsoNo == lq.QsoNo,
+                                             //          R = lq.QsoRadioTypeEnum,
+                                             //          S = lq.StationName
+                                             //      }),
+                                             //Call3 = (from lq in QsoQ
+                                             //   join lc in CallSignQ on lq.CallsignId equals lc.CallSignId
+                                             //   where lq.LogId == logid3
+                                             //   select new LogPageRecord
+                                             //      {
+                                             //          QsoDateTime = lq.QsoDateTime,
+                                             //          QsoNo = lq.QsoNo,
+                                             //          Call = lc.Call,
+                                             //          Freq = (short)lq.Frequency,
+                                             //          C = lq.QCtyMult,
+                                             //          Z = lq.QZoneMult,
+                                             //          P = lq.QPrefixMult,
+                                             //          //U = luq.QsoNo == lq1.QsoNo,
+                                             //          //B = lb.QsoNo == lq.QsoNo || lx.QsoNo == lq.QsoNo,
+                                             //          //N = ln.QsoNo == lq.QsoNo,
+                                             //          //D = ld.QsoNo == lq.QsoNo,
+                                             //          //X = lx.QsoNo == lq.QsoNo,
+                                             //          R = lq.QsoRadioTypeEnum,
+                                             //          S = lq.StationName
+                                             //      }),
+
+
+                                       }).ToList();
+
+
+                //var Call1 = (from lq in QsoQ
+                //            join lc in CallSignQ on lq.CallsignId equals lc.CallSignId
+                //            where lq.LogId == logid
+                //            select new LogPageRecord
+                //               {
+                //                   Call = lc.Call,
+                //                   Freq = (short)lq.Frequency,
+                //                   C = lq.QCtyMult,
+                //                   Z = lq.QZoneMult,
+                //                   P = lq.QPrefixMult,
+                //                   //U = luq.QsoNo == lq1.QsoNo,
+                //                   //B = lb.QsoNo == lq.QsoNo || lx.QsoNo == lq.QsoNo,
+                //                   //N = ln.QsoNo == lq.QsoNo,
+                //                   //D = ld.QsoNo == lq.QsoNo,
+                //                   //X = lx.QsoNo == lq.QsoNo,
+                //                   R = lq.QsoRadioTypeEnum,
+                //                   S = lq.StationName
+                //               }).ToList(),
+
+                //var t3 = temp3.ToList();
+
+
+
+             //   var temp = from lq in QsoQ
+             //                 .Where(x => x.LogId == logid)
+             //              from lu in UniquesQ
+             //                      .Where(x => x.QsoNo == lq.QsoNo)  
+             //                      .Where(x => x.LogId == lq.LogId)
+             //              //.DefaultIfEmpty()
+             //              select lu into luq
+
+             //              //join lu in UniquesQ on lq.LogId equals lu.LogId
+             //              from lq1 in QsoQ
+             //.Where(x => x.LogId == logid).OrderBy(x => x.QsoDateTime).ThenBy(x => x.QsoNo)
+             //              from lc in CallSignQ
+             //           .Where(x => x.CallSignId == lq1.CallsignId)
+             //              select new LogPageRecord
+             //                 {
+             //                    QsoDateTime = lq1.QsoDateTime,
+             //                     QsoNo = lq1.QsoNo,
+             //                     Call = lc.Call,
+             //                     Freq = (short)lq1.Frequency,
+             //                     C = lq1.QCtyMult,
+             //                     Z = lq1.QZoneMult,
+             //                     P = lq1.QPrefixMult,
+             //                     U = luq.QsoNo == lq1.QsoNo,
+             //                     //B = lb.QsoNo == lq.QsoNo || lx.QsoNo == lq.QsoNo,
+             //                     //N = ln.QsoNo == lq.QsoNo,
+             //                     //D = ld.QsoNo == lq.QsoNo,
+             //                     //X = lx.QsoNo == lq.QsoNo,
+             //                     R = lq1.QsoRadioTypeEnum,
+             //                     S = lq1.StationName
+             //                 };
+             //   var t = temp.ToList();
 
                 //var temp = from lq in QsoQ
                 //              .Where(x => x.LogId == logid) 
@@ -1132,13 +1260,11 @@ namespace Logqso.Repository.Repository
                 throw;
             }
 
-            LogPageDTO = new mvc.Dto.LogData.LogPageDTO()
-            {
-            };
+#endif
 
 
 
-            return Task.FromResult(LogPageDTO);
+             return Task.FromResult(LogPageDTO);
         }
 
 

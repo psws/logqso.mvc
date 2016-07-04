@@ -197,6 +197,9 @@
     <Content Include="SQL\Contestqso SQL 2014 to 2012script.sql" />
     <Content Include="SQL\ContestqsoData SQL 2014 to 2012script Data No Qso.sql" />
     <Content Include="SQL\ContestqsoData SQL 2014 to 2012script Shema.sql" />
+    <Content Include="SQL\CQD_GetContestLogsUBN.sql" />
+    <Content Include="SQL\CQD_sp_GetContestLogs.sql" />
+    <Content Include="SQL\CQD_sp_GetContestLogsUBN.sql" />
     <Content Include="SQL\EF6 query for _C_ and CQWWSSB2014 calls.sql" />
     <Content Include="SQL\QSOQuery test.sql" />
   </ItemGroup>
