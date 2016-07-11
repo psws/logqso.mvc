@@ -1,0 +1,7 @@
+﻿In Visual Studio 2012, there is no icon. Instead, there is a 
+link in the test results called "Output". If you click on the link, you see all of the writelines.
+
+geez, that "Output" link is intrinsically hard to find. If anyone is struggling to find it, it's in the Text Explorer, bottom section. 
+When a test is selected, it shows you the result with "Elapsed time: xxx". Below that is the "Output" link
+
+I think you need to be in debug

@@ -1,0 +1,11 @@
+﻿
+you must have TASK as return type for Test Explorer to auto diszcover the tests.
+
+http://caffeineoncode.com/2012/12/async-unit-tests-in-visual-studio-2012/
+So what gives?
+
+It turns out that if you want to unit test an asynchronous method, it needs to return a “Task” object. There are no warnings from Visual Studio. You’re just supposed to “know.”
+
+        [TestMethod]
+        public async Task WebApi_52DataController_v1__52card_ActionResult_Bridge_NoCards_returns_ViewResult()
+        {

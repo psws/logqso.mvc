@@ -1022,10 +1022,19 @@ namespace Logqso.Repository.Repository
                 LogCtlDataSettingsDto.DataCallInfoDtos[0].LogId,
                 LogCtlDataSettingsDto.DataCallInfoDtos[1].LogId,
                 LogCtlDataSettingsDto.DataCallInfoDtos[2].LogId);
+            //append Log filter, SQl defaults null if not specified
+                 //@FreqLow decimal,
+                 //@FreqHigh decimal,
+                 //@ContinentEnum int,
+                 //@Country varchar(10),
+                 //@Zone smallint,
+            //Append Log X-Axus
+                 //@StartTime datetime,
+                 //@Endtime datetime
 
             List<LogPageRecord> LogPageRecords;
             List<LogPageUBNRecord> LogPageUniqueRecords;
-            List<LogPageUBNRecord> LogPageNileRecords;
+            List<LogPageUBNRecord> LogPageNilRecords;
             List<LogPageUBNRecord> LogPageDupeRecords;
             List<LogPageUbnIncorrectCallRecord> LogPageUbnIncorrectCallRecords;
             List<LogPageUbnIncorrectExchangeRecord> LogPageUbnIncorrectExchangeRecords;
@@ -1053,11 +1062,36 @@ namespace Logqso.Repository.Repository
 
                     reader.NextResult();
 
-                    LogPageNileRecords =
+                    LogPageNilRecords =
                         ((IObjectContextAdapter)DbContext)
                             .ObjectContext
                             .Translate<LogPageUBNRecord>(reader)
                             .ToList();
+
+                    reader.NextResult();
+
+                    LogPageDupeRecords =
+                        ((IObjectContextAdapter)DbContext)
+                            .ObjectContext
+                            .Translate<LogPageUBNRecord>(reader)
+                            .ToList();
+
+                    reader.NextResult();
+
+                    LogPageUbnIncorrectCallRecords =
+                        ((IObjectContextAdapter)DbContext)
+                            .ObjectContext
+                            .Translate<LogPageUbnIncorrectCallRecord>(reader)
+                            .ToList();
+
+                    reader.NextResult();
+
+                    LogPageUbnIncorrectExchangeRecords =
+                        ((IObjectContextAdapter)DbContext)
+                            .ObjectContext
+                            .Translate<LogPageUbnIncorrectExchangeRecord>(reader)
+                            .ToList();
+
                 }
 
             }

@@ -11,7 +11,27 @@ namespace Logqso.mvc.ui
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+  
+            // <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.min.js"></script>
+            //<script>
+            //    // Fallback to loading jQuery from a local path if the CDN is unavailable
+            //    (window.jQuery || document.write('<script src="/scripts/jquery-1.9.0.min.js"><\/script>'));
+            //</script>
+                //or
+            //bundles.UseCdn = true;
+            //bundles.Add(new ScriptBundle("~/bundles/jquery",
+            //@"//ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.3.js"
+            //).Include(
+            // "~/Scripts/jquery-{version}.js"));
+
+           //bundles.UseCdn = true;
+           //bundles.Add(new ScriptBundle("~/bundles/jquery",
+           // @"//ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.3.js").Include(
+           // "~/Scripts/jquery-{version}.js",
+           // "~/Scripts/jquery-ui-{version}.js"));
+
+
+           bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js",
                         "~/Scripts/jquery-ui-{version}.js"));
 
@@ -45,6 +65,7 @@ namespace Logqso.mvc.ui
                        "~/Content/themes/jqx.base.css",
                       "~/Content/themes/jqx.energyblue.css",
                         "~/Content/logqso.css"));
+
 
 
             //turns off bundle minimzations when webconfig compilation debug="false"

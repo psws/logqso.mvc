@@ -77,7 +77,7 @@ namespace Logqso.WebApi
         {
             string Username = Logqso.mvc.common.definitions.Username;
 
-            bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+            bool val1 = (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
             if (val1)
             {
                 Username = System.Web.HttpContext.Current.User.Identity.Name;   
@@ -103,7 +103,7 @@ namespace Logqso.WebApi
         public async Task<IHttpActionResult> GetControlSelection(string Selection)
         {
             string Username = Logqso.mvc.common.definitions.Username;
-            bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+            bool val1 = (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
             if (val1)
             {
                 Username = System.Web.HttpContext.Current.User.Identity.Name;
@@ -147,7 +147,7 @@ namespace Logqso.WebApi
         public async Task<IHttpActionResult> SendControlSelections(ContestControlSettingsDto ContestControlSettingsDto)
         {
             string Username = Logqso.mvc.common.definitions.Username;
-            bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+            bool val1 = (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
             if (val1)
             {
                 Username = System.Web.HttpContext.Current.User.Identity.Name;
