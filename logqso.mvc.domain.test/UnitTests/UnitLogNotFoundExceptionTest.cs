@@ -132,7 +132,7 @@ namespace Logqso.mvc.domain.test.UnitTests
                 e = (LogNotFoundException)formatter.Deserialize(s);
             }
 
-            Assert.AreEqual<int>(e.LogID, LogId);
+            Assert.AreEqual<int>(LogId, e.LogID);
         }
 
 

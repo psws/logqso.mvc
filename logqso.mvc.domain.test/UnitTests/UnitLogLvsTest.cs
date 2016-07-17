@@ -59,9 +59,9 @@ namespace Logqso.mvc.domain.test.UnitTests
 
            Logqso.mvc.Entities.LogDataEntity.Log  LogEntity = logService.GetByID(LogId);
            Assert.IsInstanceOfType(LogEntity, typeof( Logqso.mvc.Entities.LogDataEntity.Log));
-           Assert.AreEqual(LogEntity.LogId, LogId);
+           Assert.AreEqual(  LogId, LogEntity.LogId);
            Assert.IsInstanceOfType(LogEntity.ContestYear, typeof(DateTime));
-           Assert.AreEqual(LogEntity.ContestYear.Year, DateTime.Now.Year);
+           Assert.AreEqual( DateTime.Now.Year, LogEntity.ContestYear.Year);
 
         }
 

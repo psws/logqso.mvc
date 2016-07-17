@@ -81,7 +81,7 @@ namespace Logqso.mvc.domain.test.UnitTests
             Qso newQso = _qsoService.CreateQso(LogEntity.LogId);
             //assert
             Assert.IsInstanceOfType(newQso, typeof(Qso));
-            Assert.AreEqual(newQso.LogId, LogEntity.LogId);
+            Assert.AreEqual(LogEntity.LogId, newQso.LogId);
         }
     }
 }

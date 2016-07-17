@@ -130,7 +130,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsFalse(caught);  //exception
                 Assert.IsNotNull(ChartQsoRateDTOList);
                 Assert.IsInstanceOfType(ChartQsoRateDTOList, typeof(List<ChartQsoRateDTO>));
-                Assert.AreEqual(ChartQsoRateDTOList.Count, 1);
+                Assert.AreEqual(1,ChartQsoRateDTOList.Count );
                 Assert.IsNotNull(ChartQsoRateDTOList[0].IntvTime == DateTime.Parse("10/26/2002 00:00") );
                 Assert.IsNotNull(ChartQsoRateDTOList[0].N == 2);
 

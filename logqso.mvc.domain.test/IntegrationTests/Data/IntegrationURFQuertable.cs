@@ -60,7 +60,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsFalse(caught);  //exception
                 Assert.IsNotNull(callis);
                 Assert.IsInstanceOfType(callis, typeof(List<CallInfo> ) );
-                Assert.AreEqual(callis.Count, 3);
+                Assert.AreEqual(3, callis.Count );
                 Assert.IsNotNull(callis[0].CallSign);
                 Assert.IsNotNull(callis[0].Station);
 
@@ -93,10 +93,10 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsFalse(caught);  //exception
                 Assert.IsNotNull(CallInfo1);
                 Assert.IsInstanceOfType(CallInfo1, typeof(IQueryable<CallInfo>));
-                Assert.AreEqual(callis.Count, 3);
+                Assert.AreEqual(3, callis.Count );
                 //check if tracked
                 //Assert.AreEqual(CallInfo1.Where(z=>z.CallGroup == (int)CallGroupEnum.CALL1).Select(x=>x.CallsignId).SingleOrDefault().))
-                Assert.AreEqual(callis[0].ObjectState, Infrastructure.ObjectState.Unchanged);
+                Assert.AreEqual(Infrastructure.ObjectState.Unchanged, callis[0].ObjectState);
                 Assert.IsNull(callis[0].CallSign);
                 Assert.IsNotNull(callis[0].Station);
                Assert.IsTrue(_CallinfoRepository.GetEntityTrackingState(callis[0]));  
@@ -131,9 +131,9 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsFalse(caught);  //exception
                 Assert.IsNotNull(CallInfo1);
                 Assert.IsInstanceOfType(CallInfo1, typeof(IQueryable<CallInfo>));
-                Assert.AreEqual(callis.Count, 3);
+                Assert.AreEqual(3, callis.Count );
                 //check if tracked
-                Assert.AreEqual(callis[0].ObjectState, Infrastructure.ObjectState.Unchanged);
+                Assert.AreEqual(Infrastructure.ObjectState.Unchanged, callis[0].ObjectState);
                 Assert.IsNull(callis[0].CallSign);
                 Assert.IsNotNull(callis[0].Station);
                 //check if tracked
@@ -171,7 +171,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsFalse(caught);  //exception
                 Assert.IsNotNull(callis);
                 Assert.IsInstanceOfType(callis, typeof(List<CallInfo> ) );
-                Assert.AreEqual(callis.Count, 3);
+                Assert.AreEqual(3, callis.Count );
                 Assert.IsNotNull(callis[0].CallSign);
                 Assert.IsNotNull(callis[0].Station);
                 Assert.IsTrue(_CallinfoRepository.GetEntityTrackingState(callis[0]));  
@@ -270,7 +270,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsFalse(caught);  //exception
                 Assert.IsNotNull(DataCallInfoDtos);
                 Assert.IsInstanceOfType(DataCallInfoDtos, typeof(List<DataCallInfoDto>));
-                Assert.AreEqual(DataCallInfoDtos.Count, 3);
+                Assert.AreEqual(3, DataCallInfoDtos.Count );
                 Assert.IsNotNull(DataCallInfoDtos[0].StationNames);
                 Assert.IsNotNull(DataCallInfoDtos[0].ContestNames);
                 Assert.IsTrue(DataCallInfoDtos[0].ContestNames.Count >0);
@@ -369,7 +369,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsFalse(caught);  //exception
                 Assert.IsNotNull(DataCallInfoDtos);
                 Assert.IsInstanceOfType(DataCallInfoDtos, typeof(List<DataCallInfoDto>));
-                Assert.AreEqual(DataCallInfoDtos.Count, 3);
+                Assert.AreEqual(3, DataCallInfoDtos.Count );
                 Assert.IsNotNull(DataCallInfoDtos[0].StationNames);
                 Assert.IsNotNull(DataCallInfoDtos[0].ContestNames);
                 Assert.IsTrue(DataCallInfoDtos[0].ContestNames.Count > 0);

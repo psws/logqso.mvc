@@ -39,8 +39,8 @@ namespace Logqso.mvc.domain.test.UnitTests
             CallSign CallSign = _callSignService.GetCallSignID(Call);
 
             //Assert
-            Assert.AreEqual(CallSign.Call, Call);
-            Assert.AreEqual(CallSign.CallSignId, 1);
+            Assert.AreEqual( Call, CallSign.Call);
+            Assert.AreEqual( 1, CallSign.CallSignId);
         }
     }
 }

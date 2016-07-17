@@ -29,25 +29,22 @@ namespace Logqso.mvc.ui.Helpers
 
         public static MvcHtmlString TabViewInitialSelector(this HtmlHelper HtmlHelper)
         {
-            string TabView = "TabViewChart"; //default
+            string TabView = "0"; //default
             var value = HtmlHelper.ViewContext.HttpContext.Request.QueryString.Get("View");
             if (value == null)
             {
-                value = "0";
+                value = "1";
             }
-            else
+            switch (value)
             {
-                switch (value)
-                {
-                    case "0":
-                        TabView = "TabViewChart";
-                        break;
-                    case "1":
-                        TabView = "TabViewLog";
-                        break;
-                   default:
-                        break;
-                }
+                case "0":
+                    TabView = "0";
+                    break;
+                case "1":
+                    TabView = "1";
+                    break;
+                default:
+                    break;
             }
            // <input id="TabViewInit" type="hidden" value="TabViewChart" />
            var builder = new TagBuilder("input");

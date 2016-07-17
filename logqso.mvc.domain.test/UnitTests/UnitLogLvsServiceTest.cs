@@ -73,10 +73,10 @@ namespace Logqso.mvc.domain.test.UnitTests
             Logqso.mvc.Entities.LogDataEntity.Log  LogEntity = _logService.GetByID(LogId);
 
             //Assert
-            Assert.IsInstanceOfType(LogEntity, typeof( Logqso.mvc.Entities.LogDataEntity.Log));
-            Assert.AreEqual(LogEntity.LogId, LogId);
+            Assert.IsInstanceOfType(LogEntity, typeof( Logqso.mvc.Entities.LogDataEntity.Log)   );
+            Assert.AreEqual(LogId, LogEntity.LogId);
             Assert.IsInstanceOfType(LogEntity.ContestYear, typeof(DateTime));
-            Assert.AreEqual(LogEntity.ContestYear.Year, DateTime.Now.Year);
+            Assert.AreEqual( DateTime.Now.Year, LogEntity.ContestYear.Year);
         }
 
         //[TestMethod,ExpectedException(typeof(LogNotFoundException))]
@@ -126,7 +126,7 @@ namespace Logqso.mvc.domain.test.UnitTests
             IReadOnlyList<Logqso.mvc.Entities.LogDataEntity.Log> Logs = _logService.GetByYear(Year);
 
             Assert.IsInstanceOfType(Logs, typeof(IReadOnlyList<Logqso.mvc.Entities.LogDataEntity.Log>));
-            Assert.AreEqual(Logs.Count, 2);
+            Assert.AreEqual(2, Logs.Count );
             foreach (var item in Logs)
             {
                 Assert.AreEqual(item.ContestYear, Year);

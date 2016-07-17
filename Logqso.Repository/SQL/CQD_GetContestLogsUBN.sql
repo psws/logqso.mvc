@@ -1,10 +1,10 @@
 
 DECLARE @datetime datetime = '7/3/2016'
-DECLARE @D int
-IF DATENAME(weekday, @datetime) IN (N'Saturday')
-        SET @D = 1
-ELSE 
-		SET @D = 2
+--DECLARE @D int
+--IF DATENAME(weekday, @datetime) IN (N'Saturday')
+--        SET @D = 1
+--ELSE 
+--		SET @D = 2
 
 	--DECLARE @Logid1	int = 535;
 	--DECLARE @logid2	int = 537;
@@ -31,7 +31,7 @@ ELSE
     SET NOCOUNT ON
 	DECLARE @restore tinyint = @@DATEFIRST
 	SET DATEFIRST 6
-    Select  DATEPART(dw,q.[QsoDateTime]) as D, q.QsoDateTime as Time, 1 AS CGroup, q.QsoNo,q.LogId, c.Call, q.Frequency,
+    Select  DATEPART(dw,q.[QsoDateTime]) as W, q.QsoDateTime as Time, 1 AS CGroup, q.QsoNo,q.LogId, c.Call, q.Frequency as Freq,
 		q.QCtyMult as C, q.QZoneMult as Z, q.QPrefixMult as P, q.QsoRadioTypeEnum as R,
 		q.StationName as S
 	 From [dbo].[Qso] q
@@ -48,7 +48,7 @@ ELSE
 	 UNION ALL
     
 	
-    Select  DATEPART(dw,q.[QsoDateTime]) as D, q.QsoDateTime as Time, 2 AS CGroup, q.QsoNo,q.LogId, c.Call, q.Frequency,
+    Select  DATEPART(dw,q.[QsoDateTime]) as W, q.QsoDateTime as Time, 2 AS CGroup, q.QsoNo,q.LogId, c.Call, q.Frequency as Freq,
 		q.QCtyMult as C, q.QZoneMult as Z, q.QPrefixMult as P, q.QsoRadioTypeEnum as R,
 		q.StationName as S
 	 From [dbo].[Qso] q
@@ -64,7 +64,7 @@ ELSE
 	UNION ALL
 
 	
-    Select  DATEPART(dw,q.[QsoDateTime]) as D, q.QsoDateTime as Time, 3 AS CGroup, q.QsoNo,q.LogId, c.Call, q.Frequency,
+    Select  DATEPART(dw,q.[QsoDateTime]) as W, q.QsoDateTime as Time, 3 AS CGroup, q.QsoNo,q.LogId, c.Call, q.Frequency as Freq,
 		q.QCtyMult as C, q.QZoneMult as Z, q.QPrefixMult as P, q.QsoRadioTypeEnum as R,
 		q.StationName as S
 	 From [dbo].[Qso] q
@@ -93,7 +93,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
 	UNION ALL
@@ -107,7 +107,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
 	UNION ALL
@@ -122,7 +122,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
 	ORDER BY  q.QsoDateTime, CGroup, u.QsoNo
@@ -137,7 +137,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
@@ -150,7 +150,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
@@ -163,7 +163,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
 	ORDER BY  q.QsoDateTime, CGroup, n.QsoNo
@@ -178,7 +178,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
@@ -191,7 +191,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
@@ -204,7 +204,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
 	ORDER BY  q.QsoDateTime, CGroup, d.QsoNo
@@ -218,7 +218,7 @@ ELSE
 		 Where q.LogId = @Logid1 AND
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
-		((@Country is null) or (c.Prefix = @Country)) AND
+		((@Country is null) or (q.QsoExchangeNumber = @Country)) AND
 		((@Zone is null) or (c.Prefix = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
@@ -232,7 +232,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber= @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
@@ -245,7 +245,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
 	ORDER BY  q.QsoDateTime, CGroup, d.QsoNo
@@ -260,7 +260,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
@@ -273,7 +273,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber= @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
@@ -286,7 +286,7 @@ ELSE
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
 	ORDER BY  q.QsoDateTime, CGroup, d.QsoNo

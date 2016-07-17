@@ -76,9 +76,9 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsFalse(caught);  //exception
                 Assert.IsNotNull(Log1);
                 Assert.IsInstanceOfType(Log1, typeof(Logqso.mvc.Entities.LogDataEntity.Log));
-                Assert.AreEqual(Log1.LogId, LogId);
+                Assert.AreEqual( LogId, Log1.LogId );
                 Assert.IsInstanceOfType(Log1.ContestYear, typeof(DateTime));
-                Assert.AreEqual(Log1.CallsignId, 1);
+                Assert.AreEqual(1, Log1.CallsignId );
 
             }
         }
@@ -109,9 +109,9 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsFalse(caught);  //exception
                 Assert.IsNotNull(Log1);
                 Assert.IsInstanceOfType(Log1, typeof(Logqso.mvc.Entities.LogDataEntity.Log));
-                Assert.AreEqual(Log1.LogId, LogId);
+                Assert.AreEqual(LogId,Log1.LogId );
                 Assert.IsInstanceOfType(Log1.ContestYear, typeof(DateTime));
-                Assert.AreEqual(Log1.CallsignId, 1);
+                Assert.AreEqual(1,Log1.CallsignId );
 
             }
         }
@@ -151,18 +151,18 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsFalse(caught);  //exception
                 Assert.IsNotNull(Logtask);
                 Assert.IsInstanceOfType(Logtask, typeof(Logqso.mvc.Entities.LogDataEntity.Log));
-                Assert.AreEqual(Logtask.LogId, LogId);
+                Assert.AreEqual(LogId, Logtask.LogId );
                 Assert.IsInstanceOfType(Logtask.ContestYear, typeof(DateTime));
-                Assert.AreEqual(Logtask.CallsignId, 1);
+                Assert.AreEqual(1, Logtask.CallsignId );
                  Assert.IsNotNull(Logtask.LogCategory);
                  Assert.AreEqual(Logtask.LogCategory.CatBandEnum, (int)Logqso.mvc.common.Enum.CatBandEnum.ALL);
                 Assert.IsNotNull(Logtask.Qsoes);
 
-                Assert.AreEqual(Logtask.Qsoes.Count, 2);
+                Assert.AreEqual(2, Logtask.Qsoes.Count );
                 Assert.IsNotNull(Logtask.Stations);
-                Assert.AreEqual(Logtask.Stations.Count, 4);
+                Assert.AreEqual(4, Logtask.Stations.Count );
                 Assert.IsNotNull(Logtask.CallSign);
-                Assert.AreEqual(Logtask.CallSign.Call, "CN2R");
+                Assert.AreEqual( "CN2R", Logtask.CallSign.Call );
 
             }
         }

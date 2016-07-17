@@ -64,9 +64,9 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsFalse(caught);  //exception
                 Assert.IsNotNull(LogforId1);
                 Assert.IsInstanceOfType(LogforId1, typeof(Logqso.mvc.Entities.LogDataEntity.Log));
-                Assert.AreEqual(LogforId1.LogId, LogId);
+                Assert.AreEqual(LogId, LogforId1.LogId);
                 Assert.IsInstanceOfType(LogforId1.ContestYear, typeof(DateTime));
-                Assert.AreEqual(LogforId1.CallsignId, 1);
+                Assert.AreEqual( 1,LogforId1.CallsignId );
 
             }
         }
@@ -101,9 +101,9 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                 Assert.IsNotNull(LogforId1s);
                 Assert.IsTrue(LogforId1s.Count > 0);
                 Assert.IsInstanceOfType(LogforId1s[0], typeof(Logqso.mvc.Entities.LogDataEntity.Log));
-                Assert.AreEqual(LogforId1s[0].LogId, LogId);
+                Assert.AreEqual(LogId, LogforId1s[0].LogId );
                 Assert.IsInstanceOfType(LogforId1s[0].ContestYear, typeof(DateTime));
-                Assert.AreEqual(LogforId1s[0].CallsignId, 1);
+                Assert.AreEqual(1, LogforId1s[0].CallsignId );
                 Assert.IsNotNull(LogforId1s[0].LogCategory);
 
             }
@@ -141,10 +141,10 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                     Assert.IsInstanceOfType(Dtos[0].RadioNames, typeof(ICollection<RadioNamestype>));
                     Assert.IsInstanceOfType(Dtos[0].StationNames, typeof(ICollection<StationNamestype>));
                     Assert.IsInstanceOfType(Dtos[0].ContestNames, typeof(ICollection<ContestNamestype>));
-                    Assert.AreNotEqual(Dtos[0].SelectedCall, string.Empty);
+                    Assert.AreNotEqual( string.Empty, Dtos[0].SelectedCall);
                     var LogIDDto = Dtos.Where(x => x.LogId == 1).SingleOrDefault();
                     Assert.IsNotNull(LogIDDto);
-                    Assert.AreEqual(LogIDDto.LogId,1);
+                    Assert.AreEqual(1, LogIDDto.LogId );
                 }
                 catch (Exception ex)
                 {
@@ -187,10 +187,10 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                     Assert.IsInstanceOfType(Dtos[0].RadioNames, typeof(ICollection<RadioNamestype>));
                     Assert.IsInstanceOfType(Dtos[0].StationNames, typeof(ICollection<StationNamestype>));
                     Assert.IsInstanceOfType(Dtos[0].ContestNames, typeof(ICollection<ContestNamestype>));
-                    Assert.AreNotEqual(Dtos[0].SelectedCall, string.Empty);
+                    Assert.AreNotEqual(string.Empty, Dtos[0].SelectedCall );
                     var LogIDDto = Dtos.Where(x => x.LogId == 1).SingleOrDefault();
                     Assert.IsNotNull(LogIDDto);
-                    Assert.AreEqual(LogIDDto.LogId, 1);
+                    Assert.AreEqual(1, LogIDDto.LogId );
                 }
                 catch (Exception ex)
                 {
@@ -236,7 +236,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                     Assert.AreNotEqual(Dtos[0].SelectedCall, string.Empty);
                     var LogIDDto = Dtos.Where(x => x.LogId == 1).SingleOrDefault();
                     Assert.IsNotNull(LogIDDto);
-                    Assert.AreEqual(LogIDDto.LogId, 1);
+                    Assert.AreEqual(1, LogIDDto.LogId );
                 }
                 catch (Exception ex)
                 {
@@ -297,11 +297,11 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
 
                     Assert.IsNotNull(DataCalls);
                     Assert.IsInstanceOfType(DataCalls, typeof(DataCalls) );
-                    Assert.AreEqual(DataCalls.CallGroup, CallGroupEnum.CALL1 );
-                    Assert.AreEqual(DataCalls.SelectedCall, "C");
+                    Assert.AreEqual(CallGroupEnum.CALL1, DataCalls.CallGroup );
+                    Assert.AreEqual( "C", DataCalls.SelectedCall );
                     Assert.IsInstanceOfType(DataCalls.Calls, typeof(ICollection<CallGroupCall>));
-                    Assert.AreNotEqual(DataCalls.Calls.Count(), 0);
-                    Assert.AreEqual(DataCalls.Calls.ElementAt(0).Call.Substring(0,1), SelectedCall.Substring(0,1) );
+                    Assert.AreNotEqual(0, DataCalls.Calls.Count() );
+                    Assert.AreEqual( SelectedCall.Substring(0,1), DataCalls.Calls.ElementAt(0).Call.Substring(0,1) );
               }
                 catch (Exception ex)
                 {

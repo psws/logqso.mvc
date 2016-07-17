@@ -35,9 +35,15 @@ namespace Logqso.mvc.ui
                         "~/Scripts/jquery-{version}.js",
                         "~/Scripts/jquery-ui-{version}.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqgrid").Include(
-                        "~/Scripts/i18n/grid.locale-en.js",
-                       "~/Scripts/jquery.jqGrid.src.js"));
+            //bundles.Add(new ScriptBundle("~/bundles/jqgrid").Include(
+            //            "~/Scripts/i18n/grid.locale-en.js",
+            //           "~/Scripts/jquery.jqGrid.src.js"));
+
+            //issues with Postdata
+           bundles.Add(new ScriptBundle("~/bundles/jqgrid").Include(
+                        "~/Scripts/free-jqGrid/i18n/grid.locale-en.js",
+                       "~/Scripts/free-jqGrid/jquery.jqgrid.src.js"));
+           
             
             bundles.Add(new ScriptBundle("~/bundles/logqso").Include(
                         "~/Scripts/jqxcore.js",
