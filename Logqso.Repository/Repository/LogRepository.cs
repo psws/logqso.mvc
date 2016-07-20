@@ -261,6 +261,12 @@ namespace Logqso.Repository.Repository
 
             DataCalls DataCalls = new DataCalls();
             string CallChar = SelectedCall.Substring(0, 1);
+       
+
+            if ( (int)CallChar[0] >= 48 && (int)CallChar[0] <= 57)
+            {
+                CallChar = "1";
+            }
 
             var LogCategoryRepository = LogRepository.GetRepository<LogCategory>();
             IQueryFluent<LogCategory> LogCategorys = LogCategoryRepository.Query();
@@ -984,7 +990,12 @@ namespace Logqso.Repository.Repository
 
         public static Task<LogPageDTO> GetContestLogs(this IRepositoryAsync<Log> _LogRepository, LogCtlDataSettingsDto LogCtlDataSettingsDto, string username)
         {
-            LogPageDTO LogPageDTO = null;
+            LogPageDTO LogPageDTO = new mvc.Dto.LogData.LogPageDTO() {
+                    page = LogCtlDataSettingsDto.LogPageRequestDTO.page,
+                    records = new List<LogPageRecordDTO>(),
+                    rows = 0,
+                    total = 0
+                };
 
             var LogRepository = _LogRepository.GetRepository<Log>();
             var CallSignRepository = LogRepository.GetRepository<CallSign>();
@@ -1038,9 +1049,6 @@ namespace Logqso.Repository.Repository
             List<LogPageUBNRecord> LogPageDupeRecords;
             List<LogPageUbnIncorrectCallRecord> LogPageUbnIncorrectCallRecords;
             List<LogPageUbnIncorrectExchangeRecord> LogPageUbnIncorrectExchangeRecords;
-            int LogPageRecords1Count = 0;
-            int LogPageRecords2Count = 0;
-            int LogPageRecords3Count = 0;
             try
             {
                 DbContext.Database.Connection.Open();
@@ -1092,6 +1100,125 @@ namespace Logqso.Repository.Repository
                             .Translate<LogPageUbnIncorrectExchangeRecord>(reader)
                             .ToList();
 
+                    int DaysInContest = 2;
+                    int weekday = 1;
+                    int index = 0;
+                    int DayIndex = 0;
+
+                    for (int d = 1; d <= DaysInContest; d++, weekday++)
+                    {
+                        index = 0;
+                        //LogPageRecords = LogPageRecords.Where(x => x.W == day).OrderBy(x => x.Time).ToList();
+                        int size = LogPageRecords.Where(x => x.W == weekday).Count();
+
+                        while (size != 0 && index < size)
+                        {
+                            DateTime DateTimeCur = LogPageRecords.ElementAt(DayIndex).Time;
+                            byte  Day = (byte)LogPageRecords.ElementAt(DayIndex).W;
+                            int CGroupCur;
+                            List<LogPageRecord> LogPageRecordsCur = LogPageRecords.Where(x => x.W == weekday && x.Time == DateTimeCur)
+                                .OrderBy(x => x.Time)
+                                //.OrderBy(x => x.W).ThenBy(x => x.Time.Hour).ThenBy(x => x.Time.Minute)
+                                //.OrderBy(x => x.W).ThenBy(x => DbFunctions.CreateTime(x.Time.Hour, x.Time.Minute, x.Time.Second) )
+                                .ToList();
+                            index += LogPageRecordsCur.Count;
+                            DayIndex += LogPageRecordsCur.Count;
+                            LogPageRecord LogPageRecord1;
+                            LogPageRecord LogPageRecord2;
+                            LogPageRecord LogPageRecord3;
+
+                            List<LogPageRecord> LogPageRecords1 = LogPageRecordsCur.Where(x => x.CGroup == 1).ToList();
+                            List<LogPageRecord> LogPageRecords2 = LogPageRecordsCur.Where(x => x.CGroup == 2).ToList();
+                            List<LogPageRecord> LogPageRecords3 = LogPageRecordsCur.Where(x => x.CGroup == 3).ToList();
+
+                            int LogPageRecords1Count = LogPageRecords1.Count;
+                            int LogPageRecords2Count = LogPageRecords2.Count;
+                            int LogPageRecords3Count = LogPageRecords3.Count;
+                            int LogPageRecords1Index = -1;
+                            int LogPageRecords2Index = -1;
+                            int LogPageRecords3Index = -1;
+
+                            //fill in LogPageDTO
+
+
+                            while (LogPageRecords1Count != 0 || LogPageRecords2Count != 0 || LogPageRecords3Count != 0)
+                            {
+                                LogPageRecord LogPageRecord = LogPageRecordsCur.FirstOrDefault();
+                                CGroupCur = LogPageRecord.CGroup;
+
+                                LogPageRecordDTO LogPageRecordDTO = new LogPageRecordDTO()
+                                {
+                                    T = DateTimeCur.ToString("HH:mm"),
+                                    W = Day
+                                };
+
+                                if (CGroupCur == 1)
+                                {
+                                    LogPageRecordDTO.I1 = LogPageRecord.Call;
+                                    LogPageRecordDTO.F1 = (LogPageRecord.Freq == 0) ? string.Empty : ((short)LogPageRecord.Freq).ToString();
+                                    LogPageRecords1Index = (LogPageRecords1Index == -1) ? 0 : LogPageRecords1Index;
+                                    LogPageRecords1Index++;
+                                    LogPageRecords1Count--;
+                                    //remove from list
+                                    LogPageRecordsCur.Remove(LogPageRecord);
+
+                                    if (LogPageRecords2Count > 0)
+                                    {
+                                        LogPageRecords2Index = (LogPageRecords2Index == -1) ? 0 : LogPageRecords2Index;
+                                        LogPageRecord2 = LogPageRecords2.ElementAt(LogPageRecords2Index);
+                                        LogPageRecordDTO.I2 = LogPageRecord2.Call;
+                                        LogPageRecordDTO.F2 = (LogPageRecord2.Freq == 0) ? string.Empty : ((short)LogPageRecord2.Freq).ToString();
+                                        LogPageRecords2Index++;
+                                        LogPageRecords2Count--;
+                                        LogPageRecordsCur.Remove(LogPageRecord2);
+
+                                    }
+                                    if (LogPageRecords3Count > 0)
+                                    {
+                                        LogPageRecords3Index = (LogPageRecords3Index == -1) ? 0 : LogPageRecords3Index;
+                                        LogPageRecord3 = LogPageRecords3.ElementAt(LogPageRecords3Index);
+                                        LogPageRecordDTO.I3 = LogPageRecord3.Call;
+                                        LogPageRecordDTO.F3 = (LogPageRecord3.Freq == 0) ? string.Empty : ((short)LogPageRecord3.Freq).ToString();
+                                        LogPageRecords3Index++;
+                                        LogPageRecords3Count--;
+                                        LogPageRecordsCur.Remove(LogPageRecord3);
+                                    }
+                                }
+                                else if (CGroupCur == 2)
+                                {
+                                    LogPageRecordDTO.I2 = LogPageRecord.Call;
+                                    LogPageRecordDTO.F2 = (LogPageRecord.Freq == 0) ? string.Empty : ((short)LogPageRecord.Freq).ToString();
+                                    LogPageRecords2Index = (LogPageRecords2Index == -1) ? 0 : LogPageRecords2Index;
+                                    LogPageRecords2Index++;
+                                    LogPageRecords2Count--;
+                                    LogPageRecordsCur.Remove(LogPageRecord);
+                                    if (LogPageRecords3Count > 0)
+                                    {
+                                        LogPageRecords3Index = (LogPageRecords3Index == -1) ? 0 : LogPageRecords3Index;
+                                        LogPageRecord3 = LogPageRecords3.ElementAt(LogPageRecords3Index);
+                                        LogPageRecordDTO.I3 = LogPageRecord3.Call;
+                                        LogPageRecordDTO.F3 = (LogPageRecord3.Freq == 0) ? string.Empty : ((short)LogPageRecord3.Freq).ToString();
+                                        LogPageRecords3Index++;
+                                        LogPageRecords3Count--;
+                                        LogPageRecordsCur.Remove(LogPageRecord3);
+                                    }
+                                }
+                                else if (CGroupCur == 3)
+                                {
+                                    LogPageRecordDTO.I3 = LogPageRecord.Call;
+                                    LogPageRecordDTO.F3 = (LogPageRecord.Freq == 0) ? string.Empty : ((short)LogPageRecord.Freq).ToString();
+                                    LogPageRecords3Index = (LogPageRecords3Index == -1) ? 0 : LogPageRecords3Index;
+                                    LogPageRecords3Index++;
+                                    LogPageRecords3Count--;
+                                    LogPageRecordsCur.Remove(LogPageRecord);
+                                }
+
+                                LogPageDTO.records.Add(LogPageRecordDTO);
+                            }
+                        }
+                    }
+		 
+
                 }
 
             }
@@ -1107,11 +1234,11 @@ namespace Logqso.Repository.Repository
 
 
 
-             LogPageDTO = new mvc.Dto.LogData.LogPageDTO()
+#if false
+            LogPageDTO = new mvc.Dto.LogData.LogPageDTO()
              {
              };
 
-#if false
             try
             {
                 var logid1 = LogCtlDataSettingsDto.DataCallInfoDtos[0].LogId;
@@ -1298,7 +1425,7 @@ namespace Logqso.Repository.Repository
 
 
 
-             return Task.FromResult(LogPageDTO);
+            return Task.FromResult(LogPageDTO);
         }
 
 

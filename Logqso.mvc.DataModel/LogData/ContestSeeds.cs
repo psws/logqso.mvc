@@ -73,7 +73,7 @@ namespace Logqso.mvc.DataModel.LogData
                 new Contest { ContestId = "CQWWCW2014", QsoModeTypeEnum =  QsoModeTypeEnum.CW, ContestTypeEnum = ContestTypeEnum.CQWW, 
                                     ContestName = "Cqww Cw 2014", StartDateTime = DateTime.Parse("11/29/2014 00:00:00"), EndDateTime = DateTime.Parse("11/30/2014 11:59:59 PM") },
                  new Contest { ContestId = "CQWWSSB2015", QsoModeTypeEnum =  QsoModeTypeEnum.SSB, ContestTypeEnum = ContestTypeEnum.CQWW, 
-                                    ContestName = "Cqww Ssb 2015", StartDateTime = DateTime.Parse("10/23/2015 00:00:00"), EndDateTime = DateTime.Parse("10/25/2015 11:59:59 PM") },
+                                    ContestName = "Cqww Ssb 2015", StartDateTime = DateTime.Parse("10/24/2015 00:00:00"), EndDateTime = DateTime.Parse("10/25/2015 11:59:59 PM") },
                 new Contest { ContestId = "CQWWCW2015", QsoModeTypeEnum =  QsoModeTypeEnum.CW, ContestTypeEnum = ContestTypeEnum.CQWW, 
                                     ContestName = "Cqww Cw 2015", StartDateTime = DateTime.Parse("11/28/2015 00:00:00"), EndDateTime = DateTime.Parse("11/29/2015 11:59:59 PM") },
                 //WPX             

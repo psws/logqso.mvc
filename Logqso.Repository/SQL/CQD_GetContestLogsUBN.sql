@@ -7,16 +7,17 @@ DECLARE @datetime datetime = '7/3/2016'
 --		SET @D = 2
 
 	--DECLARE @Logid1	int = 535;
+	DECLARE @Logid1	int = 14001;
 	--DECLARE @logid2	int = 537;
 	--DECLARE @logid3 int = 532;
 	--DECLARE @FreqLow decimal = 14000.0;
 	--DECLARE @Freqhigh decimal = 14350.0;
 
-	DECLARE @Logid1	int = 1;
+	--DECLARE @Logid1	int = 1;
 	DECLARE @logid2	int = 2;
 	DECLARE @logid3 int = 3;
-	DECLARE @FreqLow decimal = 14000.0;
-	DECLARE @Freqhigh decimal = 14350.0;
+	DECLARE @FreqLow decimal = null;
+	DECLARE @Freqhigh decimal = null;
 
 	DECLARE @ContinentEnum int = null;
 	DECLARE  @Country varchar(10) = null;;
@@ -27,11 +28,11 @@ DECLARE @datetime datetime = '7/3/2016'
 
 	--BEGIN
 
-
+	--https://msdn.microsoft.com/en-us/library/ms174420.aspx
     SET NOCOUNT ON
 	DECLARE @restore tinyint = @@DATEFIRST
 	SET DATEFIRST 6
-    Select  DATEPART(dw,q.[QsoDateTime]) as W, q.QsoDateTime as Time, 1 AS CGroup, q.QsoNo,q.LogId, c.Call, q.Frequency as Freq,
+    Select  DATEPART(dw,q.[QsoDateTime]) as W, cast(cast(q.QsoDateTime As time) as smalldatetime)   as Time, 1 AS CGroup, q.QsoNo,q.LogId, c.Call, q.Frequency as Freq,
 		q.QCtyMult as C, q.QZoneMult as Z, q.QPrefixMult as P, q.QsoRadioTypeEnum as R,
 		q.StationName as S
 	 From [dbo].[Qso] q
@@ -48,7 +49,7 @@ DECLARE @datetime datetime = '7/3/2016'
 	 UNION ALL
     
 	
-    Select  DATEPART(dw,q.[QsoDateTime]) as W, q.QsoDateTime as Time, 2 AS CGroup, q.QsoNo,q.LogId, c.Call, q.Frequency as Freq,
+    Select  DATEPART(dw,q.[QsoDateTime]) as W, cast(cast(q.QsoDateTime As time) as smalldatetime)   as Time, 2 AS CGroup, q.QsoNo,q.LogId, c.Call, q.Frequency as Freq,
 		q.QCtyMult as C, q.QZoneMult as Z, q.QPrefixMult as P, q.QsoRadioTypeEnum as R,
 		q.StationName as S
 	 From [dbo].[Qso] q
@@ -64,7 +65,7 @@ DECLARE @datetime datetime = '7/3/2016'
 	UNION ALL
 
 	
-    Select  DATEPART(dw,q.[QsoDateTime]) as W, q.QsoDateTime as Time, 3 AS CGroup, q.QsoNo,q.LogId, c.Call, q.Frequency as Freq,
+    Select  DATEPART(dw,q.[QsoDateTime]) as W, cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time, 3 AS CGroup, q.QsoNo,q.LogId, c.Call, q.Frequency as Freq,
 		q.QCtyMult as C, q.QZoneMult as Z, q.QPrefixMult as P, q.QsoRadioTypeEnum as R,
 		q.StationName as S
 	 From [dbo].[Qso] q
@@ -77,14 +78,14 @@ DECLARE @datetime datetime = '7/3/2016'
 		((@Zone is null) or (c.Prefix = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
-	 ORDER BY  Time, CGroup ASC, q.QsoNo
+	 ORDER BY W, Time, CGroup ASC, q.QsoNo
 
 
 	 SET DATEFIRST @restore
 
 
 --Uniques
-	  Select q.QsoDateTime as Time, 1 AS CGroup, u.LogId, u.QsoNo
+	  Select cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time, 1 AS CGroup, u.LogId, u.QsoNo
 	 From UbnUniques u
 	 INNER JOIN Qso q on u.QsoNo = q.QsoNo and
 		 u.LogId = q.LogId
@@ -98,7 +99,7 @@ DECLARE @datetime datetime = '7/3/2016'
 
 	UNION ALL
 
-	 Select q.QsoDateTime as Time, 2 AS CGroup, u.LogId, u.QsoNo
+	 Select cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time, 2 AS CGroup, u.LogId, u.QsoNo
 	 From UbnUniques u
 	 inner join Qso q on u.QsoNo = q.QsoNo and
 		 u.LogId = q.LogId
@@ -113,7 +114,7 @@ DECLARE @datetime datetime = '7/3/2016'
 	UNION ALL
 	 
 	--Uniques
-	 Select q.QsoDateTime as Time,  3 AS CGroup, u.LogId, u.QsoNo
+	 Select cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time,  3 AS CGroup, u.LogId, u.QsoNo
 	 From UbnUniques u
 	 INNER JOIN  Qso q on u.QsoNo = q.QsoNo and
 		 u.LogId = q.LogId
@@ -125,10 +126,10 @@ DECLARE @datetime datetime = '7/3/2016'
 		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
-	ORDER BY  q.QsoDateTime, CGroup, u.QsoNo
+	ORDER BY  Time, CGroup, u.QsoNo
 
 	--Nils
-	Select q.QsoDateTime as Time, 1 AS CGroup, n.LogId, n.QsoNo
+	Select cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time, 1 AS CGroup, n.LogId, n.QsoNo
 	 From UbnNotInLog n
 	 INNER JOIN  Qso q on n.QsoNo = q.QsoNo and
 		 n.LogId = q.LogId
@@ -141,7 +142,7 @@ DECLARE @datetime datetime = '7/3/2016'
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
-	 Select q.QsoDateTime as Time, 2 AS CGroup, n.LogId, n.QsoNo
+	 Select cast(cast(q.QsoDateTime As time) as smalldatetime) as Time, 2 AS CGroup, n.LogId, n.QsoNo
 	 From UbnNotInLog n
 	 INNER JOIN Qso q on n.QsoNo = q.QsoNo and
 		 n.LogId = q.LogId
@@ -154,7 +155,7 @@ DECLARE @datetime datetime = '7/3/2016'
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
-	 Select q.QsoDateTime as Time,  3 AS CGroup, n.LogId, n.QsoNo
+	 Select cast(cast(q.QsoDateTime As time) as smalldatetime) as Time,  3 AS CGroup, n.LogId, n.QsoNo
 	 From UbnNotInLog n
 	 INNER JOIN Qso q ON n.QsoNo = q.QsoNo and
 		 n.LogId = q.LogId
@@ -166,10 +167,10 @@ DECLARE @datetime datetime = '7/3/2016'
 		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
-	ORDER BY  q.QsoDateTime, CGroup, n.QsoNo
+	ORDER BY  Time, CGroup, n.QsoNo
 
 	--Dupes
-	Select q.QsoDateTime as Time, 1 AS CGroup, d.LogId, d.QsoNo
+	Select cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time, 1 AS CGroup, d.LogId, d.QsoNo
 	 From UbnDupes d
 	 INNER JOIN Qso q on d.QsoNo = q.QsoNo and
 		 d.LogId = q.LogId
@@ -182,7 +183,7 @@ DECLARE @datetime datetime = '7/3/2016'
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
-	 Select q.QsoDateTime as Time, 2 AS CGroup, d.LogId, d.QsoNo
+	 Select cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time, 2 AS CGroup, d.LogId, d.QsoNo
 	 From UbnNotInLog d
 	 INNER JOIN Qso q  on d.QsoNo = q.QsoNo and
 		 d.LogId = q.LogId
@@ -195,7 +196,7 @@ DECLARE @datetime datetime = '7/3/2016'
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
-	 Select q.QsoDateTime as Time,  3 AS CGroup, d.LogId, d.QsoNo
+	 Select cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time,  3 AS CGroup, d.LogId, d.QsoNo
 	 From UbnNotInLog d
 	 INNER JOIN Qso q on d.QsoNo = q.QsoNo and
 		 d.LogId = q.LogId
@@ -207,10 +208,10 @@ DECLARE @datetime datetime = '7/3/2016'
 		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
-	ORDER BY  q.QsoDateTime, CGroup, d.QsoNo
+	ORDER BY  Time, CGroup, d.QsoNo
 
 	--Bad Call
-	Select q.QsoDateTime as Time, 1 AS CGroup, d.LogId, d.QsoNo, d.CorrectCall
+	Select cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time, 1 AS CGroup, d.LogId, d.QsoNo, d.CorrectCall
 	 From UbnIncorrectCall d
 	 INNER JOIN Qso q on d.QsoNo = q.QsoNo and
 		 d.LogId = q.LogId
@@ -223,7 +224,7 @@ DECLARE @datetime datetime = '7/3/2016'
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
-	 Select q.QsoDateTime as Time, 2 AS CGroup, d.LogId, d.QsoNo, d.CorrectCall
+	 Select cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time, 2 AS CGroup, d.LogId, d.QsoNo, d.CorrectCall
 	 From UbnIncorrectCall d
 	 INNER JOIN Qso q  on d.QsoNo = q.QsoNo and
 		 d.LogId = q.LogId
@@ -236,7 +237,7 @@ DECLARE @datetime datetime = '7/3/2016'
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
-	 Select q.QsoDateTime as Time,  3 AS CGroup, d.LogId, d.QsoNo, d.CorrectCall
+	 Select cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time,  3 AS CGroup, d.LogId, d.QsoNo, d.CorrectCall
 	 From UbnIncorrectCall d
 	 INNER JOIN Qso q on d.QsoNo = q.QsoNo and
 		 d.LogId = q.LogId
@@ -248,10 +249,10 @@ DECLARE @datetime datetime = '7/3/2016'
 		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
-	ORDER BY  q.QsoDateTime, CGroup, d.QsoNo
+	ORDER BY  Time, CGroup, d.QsoNo
 
 		--Bad Exchange
-	Select q.QsoDateTime as Time, 1 AS CGroup, d.LogId, d.QsoNo, d.CorrectExchange
+	Select cast(cast(q.QsoDateTime As time) as smalldatetime) as Time, 1 AS CGroup, d.LogId, d.QsoNo, d.CorrectExchange
 	 From UbnIncorrectExchange d
 	 INNER JOIN Qso q on d.QsoNo = q.QsoNo and
 		 d.LogId = q.LogId
@@ -264,7 +265,7 @@ DECLARE @datetime datetime = '7/3/2016'
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
-	 Select q.QsoDateTime as Time, 2 AS CGroup, d.LogId, d.QsoNo, d.CorrectExchange
+	 Select cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time, 2 AS CGroup, d.LogId, d.QsoNo, d.CorrectExchange
 	 From UbnIncorrectExchange d
 	 INNER JOIN Qso q  on d.QsoNo = q.QsoNo and
 		 d.LogId = q.LogId
@@ -277,7 +278,7 @@ DECLARE @datetime datetime = '7/3/2016'
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 	UNION ALL
 
-	 Select q.QsoDateTime as Time,  3 AS CGroup, d.LogId, d.QsoNo, d.CorrectExchange
+	 Select cast(cast(q.QsoDateTime As time) as smalldatetime)  as Time,  3 AS CGroup, d.LogId, d.QsoNo, d.CorrectExchange
 	 From UbnIncorrectExchange d
 	 INNER JOIN Qso q on d.QsoNo = q.QsoNo and
 		 d.LogId = q.LogId
@@ -289,5 +290,5 @@ DECLARE @datetime datetime = '7/3/2016'
 		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
 	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
 
-	ORDER BY  q.QsoDateTime, CGroup, d.QsoNo
+	ORDER BY  Time, CGroup, d.QsoNo
 
