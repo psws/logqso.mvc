@@ -229,6 +229,7 @@
     <Content Include="App_Notes\Dependency Injectio with Unity and MEF.txt" />
     <Content Include="App_Notes\Hosting on IIS 7 local server settings.txt" />
     <Content Include="App_Notes\HTMLHELPERS Extensions.txt" />
+    <Content Include="App_Notes\Javascript\Jquery jqgrid highlighting rows.txt" />
     <Content Include="App_Notes\Join multiple table using generic repository patten with Entity framework with unit of work.txt" />
     <Content Include="App_Notes\Passing Data From a Controller to a View.txt" />
     <Content Include="App_Notes\Start Action in Visual Studio.txt" />

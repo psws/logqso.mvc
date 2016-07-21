@@ -7,13 +7,13 @@ DECLARE @datetime datetime = '7/3/2016'
 --		SET @D = 2
 
 	--DECLARE @Logid1	int = 535;
-	DECLARE @Logid1	int = 14001;
+	--DECLARE @Logid1	int = 14001;
 	--DECLARE @logid2	int = 537;
 	--DECLARE @logid3 int = 532;
 	--DECLARE @FreqLow decimal = 14000.0;
 	--DECLARE @Freqhigh decimal = 14350.0;
 
-	--DECLARE @Logid1	int = 1;
+	DECLARE @Logid1	int = 1;
 	DECLARE @logid2	int = 2;
 	DECLARE @logid3 int = 3;
 	DECLARE @FreqLow decimal = null;

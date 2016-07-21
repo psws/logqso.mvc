@@ -1156,6 +1156,14 @@ namespace Logqso.Repository.Repository
                                 {
                                     LogPageRecordDTO.I1 = LogPageRecord.Call;
                                     LogPageRecordDTO.F1 = (LogPageRecord.Freq == 0) ? string.Empty : ((short)LogPageRecord.Freq).ToString();
+                                    LogPageRecordDTO.C1 = LogPageRecord.C;
+                                    LogPageRecordDTO.Z1 = LogPageRecord.Z;
+                                    LogPageRecordDTO.P1 = LogPageRecord.P;
+                                    LogPageRecordDTO.U1 = LogPageRecord.U;
+                                    LogPageRecordDTO.B1 = (LogPageRecord.B == true || LogPageRecord.X == true) ? true : false;
+                                    LogPageRecordDTO.N1 = LogPageRecord.N;
+                                    LogPageRecordDTO.D1 = LogPageRecord.D;
+
                                     LogPageRecords1Index = (LogPageRecords1Index == -1) ? 0 : LogPageRecords1Index;
                                     LogPageRecords1Index++;
                                     LogPageRecords1Count--;
@@ -1168,6 +1176,14 @@ namespace Logqso.Repository.Repository
                                         LogPageRecord2 = LogPageRecords2.ElementAt(LogPageRecords2Index);
                                         LogPageRecordDTO.I2 = LogPageRecord2.Call;
                                         LogPageRecordDTO.F2 = (LogPageRecord2.Freq == 0) ? string.Empty : ((short)LogPageRecord2.Freq).ToString();
+                                        LogPageRecordDTO.C2 = LogPageRecord2.C;
+                                        LogPageRecordDTO.Z2 = LogPageRecord2.Z;
+                                        LogPageRecordDTO.P2 = LogPageRecord2.P;
+                                        LogPageRecordDTO.U2 = LogPageRecord2.U;
+                                        LogPageRecordDTO.B2 = (LogPageRecord2.B == true || LogPageRecord2.X == true) ? true : false;
+                                        LogPageRecordDTO.N2 = LogPageRecord2.N;
+                                        LogPageRecordDTO.D2 = LogPageRecord2.D;
+
                                         LogPageRecords2Index++;
                                         LogPageRecords2Count--;
                                         LogPageRecordsCur.Remove(LogPageRecord2);
@@ -1179,6 +1195,14 @@ namespace Logqso.Repository.Repository
                                         LogPageRecord3 = LogPageRecords3.ElementAt(LogPageRecords3Index);
                                         LogPageRecordDTO.I3 = LogPageRecord3.Call;
                                         LogPageRecordDTO.F3 = (LogPageRecord3.Freq == 0) ? string.Empty : ((short)LogPageRecord3.Freq).ToString();
+                                        LogPageRecordDTO.C3 = LogPageRecord3.C;
+                                        LogPageRecordDTO.Z3 = LogPageRecord3.Z;
+                                        LogPageRecordDTO.P3 = LogPageRecord3.P;
+                                        LogPageRecordDTO.U3 = LogPageRecord3.U;
+                                        LogPageRecordDTO.B3 = (LogPageRecord3.B == true || LogPageRecord3.X == true) ? true : false;
+                                        LogPageRecordDTO.N3 = LogPageRecord3.N;
+                                        LogPageRecordDTO.D3 = LogPageRecord3.D;
+
                                         LogPageRecords3Index++;
                                         LogPageRecords3Count--;
                                         LogPageRecordsCur.Remove(LogPageRecord3);
@@ -1189,6 +1213,14 @@ namespace Logqso.Repository.Repository
                                     LogPageRecordDTO.I2 = LogPageRecord.Call;
                                     LogPageRecordDTO.F2 = (LogPageRecord.Freq == 0) ? string.Empty : ((short)LogPageRecord.Freq).ToString();
                                     LogPageRecords2Index = (LogPageRecords2Index == -1) ? 0 : LogPageRecords2Index;
+                                    LogPageRecordDTO.C2 = LogPageRecord.C;
+                                    LogPageRecordDTO.Z2 = LogPageRecord.Z;
+                                    LogPageRecordDTO.P2 = LogPageRecord.P;
+                                    LogPageRecordDTO.U2 = LogPageRecord.U;
+                                    LogPageRecordDTO.B2 = (LogPageRecord.B == true || LogPageRecord.X == true) ? true : false;
+                                    LogPageRecordDTO.N2 = LogPageRecord.N;
+                                    LogPageRecordDTO.D2 = LogPageRecord.D;
+
                                     LogPageRecords2Index++;
                                     LogPageRecords2Count--;
                                     LogPageRecordsCur.Remove(LogPageRecord);
@@ -1198,6 +1230,14 @@ namespace Logqso.Repository.Repository
                                         LogPageRecord3 = LogPageRecords3.ElementAt(LogPageRecords3Index);
                                         LogPageRecordDTO.I3 = LogPageRecord3.Call;
                                         LogPageRecordDTO.F3 = (LogPageRecord3.Freq == 0) ? string.Empty : ((short)LogPageRecord3.Freq).ToString();
+                                        LogPageRecordDTO.C3 = LogPageRecord3.C;
+                                        LogPageRecordDTO.Z3 = LogPageRecord3.Z;
+                                        LogPageRecordDTO.P3 = LogPageRecord3.P;
+                                        LogPageRecordDTO.U3 = LogPageRecord3.U;
+                                        LogPageRecordDTO.B3 = (LogPageRecord3.B == true || LogPageRecord3.X == true) ? true : false;
+                                        LogPageRecordDTO.N3 = LogPageRecord3.N;
+                                        LogPageRecordDTO.D3 = LogPageRecord3.D;
+                                      
                                         LogPageRecords3Index++;
                                         LogPageRecords3Count--;
                                         LogPageRecordsCur.Remove(LogPageRecord3);
@@ -1208,6 +1248,14 @@ namespace Logqso.Repository.Repository
                                     LogPageRecordDTO.I3 = LogPageRecord.Call;
                                     LogPageRecordDTO.F3 = (LogPageRecord.Freq == 0) ? string.Empty : ((short)LogPageRecord.Freq).ToString();
                                     LogPageRecords3Index = (LogPageRecords3Index == -1) ? 0 : LogPageRecords3Index;
+                                    LogPageRecordDTO.U3 = LogPageRecord.U;
+                                    LogPageRecordDTO.C3 = LogPageRecord.C;
+                                    LogPageRecordDTO.Z3 = LogPageRecord.Z;
+                                    LogPageRecordDTO.P3 = LogPageRecord.P;
+                                    LogPageRecordDTO.B3 = (LogPageRecord.B == true || LogPageRecord.X == true) ? true : false;
+                                    LogPageRecordDTO.N3 = LogPageRecord.N;
+                                    LogPageRecordDTO.D3 = LogPageRecord.D;
+
                                     LogPageRecords3Index++;
                                     LogPageRecords3Count--;
                                     LogPageRecordsCur.Remove(LogPageRecord);

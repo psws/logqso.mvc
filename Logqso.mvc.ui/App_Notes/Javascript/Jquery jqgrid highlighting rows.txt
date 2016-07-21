@@ -1,0 +1,54 @@
+﻿you can hilight rows tath time changes on by the following
+
+ Set the loadComplete function to call _lq.gridHighlight();
+
+  _lq.LogViewInit = function () {
+        var grid = $("#jqGridLog");
+        grid.jqGrid({
+            loadComplete: function (pgButton) {
+                _lq.gridHighlight();
+                return 'stop';
+            },
+ 
+ HTML rendered brfore highlighting
+<tr tabindex="-1" class="ui-widget-content jqgrow ui-row-ltr rowchanged" id="jqg1" role="row">
+	<td title="1" role="gridcell" aria-describedby="jqGridLog_W" style="text-align: center;">1</td
+	><td title="00:00" class="lq-LogBrdB" role="gridcell" aria-describedby="jqGridLog_T" style="text-align: center;">00:00</td>
+	<td title="CN3A" class="lq-LogVBrdr" role="gridcell" aria-describedby="jqGridLog_I1">CN3A</td>
+	<td title="14208" class="lq-LogBrdB" role="gridcell" aria-describedby="jqGridLog_F1" style="text-align: left;">14208</td>
+	<td class="lq-LogMltBrdr " role="gridcell" aria-describedby="jqGridLog_C1" style="text-align: center;"></td>
+	<td class="lq-LogMltBrdr " role="gridcell" aria-describedby="jqGridLog_Z1" style="text-align: center;"></td>
+	<td class="lq-LogMltBrdr " role="gridcell" aria-describedby="jqGridLog_U1" style="text-align: center;"></td>
+	<td class="lq-LogMltBrdr " role="gridcell" aria-describedby="jqGridLog_B1" style="text-align: center;"></td>
+	<td class="lq-LogMltBrdr " role="gridcell" aria-describedby="jqGridLog_N1" style="text-align: center;"></td>
+	<td title="CN2R" class="lq-LogVBrdr" role="gridcell" aria-describedby="jqGridLog_I2">CN2R</td>
+
+
+------------------------------------
+ CSS:
+ .rowchanged td
+{
+    background-color: #ebf5e7; 
+}
+-------------------------------
+ 
+ _lq.time = '59:59';
+     _lq.gridHighlight = function () {
+        var x = $("#jqGridLog tbody tr td[aria-describedby='jqGridLog_T']")
+            .filter(_lq.filterCells).parent("tr").addClass("rowchanged");
+    }
+
+     _lq.filterCells = function (index) {
+        var result = false;
+        if ($(this).text() != _lq.time) {
+            _lq.time = $(this).text();
+            result = true;
+        }
+        return result;
+    }
+-------------------------------------
+The filter() function _lq.filterCells() builds a list of tds that the 
+.parent("tr").addClass("rowchanged") will e applied to.
+In this case it is every time the time changes.
+The row changed class is added to every row where time changes.
+The css .rowchaned td will then cascade te style  into the time changed tds.
