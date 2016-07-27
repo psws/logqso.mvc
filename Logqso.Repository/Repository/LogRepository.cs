@@ -18,6 +18,8 @@ using System.Linq.Dynamic;
 using Logqso.mvc.Dto.Chart;
 using System.Collections.ObjectModel;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
+using System.Data.Common;
 
 namespace Logqso.Repository.Repository
 {
@@ -1028,12 +1030,132 @@ namespace Logqso.Repository.Repository
 
         //https://msdn.microsoft.com/en-us/data/jj691402.aspx
             DbContext DbContext = QsoRepository.GetDbContext() as DbContext;
-            var command = DbContext.Database.Connection.CreateCommand();
-            command.CommandText = string.Format("EXEC [dbo].[CQD_sp_GetContestLogs] @Logid1 = {0}, @Logid2 = {1}, @Logid3 = {2} ",
-                LogCtlDataSettingsDto.DataCallInfoDtos[0].LogId,
-                LogCtlDataSettingsDto.DataCallInfoDtos[1].LogId,
-                LogCtlDataSettingsDto.DataCallInfoDtos[2].LogId);
-            //append Log filter, SQl defaults null if not specified
+
+            var time = LogCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisStarttime.Substring(0,5);
+            var StartTime = DateTime.Parse("1900-01-01 " + LogCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisStarttime.Substring(0,5) );
+            int StartDay = int.Parse( LogCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisStarttime.Substring(11,1) );
+            int EndDay = 1;
+            var EndTime = DateTime.Parse("1900-01-01 " + StartTime.AddHours(double.Parse(LogCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisDuration)%24).AddMinutes(-1).ToShortTimeString() );
+            if (StartDay == 1)
+            {
+                var HoursToEndDay1 = 24 - StartTime.Hour;
+                if (int.Parse(LogCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisDuration) > HoursToEndDay1)
+                {
+                    EndDay = 2;
+                }
+            }
+            else
+            {
+                EndDay = 2;
+            }
+
+            DbCommand command = DbContext.Database.Connection.CreateCommand();
+            try
+            {
+                decimal FreqLow = 0;
+                decimal  FreqHigh = 0;
+                ContinentEnum ContinentEnum = mvc.common.Enum.ContinentEnum.ALL;
+                string Country = string.Empty;
+                short Zone = 0;
+                string Station= string.Empty;
+                QsoRadioTypeEnum Radio = QsoRadioTypeEnum.NONE;
+
+                command.CommandType = CommandType.StoredProcedure;
+                command.CommandText = "[dbo].[CQD_sp_GetContestLogs]";
+                //logid? = -1 if no call selected
+                if (LogCtlDataSettingsDto.DataCallInfoDtos[0].Disabled == false)
+                {
+                    command.AddParameterWithValue("@Logid1", DbType.Int32, LogCtlDataSettingsDto.DataCallInfoDtos[0].LogId);
+                    if (LogUtilities.LogGetStation(LogCtlDataSettingsDto.DataCallInfoDtos[0], out Station) == true)
+                    {
+                        command.AddParameterWithValue("@Station1", DbType.String, Station);
+                    }
+                    if (LogUtilities.LogGetRadio(LogCtlDataSettingsDto.DataCallInfoDtos[0], out Radio) == true)
+                    {
+                        command.AddParameterWithValue("@Radio1", DbType.Int32, (Int32)Radio);
+                    }
+                }
+                else
+                {
+                    command.AddParameterWithValue("@Logid1", DbType.Int32, -1);
+                }
+                if (LogCtlDataSettingsDto.DataCallInfoDtos[1].Disabled == false)
+                {
+                    command.AddParameterWithValue("@Logid2", DbType.Int32, LogCtlDataSettingsDto.DataCallInfoDtos[1].LogId);
+                    if (LogUtilities.LogGetStation(LogCtlDataSettingsDto.DataCallInfoDtos[1], out Station) == true)
+                    {
+                        command.AddParameterWithValue("@Station2", DbType.String, Station);
+                    }
+                    if (LogUtilities.LogGetRadio(LogCtlDataSettingsDto.DataCallInfoDtos[1], out Radio) == true)
+                    {
+                        command.AddParameterWithValue("@Radio2", DbType.Int32, (Int32)Radio);
+                    }
+                }
+                else
+                {
+                    command.AddParameterWithValue("@Logid2", DbType.Int32, -1);
+                }
+                if (LogCtlDataSettingsDto.DataCallInfoDtos[2].Disabled == false)
+                {
+                    command.AddParameterWithValue("@Logid3", DbType.Int32, LogCtlDataSettingsDto.DataCallInfoDtos[2].LogId);
+                    if (LogUtilities.LogGetStation(LogCtlDataSettingsDto.DataCallInfoDtos[2], out Station) == true)
+                    {
+                        command.AddParameterWithValue("@Station3", DbType.String, Station);
+                    }
+                    if (LogUtilities.LogGetRadio(LogCtlDataSettingsDto.DataCallInfoDtos[2], out Radio) == true)
+                    {
+                        command.AddParameterWithValue("@Radio3", DbType.Int32, (Int32)Radio);
+                    }
+                }
+                else
+                {
+                    command.AddParameterWithValue("@Logid3", DbType.Int32, -1);
+                }
+
+                command.AddParameterWithValue("@StartDay", DbType.Int32, StartDay);
+                command.AddParameterWithValue("@EndDay", DbType.Int32, EndDay);
+                command.AddParameterWithValue("@StartTime", DbType.DateTime, StartTime);
+                command.AddParameterWithValue("@EndTime", DbType.DateTime, EndTime);
+                if (LogCtlDataSettingsDto.ControlSettingsDto.ControlFiltersSettingsDto.Disabled == false)
+                {
+
+                    if (LogUtilities.LogGetFrequencyRange(LogCtlDataSettingsDto.ControlSettingsDto.ControlFiltersSettingsDto, out FreqLow, out FreqHigh) == true)
+                    {
+                        command.AddParameterWithValue("@FreqLow", DbType.Decimal, FreqLow);
+                        command.AddParameterWithValue("@FreqHigh", DbType.Decimal, FreqHigh);
+                    }
+                    if (LogUtilities.LogGetContinent(LogCtlDataSettingsDto.ControlSettingsDto.ControlFiltersSettingsDto, out ContinentEnum) == true)
+                    {
+                        command.AddParameterWithValue("@ContinentEnum", DbType.Int32, (Int32)ContinentEnum);
+                    }
+                    if (LogUtilities.LogGetCountry(LogCtlDataSettingsDto.ControlSettingsDto.ControlFiltersSettingsDto, out Country) == true)
+                    {
+                        command.AddParameterWithValue("@Country", DbType.String, Country);
+                    }
+                    if (LogUtilities.LogGetZone(LogCtlDataSettingsDto.ControlSettingsDto.ControlFiltersSettingsDto, out Zone) == true)
+                    {
+                        command.AddParameterWithValue("@Zone", DbType.UInt16, Zone);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            } 
+
+
+
+            //command.CommandText = string.Format("EXEC [dbo].[CQD_sp_GetContestLogs] @Logid1 = {0}, @Logid2 = {1}, @Logid3 = {2}, "
+            //    + " @StartDay = {3} , @EndDay = {4} , @StartTime = {5}, @Endtime = {6}",
+            //    LogCtlDataSettingsDto.DataCallInfoDtos[0].LogId,
+            //    LogCtlDataSettingsDto.DataCallInfoDtos[1].LogId,
+            //    LogCtlDataSettingsDto.DataCallInfoDtos[2].LogId,
+            //    StartDay, EndDay,
+            //    StartTime.ToString("yyyy-mm-dd HH:mm"), EndTime.ToString("yyyy-mm-dd HH:mm")
+            //    );
+           //append Log filter, SQl defaults null if not specified
                  //@FreqLow decimal,
                  //@FreqHigh decimal,
                  //@ContinentEnum int,
@@ -1041,6 +1163,7 @@ namespace Logqso.Repository.Repository
                  //@Zone smallint,
             //Append Log X-Axus
                  //@StartTime datetime,
+
                  //@Endtime datetime
 
             List<LogPageRecord> LogPageRecords;
@@ -1104,6 +1227,11 @@ namespace Logqso.Repository.Repository
                     int weekday = 1;
                     int index = 0;
                     int DayIndex = 0;
+
+                    LogPageDTO.I1Cnt = LogPageRecords.Where(x => x.CGroup == 1).Count();
+                    LogPageDTO.I2Cnt = LogPageRecords.Where(x => x.CGroup == 2).Count();
+                    LogPageDTO.I3Cnt = LogPageRecords.Where(x => x.CGroup == 3).Count();
+
 
                     for (int d = 1; d <= DaysInContest; d++, weekday++)
                     {
@@ -1470,7 +1598,6 @@ namespace Logqso.Repository.Repository
             }
 
 #endif
-
 
 
             return Task.FromResult(LogPageDTO);

@@ -126,11 +126,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbParameterExtensions.cs" />
     <Compile Include="DependencyResolver.cs" />
     <Compile Include="DynamicLibrary.cs" />
     <Compile Include="Interfaces\ICallSignRepository.cs" />
     <Compile Include="Interfaces\ILogLvsRepository.cs" />
     <Compile Include="Interfaces\IQsoRepository.cs" />
+    <Compile Include="LogUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\CallSignRepository.cs" />
     <Compile Include="Repository\ControlRepository.cs" />

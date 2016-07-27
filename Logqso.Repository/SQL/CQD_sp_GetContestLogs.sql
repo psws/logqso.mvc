@@ -21,7 +21,15 @@ CREATE PROCEDURE [dbo].[CQD_sp_GetContestLogs]
 	 @Zone smallint = null,
 
 	 @StartTime datetime = null,
-	 @Endtime datetime = null
+	 @Endtime datetime = null,
+	 @StartDay int = null,
+	 @EndDay int = null,
+	 @Radio1 int = null,
+	 @Radio2 int = null,
+	 @Radio3 int = null,
+	 @Station1 varchar(20) = null,
+	 @Station2 varchar(20) = null,
+	 @Station3 varchar(20) = null
 
 AS 
 	BEGIN
@@ -61,18 +69,45 @@ AS
 	 From [dbo].[Qso] q
 	 INNER JOIN CallSign c  on q.CallsignId = c.CallSignId
 	 INNER JOIN Log l on q.LogId = l.LogId
-	 where (q.LogId = @Logid1 or q.LogId = @Logid2 or q.LogId = @Logid3) AND
+	 where (	(q.LogId = @Logid1 AND ((@Radio1 is null or q.QsoRadioTypeEnum = @Radio1) AND
+						(@Station1 is null or q.StationName = @Station1) ) ) OR
+				(q.LogId = @Logid2 AND (( @Radio2 is null or q.QsoRadioTypeEnum = @Radio2) AND
+						(@Station2 is null or q.StationName = @Station2) ) ) OR
+			    (q.LogId = @Logid3 AND ((@Radio3 is null or q.QsoRadioTypeEnum = @Radio3) AND
+						(@Station3 is null or q.StationName = @Station3) ) )
+			) AND
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
-	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
-
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone))
+		 AND
+		--Days are Not Equal
+	 	((@StartTime is null or @StartDay is null or ( @StartDay = @EndDay ) )  
+			OR
+				((cast(cast(q.QsoDateTime As time) as smalldatetime)  >= 
+					(@StartTime) AND (DATEPART(dw,q.[QsoDateTime]) = @StartDay) 
+				OR
+	 			  (cast(cast(q.QsoDateTime As time) as smalldatetime)  <= 
+					(@Endtime) AND (DATEPART(dw,q.[QsoDateTime]) = @EndDay)   )
+				)
+			) 
+		)
+		AND
+		--Days are Equal
+	 	((@StartTime is null or @StartDay is null or ( @StartDay <> @EndDay ) )  
+			OR
+				((cast(cast(q.QsoDateTime As time) as smalldatetime)   >= 
+					(@StartTime) AND (DATEPART(dw,q.[QsoDateTime]) = @StartDay) 
+				AND
+	 			(cast(cast(q.QsoDateTime As time) as smalldatetime)  <= 
+					(@Endtime) AND (DATEPART(dw,q.[QsoDateTime]) = @EndDay)   )  
+				)  
+			) 
+		)
 
 	 ORDER BY W, Time, CGroup ASC, q.QsoNo
 
 
-	 SET DATEFIRST @restore
 
 
 --Uniques
@@ -86,13 +121,41 @@ AS
 	 INNER JOIN Qso q on u.QsoNo = q.QsoNo and
 		 u.LogId = q.LogId
 	 INNER JOIN Callsign c on q.CallsignId = c.CallSignId 
-	 where (q.LogId = @Logid1 or q.LogId = @Logid2 or q.LogId = @Logid3) AND
+	 where (	(q.LogId = @Logid1 AND ((@Radio1 is null or q.QsoRadioTypeEnum = @Radio1) AND
+						(@Station1 is null or q.StationName = @Station1) ) ) OR
+				(q.LogId = @Logid2 AND (( @Radio2 is null or q.QsoRadioTypeEnum = @Radio2) AND
+						(@Station2 is null or q.StationName = @Station2) ) ) OR
+			    (q.LogId = @Logid3 AND ((@Radio3 is null or q.QsoRadioTypeEnum = @Radio3) AND
+						(@Station3 is null or q.StationName = @Station3) ) )
+			) AND
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
-	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
-
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) 
+		AND
+		--Days are Not Equal
+	 	((@StartTime is null or @StartDay is null or ( @StartDay = @EndDay ) )  
+			OR
+				((cast(cast(q.QsoDateTime As time) as smalldatetime)  >= 
+					(@StartTime) AND (DATEPART(dw,q.[QsoDateTime]) = @StartDay) 
+				OR
+	 			  (cast(cast(q.QsoDateTime As time) as smalldatetime)  <= 
+					(@Endtime) AND (DATEPART(dw,q.[QsoDateTime]) = @EndDay)   )
+				)
+			) 
+		)
+		AND
+		--Days are Equal
+	 	((@StartTime is null or @StartDay is null or ( @StartDay <> @EndDay ) )  
+			OR
+				((cast(cast(q.QsoDateTime As time) as smalldatetime)   >= 
+					(@StartTime) AND (DATEPART(dw,q.[QsoDateTime]) = @StartDay) 
+				AND
+	 			(cast(cast(q.QsoDateTime As time) as smalldatetime)  <= 
+					(@Endtime) AND (DATEPART(dw,q.[QsoDateTime]) = @EndDay)   )  
+				)  
+			) 
+		)
 
 	ORDER BY  Time, CGroup, u.QsoNo
 
@@ -107,12 +170,41 @@ AS
 	 INNER JOIN  Qso q on n.QsoNo = q.QsoNo and
 		 n.LogId = q.LogId
 	 INNER JOIN Callsign c on q.CallsignId = c.CallSignId 
-	 where (q.LogId = @Logid1 or q.LogId = @Logid2 or q.LogId = @Logid3) AND
+	 where (	(q.LogId = @Logid1 AND ((@Radio1 is null or q.QsoRadioTypeEnum = @Radio1) AND
+						(@Station1 is null or q.StationName = @Station1) ) ) OR
+				(q.LogId = @Logid2 AND (( @Radio2 is null or q.QsoRadioTypeEnum = @Radio2) AND
+						(@Station2 is null or q.StationName = @Station2) ) ) OR
+			    (q.LogId = @Logid3 AND ((@Radio3 is null or q.QsoRadioTypeEnum = @Radio3) AND
+						(@Station3 is null or q.StationName = @Station3) ) )
+			) AND
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
-	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone))
+		 AND
+		--Days are Not Equal
+	 	((@StartTime is null or @StartDay is null or ( @StartDay = @EndDay ) )  
+			OR
+				((cast(cast(q.QsoDateTime As time) as smalldatetime)  >= 
+					(@StartTime) AND (DATEPART(dw,q.[QsoDateTime]) = @StartDay) 
+				OR
+	 			  (cast(cast(q.QsoDateTime As time) as smalldatetime)  <= 
+					(@Endtime) AND (DATEPART(dw,q.[QsoDateTime]) = @EndDay)   )
+				)
+			) 
+		)
+		AND
+		--Days are Equal
+	 	((@StartTime is null or @StartDay is null or ( @StartDay <> @EndDay ) )  
+			OR
+				((cast(cast(q.QsoDateTime As time) as smalldatetime)   >= 
+					(@StartTime) AND (DATEPART(dw,q.[QsoDateTime]) = @StartDay) 
+				AND
+	 			(cast(cast(q.QsoDateTime As time) as smalldatetime)  <= 
+					(@Endtime) AND (DATEPART(dw,q.[QsoDateTime]) = @EndDay)   )  
+				)  
+			) 
+		)
 
 	ORDER BY  Time, CGroup, n.QsoNo
 
@@ -127,12 +219,42 @@ AS
 	 INNER JOIN Qso q on d.QsoNo = q.QsoNo and
 		 d.LogId = q.LogId
 	 INNER JOIN Callsign c on q.CallsignId = c.CallSignId 
-	 where (q.LogId = @Logid1 or q.LogId = @Logid2 or q.LogId = @Logid3) AND
+	 where (	(q.LogId = @Logid1 AND ((@Radio1 is null or q.QsoRadioTypeEnum = @Radio1) AND
+						(@Station1 is null or q.StationName = @Station1) ) ) OR
+				(q.LogId = @Logid2 AND (( @Radio2 is null or q.QsoRadioTypeEnum = @Radio2) AND
+						(@Station2 is null or q.StationName = @Station2) ) ) OR
+			    (q.LogId = @Logid3 AND ((@Radio3 is null or q.QsoRadioTypeEnum = @Radio3) AND
+						(@Station3 is null or q.StationName = @Station3) ) )
+			) AND
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
-	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone))
+		 AND
+		--Days are Not Equal
+	 	((@StartTime is null or @StartDay is null or ( @StartDay = @EndDay ) )  
+			OR
+				((cast(cast(q.QsoDateTime As time) as smalldatetime)  >= 
+					(@StartTime) AND (DATEPART(dw,q.[QsoDateTime]) = @StartDay) 
+				OR
+	 			  (cast(cast(q.QsoDateTime As time) as smalldatetime)  <= 
+					(@Endtime) AND (DATEPART(dw,q.[QsoDateTime]) = @EndDay)   )
+				)
+			) 
+		)
+		AND
+		--Days are Equal
+	 	((@StartTime is null or @StartDay is null or ( @StartDay <> @EndDay ) )  
+			OR
+				((cast(cast(q.QsoDateTime As time) as smalldatetime)   >= 
+					(@StartTime) AND (DATEPART(dw,q.[QsoDateTime]) = @StartDay) 
+				AND
+	 			(cast(cast(q.QsoDateTime As time) as smalldatetime)  <= 
+					(@Endtime) AND (DATEPART(dw,q.[QsoDateTime]) = @EndDay)   )  
+				)  
+			) 
+		)
+
 
 	ORDER BY  Time, CGroup, d.QsoNo
 
@@ -147,13 +269,41 @@ AS
 	 INNER JOIN Qso q on d.QsoNo = q.QsoNo and
 		 d.LogId = q.LogId
 	 INNER JOIN Callsign c on q.CallsignId = c.CallSignId 
-	 where (q.LogId = @Logid1 or q.LogId = @Logid2 or q.LogId = @Logid3) AND
+	 where (	(q.LogId = @Logid1 AND ((@Radio1 is null or q.QsoRadioTypeEnum = @Radio1) AND
+						(@Station1 is null or q.StationName = @Station1) ) ) OR
+				(q.LogId = @Logid2 AND (( @Radio2 is null or q.QsoRadioTypeEnum = @Radio2) AND
+						(@Station2 is null or q.StationName = @Station2) ) ) OR
+			    (q.LogId = @Logid3 AND ((@Radio3 is null or q.QsoRadioTypeEnum = @Radio3) AND
+						(@Station3 is null or q.StationName = @Station3) ) )
+			) AND
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
-		((@Country is null) or (q.QsoExchangeNumber = @Country)) AND
-		((@Zone is null) or (c.Prefix = @Zone)) AND
-	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
-
+		((@Country is null) or (c.Prefix = @Country)) AND
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) 
+		AND
+		--Days are Not Equal
+	 	((@StartTime is null or @StartDay is null or ( @StartDay = @EndDay ) )  
+			OR
+				((cast(cast(q.QsoDateTime As time) as smalldatetime)  >= 
+					(@StartTime) AND (DATEPART(dw,q.[QsoDateTime]) = @StartDay) 
+				OR
+	 			  (cast(cast(q.QsoDateTime As time) as smalldatetime)  <= 
+					(@Endtime) AND (DATEPART(dw,q.[QsoDateTime]) = @EndDay)   )
+				)
+			) 
+		)
+		AND
+		--Days are Equal
+	 	((@StartTime is null or @StartDay is null or ( @StartDay <> @EndDay ) )  
+			OR
+				((cast(cast(q.QsoDateTime As time) as smalldatetime)   >= 
+					(@StartTime) AND (DATEPART(dw,q.[QsoDateTime]) = @StartDay) 
+				AND
+	 			(cast(cast(q.QsoDateTime As time) as smalldatetime)  <= 
+					(@Endtime) AND (DATEPART(dw,q.[QsoDateTime]) = @EndDay)   )  
+				)  
+			) 
+		)
 	ORDER BY  Time, CGroup, d.QsoNo
 
 		--Bad Exchange
@@ -167,14 +317,45 @@ AS
 	 INNER JOIN Qso q on d.QsoNo = q.QsoNo and
 		 d.LogId = q.LogId
 	 INNER JOIN Callsign c on q.CallsignId = c.CallSignId 
-	 where (q.LogId = @Logid1 or q.LogId = @Logid2 or q.LogId = @Logid3) AND
+	 where (	(q.LogId = @Logid1 AND ((@Radio1 is null or q.QsoRadioTypeEnum = @Radio1) AND
+						(@Station1 is null or q.StationName = @Station1) ) ) OR
+				(q.LogId = @Logid2 AND (( @Radio2 is null or q.QsoRadioTypeEnum = @Radio2) AND
+						(@Station2 is null or q.StationName = @Station2) ) ) OR
+			    (q.LogId = @Logid3 AND ((@Radio3 is null or q.QsoRadioTypeEnum = @Radio3) AND
+						(@Station3 is null or q.StationName = @Station3) ) )
+			) AND
 	 	((@FreqLow is null) or (q.Frequency BETWEEN @FreqLow AND @FreqHigh)) AND
 		((@ContinentEnum is null) or (c.ContinentEnum = @ContinentEnum)) AND
 		((@Country is null) or (c.Prefix = @Country)) AND
-		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) AND
-	 	((@StartTime is null) or (q.QsoDateTime BETWEEN @StartTime AND @Endtime))
-	
+		((@Zone is null) or (q.QsoExchangeNumber = @Zone)) 
+		AND
+		--Days are Not Equal
+	 	((@StartTime is null or @StartDay is null or ( @StartDay = @EndDay ) )  
+			OR
+				((cast(cast(q.QsoDateTime As time) as smalldatetime)  >= 
+					(@StartTime) AND (DATEPART(dw,q.[QsoDateTime]) = @StartDay) 
+				OR
+	 			  (cast(cast(q.QsoDateTime As time) as smalldatetime)  <= 
+					(@Endtime) AND (DATEPART(dw,q.[QsoDateTime]) = @EndDay)   )
+				)
+			) 
+		)
+		AND
+		--Days are Equal
+	 	((@StartTime is null or @StartDay is null or ( @StartDay <> @EndDay ) )  
+			OR
+				((cast(cast(q.QsoDateTime As time) as smalldatetime)   >= 
+					(@StartTime) AND (DATEPART(dw,q.[QsoDateTime]) = @StartDay) 
+				AND
+	 			(cast(cast(q.QsoDateTime As time) as smalldatetime)  <= 
+					(@Endtime) AND (DATEPART(dw,q.[QsoDateTime]) = @EndDay)   )  
+				)  
+			) 
+		)	
 
 	ORDER BY  Time, CGroup, d.QsoNo
+
+	SET DATEFIRST @restore
+
   END
   
