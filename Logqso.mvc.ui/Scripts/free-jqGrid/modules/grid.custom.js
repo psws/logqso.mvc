@@ -252,7 +252,7 @@
 					hoverClasses = getGuiStyles.call($t, "states.hover"),
 					highlightClass = getGuiStyles.call($t, "states.select"),
 					dataFieldClass = getGuiStyles.call($t, "filterToolbar.dataField"),
-					currentFilters,
+					currentFilters = {},
 					getId = function (cmName) {
 						var prefix = "gs_";
 						switch (o.idMode) {
@@ -288,6 +288,8 @@
 							}
 						}
 
+						// TODO: test for !o.stringResult && !o.searchOperators && p.datatype !== "local"
+						// and use p.postData[cm.index || cm.name] instead of filter[cm.name]
 						if (!filters || !p.search) { return filter; }
 						if (typeof filters === "string") {
 							try {
@@ -403,6 +405,7 @@
 										}
 										break;
 									default:
+										// TODO: call unformatter if it's defined.
 										break;
 								}
 							}
@@ -628,7 +631,7 @@
 						});
 					},
 					timeoutHnd,
-					tr = $("<tr></tr>", { "class": "ui-search-toolbar", role: "row" });
+					tr = $("<tr></tr>", { "class": "ui-search-toolbar", role: "row form" });
 
 				if (o.loadFilterDefaults) {
 					currentFilters = parseFilter() || {};
@@ -636,7 +639,11 @@
 				// create the row
 				$.each(colModel, function (ci) {
 					var cm = this, soptions, mode = "filter", surl, self, select = "", sot, so, i, searchoptions = cm.searchoptions || {}, editoptions = cm.editoptions || {},
-						th = $("<th></th>", { "class": getGuiStyles.call($t, "colHeaders", "ui-th-column ui-th-" + p.direction + " " + (o.applyLabelClasses ? cm.labelClasses || "" : "")) }),
+						th = $("<th></th>", {
+							"class": getGuiStyles.call($t, "colHeaders", "ui-th-column ui-th-" + p.direction + " " + (o.applyLabelClasses ? cm.labelClasses || "" : "")),
+							role: "gridcell",
+							"aria-describedby": p.id + "_" + cm.name
+						}),
 						thd = $("<div></div>"),
 						stbl = $("<table class='ui-search-table'><tr><td class='ui-search-oper'></td><td class='ui-search-input'></td><td class='ui-search-clear' style='width:1px'></td></tr></table>");
 					if (this.hidden === true) { $(th).css("display", "none"); }
@@ -683,10 +690,17 @@
 							soptions.clearSearch = this.stype === "text" ? true : false;
 						}
 						if (soptions.clearSearch) {
-							var csv = getRes("search.resetTitle") || "Clear Search Value";
+							var csv = $.isFunction(o.resetTitle) ?
+									o.resetTitle.call($t, {
+										options: o,
+										cm: cm,
+										cmName: cm.name,
+										iCol: ci
+									}) :
+									(getRes("search.resetTitle") || "Clear Search Value") + " " + jgrid.stripHtml(p.colNames[ci]);
 							$("td", stbl)
 								.eq(2)
-								.append("<a title='" + csv + "' class='" +
+								.append("<a title='" + csv + "' aria-label='" + csv + "' class='" +
 									getGuiStyles.call($t, "searchToolbar.clearButton", "clearsearchclass") +
 									"'><span>" + o.resetIcon + "</span></a>");
 						} else {
@@ -760,7 +774,11 @@
 									if (oSv) {
 										var elem = document.createElement("select");
 										elem.style.width = "100%";
-										$(elem).attr({ name: cm.index || cm.name, id: getId(cm.name) });
+										$(elem).attr({
+											name: cm.index || cm.name,
+											id: getId(cm.name),
+											"aria-describedby": p.id + "_" + cm.name
+										});
 										var sv, ov, key, k, isNoFilterValueExist;
 										if (typeof oSv === "string") {
 											so = oSv.split(delim);
@@ -791,6 +809,7 @@
 											ov = document.createElement("option");
 											ov.value = "";
 											ov.innerHTML = soptions.noFilterText;
+											ov.selected = true;
 											$(elem).prepend(ov);
 										}
 										if (soptions.defaultValue !== undefined) { $(elem).val(soptions.defaultValue); }
@@ -819,7 +838,11 @@
 							case "text":
 								var df = soptions.defaultValue !== undefined ? soptions.defaultValue : "";
 
-								$("td", stbl).eq(1).append("<input type='text' class='" + dataFieldClass + "' name='" + (cm.index || cm.name) + "' id='" + getId(cm.name) + "' value='" + df + "'/>");
+								$("td", stbl).eq(1).append("<input role='search' type='text' class='" + dataFieldClass +
+									"' name='" + (cm.index || cm.name) +
+									"' id='" + getId(cm.name) +
+									"' aria-labelledby='" + "jqgh_" + p.id + "_" + cm.name +
+									"' value='" + df + "'/>");
 								$(thd).append(stbl);
 
 								if (soptions.attr) { $("input", thd).attr(soptions.attr); }

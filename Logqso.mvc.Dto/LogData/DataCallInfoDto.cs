@@ -49,8 +49,13 @@ namespace Logqso.mvc.Dto.LogData
     };
     public class RadioNamestype
     {
+        public RadioNamestype()
+        {
+            disabled = false;
+        }
         public int key;
         public string value;
+        public bool disabled;
     };
 
 

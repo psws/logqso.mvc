@@ -144,7 +144,8 @@ namespace Logqso.Repository.Repository
                                                       select new RadioNamestype
                                                       {
                                                           key = cn.QsoRadioTypeEnum,
-                                                          value = cn.QsoRadioTypeName
+                                                          value = cn.QsoRadioTypeName,
+                                                          disabled = false
                                                       }).ToList(),
 
                                         Disabled = lc.Disabled
@@ -175,44 +176,13 @@ namespace Logqso.Repository.Repository
                                                join ll in LogQ on lc.LogCategoryId equals ll.LogCategoryId
                                                where ll.LogId == item.LogId
                                                select lc).FirstOrDefault();
-                    CatOperatorEnum CatOperatorEnum;
-                    ICollection<RadioNamestype> Validnames = new Collection<RadioNamestype>();
+
+                    ICollection<RadioNamestype> Validnames = null;
                     List<RadioNamestype> RadioNamelist = item.RadioNames.Cast<RadioNamestype>().ToList();
 
-                    Validnames.Add(RadioNamelist.Where(p => p.value == "ALL").FirstOrDefault());
 
-                    if (CatOperatorEnum.TryParse(LogCategory.CatOperatorEnum.ToString(), true, out CatOperatorEnum) == true)
-                    {
-                        switch (CatOperatorEnum)
-                        {
-                            case CatOperatorEnum.ALL:
-                                break;
-                            case CatOperatorEnum.SINGLE_OP:
-                                Validnames.Add(RadioNamelist.Where(p => p.value == "Run").FirstOrDefault());
-                                Validnames.Add(RadioNamelist.Where(p => p.value == "S_P").FirstOrDefault());
-                                break;
-                            case CatOperatorEnum.MULTI_OP:
-                                if (LogCategory.CatNoOfTxEnum == (int)CatNoOfTxEnum.ONE)
-                                {
-                                    Validnames.Add(RadioNamelist.Where(p => p.value == "Mult").FirstOrDefault());
-                                    Validnames.Add(RadioNamelist.Where(p => p.value == "Run").FirstOrDefault());
-                                }
-                                else if (LogCategory.CatNoOfTxEnum == (int)CatNoOfTxEnum.TWO)
-                                {
-                                    Validnames.Add(RadioNamelist.Where(p => p.value == "R1").FirstOrDefault());
-                                    Validnames.Add(RadioNamelist.Where(p => p.value == "R2").FirstOrDefault());
-                                }
-                                else
-                                {
-                                }
-                                break;
-                            case CatOperatorEnum.CHECKLOG:
-                                break;
-                            default:
-                                break;
-                        }
-                        item.RadioNames = Validnames;
-                    }
+                    GetValidRadioNamelist(item.LogId, LogCategory, RadioNamelist, LogRepository, out Validnames);
+                    item.RadioNames = Validnames;
                 }
 
 #endif
@@ -927,50 +897,20 @@ namespace Logqso.Repository.Repository
                                                join ll in LogQ on lc.LogCategoryId equals ll.LogCategoryId
                                                where ll.LogId == DataCallInfoDtoResult.LogId
                                                select lc).FirstOrDefault();
-                    CatOperatorEnum CatOperatorEnum;
-                    ICollection<RadioNamestype> Validnames = new Collection<RadioNamestype>();
+
+                    ICollection<RadioNamestype> Validnames = null;
                     List<RadioNamestype> RadioNamelist = DataCallInfoDtoResult.RadioNames.Cast<RadioNamestype>().ToList();
 
-                    Validnames.Add(RadioNamelist.Where(p => p.value == "ALL").FirstOrDefault());
 
-                    if (CatOperatorEnum.TryParse(LogCategory.CatOperatorEnum.ToString(), true, out CatOperatorEnum) == true)
+                    GetValidRadioNamelist(DataCallInfoDtoResult.LogId, LogCategory, RadioNamelist, LogRepository, out Validnames);
+                    
+                    DataCallInfoDtoResult.RadioNames = Validnames;
+                    RadioNamestype RadioNamestype = DataCallInfoDtoResult.RadioNames.Where(p => p.value == Enum.GetName(typeof(QsoRadioTypeEnum), DataCallInfoDtoResult.QsoRadioType)).FirstOrDefault();
+                    if (RadioNamestype == null)
                     {
-                        switch (CatOperatorEnum)
-                        {
-                            case CatOperatorEnum.ALL:
-                                break;
-                            case CatOperatorEnum.SINGLE_OP:
-                                Validnames.Add(RadioNamelist.Where(p => p.value == "Run").FirstOrDefault());
-                                Validnames.Add(RadioNamelist.Where(p => p.value == "S_P").FirstOrDefault());
-                                break;
-                            case CatOperatorEnum.MULTI_OP:
-                                if (LogCategory.CatNoOfTxEnum == (int)CatNoOfTxEnum.ONE)
-                                {
-                                    Validnames.Add(RadioNamelist.Where(p => p.value == "Mult").FirstOrDefault());
-                                    Validnames.Add(RadioNamelist.Where(p => p.value == "Run").FirstOrDefault());
-                                }
-                                else if (LogCategory.CatNoOfTxEnum == (int)CatNoOfTxEnum.TWO)
-                                {
-                                    Validnames.Add(RadioNamelist.Where(p => p.value == "R1").FirstOrDefault());
-                                    Validnames.Add(RadioNamelist.Where(p => p.value == "R2").FirstOrDefault());
-                                }
-                                else
-                                {
-                                }
-                                break;
-                            case CatOperatorEnum.CHECKLOG:
-                                break;
-                            default:
-                                break;
-                        }
-                        DataCallInfoDtoResult.RadioNames = Validnames;
-                        RadioNamestype RadioNamestype = DataCallInfoDtoResult.RadioNames.Where(p => p.value == Enum.GetName(typeof(QsoRadioTypeEnum), DataCallInfoDtoResult.QsoRadioType)).FirstOrDefault();
-                        if (RadioNamestype == null)
-                        {
-                            DataCallInfoDtoResult.QsoRadioType = QsoRadioTypeEnum.ALL;
-                        }
-
+                        DataCallInfoDtoResult.QsoRadioType = QsoRadioTypeEnum.ALL;
                     }
+
 
 
                 }
@@ -1601,6 +1541,75 @@ namespace Logqso.Repository.Repository
 
 
             return Task.FromResult(LogPageDTO);
+        }
+
+
+        public static void GetValidRadioNamelist(int Logid, LogCategory LogCategory, IList<RadioNamestype> RadioNamelist, IRepository<Log> _LogRepository, out ICollection<RadioNamestype> Validnames)
+        {
+            Validnames = new Collection<RadioNamestype>();
+            Validnames.Add(RadioNamelist.Where(p => p.value == "ALL").FirstOrDefault());
+
+            CatOperatorEnum CatOperatorEnum = mvc.common.Enum.CatOperatorEnum.ALL;
+
+            if (CatOperatorEnum.TryParse(LogCategory.CatOperatorEnum.ToString(), true, out CatOperatorEnum) == true)
+            {
+                switch (CatOperatorEnum)
+                {
+                    case CatOperatorEnum.ALL:
+                        break;
+                    case CatOperatorEnum.SINGLE_OP:
+                        //Validnames.Add(RadioNamelist.Where(p => p.value == "Run").FirstOrDefault());
+                        //Validnames.Add(RadioNamelist.Where(p => p.value == "S_P").FirstOrDefault());
+                        //if log has any QsoRadioTypeEnum.None, then logging program specifies no radio type QsoRadioTypeEnum.NONE
+                        IQueryFluent<Log> Logs = _LogRepository.Query();
+                        var LogQ1 = Logs
+                        .SelectQueryable(false).Where(x => x.LogId == Logid);
+
+                        IRepository<Qso> _QsoRepository = _LogRepository.GetRepository<Qso>();
+                        IQueryFluent<Qso> Qsos = _QsoRepository.Query();
+                        var QsoQ = Qsos.SelectQueryable(true);
+                        var NONETypes = (from ll in LogQ1
+                                         join lq in QsoQ on ll.LogId equals lq.LogId
+                                        where lq.QsoRadioTypeEnum == (int)QsoRadioTypeEnum.NONE
+                                        select new {
+                                           lq.QsoRadioTypeEnum
+                                        }).FirstOrDefault();
+
+
+                        foreach (var itemRadio in RadioNamelist)
+                        {
+                            if (itemRadio.value == "Run"  || itemRadio.value == "S_P"  )
+                            {
+                                if (NONETypes != null)
+                                {// if 1 NONE typr exists then all Qsosin log are NONE
+                                    itemRadio.disabled = true;
+                                }
+                                Validnames.Add(itemRadio);
+                            }
+                        }
+                        break;
+                    case CatOperatorEnum.MULTI_OP:
+                        if (LogCategory.CatNoOfTxEnum == (int)CatNoOfTxEnum.ONE)
+                        {
+                            Validnames.Add(RadioNamelist.Where(p => p.value == "Mult").FirstOrDefault());
+                            Validnames.Add(RadioNamelist.Where(p => p.value == "Run").FirstOrDefault());
+                        }
+                        else if (LogCategory.CatNoOfTxEnum == (int)CatNoOfTxEnum.TWO)
+                        {
+                            Validnames.Add(RadioNamelist.Where(p => p.value == "R1").FirstOrDefault());
+                            Validnames.Add(RadioNamelist.Where(p => p.value == "R2").FirstOrDefault());
+                        }
+                        else
+                        {
+                        }
+                        break;
+                    case CatOperatorEnum.CHECKLOG:
+                        break;
+                    default:
+                        break;
+                }
+            }
+
         }
 
 
