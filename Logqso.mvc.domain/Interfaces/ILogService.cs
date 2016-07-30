@@ -23,6 +23,7 @@ namespace Logqso.mvc.domain.Interfaces
             Task<MemoryStream> UpdateChartSettingsAsync(ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username);
             Task<DataCalls> GetCategorizedCallsAsync(dataCallObjDTO dataCallObjDTO, string Username);
             Task<DataCallInfoDto> GetUpdatedContestCall(DataCallInfoDto dataCallObjDTO, string Username);
+            Task<LogPageDTO> GetContestLogs(LogCtlDataSettingsDto LogCtlDataSettingsDto, string Username);
             
 #if false
             Task<ContestControlEntity> GetContestControlNames();

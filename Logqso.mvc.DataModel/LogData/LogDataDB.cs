@@ -64,8 +64,12 @@ namespace Logqso.mvc.DataModel.LogData
                     StationSeeds.SeedContest(context);
                     SessionSeeds.SeedContest(context); 
                   CallInfoSeeds.SeedContest(context);
-                 QsoExchangeNumberSeeds.SeedQsoExchangeNumber(context);
-
+                  QsoExchangeNumberSeeds.SeedQsoExchangeNumber(context);
+                  UbnUniqueSeeds.SeedContest(context);
+                    UbnNotInLogSeeds.SeedContest(context);
+                    UbnIncorrectCallSeeds.SeedContest(context);        
+                    UbnDupeSeeds.SeedContest(context);
+                    UbnIncorrectExchangeSeeds.SeedContest(context); 
          #if DEBUG
                 QsoSeeds.SeedContest(context);
         #endif

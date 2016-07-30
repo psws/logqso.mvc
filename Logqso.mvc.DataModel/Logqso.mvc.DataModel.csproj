@@ -179,6 +179,9 @@
     <Compile Include="LogControl\FilterModels\FiltContinent.cs" />
     <Compile Include="LogControl\FilterModels\FiltBand.cs" />
     <Compile Include="LogControl\FiltersSeeds.cs" />
+    <Compile Include="LogData\UbnDupeSeeds.cs" />
+    <Compile Include="LogData\UbnIncorrectCallSeeds.cs" />
+    <Compile Include="LogData\UbnIncorrectExchangeSeeds.cs" />
     <Compile Include="LogData\UbnModels\UbnDupes.cs" />
     <Compile Include="LogData\UbnModels\UbnIncorrectCall.cs" />
     <Compile Include="LogData\UbnModels\UbnIncorrectExchange.cs" />
@@ -186,6 +189,8 @@
     <Compile Include="LogData\UbnModels\UbnSummary.cs" />
     <Compile Include="LogData\UbnModels\UbnUniques.cs" />
     <Compile Include="ControlUnitOfWork.cs" />
+    <Compile Include="LogData\UbnNotInLogSeeds.cs" />
+    <Compile Include="LogData\UbnUniqueSeeds.cs" />
     <Compile Include="LogUnitOfWork.cs" />
     <Compile Include="LogControl\Models\ContestQsoContext.cs" />
     <Compile Include="LogControl\Models\Mapping\CatAssistedMap.cs" />

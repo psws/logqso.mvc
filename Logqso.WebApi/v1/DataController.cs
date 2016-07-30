@@ -66,7 +66,7 @@ namespace Logqso.WebApi
             //This webapi method loads the Callinfo selection comboboxes and sets the seleced values
 
             string Username = Logqso.mvc.common.definitions.Username;
-            bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+            bool val1 = (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
             if (val1)
             {
                 Username = System.Web.HttpContext.Current.User.Identity.Name;
@@ -124,7 +124,7 @@ namespace Logqso.WebApi
         public async Task<IHttpActionResult> CallsRequest(dataCallObjDTO dataCallObjDTO )
         {
             string Username = Logqso.mvc.common.definitions.Username;
-            bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+            bool val1 = (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
             if (val1)
             {
                 Username = System.Web.HttpContext.Current.User.Identity.Name;
@@ -153,7 +153,7 @@ namespace Logqso.WebApi
         public async Task<IHttpActionResult> UpdateChartSettings(ChartCtlDataSettingsDto ChartCtlDataSettingsDto)
         {
             string Username = Logqso.mvc.common.definitions.Username;
-            bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+            bool val1 = (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
             if (val1)
             {
                 Username = System.Web.HttpContext.Current.User.Identity.Name;
@@ -210,7 +210,7 @@ namespace Logqso.WebApi
         public async Task<IHttpActionResult> GetUpdatedContestCall(DataCallInfoDto DataCallInfoDto)
         {
             string Username = Logqso.mvc.common.definitions.Username;
-            bool val1 = (System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+            bool val1 = (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
             if (val1)
             {
                 Username = System.Web.HttpContext.Current.User.Identity.Name;
@@ -227,6 +227,34 @@ namespace Logqso.WebApi
             else
             {
                 return Ok(DataCallInfoDto);
+            }
+
+        }
+
+
+        [HttpPost]
+        [ResponseType(typeof(HttpResponseMessage))]
+        [Route("GetContestLogs")]
+        public async Task<IHttpActionResult> GetContestLogs(LogCtlDataSettingsDto LogCtlDataSettingsDto)
+        {
+            string Username = Logqso.mvc.common.definitions.Username;
+            bool val1 = (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+            if (val1)
+            {
+                Username = System.Web.HttpContext.Current.User.Identity.Name;
+            }
+
+
+            LogPageDTO LogPageDTO = await _LogService.GetContestLogs(LogCtlDataSettingsDto, Username);
+
+
+            if (LogPageDTO == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(LogPageDTO);
             }
 
         }

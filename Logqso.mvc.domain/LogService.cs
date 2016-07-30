@@ -125,6 +125,16 @@ namespace Logqso.mvc.domain
 
         }
 
+        public async Task<LogPageDTO> GetContestLogs(LogCtlDataSettingsDto LogCtlDataSettingsDto, string Username)
+        {
+
+            LogPageDTO LogPageDTO = await _repository.GetContestLogsAsync(LogCtlDataSettingsDto, Username);
+
+            return LogPageDTO;
+
+        }
+
+
 
         public override void Insert(Log entity)
         {

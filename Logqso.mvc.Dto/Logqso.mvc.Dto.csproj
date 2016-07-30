@@ -112,6 +112,7 @@
     <Compile Include="LogControl\ControlYaxisSettingsDto.cs" />
     <Compile Include="LogData\ChartCtlDataSettingsDto.cs" />
     <Compile Include="LogData\DataCallInfoDto.cs" />
+    <Compile Include="LogData\LogPageDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

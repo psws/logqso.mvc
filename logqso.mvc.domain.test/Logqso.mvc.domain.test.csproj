@@ -133,6 +133,7 @@
     <Compile Include="IntegrationTests\Data\IntegrationDataLogServiceTests.cs" />
     <Compile Include="IntegrationTests\Data\IntegrationURFQuertable.cs" />
     <Compile Include="IntegrationTests\Data\IntegrationURFSQL.cs" />
+    <Compile Include="IntegrationTests\Data\IntegrationDataRepositoryLogTests.cs" />
     <Compile Include="UnitTests\Automap\AutomapTest.cs" />
     <Compile Include="UnitTests\UnitCallSignServiceTest.cs" />
     <Compile Include="IntegrationTests\Control\IntegrationControlRepositoryTests.cs" />
@@ -218,8 +219,10 @@
     <None Include="Views\Shared\EditorTemplates\Week.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App Notes\Creat LogqsoTest DB clone.txt" />
-    <Content Include="App Notes\Generate LogqsoTest SQL DB script for integreation testing.txt" />
+    <Content Include="App Notes\Async unit tests.txt" />
+    <Content Include="App Notes\Creat ContestqsoTest DB clone.txt" />
+    <Content Include="App Notes\Generate ContestqsoTest SQL DB script for integreation testing.txt" />
+    <Content Include="App Notes\TestContext ouput.txt" />
     <Content Include="Scripts\jquery-2.2.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.3.js" />
     <Content Include="Scripts\jquery-2.2.3.min.js" />

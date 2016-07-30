@@ -100,6 +100,7 @@ div[id^='bdyPnlSel'], div[id^='bdyYaxis'],  div[id^='bdyXaxis']{
     min-width:110px;
     max-width:120px;
     text-align:left;
+    padding-left:3px;
 }
 
 .lq-checkbox{
@@ -138,12 +139,12 @@ span[id^='enb_dis']{
 }
 
 .lq-LogTitle {
-     width:29.5%;
+     width:30.0%;
      text-align:center;
      color: white;
 }
 .lq-LogTime {
-     width:8.7%;
+     width:8.0%;
      text-align:center;
      color: white;
 }
@@ -157,7 +158,7 @@ span[id^='enb_dis']{
 }
 
 .lq-LogU {
-     background-color: lightyellow; 
+    background-color: #fef90d;
 }
 
 .lq-LogBN {
@@ -165,7 +166,7 @@ span[id^='enb_dis']{
 }
 
 
-.lq-LogVBrdr {
+.lq-LogVBrdDbl {
      border-left-color:black;
      border-left-width:medium; 
      border-left-style:double; 
@@ -173,13 +174,64 @@ span[id^='enb_dis']{
      background-color: #eee; 
 }
 
-.lq-LogMltBrdr {
+.lq-LogBrdRed {
      border-left-color:red;
      border-left-width:thin; 
      border-left-style:solid; 
-     padding-left: 5px;
+     padding-left: 2px;
 }
 
+.lq-LogBrdBlk {
+     border-left-color:black;
+     border-left-width:thin; 
+     border-left-style:solid; 
+     padding-left: 3px;
+}
+
+.lq-LogBrdBrn {
+     border-left-color:brown;
+     border-left-width:thin; 
+     border-left-style:solid; 
+     padding-left: 3px;
+}
+
+.rowchangedEven td
+{
+    background-color: #ebf5e7; 
+}
+.rowchangedOdd td
+{
+    background-color: #fbe0e0; 
+}
+
+/*input[type=radio] {
+    border: 0px;
+    width: 50%;
+    height: .5em;
+}*/
+
+#jqGridLog {
+    font-size: .875em;
+}
+@media only screen and (max-width: 640px) {
+ #jqGridLog { font-size: .500em; }
+ #gbox_jqGridLog { font-size: .500em; }
+ }
+
+@media only screen and (max-width: 760px) {
+ #jqGridLog { font-size: .571em; }
+ #gbox_jqGridLog { font-size: .571em; }
+ }
+
+@media only screen and (max-width: 992px) {
+ #jqGridLog { font-size: .821em; }
+ #gbox_jqGridLog { font-size: .821em; }
+ }
+
+/*@media only screen and (max-width: 1280px) {
+ #jqGridLog { font-size: .785em; }
+ #gbox_jqGridLog { font-size: .785em; }
+ }*/
 
 #warning-message { display: none; }
 @media only screen and (max-width:480px)   {
@@ -454,6 +506,10 @@ a.close:hover {
   -webkit-transition: color .5s ease;
   -moz-transition: color .5s ease;
   transition: color .5s ease;
+}
+.CallListTabs{
+    margin-left: 5px;
+    list-style-type:none;
 }
 
 .test {
