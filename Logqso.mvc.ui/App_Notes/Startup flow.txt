@@ -111,5 +111,5 @@
 				This page is sent to the client
 			5)
 				The js Ready $function ($( document ).ready(function() {} )calls into webapi GetControlNames
-					function getAllControls() {
+					function _lq.getAllControls() {
 					_lq.ajaxHelper(_lq.controlUri + "/GetControlNames", 'GET').done(function (data) {
