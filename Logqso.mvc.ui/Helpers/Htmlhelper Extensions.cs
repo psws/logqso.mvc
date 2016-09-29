@@ -33,15 +33,18 @@ namespace Logqso.mvc.ui.Helpers
             var value = HtmlHelper.ViewContext.HttpContext.Request.QueryString.Get("View");
             if (value == null)
             {
-                value = "1";
+                value = "UBN";
             }
             switch (value)
             {
-                case "0":
-                    TabView = "0";
+                case "Chaet":
+                    TabView = "Chart";
                     break;
-                case "1":
-                    TabView = "1";
+                case "Log":
+                    TabView = "Log";
+                    break;
+                case "UBN":
+                    TabView = "UBN";
                     break;
                 default:
                     break;
@@ -51,7 +54,8 @@ namespace Logqso.mvc.ui.Helpers
             builder.MergeAttribute("id", "TabViewInit");
             builder.MergeAttribute("type", "hidden");
             builder.MergeAttribute("value", TabView);
-            MvcHtmlString MvcHtmlString = MvcHtmlString.Create(builder.ToString());
+
+            MvcHtmlString MvcHtmlString = MvcHtmlString.Create(builder.ToString(TagRenderMode.SelfClosing));
 
             return MvcHtmlString;
 

@@ -22,5 +22,13 @@ namespace Logqso.mvc.common
             StrReturn.Substring(0, length);
             return StrReturn;
         }
+
+        public static string GetReverseString(string s)
+        {
+            char[] charArray = s.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
+        }
+
     }
 }

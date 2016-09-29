@@ -158,6 +158,7 @@ namespace Logqso.Repository.Repository
                     item.StationNames.Add(StationNamestype);
                     //var Resuls = item.StationNames.OrderBy(i => i.key == 0 ? 0 : 1).ThenBy(i => i.key).ThenBy(x => x.value);
                     item.StationNames = item.StationNames.OrderBy(i => i.key).ThenBy(x => x.value).ToList();
+
                 }
 
                 //fixup radio
@@ -183,6 +184,7 @@ namespace Logqso.Repository.Repository
 
                     GetValidRadioNamelist(item.LogId, LogCategory, RadioNamelist, LogRepository, out Validnames);
                     item.RadioNames = Validnames;
+
                 }
 
 #endif
@@ -875,11 +877,15 @@ namespace Logqso.Repository.Repository
                     StationNamestype StationNamestype = new StationNamestype(0, "ALL");
                     DataCallInfoDtoResult.StationNames.Add(StationNamestype);
                     //fixup SelectedStationName
-                    StationNamestype = DataCallInfoDtoResult.StationNames.Where(p => p.value == DataCallInfoDtoResult.SelectedStationName).FirstOrDefault();
-                    if (StationNamestype == null)
-                    {
-                        DataCallInfoDtoResult.SelectedStationName = "ALL";
-                    }
+                    //StationNamestype = DataCallInfoDtoResult.StationNames.Where(p => p.value == DataCallInfoDtoResult.SelectedStationName).FirstOrDefault();
+                    //if (StationNamestype == null)
+                    //{
+                    //    DataCallInfoDtoResult.SelectedStationName = "ALL";
+                    //}
+
+                    // force default ALL wheb Call chabges
+                    DataCallInfoDtoResult.SelectedStationName = "ALL";
+
                     //var Resuls = item.StationNames.OrderBy(i => i.key == 0 ? 0 : 1).ThenBy(i => i.key).ThenBy(x => x.value);
                     DataCallInfoDtoResult.StationNames = DataCallInfoDtoResult.StationNames.OrderBy(i => i.key).ThenBy(x => x.value).ToList();
 
@@ -906,7 +912,7 @@ namespace Logqso.Repository.Repository
                     
                     DataCallInfoDtoResult.RadioNames = Validnames;
                     RadioNamestype RadioNamestype = DataCallInfoDtoResult.RadioNames.Where(p => p.value == Enum.GetName(typeof(QsoRadioTypeEnum), DataCallInfoDtoResult.QsoRadioType)).FirstOrDefault();
-                    if (RadioNamestype == null)
+                    if (RadioNamestype == null || RadioNamestype.disabled == true)
                     {
                         DataCallInfoDtoResult.QsoRadioType = QsoRadioTypeEnum.ALL;
                     }
@@ -948,25 +954,25 @@ namespace Logqso.Repository.Repository
             IQueryFluent<Qso> Qsos = QsoRepository.Query();
             var QsoQ = Qsos.SelectQueryable(true);
 
-            var UniqueRepository = LogRepository.GetRepository<UbnUnique>();
-            IQueryFluent<UbnUnique> Uniques = UniqueRepository.Query();
-            var UniquesQ = Uniques.SelectQueryable(true);
+            //var UniqueRepository = LogRepository.GetRepository<UbnUnique>();
+            //IQueryFluent<UbnUnique> Uniques = UniqueRepository.Query();
+            //var UniquesQ = Uniques.SelectQueryable(true);
 
-            var BadRepository = LogRepository.GetRepository<UbnIncorrectCall>(); //not in log
-            IQueryFluent<UbnIncorrectCall> Bads = BadRepository.Query();
-            var BadQ = Bads.SelectQueryable(true);
+            //var BadRepository = LogRepository.GetRepository<UbnIncorrectCall>(); //not in log
+            //IQueryFluent<UbnIncorrectCall> Bads = BadRepository.Query();
+            //var BadQ = Bads.SelectQueryable(true);
 
-            var NilRepository = LogRepository.GetRepository<UbnNotInLog>(); //not in log
-            IQueryFluent<UbnNotInLog> Nils = NilRepository.Query();
-            var NilQ = Nils.SelectQueryable(true);
+            //var NilRepository = LogRepository.GetRepository<UbnNotInLog>(); //not in log
+            //IQueryFluent<UbnNotInLog> Nils = NilRepository.Query();
+            //var NilQ = Nils.SelectQueryable(true);
 
-            var DupeRepository = LogRepository.GetRepository<UbnDupe>();
-            IQueryFluent<UbnDupe> Dupes = DupeRepository.Query();
-            var DupesQ = Dupes.SelectQueryable(true);
+            //var DupeRepository = LogRepository.GetRepository<UbnDupe>();
+            //IQueryFluent<UbnDupe> Dupes = DupeRepository.Query();
+            //var DupesQ = Dupes.SelectQueryable(true);
 
-            var XchgRepository = LogRepository.GetRepository<UbnIncorrectExchange>();
-            IQueryFluent<UbnIncorrectExchange> Xchngs = XchgRepository.Query();
-            var XchgsQ = Xchngs.SelectQueryable(true);
+            //var XchgRepository = LogRepository.GetRepository<UbnIncorrectExchange>();
+            //IQueryFluent<UbnIncorrectExchange> Xchngs = XchgRepository.Query();
+            //var XchgsQ = Xchngs.SelectQueryable(true);
 
         //https://msdn.microsoft.com/en-us/data/jj691402.aspx
             DbContext DbContext = QsoRepository.GetDbContext() as DbContext;
@@ -1001,7 +1007,10 @@ namespace Logqso.Repository.Repository
                 QsoRadioTypeEnum Radio = QsoRadioTypeEnum.NONE;
 
                 command.CommandType = CommandType.StoredProcedure;
-                command.CommandText = "[dbo].[CQD_sp_GetContestLogs]";
+                //This proc does not work if any of the 3 LogIDs are equal
+                //command.CommandText = "[dbo].[CQD_sp_GetContestLogs]";
+                command.CommandText = "[dbo].[CQD_sp_GetContestLogsUnion]";
+                
                 //logid? = -1 if no call selected
                 if (LogCtlDataSettingsDto.DataCallInfoDtos[0].Disabled == false)
                 {
@@ -1072,7 +1081,7 @@ namespace Logqso.Repository.Repository
                     {
                         command.AddParameterWithValue("@Country", DbType.String, Country);
                     }
-                    if (LogUtilities.LogGetZone(LogCtlDataSettingsDto.ControlSettingsDto.ControlFiltersSettingsDto, out Zone) == true)
+                    if (LogUtilities.LogGetZone(LogCtlDataSettingsDto.DataCallInfoDtos, LogCtlDataSettingsDto.ControlSettingsDto.ControlFiltersSettingsDto, out Zone) == true)
                     {
                         command.AddParameterWithValue("@Zone", DbType.UInt16, Zone);
                     }
@@ -1121,7 +1130,7 @@ namespace Logqso.Repository.Repository
                         ((IObjectContextAdapter)DbContext)
                             .ObjectContext
                             .Translate<LogPageRecord>(reader)
-                            .ToList();
+                            .ToList(); // all ubndx data is included
 
                     reader.NextResult();
 
@@ -1214,11 +1223,17 @@ namespace Logqso.Repository.Repository
                                 LogPageRecord LogPageRecord = LogPageRecordsCur.FirstOrDefault();
                                 CGroupCur = LogPageRecord.CGroup;
 
+
                                 LogPageRecordDTO LogPageRecordDTO = new LogPageRecordDTO()
                                 {
                                     T = DateTimeCur.ToString("HH:mm"),
                                     W = Day
                                 };
+        //if  (LogPageRecord.Call == "PJ2T")
+        //{
+
+
+        //}
 
                                 if (CGroupCur == 1)
                                 {
@@ -1228,9 +1243,14 @@ namespace Logqso.Repository.Repository
                                     LogPageRecordDTO.Z1 = LogPageRecord.Z;
                                     LogPageRecordDTO.P1 = LogPageRecord.P;
                                     LogPageRecordDTO.U1 = LogPageRecord.U;
-                                    LogPageRecordDTO.B1 = (LogPageRecord.B == true || LogPageRecord.X == true) ? true : false;
+                                    LogPageRecordDTO.B1 = LogPageRecord.B;
+                                    LogPageRecordDTO.BC1 = LogPageRecord.BC;
                                     LogPageRecordDTO.N1 = LogPageRecord.N;
                                     LogPageRecordDTO.D1 = LogPageRecord.D;
+                                    LogPageRecordDTO.X1 = LogPageRecord.X;
+                                    LogPageRecordDTO.XC1 = LogPageRecord.XC;
+                                    LogPageRecordDTO.R1 = Enum.GetName(typeof(QsoRadioTypeEnum), LogPageRecord.R);
+                                    LogPageRecordDTO.S1 = LogPageRecord.S;
 
                                     LogPageRecords1Index = (LogPageRecords1Index == -1) ? 0 : LogPageRecords1Index;
                                     LogPageRecords1Index++;
@@ -1248,9 +1268,14 @@ namespace Logqso.Repository.Repository
                                         LogPageRecordDTO.Z2 = LogPageRecord2.Z;
                                         LogPageRecordDTO.P2 = LogPageRecord2.P;
                                         LogPageRecordDTO.U2 = LogPageRecord2.U;
-                                        LogPageRecordDTO.B2 = (LogPageRecord2.B == true || LogPageRecord2.X == true) ? true : false;
+                                        LogPageRecordDTO.B2 = LogPageRecord2.B;
+                                        LogPageRecordDTO.BC2 = LogPageRecord2.BC;
                                         LogPageRecordDTO.N2 = LogPageRecord2.N;
                                         LogPageRecordDTO.D2 = LogPageRecord2.D;
+                                        LogPageRecordDTO.X2 = LogPageRecord2.X;
+                                        LogPageRecordDTO.XC2 = LogPageRecord2.XC;
+                                        LogPageRecordDTO.R2 = Enum.GetName(typeof(QsoRadioTypeEnum), LogPageRecord2.R);
+                                        LogPageRecordDTO.S2 = LogPageRecord2.S;
 
                                         LogPageRecords2Index++;
                                         LogPageRecords2Count--;
@@ -1267,9 +1292,14 @@ namespace Logqso.Repository.Repository
                                         LogPageRecordDTO.Z3 = LogPageRecord3.Z;
                                         LogPageRecordDTO.P3 = LogPageRecord3.P;
                                         LogPageRecordDTO.U3 = LogPageRecord3.U;
-                                        LogPageRecordDTO.B3 = (LogPageRecord3.B == true || LogPageRecord3.X == true) ? true : false;
+                                        LogPageRecordDTO.B3 = LogPageRecord3.B;
+                                        LogPageRecordDTO.BC3 = LogPageRecord3.BC;
                                         LogPageRecordDTO.N3 = LogPageRecord3.N;
                                         LogPageRecordDTO.D3 = LogPageRecord3.D;
+                                        LogPageRecordDTO.X3 = LogPageRecord3.X;
+                                        LogPageRecordDTO.XC3 = LogPageRecord3.XC;
+                                        LogPageRecordDTO.R3 = Enum.GetName(typeof(QsoRadioTypeEnum), LogPageRecord3.R);
+                                        LogPageRecordDTO.S3 = LogPageRecord3.S;
 
                                         LogPageRecords3Index++;
                                         LogPageRecords3Count--;
@@ -1285,9 +1315,14 @@ namespace Logqso.Repository.Repository
                                     LogPageRecordDTO.Z2 = LogPageRecord.Z;
                                     LogPageRecordDTO.P2 = LogPageRecord.P;
                                     LogPageRecordDTO.U2 = LogPageRecord.U;
-                                    LogPageRecordDTO.B2 = (LogPageRecord.B == true || LogPageRecord.X == true) ? true : false;
+                                    LogPageRecordDTO.B2 = LogPageRecord.B;
+                                    LogPageRecordDTO.BC2 = LogPageRecord.BC;
                                     LogPageRecordDTO.N2 = LogPageRecord.N;
                                     LogPageRecordDTO.D2 = LogPageRecord.D;
+                                    LogPageRecordDTO.X2 = LogPageRecord.X;
+                                    LogPageRecordDTO.XC2 = LogPageRecord.XC;
+                                    LogPageRecordDTO.R2 = Enum.GetName(typeof(QsoRadioTypeEnum), LogPageRecord.R);
+                                    LogPageRecordDTO.S2 = LogPageRecord.S;
 
                                     LogPageRecords2Index++;
                                     LogPageRecords2Count--;
@@ -1302,10 +1337,15 @@ namespace Logqso.Repository.Repository
                                         LogPageRecordDTO.Z3 = LogPageRecord3.Z;
                                         LogPageRecordDTO.P3 = LogPageRecord3.P;
                                         LogPageRecordDTO.U3 = LogPageRecord3.U;
-                                        LogPageRecordDTO.B3 = (LogPageRecord3.B == true || LogPageRecord3.X == true) ? true : false;
+                                        LogPageRecordDTO.B3 = LogPageRecord3.B;
+                                        LogPageRecordDTO.BC3 = LogPageRecord3.BC;
                                         LogPageRecordDTO.N3 = LogPageRecord3.N;
                                         LogPageRecordDTO.D3 = LogPageRecord3.D;
-                                      
+                                        LogPageRecordDTO.X3 = LogPageRecord3.X;
+                                        LogPageRecordDTO.XC3 = LogPageRecord3.XC;
+                                        LogPageRecordDTO.R3 = Enum.GetName(typeof(QsoRadioTypeEnum), LogPageRecord3.R);
+                                        LogPageRecordDTO.S3 = LogPageRecord3.S;
+                                     
                                         LogPageRecords3Index++;
                                         LogPageRecords3Count--;
                                         LogPageRecordsCur.Remove(LogPageRecord3);
@@ -1320,9 +1360,14 @@ namespace Logqso.Repository.Repository
                                     LogPageRecordDTO.C3 = LogPageRecord.C;
                                     LogPageRecordDTO.Z3 = LogPageRecord.Z;
                                     LogPageRecordDTO.P3 = LogPageRecord.P;
-                                    LogPageRecordDTO.B3 = (LogPageRecord.B == true || LogPageRecord.X == true) ? true : false;
+                                    LogPageRecordDTO.B3 = LogPageRecord.B;
+                                    LogPageRecordDTO.BC3 = LogPageRecord.BC;
                                     LogPageRecordDTO.N3 = LogPageRecord.N;
                                     LogPageRecordDTO.D3 = LogPageRecord.D;
+                                    LogPageRecordDTO.X3 = LogPageRecord.X;
+                                    LogPageRecordDTO.XC3 = LogPageRecord.XC;
+                                    LogPageRecordDTO.R3 = Enum.GetName(typeof(QsoRadioTypeEnum), LogPageRecord.R);
+                                    LogPageRecordDTO.S3 = LogPageRecord.S;
 
                                     LogPageRecords3Index++;
                                     LogPageRecords3Count--;
@@ -1612,6 +1657,112 @@ namespace Logqso.Repository.Repository
 
         }
 
+        public static  async Task<List<Qso>> GetQsoRangeListAsync(this IRepositoryAsync<Log> _LogRepository, int Logid, short StartQsoNo, short EndQsoNo)
+        {
+            return await GetQsoRangeList(_LogRepository, Logid, StartQsoNo, EndQsoNo);
+        }
+        public static  Task<List<Qso>> GetQsoRangeList(this IRepositoryAsync<Log> _LogRepository, int Logid, short StartQsoNo, short EndQsoNo)
+        {
+            List<Qso> QsoResults = null;
+
+            IRepository<Qso> _QsoRepository = _LogRepository.GetRepository<Qso>();
+            IQueryFluent<Qso> Qsos = _QsoRepository.Query();
+            var QsoQ = Qsos.Include(x => x.CallSign)
+                        .SelectQueryable(true)
+                        .OrderBy(t => t.QsoNo);
+
+             QsoResults =  (from lq in QsoQ
+                             where lq.LogId == Logid &&
+                             lq.QsoNo >= StartQsoNo && lq.QsoNo <= EndQsoNo
+                             select lq
+                             ).ToList();
+             return Task.FromResult(QsoResults);
+        }
+
+        public static async Task<bool> UpdateQsoStationsAsync(this IRepositoryAsync<Log> _LogRepository, QsoUpdateStationNamesDTOCollextion QsoUpdateStationNamesDTOCollextion)
+        {
+            return await UpdateQsoStations(_LogRepository, QsoUpdateStationNamesDTOCollextion);
+        }
+        public static Task<bool> UpdateQsoStations(this IRepositoryAsync<Log> _LogRepository, QsoUpdateStationNamesDTOCollextion QsoUpdateStationNamesDTOCollextion)
+        {
+            bool results = true;
+            DbContext DbContext = _LogRepository.GetDbContext() as DbContext;
+
+            // .Net will call QDUpdateInImsQuoteCollection.GetEnumerator() for each record.
+            try 
+	        {
+                using (DbContext)
+                {
+                    var sqp = new SqlParameter("sqp", SqlDbType.Structured);
+                    sqp.Value = QsoUpdateStationNamesDTOCollextion;
+                    sqp.TypeName = "udt_QsoStationNames";
+
+                    string command = "EXEC " + "CQD_sp_QsoUpdatePointsMults" + " @sqp";
+                    DbContext.Database.ExecuteSqlCommand(command, sqp);
+                }
+            }
+	        catch (Exception ex)
+	        {
+		        results = false;
+	        }
+            finally
+            {
+                DbContext.Dispose();
+            }
+            return Task.FromResult(results);
+        }
+
+        public static async Task<bool> SetStationListAsync(this IRepositoryAsync<Log> _LogRepository, int Logid, List<Station> LogStations)
+        {
+            return await SetStationList(_LogRepository, Logid, LogStations);
+        }
+        public static Task<bool> SetStationList(this IRepositoryAsync<Log> _LogRepository, int Logid, List<Station> LogStations)
+        {
+            bool Results = true;
+
+            IRepository<Qso> _QsoRepository = _LogRepository.GetRepository<Qso>();
+            IQueryFluent<Qso> Qsos = _QsoRepository.Query();
+            var QsoQ = Qsos.SelectQueryable(true);
+
+            IRepository<Station> _StationRepository = _LogRepository.GetRepository<Station>();
+            IQueryFluent<Station> Stations = _StationRepository.Query();
+            var StationsQ = Stations.SelectQueryable(true);
+
+
+            var StationsCurrent = (from ls in StationsQ
+                          where ls.LogId == Logid 
+                          select ls
+                            ).ToList();
+            //if current sation is being used, we need to remove all Qsos withthis StationName
+            var _contextStation = _StationRepository.GetDbContext();
+
+            foreach (var item in StationsCurrent)
+	        {
+                //get all Qs with this stationName
+                var QsosWithStatioName = (from lq in QsoQ
+                          where lq.LogId == Logid &&
+                          lq.StationName == item.StationName
+                          select lq
+                            ).ToList();
+                foreach (var Qso in QsosWithStatioName)
+	            {
+		            Qso.StationName = string.Empty;
+                    _QsoRepository.Update(Qso);
+	            }
+                var _context = _QsoRepository.GetDbContext();
+                _context.SaveChanges();
+                //now delete the stationName
+                _StationRepository.Delete(item);
+                _contextStation.SaveChanges();
+            }
+            foreach (var item in LogStations)
+            {
+                _StationRepository.Insert(item);
+            }
+            _contextStation.SaveChanges();
+
+            return Task.FromResult(Results);
+        }
 
     }
 

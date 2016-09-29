@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Diagnostics;
 
 using Logqso.mvc.domain.Charting;
+using System.ComponentModel;
 
 
 
@@ -131,6 +132,156 @@ namespace Logqso.mvc.domain
             LogPageDTO LogPageDTO = await _repository.GetContestLogsAsync(LogCtlDataSettingsDto, Username);
 
             return LogPageDTO;
+
+        }
+
+        
+        public async Task<bool>  ValiadateWintestStnUpload(DataCallInfoDto DataCallInfoDto, string originalFileName, string Filepath   )
+        {
+            bool result = true;
+            //check if 1st 2 qsos match DB.
+            //check first line of file
+            StreamReader TxtStream = new StreamReader(Filepath);
+
+            try
+            {
+                if (TxtStream != null)
+                {
+                    using (TxtStream)
+                    {
+
+                        List<string> rowcolumns = TxtStream.ReadLine().Split(",".ToCharArray(),StringSplitOptions.RemoveEmptyEntries).ToList();
+                        int columnStation = rowcolumns.FindIndex(x=>x == "Station name");
+                        if (columnStation >= 0)
+                        {
+                           // QSO number
+                            int columnQsoNo = rowcolumns.FindIndex(x => x == "QSO number");
+                            //Date (YYYY-MM-DD)
+                            int columnDate = rowcolumns.FindIndex(x => x == "Date (YYYY-MM-DD)");
+                            //Time (HH:MM:SS)
+                            int columnTime = rowcolumns.FindIndex(x => x == "Time (HH:MM:SS)");
+                            //Frequency (kHz)
+                            int columnFreq = rowcolumns.FindIndex(x => x == "Frequency (kHz)");
+                            //Callsign
+                            int columnCall = rowcolumns.FindIndex(x => x == "Callsign");
+                            if (columnQsoNo >= 0 && columnDate >= 0 && columnTime >= 0 && columnFreq >= 0 && columnCall >= 0)
+                            {//line is valid
+                                //get qsos
+                                List<Qso> QsoResults = await _repository.GetQsoRangeList(DataCallInfoDto.LogId, 1, 2);
+                                if (QsoResults.Count != 0)
+                                {
+                                    foreach (var item in QsoResults)
+                                    {
+                                        //QSO number,Date (YYYY-MM-DD),Time (HH:MM:SS),Band,Frequency (kHz),Mode,Callsign,RS(T) sent,RS(T) received,Station name,Radio / Status
+                                        //1,10/24/2015,0:00:33,20,"14230,8",SSB,TM2Y,59,59,STN4,R2
+                                        //We need to handle the case where the CSV fie uses a, for the "" frequency
+                                        string QsoLine = TxtStream.ReadLine();
+                                        if (QsoLine.Contains("\"") == true)
+                                        {
+                                            var first = QsoLine.IndexOf('"');
+                                            var last = QsoLine.LastIndexOf('"');
+                                            char[] arraychar = QsoLine.ToArray();
+                                            for (int i = first; i < last; i++)
+                                            {
+                                                if (arraychar[i] == ',')
+                                                {
+                                                    arraychar[i] = '.';
+                                                }
+                                            }
+                                            arraychar[first] = ',';
+                                            arraychar[last] = ',';
+                                            QsoLine = new string(arraychar);
+                                        } 
+
+
+                                        List<string> qsocolumns = QsoLine.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+                                        if (qsocolumns[columnQsoNo] != item.QsoNo.ToString() )
+	                                    {
+                                            result = false;
+                                            break;
+	                                    }
+                                       //trim seconds
+                                        DateTime DateTime = DateTime.Parse(qsocolumns[columnDate] + " " + qsocolumns[columnTime].Substring(0, qsocolumns[columnTime].Length-3));
+                                        if (DateTime != item.QsoDateTime)
+                                        {
+                                            result = false;
+                                            break;
+                                        }
+                                        decimal freq;
+                                        //no decimalin cabrillo
+                                        if (decimal.TryParse(qsocolumns[columnFreq].Substring(0, qsocolumns[columnFreq].Length - 2), out freq) == true)
+                                        {
+                                            if (freq != item.Frequency)
+                                            {
+                                                result = false;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            result = false;
+                                            break;
+                                        }
+                                        if (qsocolumns[columnCall] != item.CallSign.Call )
+                                        {
+                                            result = false;
+                                            break;
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                        } 
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
+
+        //Check datetime, frequency, callsignid and QsoRadioTypeEnum of QSO
+            return result;
+        }
+
+        public  Task<bool> ProcessWintestStnUpload(int LogId, string Filepath)
+        {
+            bool results = true;
+             try
+             {
+                    ProcessStations ProcessStationsobj = new ProcessStations(_repository, LogId, Filepath );
+                    //http://stackoverflow.com/questions/5483565/how-to-use-wpf-background-worker
+                    BackgroundWorker worker = new BackgroundWorker();
+                    worker.WorkerReportsProgress = false;
+                    worker.DoWork += worker_DoWorkCall;
+                    //worker.ProgressChanged += worker_ProgressChanged;
+                    //worker.RunWorkerCompleted += worker_RunWorkerCompleted;	
+	                worker.RunWorkerAsync(ProcessStationsobj);
+
+             }
+             catch (Exception ex)
+             {
+                 results = false;
+             }
+
+            //gather The station names into hash
+
+            return Task.FromResult(results);
+        }
+
+        private void worker_DoWorkCall(object sender, DoWorkEventArgs e)
+        {
+            // run all background tasks here
+            //Get the BackgroundWorker that raised this event.
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            ProcessStations ProcessLogsobj = e.Argument as ProcessStations;
+            ProcessLogsobj.StationsToDatabase(worker);
 
         }
 

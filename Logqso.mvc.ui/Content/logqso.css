@@ -26,6 +26,9 @@ div.row{
 .clear {
     clear:both;
 }
+
+
+
 div[id^='hdgPnl'], div[id^='hdgAxis'], div[id^='FhdgPnl']{
     height:20px;
     padding:2px 2px 2px 2px;
@@ -80,10 +83,15 @@ div[id^='bdyPnlSel'], div[id^='bdyYaxis'],  div[id^='bdyXaxis']{
 }
 
 .lq-contest-selector {
-    font-size: 80%;
+    font-size: 80% !important;
     width: 130px;
     height:25px;
     display: inline;
+}
+.lq-update-selector{
+    min-width:158px;
+    max-width:180px;
+    border-radius:4px;
 }
 
 .lq-call-selector{
@@ -121,6 +129,85 @@ span[id^='enb_dis']{
     float:right;
 
 }
+
+.lq-button-big{
+    font-size:80%;
+   height:33px;
+    font-size: 1.0em;
+    font-weight: 700;
+    color: black;
+    background-color: white;
+       height:24px;
+       border-width:2px;
+       border-bottom-style:outset;
+       border-bottom-color:#333;
+       border-top-style:inset;
+        border-top-color:rgba(252, 242, 242, 0.50);
+       border-right-color: #333;
+        border-right-style:outset;
+        border-left-color:rgba(252, 242, 242, 0.50);
+        border-left-style:inset;
+
+}
+.lq-label-file{
+   visibility:visible;
+   width:300px;
+   height:24px;
+    font-size:100%;
+    color:green;
+
+}
+
+/*http://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/*/
+.lq-FileInput{
+    display: inline-block !important;
+    /*max-width:500px;
+    width:500px;*/
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+
+}
+.lq-FileInput + label {
+    font-size: 1.0em;
+    font-weight: 700;
+    color: black;
+    background-color: white;
+       height:24px;
+       border-width:2px;
+       border-bottom-style:outset;
+       border-bottom-color:#333;
+       border-top-style:inset;
+        border-top-color:rgba(252, 242, 242, 0.50);
+       border-right-color: #333;
+        border-right-style:outset;
+        border-left-color:rgba(252, 242, 242, 0.50);
+        border-left-style:inset;
+   display: inline-block;
+}
+
+.lq-FileInput:focus + label {
+	outline: 1px dotted #000;
+	outline: -webkit-focus-ring-color auto 5px;
+}
+.lq-FileInput:focus + label,
+.lq-FileInput + label:hover {
+    background-color: rgba(252, 242, 242, 0.50);
+}
+.lq-FileInputLenabled + label {
+	cursor: pointer; /* "hand" cursor */
+}
+.lq-FileInput:disabled + label {
+    opacity: .3;
+}
+#UploadWintest:disabled
+{
+    opacity: .3;
+}
+
 .lq-inline {
     display: inline;
 }
@@ -195,6 +282,13 @@ span[id^='enb_dis']{
      padding-left: 3px;
 }
 
+.lq-LogRR1 {
+     border-left-color:red;
+     border-left-width:thin; 
+     border-left-style:solid; 
+     padding-left: 2px;
+}
+
 .rowchangedEven td
 {
     background-color: #ebf5e7; 
@@ -210,34 +304,61 @@ span[id^='enb_dis']{
     height: .5em;
 }*/
 
-#jqGridLog {
-    font-size: .875em;
+/*https://css-tricks.com/snippets/css/using-font-face/*/
+/*conversion http://stackoverflow.com/questions/15744026/font-face-not-displaying-correctly-in-ie*/
+@font-face {
+     font-family: ArialSlashZero;
+      src: url(../fonts/slash_0-webfont.woff2) format('woff2'),  
+           url(../fonts/slash_0-webfont.woff) format('woff'),  /*for chrome IE11*/
+           url(../fonts/slash_0.ttf) format('truetype');  /* for android browser*/
 }
+
+/*div[id^= 'gview_jqGrid']{
+    font-family:  'ArialSlashZero', Fallback, Arial;
+}*/
+
+#jqGridLog {
+    font-size: .871em;
+}
+#jqGridUBN {
+    font-size: .871em;
+}
+
 @media only screen and (max-width: 640px) {
  #jqGridLog { font-size: .500em; }
  #gbox_jqGridLog { font-size: .500em; }
+ #jqGridUBN { font-size: .500em; }
+ #gbox_jqGridUBN { font-size: .500em; }
  }
 
 @media only screen and (max-width: 760px) {
  #jqGridLog { font-size: .571em; }
  #gbox_jqGridLog { font-size: .571em; }
- }
+ #jqGridUBN { font-size: .571em; }
+ #gbox_jqGridUBN { font-size: .571em; }
+}
 
 @media only screen and (max-width: 992px) {
  #jqGridLog { font-size: .821em; }
  #gbox_jqGridLog { font-size: .821em; }
+ #jqGridUBN { font-size: .821em; }
+ #gbox_jqGridUBN { font-size: .821em; }
  }
 
 /*@media only screen and (max-width: 1280px) {
  #jqGridLog { font-size: .785em; }
  #gbox_jqGridLog { font-size: .785em; }
+ #jqGridUBN { font-size: .785em; }
+ #gbox_jqGridUBN { font-size: .785em; }
  }*/
+
 
 #warning-message { display: none; }
 @media only screen and (max-width:480px)   {
     #wrapper { display:none; }
     #warning-message { display:block; }
 }
+
 @media only screen and (orientation:landscape){
     #warning-message { display:none; }
 }

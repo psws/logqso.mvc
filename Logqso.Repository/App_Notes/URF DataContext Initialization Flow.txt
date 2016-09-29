@@ -1,0 +1,48 @@
+﻿LogqsoDataContext()
+	DataContext(string nameOrConnectionString) : base(nameOrConnectionString)
+		(1)3ce1113e-7853-4bdc-851b-4141b611b33c}
+UnitOfWorkData(IDataContextAsync dataContext)
+		(1)3ce1113e-7853-4bdc-851b-4141b611b33c}
+
+LogqsoDataContext()
+	DataContext(string nameOrConnectionString) : base(nameOrConnectionString) LogControlDB
+		(2)092adf99-bc5c-4f25-9f7d-c097492209d5}
+
+LogControlContext()
+	DataContext(string nameOrConnectionString) : base(nameOrConnectionString) LogControlDB
+		(3){e53faaee-f9ce-4b47-90c7-5dcbc064031d
+UnitOfWork(IDataContextAsync dataContext)
+		(3)e53faaee-f9ce-4b47-90c7-5dcbc064031d}
+
+
+Repository(IDataContextAsync context, IUnitOfWorkAsync unitOfWork)  //for Repository<log>
+	IDataContextAsync context
+		(2)092adf99-bc5c-4f25-9f7d-c097492209d5}
+	IUnitOfWorkAsync unitOfWork
+		(3)e53faaee-f9ce-4b47-90c7-5dcbc064031d}
+LogService(IRepositoryAsync<Log> repository)
+		(2)092adf99-bc5c-4f25-9f7d-c097492209d5}  
+
+DataController(IUnitOfWorkDataAsync unitOfWorkAsync, ILogService LogService)
+	IUnitOfWorkDataAsync 
+		(1)3ce1113e-7853-4bdc-851b-4141b611b33c
+	ILogService 
+		(2)092adf99-bc5c-4f25-9f7d-c097492209d5}
+
+
+GetDataCallInfoSelectionsAsync(this IRepositoryAsync<Log> LogRepository, string Username)	
+	IRepositoryAsync<Log>
+		(2)092adf99-bc5c-4f25-9f7d-c097492209d5}
+
+CallInfoRepository = _LogRepository.GetRepository<CallInfo>();
+	return _unitOfWork.Repository<T>();
+		_unitOfWork
+			(3){e53faaee-f9ce-4b47-90c7-5dcbc064031d}
+		Repository(IDataContextAsync context, IUnitOfWorkAsync unitOfWork)
+				IDataContextAsync
+					(3){e53faaee-f9ce-4b47-90c7-5dcbc064031d}
+				IUnitOfWorkAsync
+					(3)e53faaee-f9ce-4b47-90c7-5dcbc064031d}
+	CallInfoRepository
+		(3)e53faaee-f9ce-4b47-90c7-5dcbc064031d
+

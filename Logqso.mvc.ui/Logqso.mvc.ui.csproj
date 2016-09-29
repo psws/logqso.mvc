@@ -431,6 +431,9 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\ui.jqgrid.min.css.map" />
+    <Content Include="fonts\slash_0.ttf" />
+    <Content Include="fonts\slash_0-webfont.woff" />
+    <Content Include="fonts\slash_0-webfont.woff2" />
     <None Include="Properties\PublishProfiles\contestqso.pubxml" />
     <Content Include="Scripts\free-jqGrid\i18n\grid.locale-ar.js" />
     <Content Include="Scripts\free-jqGrid\i18n\grid.locale-ar.min.js" />

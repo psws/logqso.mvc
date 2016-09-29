@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Web;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -16,6 +18,8 @@ using System.Web.UI.WebControls;
 using System.Web.Hosting;
 using System.Net.Http.Headers;
 using Logqso.mvc.Dto.LogControl;
+using Newtonsoft.Json;
+using System.Web.Http.Filters;
 
 
 namespace Logqso.WebApi
@@ -257,6 +261,131 @@ namespace Logqso.WebApi
                 return Ok(LogPageDTO);
             }
 
+        }
+
+
+        [HttpPost]
+        [ResponseType(typeof(HttpResponseMessage))]
+        [Route("UploadWintestFile")]
+        [ValidateMimeMultipartContent]
+        public async Task<IHttpActionResult> UploadWintestFile()
+        {
+             //http://stackoverflow.com/questions/27885052/how-to-upload-files-to-a-web-api-server-and-send-parameters-along-to-the-action
+            HttpResponseMessage HttpResponseMessage = null;
+
+            // Put the files in a temporary location
+            // this way we call ReadAsMultiPartAsync and we get access to the other data submitted
+            string WintestPath = ConfigurationManager.AppSettings["WintestDirectory"].ToString();
+            var tempPath = HttpContext.Current.Server.MapPath(WintestPath + @"/temp");
+            if (Directory.Exists(tempPath) == false)
+            {
+                Directory.CreateDirectory(tempPath);
+            }
+
+            var streamProvider = new MultipartFormDataStreamProvider(tempPath);
+            var readResult = await Request.Content.ReadAsMultipartAsync(streamProvider);
+
+            if (readResult.FormData["UploadInfo"] == null)
+            {
+                // We don't have the UploadInfo ... delete the TempFiles and return BadRequest
+                File.Delete(tempPath);
+                HttpResponseMessage =  Request.CreateResponse(HttpStatusCode.BadRequest,"The file upload has failed");
+            }
+            else
+            {//process formdata
+
+
+                // The files have been successfully saved in a TempLocation and the FileModels are not null
+                // Validate that everything else is fine with this command
+                //var DataCallInfoDto = JsonConvert.DeserializeObject<IEnumerable<DataCallInfoDto>>(readResult.FormData["UploadInfo"]).ToList();
+                var DataCallInfoDto = JsonConvert.DeserializeObject<DataCallInfoDto>(readResult.FormData["UploadInfo"]);
+                bool result = false;
+                var FileData = readResult.FileData.FirstOrDefault();
+                string UploadFile = FileData.LocalFileName;
+                //foreach (var tempFile in readResult.FileData)
+                //{
+                var originalFileName = FileData.Headers.ContentDisposition.FileName.Replace("\"", string.Empty);
+
+                //check if 1st 2 qsos match DB.
+                result = await _LogService.ValiadateWintestStnUpload(DataCallInfoDto, originalFileName, UploadFile);
+                //}
+                if (result == true)
+                {
+                    HttpResponseMessage = Request.CreateResponse(HttpStatusCode.OK, "The file upload has completed");
+                    //move file
+                    var StorePath = HttpContext.Current.Server.MapPath(WintestPath + @"/" + DataCallInfoDto.SelectedContestName);
+                    if (Directory.Exists(StorePath) == false)
+                    {
+                        Directory.CreateDirectory(StorePath);
+                    }
+                    var SavePath = StorePath + @"/" + DataCallInfoDto.SelectedCall + ".CSV";
+                    if (File.Exists(SavePath) )
+                    {
+                        File.Delete(SavePath);
+                    }
+                    Directory.Move(UploadFile, SavePath);
+
+                    File.Delete(UploadFile);
+
+                    //start background thread
+                     _LogService.ProcessWintestStnUpload(DataCallInfoDto.LogId, SavePath);
+                }
+                else
+                {
+                    HttpResponseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, 
+                        "The Uploaded file does not match the submitted log. The file upload has failed");
+                }
+            }
+
+
+
+ //           var httpPostedFile = HttpContext.Current.Request.Files["UploadedFile"];
+ //           if (httpPostedFile != null)
+ //           {
+ //               // Validate the uploaded image(optional)
+
+ //               // Get the complete file path
+ //               var fileSavePath = Path.Combine(HttpContext.Current.Server.MapPath("~/UploadedFiles"), httpPostedFile.FileName);
+
+ //               // Save the uploaded file to "UploadedFiles" folder
+ //               //                        httpPostedFile.SaveAs(fileSavePath);
+
+ ////               return new KeyValuePair<bool, string>(true, "File uploaded successfully.");
+ //           }
+
+
+            //System.Web.HttpFileCollection hfc = System.Web.HttpContext.Current.Request.Files;
+            //foreach (System.Web.HttpPostedFile hpf in hfc)
+            //{
+            //    //System.Web.HttpPostedFileBase hpf = file as System.Web.HttpPostedFileBase;
+            //    if (hpf.ContentLength == 0)
+            //        continue;
+            //    string savedFileName = Path.Combine(
+            //        AppDomain.CurrentDomain.BaseDirectory,
+            //        Path.GetFileName(hpf.FileName));
+            //    hpf.SaveAs(savedFileName);
+            //}
+            if (HttpResponseMessage == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return ResponseMessage(HttpResponseMessage);
+                //return Ok(HttpResponseMessage);
+                //return Ok();
+            }
+        }
+
+        public class ValidateMimeMultipartContent : ActionFilterAttribute
+        {
+            public override void OnActionExecuting(System.Web.Http.Controllers.HttpActionContext actionContext)
+            {
+                if (!actionContext.Request.Content.IsMimeMultipartContent())
+                {
+                    actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.UnsupportedMediaType, "Unsupported Media Type");
+                }
+            }
         }
 
     }

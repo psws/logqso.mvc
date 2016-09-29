@@ -54,6 +54,10 @@ AS
 			from UbnIncorrectCall as badCall
 			where q.LogId = badCall.LogId and q.QsoNo = badCall.QsoNo
 		) as B,
+		(Select badCall.CorrectCall
+			from UbnIncorrectCall as badCall
+			where q.LogId = badCall.LogId and q.QsoNo = badCall.QsoNo
+		) as BC,
 		(Select Cast(count(*) as bit)
 			from UbnNotInLog as nil
 			where q.LogId = nil.LogId and q.QsoNo = nil.QsoNo
@@ -65,7 +69,12 @@ AS
 		(Select Cast(count(*) as bit)
 			from UbnIncorrectExchange as badX
 			where q.LogId = badX.LogId and q.QsoNo = badX.QsoNo
-		) as X
+		) as X,
+		(Select badX.CorrectExchange
+			from UbnIncorrectExchange as badX
+			where q.LogId = badX.LogId and q.QsoNo = badX.QsoNo
+		) as XC
+
 	 From [dbo].[Qso] q
 	 INNER JOIN CallSign c  on q.CallsignId = c.CallSignId
 	 INNER JOIN Log l on q.LogId = l.LogId

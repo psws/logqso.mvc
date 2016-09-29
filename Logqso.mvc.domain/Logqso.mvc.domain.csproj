@@ -119,6 +119,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LoglvsService.cs" />
+    <Compile Include="ProcessStations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QsoService.cs" />
   </ItemGroup>

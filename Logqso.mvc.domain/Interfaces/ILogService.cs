@@ -24,6 +24,8 @@ namespace Logqso.mvc.domain.Interfaces
             Task<DataCalls> GetCategorizedCallsAsync(dataCallObjDTO dataCallObjDTO, string Username);
             Task<DataCallInfoDto> GetUpdatedContestCall(DataCallInfoDto dataCallObjDTO, string Username);
             Task<LogPageDTO> GetContestLogs(LogCtlDataSettingsDto LogCtlDataSettingsDto, string Username);
+            Task<bool> ValiadateWintestStnUpload(DataCallInfoDto DataCallInfoDto, string originalFileName, string Filepath);
+            Task<bool> ProcessWintestStnUpload(int LogId, string Filepath);
             
 #if false
             Task<ContestControlEntity> GetContestControlNames();

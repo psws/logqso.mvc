@@ -46,8 +46,13 @@ namespace Logqso.mvc.Dto.LogData
             public bool P1 {get; set;}
             public bool U1 {get; set;}
             public bool B1 {get; set;}
-            public bool N1 {get; set;}
+            public string BC1 { get; set; } // corrected call
+            public bool N1 { get; set; }
             public bool D1 {get; set;}
+            public bool X1 { get; set; }
+            public string XC1 { get; set; } // corrected exchange
+            public string R1 { get; set; }
+            public string S1 { get; set; }
 
             public string I2 {get; set;}
             public string F2 { get; set; }
@@ -56,8 +61,13 @@ namespace Logqso.mvc.Dto.LogData
             public bool P2 {get; set;}
             public bool U2 {get; set;}
             public bool B2 {get; set;}
-            public bool N2 {get; set;}
+            public string BC2 { get; set; } // corrected call
+            public bool N2 { get; set; }
             public bool D2 {get; set;}
+            public bool X2 { get; set; }
+            public string XC2 { get; set; } // corrected exchange
+            public string R2 { get; set; }
+            public string S2 { get; set; }
 
             public string I3 {get; set;}
             public string F3 { get; set; }
@@ -66,8 +76,13 @@ namespace Logqso.mvc.Dto.LogData
             public bool P3 {get; set;}
             public bool U3 {get; set;}
             public bool B3 {get; set;}
-            public bool N3 {get; set;}
+            public string BC3 { get; set; } // corrected call
+            public bool N3 { get; set; }
             public bool D3 {get; set;}
+            public bool X3 { get; set; }
+            public string XC3 { get; set; } // corrected exchange
+            public string R3 { get; set; }
+            public string S3 { get; set; }
 
    }
     public class LogPageRecord
@@ -84,9 +99,11 @@ namespace Logqso.mvc.Dto.LogData
         public bool P { get; set; }
         public bool U { get; set; }
         public bool B { get; set; } //incorrect call
+        public string BC { get; set; } // corrected call
         public bool N { get; set; }  //not in log
         public bool D { get; set; } //Dupes
         public bool X { get; set; } //bad exchange
+        public string XC { get; set; } // corrected exchange
         public int R { get; set; }
         public string S { get; set; } //station
 

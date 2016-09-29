@@ -11,5 +11,6 @@ namespace Logqso.mvc.common.Enum
         CALL1 = 1,
         CALL2,
         CALL3,
+        CALL4
     }
 }

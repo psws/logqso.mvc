@@ -87,13 +87,27 @@ namespace Logqso.Repository
             return bHasRange;
         }
 
-        public static bool LogGetZone(ControlFiltersSettingsDto ControlFiltersSettingsDto, out short QsoExchangeNumber)
+        public static bool LogGetZone(DataCallInfoDto[] DataCallInfoDtos, ControlFiltersSettingsDto ControlFiltersSettingsDto, out short QsoExchangeNumber)
         {
             bool bHasRange = false;
-            QsoExchangeNumber = 0; 
-            if (short.TryParse(ControlFiltersSettingsDto.FiltCQZone, out QsoExchangeNumber) == true)
+            QsoExchangeNumber = 0;
+            var NoZone = false;
+            //check for WPX contest ==> no zone qualifier
+            foreach (var item in DataCallInfoDtos)
             {
-                bHasRange = true;
+                if (item.SelectedContestName.Contains("wpx") == true)
+                {
+                    NoZone = true;
+                    break;
+                }
+            }
+
+            if (NoZone != true)
+            {
+                if (short.TryParse(ControlFiltersSettingsDto.FiltCQZone, out QsoExchangeNumber) == true)
+                {
+                    bHasRange = true;
+                }
             }
             return bHasRange;
         }

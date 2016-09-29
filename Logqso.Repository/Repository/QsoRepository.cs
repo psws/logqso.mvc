@@ -5,6 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Logqso.Repository.Interfaces;
 using Logqso.mvc.DataModel.LogData.DataModels;
+using Logqso.Repository.Repository;
+using System.Data.SqlClient;
+using System.Data;
+using Repository.Pattern.Repositories;
+using System.Data.Entity;
 
 namespace Logqso.Repository
 {
@@ -12,7 +17,7 @@ namespace Logqso.Repository
     {
         //TODO stubed out. replace by DB call
 
-        public Qso CreateQso(int LogID) 
+        public Qso CreateQso(int LogID)
         {
             Qso Qso = new Qso
             {
@@ -26,6 +31,5 @@ namespace Logqso.Repository
             };
             return Qso;
         }
-
     }
 }

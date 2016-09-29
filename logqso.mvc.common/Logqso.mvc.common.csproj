@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="definitions.cs" />
+    <Compile Include="EnumUtils.cs" />
     <Compile Include="Enum\CallEnums.cs" />
     <Compile Include="Enum\CategoryEnums.cs" />
     <Compile Include="Enum\ChartEnums.cs" />

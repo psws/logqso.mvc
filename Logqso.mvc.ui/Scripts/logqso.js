@@ -35,11 +35,22 @@ $(function () {
 
     _lq.LogScrollPosition = window.sessionStorage.getItem('_lq.LogScrollPosition');
     if (_lq.LogScrollPosition != null) {
-        _lq.LogScrollUpdateReqd = false;
+        _lq.LogScrollUpdateReqd = false; //restored pos on refresh
     } else {
         _lq.LogScrollUpdateReqd = true;
     }
 
+    _lq.LogScrollPosition = window.sessionStorage.getItem('_lq.LogScrollPosition');
+    if (_lq.LogScrollPosition != null) {
+        _lq.LogScrollUpdateReqd = false; //restored pos on refresh
+    } else {
+        _lq.LogScrollUpdateReqd = true;
+    }
+
+
+
+
+    _lq.UBNViewInit();
     _lq.LogViewInit();
 
 
@@ -344,7 +355,7 @@ $(function () {
                 $(this).selectmenu('menuWidget').addClass('lq-dropdwn');
                 switch (valueOfElement.id) {
                     case 'FiltBand':
-                        $(this).selectmenu("option", "width", 60);
+                        $(this).selectmenu("option", "width", 65);
                         break
                     case 'FiltContinent':
                         $(this).selectmenu("option", "width", 75);
@@ -353,7 +364,7 @@ $(function () {
                         $(this).selectmenu("option", "width", 160);
                         break
                     case 'FiltCQZone':
-                        $(this).selectmenu("option", "width", 80);
+                        $(this).selectmenu("option", "width", 70);
                         break
                     default:
                         $(this).selectmenu("option", "width", 100);
@@ -402,7 +413,7 @@ $(function () {
     //                'margin-top': -(ElementCount * 25)
     //            });
 
-    //set DDL change event
+    //set DDL control change event
     $("select[id ^='Cat'], select[id ^='Filt'], select[id ^='Yaxis'], select[id ^='Xaxis']").
         each(function (indexInArray, valueOfElement) {
             //$(this).on("selectmenuopen", function (event, ui) {
@@ -410,12 +421,13 @@ $(function () {
             //});
             $(this).on("selectmenuselect", function (event, ui) {
                 id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
-                if (_lq.ChartUpdateReqd == true && event.key != 'F5') {//weird bug async called wfen F5 oushed
+                if (_lq.ChartUpdateReqd == true && event.key != 'F5') {//wierd bug async called when F5 pushed
                     _lq.ControlUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML, id[0].value);
                 }
             })
 
         });
+
     //set DDL Data change event
     $("select[id ^='Station'], select[id ^='Radio']").
         each(function (indexInArray, valueOfElement) {
@@ -509,8 +521,13 @@ $(function () {
         //});
 
         var call = e.currentTarget.innerText.toUpperCase();
+        var c;
+        if (call != '') {
+            c = call.charCodeAt(0);//.toString(16);
+        } else {
+            c = 49;//default to 1st tab
+        }
         //set active tab 
-        var c = call.charCodeAt(0);//.toString(16);
         var acttab;
         var actDiv;
         if (c > 48 && c <= 57) {
@@ -541,6 +558,11 @@ $(function () {
                 tabNo = 'tabs3';
                 popupNo = 'popupCall3';
                 break;
+            case 'Call4':
+                tdiv = $('div[id=tabs4]');
+                tabNo = 'tabs4';
+                popupNo = 'popupCall4';
+                break;
             default:
 
         }
@@ -555,7 +577,11 @@ $(function () {
         //style popup
         var modalBox = $('#' + popupNo + '');
         var popup = $('#' + popupNo + ' h4');
-        popup.html("Select a Call for " + _lq.parent_modal_box_id);
+        if (_lq.parent_modal_box_id == 'Call4') {
+            popup.html("Select your Call for the Uploaded csv file ");
+        } else {
+            popup.html("Select a Call for " + _lq.parent_modal_box_id);
+        }
         popup.addClass('lq-popup-hdr');
 
         tdiv.tabs({
@@ -574,6 +600,8 @@ $(function () {
                 //alert( this.text);
             }
         });
+
+
 
         //_lq.LoadInitialCallTab() tab is only called once
         //after this first call, InitTabState is set true.
@@ -629,7 +657,111 @@ $(function () {
 
     //});
 
+    var dataobj = window.sessionStorage.getItem('_lq.DataCallInfoDto4');
+    if (dataobj != null) {
+        _lq.DataCallInfoDto4 = JSON.parse(dataobj);
+        if (_lq.DataCallInfoDto4.SelectedContestName != "") {
+            $("button[id='Contest4'] span").text(_lq.DataCallInfoDto4.SelectedContestName);
+            if (_lq.DataCallInfoDto4.SelectedCall != "") {
+                $("button[id='Call4'] ").text(_lq.DataCallInfoDto4.SelectedCall);
+                $("#Call4").button("enable");
+                $("#FileInputWT").prop('disabled', false);
+            }
+        }
+    } else {
+        _lq.DataCallInfoDto4 = { // for upload controls. Not cached
+            CallGroup: 4,
+            SelectedContestName: '',
+            SelectedCall: '',
+            SelectedStationName: '',
+            QsoRadioType: '',
+            LogId: '',
+            Disabled: 0,
+            StationNames: '',
+            ContestNames: '',
+            RadioNames: '',
+        };
+        window.sessionStorage.setItem('_lq.DataCallInfoDto4', JSON.stringify(_lq.DataCallInfoDto4));
+    }
 
+
+    $('.lq-FileInput').each(function () {
+        var $input = $(this),
+			$label = $input.next('label'),
+			labelVal = $label.html();
+
+        $input.on('change', function (e) {
+            var fileName = '';
+
+            if (this.files && this.files.length > 1)
+                _lq.fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
+            else if (e.target.value)
+                _lq.fileName = e.target.value.split('\\').pop();
+            //_lq.FiletoUpload = e.originalEvent.currentTarget.files[0];
+
+
+
+            if (_lq.fileName) {
+                //$label.find('span').html(fileName);
+                //$label[0].innerHTML = fileName;
+                //&nbsp;Select File to Upload&nbsp;
+                var filelbl = $('#FileLabelWT');
+                filelbl[0].disabled = false;
+                filelbl[0].innerHTML = _lq.fileName;
+
+                $("#UploadWintest")[0].disabled = false;
+                $("#FileBlkWT").css({
+                    'display': 'inline-block'
+                });
+
+            }
+            else {
+                $label.html(labelVal);
+            }
+        });
+    });
+
+    $("#UploadWintest").click(function () {
+        //http://stackoverflow.com/questions/25921941/using-html5-filereader-c-and-jquery-to-upload-file
+        var formData = new FormData();
+        //formData.append(_lq.FiletoUpload.name, _lq.FiletoUpload);
+        _lq.FiletoUpload = $('.lq-FileInput').get(0).files;
+
+        formData.append("UploadInfo", JSON.stringify(_lq.DataCallInfoDto4));
+        formData.append("UploadedFile", _lq.FiletoUpload[0]);
+
+        _lq.ajaxHelperNoJsonData(_lq.dataUri + '/UploadWintestFile', 'POST', 'json', false, false, formData, FileUploaded);
+
+    // Firefox bug fix
+    //$input
+	//.on('focus', function () { $input.addClass('has-focus'); })
+	//.on('blur', function () { $input.removeClass('has-focus'); });
+    });
+
+    FileUploaded = function (responseData, textStatus, jqXHR) {
+        if (textStatus == 'success') {
+            $('#updateProgressDiv').hide();
+            updateProgressDiv.css({
+                position: "absolute",
+                top: y + "px",
+                left: x + "px"
+            });
+
+            if (responseData != null) {
+                alert(responseData);
+                $("#FileStskWT").css({
+                    'display': 'inline-block'
+                });
+                $('#FileSelectedWT')[0].innerHTML = "File Upload Complete";
+                $("#UploadWintest")[0].disabled = true;
+
+            }
+        } else {
+            alert(responseData);
+            $('#FileLabelWT')[0].innerHTML = "File Upload Error";
+        }
+
+    };
 
 
     $(".modal-box").draggable();
@@ -677,18 +809,12 @@ $(function () {
 
 
 
-
-
-
-
-
-
     $("button[id$= 'Dft']").click(function () {
         var ReqUri = "/GetControlSelection/";
         switch (this.id) {
             case "CatDft":
                 ReqUri += "ControlCategorySettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, ControlCategorySettingsDtoLoad);
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, 'application/json', null, ControlCategorySettingsDtoLoad);
                 function ControlCategorySettingsDtoLoad(ControlCategorySettingsDto) {
                     _lq.SetControlCategorySettings(ControlCategorySettingsDto, true);
                     _lq.LogUpdateReqd = true;
@@ -697,7 +823,7 @@ $(function () {
                 break;
             case "QsoDft":
                 ReqUri += "ControlFiltersSettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, SetControlFiltersSettingsDtoLoad);
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, 'application/json', null, SetControlFiltersSettingsDtoLoad);
                 function SetControlFiltersSettingsDtoLoad(ControlFiltersSettingsDto) {
                     _lq.SetControlFiltersSettings(ControlFiltersSettingsDto, true);
                     _lq.LogUpdateReqd = true;
@@ -706,7 +832,7 @@ $(function () {
                 break;
             case "AxisDft":
                 ReqUri += "ControlYaxisSettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, ControlYaxisSettingsDtoLoad);
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, 'application/json', null, ControlYaxisSettingsDtoLoad);
                 function ControlYaxisSettingsDtoLoad(ControlYaxisSettingsDto) {
                     _lq.SetControlYaxisSettings(ControlYaxisSettingsDto, true);
                     _lq.LogUpdateReqd = true;
@@ -715,7 +841,7 @@ $(function () {
                 break;
             case "XAxisDft":
                 ReqUri += "ControlXaxisSettingsDto";
-                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, null, SetControlXaxisSettingsDtoLoad);
+                _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, 'application/json', null, SetControlXaxisSettingsDtoLoad);
                 function SetControlXaxisSettingsDtoLoad(ControlXaxisSettingsDto) {
                     _lq.SetControlXaxisSettings(ControlXaxisSettingsDto, true);
                      _lq.LogUpdateReqd = true;
@@ -744,6 +870,10 @@ $(function () {
         var $grid = $("#jqGridLog"),
             newWidth = $grid.closest(".ui-jqgrid").parent().width();
         $grid.jqGrid("setGridWidth", newWidth, true);
+
+        $grid = $("#jqGridUBN"),
+           newWidth = $grid.closest(".ui-jqgrid").parent().width();
+        $grid.jqGrid("setGridWidth", newWidth, true);
     });
 
 
@@ -761,6 +891,9 @@ $(function () {
     _lq.CallReload1 = true;
     _lq.CallReload2 = true;
     _lq.CallReload3 = true;
+    _lq.CallReload4 = true;
+    _lq.fileName;
+    _lq.FiletoUpload;
     _lq.InitTab;
     _lq.InitTabState = 0;
     _lq.ajaxCallCount = 0;
@@ -768,6 +901,7 @@ $(function () {
     _lq.ChartInitialUpdateReqd = true;
     _lq.ChartDataLoaded = false;
     _lq.ChartControlLoaded = false;
+    _lq.minWidth = '992px';
     _lq.ActiveView;
     _lq.LogUpdateReqd = true;
     _lq.LogScrollUpdateReqd = true;
@@ -880,6 +1014,19 @@ $(function () {
         RadioNames: '',
     };
 
+    _lq.DataCallInfoDto4 = { // for upload controls. Not cached
+        CallGroup: 4,
+        SelectedContestName: '',
+        SelectedCall: '',
+        SelectedStationName: '',
+        QsoRadioType: '',
+        LogId: '',
+        Disabled: 0,
+        StationNames: '',
+        ContestNames: '',
+        RadioNames: '',
+    };
+
     _lq.DataCalls = {
         CallGroup: '',
         SelectedCall: '',
@@ -953,13 +1100,13 @@ $(function () {
     });
 
 
-    _lq.ajaxHelper = function (uri, method, datatype, processdata, data, Function) {
+    _lq.ajaxHelper = function (uri, method, datatype, processdata, contentType, data, Function) {
         $.ajax({
             type: method,
             url: uri,
             dataType: datatype,
             processData: processdata,
-            contentType: 'application/json',
+            contentType: contentType,
             beforeSend: function () {
                 _lq.ajaxCallCount++;
                 $('#updateProgressDiv').show();
@@ -979,6 +1126,35 @@ $(function () {
        });
 
     }
+
+
+    _lq.ajaxHelperNoJsonData = function (uri, method, datatype, processdata, contentType, data, Function) {
+        $.ajax({
+            type: method,
+            url: uri,
+            dataType: datatype,
+            processData: processdata,
+            contentType: contentType,
+            beforeSend: function () {
+                _lq.ajaxCallCount++;
+                $('#updateProgressDiv').show();
+            },
+            complete: function () {
+                _lq.ajaxCallCount--;
+                if (_lq.ajaxCallCount == 0) {
+                    $('#updateProgressDiv').hide();
+                }
+            },
+
+            data: data ,
+        })
+       .done(Function)
+       .fail(function (jqXHR, textStatus, errorThrown) {
+           console.log(errorThrown);
+       });
+
+    }
+
 
     _lq.LoadCallPopupTabs = function (Tabsel) {
         var tab;
@@ -1073,11 +1249,16 @@ $(function () {
          each(function (indexInArray, valueOfElement) {
              $(this).css('margin', '0');
          });
-        $("#TabViewChart, #TabViewLog").
+
+        //get rid of outer padding
+        $("div[id = 'TabViews'] div[id^='TabView']").
              each(function (indexInArray, valueOfElement) {
-                 $(this).css('padding', '0');
+                 //$(this).css('padding', '0');
+                 valueOfElement.style.padding = "0px";
              });
 
+        $.jgrid.defaults.responsive = true;
+        $.jgrid.defaults.styleUI = 'Bootstrap';
     }
 
     _lq.LoadInitialViewTab = function (event, ui) {
@@ -1088,47 +1269,68 @@ $(function () {
 
     _lq.LoadViewTab = function (event, ui) {
         //http://stackoverflow.com/questions/300078/jquery-ui-tabs-get-currently-selected-tab-index/12973370#12973370
-        _lq.ActiveView = ui.newTab.index().toString();
+        //_lq.ActiveView = ui.newTab.index().toString();
+        _lq.ActiveView = ui.newTab[0].textContent;
         window.sessionStorage.setItem('_lq.ActiveView', _lq.ActiveView);
         if (ui.newTab[0].textContent == 'Chart') {
  
             //ui.newPanel[0].innerText = text;
         }
-        else if (ui.newTab[0].textContent == 'Log') {
-
+        else {
+    
             //$.jgrid.defaults.width = 900;
-            $.jgrid.defaults.responsive = true;
-            $.jgrid.defaults.styleUI = 'Bootstrap';
 
             //set to current call
             var dataobj = window.sessionStorage.getItem(_lq.DataCallInfoDTOs);
             if (dataobj != null) {
                 _lq.DataCallInfoDTOs = JSON.parse(dataobj);
-                _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs);
             }
 
 
             //_lq.LogViewDraw();
+            var view = ui.newTab[0].textContent;
+            if (view == 'Log') {
+                _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs, _lq.ActiveView);
+                var grid = $("#jqGridLog");
+                var newWidth = grid.closest(".ui-jqgrid").parent().width();
+                grid.jqGrid("setGridWidth", newWidth, true);
 
-            var grid = $("#jqGridLog");
-            var newWidth = grid.closest(".ui-jqgrid").parent().width();
-            grid.jqGrid("setGridWidth", newWidth, true);
+                // var tdiv = $('div[id=TabViews]');
+                //var active = tdiv.tabs('option', 'active');
+                if (ui.oldTab[0].textContent != 'Log') {
+                    if (_lq.LogUpdateReqd == true) {
+                        _lq.GetContestLogs();
+                    } else {
+                        //_lq.LogScrollPosition = window.sessionStorage.getItem('_lq.LogScrollPosition');
+                        //if (_lq.LogScrollPosition == null) {
+                        //    _lq.LogScrollPosition = 0;
+                        //}
+                        grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.LogScrollPosition);
+                        //grid.trigger("reloadGrid", [{ page: 49 }]);
+                    }
+                }
+            } else if (view == 'UBN') {
+                _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs, _lq.ActiveView);
+                var grid = $("#jqGridUBN");
+                var newWidth = grid.closest(".ui-jqgrid").parent().width();
+                grid.jqGrid("setGridWidth", newWidth, true);
 
-            var tdiv = $('div[id=TabViews]');
-            var active = tdiv.tabs('option', 'active');
-            if (ui.oldTab[0].textContent != 'Log') {
-                if (_lq.LogUpdateReqd == true) {
-                    _lq.GetContestLogs();
-                } else {
-                    //_lq.LogScrollPosition = window.sessionStorage.getItem('_lq.LogScrollPosition');
-                    //if (_lq.LogScrollPosition == null) {
-                    //    _lq.LogScrollPosition = 0;
-                    //}
-                    grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.LogScrollPosition);
-                    //grid.trigger("reloadGrid", [{ page: 49 }]);
+                // var tdiv = $('div[id=TabViews]');
+                //var active = tdiv.tabs('option', 'active');
+                if (ui.oldTab[0].textContent != 'UBN') {
+                    if (_lq.LogUpdateReqd == true) {
+                        _lq.GetContestLogs();
+                    } else {
+                        //_lq.LogScrollPosition = window.sessionStorage.getItem('_lq.LogScrollPosition');
+                        //if (_lq.LogScrollPosition == null) {
+                        //    _lq.LogScrollPosition = 0;
+                        //}
+                        grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.LogScrollPosition);
+                        //grid.trigger("reloadGrid", [{ page: 49 }]);
+                    }
                 }
             }
-            var mq = window.matchMedia("(min-width: 992px)");
+            var mq = window.matchMedia("(min-width:" + _lq.minWidth + " )");
             WidthChange(mq);
             //_lq.LogViewDraw2();
 
@@ -1138,16 +1340,25 @@ $(function () {
 
 
     _lq.TabVieweSelectTab = function () {
-        _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs);
+        _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs, _lq.ActiveView);
 
         //http://stackoverflow.com/questions/7244549/jquery-ui-tabs-switching-to-a-new-tab-programatically
         var tdiv = $('div[id=TabViews]');
-        tdiv.tabs("option", "active", _lq.ActiveView);
+        //var index = $('#TabViews a:contains("' + _lq.ActiveView + '") ').parent().index();
+        var index = $('#TabViews a[href$="' + _lq.ActiveView + '"] ').parent().index();
+        tdiv.tabs("option", "active", index.toString() );
     }
 
 
     _lq.GetContestLogs = function () {
-        var grid = $("#jqGridLog");
+        var grid;
+        if (_lq.ActiveView == 'Log') {
+            grid = $("#jqGridLog");
+        } else if (_lq.ActiveView == 'UBN')
+        {
+            grid = $("#jqGridUBN");
+        }
+
         var postDataValues = grid.jqGrid('getGridParam', 'postData');
         _lq.LogPageRequestDTO.page = postDataValues.page;
         _lq.LogPageRequestDTO.sidx = postDataValues.sidx;
@@ -1167,63 +1378,77 @@ $(function () {
 
         }
 
-        _lq.ajaxHelper(_lq.dataUri + '/GetContestLogs', 'POST', 'json', false, dataObj, _lq.LogViewDraw2);
+        _lq.ajaxHelper(_lq.dataUri + '/GetContestLogs', 'POST', 'json', false,'application/json', dataObj, _lq.LogViewDraw2);
 
     }
 
 
     // media query event handler
     if (matchMedia) {
-        var mq = window.matchMedia("(min-width: 992px)");
+        var mq = window.matchMedia("(min-width:" + _lq.minWidth + " )");
         mq.addListener(WidthChange);
         WidthChange(mq );
     }
 
     // media query change
-    function WidthChange( mq) {
-        var grid = $("#jqGridLog");
-        if (mq.matches) {
-            // window width is at least 500px
-            grid.parents('div.ui-jqgrid-bdiv').css("max-height", "385px");
-            //$('div[id^= LCall]').
-            //        each(function () {
-            //            $(this).css(
-            //     { "width": "30.0%" });
-            //        });
-            //grid.jqGrid('showCol', "B1");
-            //grid.jqGrid('showCol', "B2");
-            //grid.jqGrid('showCol', "B3");
-            //var CallW = grid.jqGrid('getColProp', 'I1');
-            //var BW = grid.jqGrid('getColProp', 'B1');
-            //var newWidth = 35;
-            //grid.jqGrid('setColProp', 'I1', { width: newWidth });
-            ////grid.jqGrid('setColProp', 'I2', { width: 35 });
-            ////grid.jqGrid('setColProp', 'I3', { width: 35 });
-        } else {
-            // window width is less than 500px
-            grid.parents('div.ui-jqgrid-bdiv').css("max-height", "224px");
-            //var I = $('div[id^= LCall]').
-            //        each(function () {
-            //            $(this).css(
-            //     { "width": "29.0%" });
-            //        });
-            //grid.jqGrid('hideCol', "B1");
-            //grid.jqGrid('hideCol', "B2");
-            //grid.jqGrid('hideCol', "B3");
-            //var CallW = grid.jqGrid('getColProp', 'I1');
-            //var BW = grid.jqGrid('getColProp', 'B1');
-            //var newWidth = 50;
-            //grid.jqGrid('setColProp', 'I1', { width: newWidth });
-            ////grid.jqGrid('setColProp', 'I2', { width: 50 });
-            ////grid.jqGrid('setColProp', 'I3', { width: 50 });
+    function WidthChange(mq) {
+        if ( _lq.ActiveView == 'Log' || _lq.ActiveView == 'UBN') {
+            var grid;
+            if (_lq.ActiveView == 'Log') {
+                grid = $("#jqGridLog");
+            } else if (_lq.ActiveView == 'UBN') {
+                grid = $("#jqGridUBN");
+            }
+            if (mq.matches) {
+                // window width is at least 500px
+                grid.parents('div.ui-jqgrid-bdiv').css("max-height", "388px");
+                //$('div[id^= LCall]').
+                //        each(function () {
+                //            $(this).css(
+                //     { "width": "30.0%" });
+                //        });
+                //grid.jqGrid('showCol', "B1");
+                //grid.jqGrid('showCol', "B2");
+                //grid.jqGrid('showCol', "B3");
+                //var CallW = grid.jqGrid('getColProp', 'I1');
+                //var BW = grid.jqGrid('getColProp', 'B1');
+                //var newWidth = 35;
+                //grid.jqGrid('setColProp', 'I1', { width: newWidth });
+                ////grid.jqGrid('setColProp', 'I2', { width: 35 });
+                ////grid.jqGrid('setColProp', 'I3', { width: 35 });
+            } else {
+                // window width is less than 500px
+                grid.parents('div.ui-jqgrid-bdiv').css("max-height", "224px");
+                //var I = $('div[id^= LCall]').
+                //        each(function () {
+                //            $(this).css(
+                //     { "width": "29.0%" });
+                //        });
+                //grid.jqGrid('hideCol', "B1");
+                //grid.jqGrid('hideCol', "B2");
+                //grid.jqGrid('hideCol', "B3");
+                //var CallW = grid.jqGrid('getColProp', 'I1');
+                //var BW = grid.jqGrid('getColProp', 'B1');
+                //var newWidth = 50;
+                //grid.jqGrid('setColProp', 'I1', { width: newWidth });
+                ////grid.jqGrid('setColProp', 'I2', { width: 50 });
+                ////grid.jqGrid('setColProp', 'I3', { width: 50 });
+            }
         }
 
     }
 
 
-    _lq.SetLogCallGroupdCalls = function (DataCallInfoDTOs) {
-        $('.jqg-second-row-header th[colspan=7]')
-            .each(function (indexInArray, valueOfElement) {
+    _lq.SetLogCallGroupdCalls = function (DataCallInfoDTOs, View) {
+        var grid = null;
+        if (View == 'Log') {
+            grid = $('#TabViewLog .jqg-second-row-header th[colspan=6]')
+        } else if (View == 'UBN') {
+            grid = $('#TabViewUBN .jqg-second-row-header th[colspan=7]')
+        }
+        if (grid != null) {
+
+            $.each(grid, function (indexInArray, valueOfElement) {
                 switch (indexInArray) {
                     case 0:
                         valueOfElement.innerText = DataCallInfoDTOs[0].SelectedCall;
@@ -1238,21 +1463,65 @@ $(function () {
 
                 }
             });
+        }
     }
 
 
+    var setSorting = function (colName, sortOrder) {
+        var $self = $(this),
+            colModel = $self.jqGrid("getGridParam", "colModel"),
+            headers = $self[0].grid.headers,
+            showSortIconsInAllCols = $self.jqGrid("getGridParam", "viewsortcols")[0],
+            cmLength = colModel.length,
+            cm,
+            $sortSpan,
+            i;
+        for (i = 0; i < cmLength; i++) {
+            cm = colModel[i];
+            if (cm.name === colName) {
+                cm.lso = String(sortOrder).toLowerCase() === "desc" ? "desc" : "asc";
+            }
+            $sortSpan = $(headers[i].el).find(">div.ui-jqgrid-sortable>span.s-ico");
+            if (showSortIconsInAllCols || cm.lso) {
+                $sortSpan.show();
+                if (cm.lso) {
+                    $sortSpan.find(">span.ui-icon-" + cm.lso)
+                        .removeClass("ui-state-disabled");
+                }
+            }
+        }
+    };
 
-
-    _lq.LogViewInit = function () {
-        var grid = $("#jqGridLog");
+    _lq.UBNViewInit = function () {
+        var grid = $('#jqGridUBN');
 
         grid.jqGrid({
             //onSelectRow: function (rowid, status, e) {
             //    grid.jqGrid('setSelection', rowid, false);
             //},
             onSortCol: function (index, columnIndex, sortOrder) {
-                _lq.GetContestLogs();
-                return 'stop';
+                var grid = $('#jqGridUBN');
+                //http://stackoverflow.com/questions/25801755/multiple-column-sorting-jqgrid
+                var arr = [ "U1", "U2", "U3", "B1", "B2", "B3", "N1", "N2", "N3", "D1", "D2", "D3", "X1", "X2", "U3"];
+                if ($.inArray(index, arr) != -1) {
+                    setSorting.call(grid[0], index, "asc");
+                    setSorting.call(grid[0], "W", "asc");
+                    setSorting.call(grid[0], "T", "asc");
+                    grid.jqGrid("setGridParam", {
+                        multiSort: true,
+                        sortorder: 'asc',
+                        sortname: index +' asc, W asc, T'
+                    }).trigger("reloadGrid");
+                    //return 'stop';
+                } else {
+                    var grid = $('#jqGridUBN');
+                    grid.jqGrid('setGridParam', {
+                        multiSort: false
+                        //sortorder: 'asc',
+                        //sortname: 'U1 asc, W asc, T'
+                    }).trigger('reloadGrid');
+                    //return 'stop';
+                }
             },
             onPaging: function (pgButton) {
                 _lq.GetContestLogs();
@@ -1260,7 +1529,7 @@ $(function () {
             },
             loadComplete: function () {
                 if (grid[0].textContent != "") {
-                    _lq.gridHighlight();
+                    _lq.gridHighlight('UBN');
                 }
             },
             gridComplete: function () {
@@ -1270,8 +1539,9 @@ $(function () {
                         window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
                     } else {
                         _lq.LogScrollPosition = window.sessionStorage.getItem('_lq.LogScrollPosition');
-                        _lq.LogScrollUpdateReqd = true;
                         grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.LogScrollPosition);
+                        //_lq.LogScrollUpdateReqd = true;
+
                     }
                 }
 
@@ -1285,6 +1555,7 @@ $(function () {
                       name: 'W',
                       width: 6,
                       align: 'center',
+                      title: false,
                       resizable:false  //required for IE11 multiple calls to this init()
                   },
 
@@ -1294,13 +1565,28 @@ $(function () {
                     width: 16,
                     cellattr: _lq.cellBrdBlk,
                     align: 'center',
+                    title: false,
                     resizable: false
                 },
                 {
                     label: 'Call',
                     name: 'I1',
+                    formatter: _lq.formatCall,
                     cellattr: _lq.cellBrdBlkDbl,
                     width: 34,
+                    firstsortorder: 'asc',
+                    sorttype: function (cellObj, rowObj) {
+                        var grid = $('#jqGridUBN');
+                        var sortColumnName = grid.jqGrid('getGridParam', 'sortname');
+                        var sortOrder = grid.jqGrid('getGridParam', 'sortorder');
+                        if (sortOrder === 'desc') {
+                            return ((cellObj === null || cellObj === '') ? '-1000' : cellObj);
+                        }
+                        else if (sortOrder === 'asc') {
+                            return ((cellObj === null || cellObj === '') ? 'zzz50000' : cellObj);
+                        }
+                    },
+                    title: false,
                     resizable: false
                 },
                 {
@@ -1309,39 +1595,22 @@ $(function () {
                     width: 16,
                     cellattr: _lq.cellBrdBrn,
                     align: 'left',
-                    firstsortorder:'asc',
+                    firstsortorder: 'asc',
+                    title: false,
                     resizable: false
                 },
                 {
-                    label: 'C',
-                    name: 'C1',
+                    label: 'U',
+                    name: 'U1',
                     width: 7,
-                    formatter: _lq.formatTF,
-                    cellattr: _lq.cellTF,
+                    formatter: _lq.formatBNTF,
+                    cellattr: _lq.cellU,
                     align: 'center',
-                    firstsortorder: 'desc',
+                    firstsortorder: 'asc', //no good with multiSort
+                    sorttype: _lq.SortUBNDXTF,
+                    title: false,
                     resizable: false
                 },
-                 {
-                     label: _lq.PZLabel1,
-                     name: _lq.PZName1,
-                     width: 7,
-                     formatter: _lq.formatTF,
-                     cellattr: _lq.cellTF,
-                     align: 'center',
-                     resizable: false
-                 },
-
-                {
-                     label: 'U',
-                     name: 'U1',
-                     width: 7,
-                     formatter: _lq.formatUTF,
-                     cellattr: _lq.cellU,
-                     align: 'center',
-                     firstsortorder: 'desc',
-                     resizable: false
-                 },
                  {
                      label: 'B',
                      name: 'B1',
@@ -1349,24 +1618,66 @@ $(function () {
                      formatter: _lq.formatBNTF,
                      cellattr: _lq.cellBN,
                      align: 'center',
-                     firstsortorder: 'desc',
+                     firstsortorder: 'asc',
+                     sorttype: _lq.SortUBNDXTF,
+                     resizable: false
+                 },
+
+                {
+                     label: 'N',
+                     name: 'N1',
+                     width: 7,
+                     formatter: _lq.formatBNTF,
+                     cellattr: _lq.cellBN,
+                     align: 'center',
+                     firstsortorder: 'asc',
+                     sorttype: _lq.SortUBNDXTF,
+                     title: false,
+                     resizable: false
+                 },
+                 {
+                     label: 'D',
+                     name: 'D1',
+                     width: 7,
+                     formatter: _lq.formatBNTF,
+                     cellattr: _lq.cellBN,
+                     align: 'center',
+                     firstsortorder: 'asc',
+                     sorttype: _lq.SortUBNDXTF,
+                     title: false,
                      resizable: false
                  },
                   {
-                      label: 'N',
-                      name: 'N1',
+                      label: 'X',
+                      name: 'X1',
                       width: 7,
                       formatter: _lq.formatBNTF,
                       cellattr: _lq.cellBN,
                       align: 'center',
-                      firstsortorder: 'desc',
+                      firstsortorder: 'asc',
+                      sorttype: _lq.SortUBNDXTF,
                       resizable: false
                   },
                {
                    label: 'Call',
                    name: 'I2',
+                   formatter: _lq.formatCall,
                    cellattr: _lq.cellBrdBlkDbl,
                    width: 34,
+                   firstsortorder: 'asc',
+                   sorttype: function (cellObj, rowObj) {
+                       var grid = $('#jqGridUBN');
+                       var sortColumnName = grid.jqGrid('getGridParam', 'sortname');
+                       var sortOrder = grid.jqGrid('getGridParam', 'sortorder');
+                       if (sortOrder === 'desc') {
+                           return ((cellObj === null || cellObj === '') ? '-1000' : cellObj);
+                       }
+                       else if (sortOrder === 'asc') {
+                           return ((cellObj === null || cellObj === '') ? 'zzz50000' : cellObj);
+                       }
+                   },
+                   title: false,
+
                    resizable: false
                },
                 {
@@ -1376,38 +1687,21 @@ $(function () {
                     cellattr: _lq.cellBrdBrn,
                     align: 'left',
                     firstsortorder: 'asc',
+                    title: false,
                     resizable: false
                 },
                 {
-                    label: 'C',
-                    name: 'C2',
+                    label: 'U',
+                    name: 'U2',
                     width: 7,
-                    formatter: _lq.formatTF,
-                    cellattr: _lq.cellTF,
+                    formatter: _lq.formatBNTF,
+                    cellattr: _lq.cellU,
                     align: 'center',
-                    firstsortorder: 'desc',
+                    firstsortorder: 'asc',
+                    sorttype: _lq.SortUBNDXTF,
+                    title: false,
                     resizable: false
                 },
-                 {
-                     label: _lq.PZLabel2,
-                     name: _lq.PZName2,
-                     width: 7,
-                     formatter: _lq.formatTF,
-                     cellattr: _lq.cellTF,
-                     align: 'center',
-                     firstsortorder: 'desc',
-                     resizable: false
-                 },
-                 {
-                     label: 'U',
-                     name: 'U2',
-                     width: 7,
-                     formatter: _lq.formatUTF,
-                     cellattr: _lq.cellU,
-                     align: 'center',
-                     firstsortorder: 'desc',
-                     resizable: false
-                 },
                  {
                      label: 'B',
                      name: 'B2',
@@ -1415,25 +1709,66 @@ $(function () {
                      formatter: _lq.formatBNTF,
                      cellattr: _lq.cellBN,
                      align: 'center',
-                     firstsortorder: 'desc',
+                     firstsortorder: 'asc',
+                     sorttype: _lq.SortUBNDXTF,
+                     resizable: false
+                 },
+
+                {
+                    label: 'N',
+                    name: 'N2',
+                    width: 7,
+                    formatter: _lq.formatBNTF,
+                    cellattr: _lq.cellBN,
+                    align: 'center',
+                    firstsortorder: 'asc',
+                    sorttype: _lq.SortUBNDXTF,
+                    title: false,
+                    resizable: false
+                },
+                 {
+                     label: 'D',
+                     name: 'D2',
+                     width: 7,
+                     formatter: _lq.formatBNTF,
+                     cellattr: _lq.cellBN,
+                     align: 'center',
+                     firstsortorder: 'asc',
+                     sorttype: _lq.SortUBNDXTF,
+                     title: false,
                      resizable: false
                  },
                   {
-                      label: 'N',
-                      name: 'N2',
+                      label: 'X',
+                      name: 'X2',
                       width: 7,
                       formatter: _lq.formatBNTF,
                       cellattr: _lq.cellBN,
                       align: 'center',
-                      firstsortorder: 'desc',
+                      firstsortorder: 'asc',
+                      sorttype: _lq.SortUBNDXTF,
                       resizable: false
                   },
-
-                {
+                  {
                     label: 'Call',
                     name: 'I3',
+                    formatter: _lq.formatCall,
                     cellattr: _lq.cellBrdBlkDbl,
                     width: 34,
+                    firstsortorder: 'asc',
+                    sorttype: function (cellObj, rowObj) {
+                        var grid = $('#jqGridUBN');
+                        var sortColumnName = grid.jqGrid('getGridParam', 'sortname');
+                        var sortOrder = grid.jqGrid('getGridParam', 'sortorder');
+                        if (sortOrder === 'desc') {
+                            return ((cellObj === null || cellObj === '') ? '-1000' : cellObj);
+                        }
+                        else if (sortOrder === 'asc') {
+                            return ((cellObj === null || cellObj === '') ? 'zzz50000' : cellObj);
+                        }
+                    },
+                    title: false,
+
                     resizable: false
                 },
                 {
@@ -1443,38 +1778,21 @@ $(function () {
                     cellattr: _lq.cellBrdBrn,
                     align: 'left',
                     firstsortorder: 'asc',
+                    title: false,
                     resizable: false
                 },
                 {
-                    label: 'C',
-                    name: 'C3',
+                    label: 'U',
+                    name: 'U3',
                     width: 7,
-                    formatter: _lq.formatTF,
-                    cellattr: _lq.cellTF,
+                    formatter: _lq.formatBNTF,
+                    cellattr: _lq.cellU,
                     align: 'center',
-                    firstsortorder: 'desc',
+                    firstsortorder: 'asc',
+                    sorttype: _lq.SortUBNDXTF,
+                    title: false,
                     resizable: false
                 },
-                 {
-                     label: _lq.PZLabel3,
-                     name: _lq.PZName3,
-                     width: 7,
-                     formatter: _lq.formatTF,
-                     cellattr: _lq.cellTF,
-                     align: 'center',
-                     firstsortorder: 'desc',
-                     resizable: false
-                 },
-                 {
-                     label: 'U',
-                     name: 'U3',
-                     width: 7,
-                     formatter: _lq.formatUTF,
-                     cellattr: _lq.cellU,
-                     align: 'center',
-                     firstsortorder: 'desc',
-                     resizable: false
-                 },
                  {
                      label: 'B',
                      name: 'B3',
@@ -1482,17 +1800,44 @@ $(function () {
                      formatter: _lq.formatBNTF,
                      cellattr: _lq.cellBN,
                      align: 'center',
-                     firstsortorder: 'desc',
+                     firstsortorder: 'asc',
+                     sorttype: _lq.SortUBNDXTF,
+                     resizable: false
+                 },
+
+                {
+                    label: 'N',
+                    name: 'N3',
+                    width: 7,
+                    formatter: _lq.formatBNTF,
+                    cellattr: _lq.cellBN,
+                    align: 'center',
+                    firstsortorder: 'asc',
+                    title: false,
+                    sorttype: _lq.SortUBNDXTF,
+                    resizable: false
+                },
+                 {
+                     label: 'D',
+                     name: 'D3',
+                     width: 7,
+                     formatter: _lq.formatBNTF,
+                     cellattr: _lq.cellBN,
+                     align: 'center',
+                     firstsortorder: 'asc',
+                     sorttype: _lq.SortUBNDXTF,
+                     title: false,
                      resizable: false
                  },
                   {
-                      label: 'N',
-                      name: 'N3',
+                      label: 'X',
+                      name: 'X3',
                       width: 7,
                       formatter: _lq.formatBNTF,
                       cellattr: _lq.cellBN,
                       align: 'center',
-                      firstsortorder: 'desc',
+                      firstsortorder: 'asc',
+                      sorttype: _lq.SortUBNDXTF,
                       resizable: false
                   }
 
@@ -1502,13 +1847,14 @@ $(function () {
             scroll: 'true',
             scrollrows : true,
             //scroll: 1,
+            sortorder: 'asc',
             width: '100%',
-            height: 385,
+            height: 388,
             //height: 'auto',
             rowNum: 19,
             datatype: 'local',
             //data:_lq.mydata,
-            pager: "#jqGridPager",
+            pager: "#jqGridUBNPager",
             pgtext: null
             //pgbuttons: true,
             //pginput: true,
@@ -1519,10 +1865,9 @@ $(function () {
         //_lq.LogPageInfo.page = 1;
         //_lq.LogPageInfo.
 
-        grid.jqGrid('setLabel', 'D', '', { 'text-align': 'center' },
-       { 'title': '1st or 2nd day of contest' });
 
-        grid.jqGrid('setLabel', 'W', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'W', '', { 'text-align': 'center' },
+               { 'title': '1st or 2nd day of contest' });
         grid.jqGrid('setLabel', 'T', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'I1', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'I2', '', { 'text-align': 'center' });
@@ -1530,12 +1875,6 @@ $(function () {
         grid.jqGrid('setLabel', 'F1', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'F2', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'F3', '', { 'text-align': 'center' });
-        grid.jqGrid('setLabel', 'C1', '', { 'text-align': 'center' });
-        grid.jqGrid('setLabel', 'C2', '', { 'text-align': 'center' });
-        grid.jqGrid('setLabel', 'C3', '', { 'text-align': 'center' });
-        grid.jqGrid('setLabel', _lq.PZName1, '', { 'text-align': 'center' });
-        grid.jqGrid('setLabel', _lq.PZName2, '', { 'text-align': 'center' });
-        grid.jqGrid('setLabel', _lq.PZName3, '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'U1', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'U2', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'U3', '', { 'text-align': 'center' });
@@ -1545,6 +1884,12 @@ $(function () {
         grid.jqGrid('setLabel', 'N1', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'N2', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'N3', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'D1', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'D2', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'D3', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'X1', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'X2', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'X3', '', { 'text-align': 'center' });
 
 
         grid.setGroupHeaders(
@@ -1598,31 +1943,424 @@ $(function () {
                 _lq.LogScrollPosition = grid.closest(".ui-jqgrid-bdiv").scrollTop();
                 window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
             }
-            return true;
         });
     }
 
 
-    
+
+    //LOG View
+    _lq.LogViewInit = function () {
+        var grid = $('#jqGridLog');
+
+        grid.jqGrid({
+            //onSelectRow: function (rowid, status, e) {
+            //    grid.jqGrid('setSelection', rowid, false);
+            //},
+            onSortCol: function (index, columnIndex, sortOrder) {
+                //_lq.GetContestLogs();
+                //return 'stop';
+            },
+            onPaging: function (pgButton) {
+                _lq.GetContestLogs();
+                return 'stop';
+            },
+            loadComplete: function () {
+                if (grid[0].textContent != "") {
+                    _lq.gridHighlight('Log');
+                }
+            },
+            gridComplete: function () {
+                if (grid[0].textContent != "") {
+                    if (_lq.LogScrollUpdateReqd == true) {
+                        _lq.LogScrollPosition = grid.closest(".ui-jqgrid-bdiv").scrollTop();
+                        window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
+                    } else {
+                        _lq.LogScrollPosition = window.sessionStorage.getItem('_lq.LogScrollPosition');
+                        grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.LogScrollPosition);
+                        _lq.LogScrollUpdateReqd = true;
+                    }
+                }
+
+                //return 'stop';
+            },
+
+
+            colModel: [
+                  {
+                      label: 'D',
+                      name: 'W',
+                      width: 6,
+                      align: 'center',
+                      title: false,
+                      resizable: false  //required for IE11 multiple calls to this init()
+                  },
+
+                {
+                    label: 'Time',
+                    name: 'T',
+                    width: 16,
+                    cellattr: _lq.cellBrdBlk,
+                    align: 'center',
+                    title: false,
+                    resizable: false
+                },
+                {
+                    label: 'Call',
+                    name: 'I1',
+                    formatter: _lq.formatCall,
+                    cellattr: _lq.cellBrdBlkDbl,
+                    width: 34,
+                    firstsortorder: 'asc',
+                    sorttype: function (cellObj, rowObj) {
+                        var grid = $('#jqGridLog');
+                        var sortColumnName = grid.jqGrid('getGridParam', 'sortname');
+                        var sortOrder = grid.jqGrid('getGridParam', 'sortorder');
+                        if (sortOrder === 'desc') {
+                            return ((cellObj === null || cellObj === '') ? '-1000' : cellObj);
+                        }
+                        else if (sortOrder === 'asc') {
+                            return ((cellObj === null || cellObj === '') ? 'zzz50000' : cellObj);
+                        }
+                    },
+                    title: false,
+
+                    resizable: false
+                },
+                {
+                    label: 'Freq',
+                    name: 'F1',
+                    width: 16,
+                    cellattr: _lq.cellBrdBrn,
+                    align: 'left',
+                    firstsortorder: 'asc',
+                    title: false,
+                    resizable: false
+                },
+                {
+                    label: 'C',
+                    name: 'C1',
+                    width: 7,
+                    formatter: _lq.formatTF,
+                    cellattr: _lq.cellTF,
+                    align: 'center',
+                    firstsortorder: 'desc',
+                    title: false,
+                    resizable: false
+                },
+                 {
+                     label: _lq.PZLabel1,
+                     name: _lq.PZName1,
+                     width: 7,
+                     formatter: _lq.formatTF,
+                     cellattr: _lq.cellTF,
+                     title: false,
+                     align: 'center',
+                     resizable: false
+                 },
+
+                {
+                    label: 'R',
+                    name: 'R1',
+                    width: 7,
+                    formatter: _lq.formatR,
+                    cellattr: _lq.cellR,
+                    align: 'center',
+                    firstsortorder: 'desc',
+                    title: false,
+                    resizable: false
+                },
+                 {
+                     label: 'Stn',
+                     name: 'S1',
+                     width: 14,
+                     formatter: _lq.formatS,
+                     cellattr: _lq.cellS,
+                     align: 'left',
+                     firstsortorder: 'desc',
+                     title: false,
+                     resizable: false
+                 },
+               {
+                   label: 'Call',
+                   name: 'I2',
+                   formatter: _lq.formatCall,
+                   cellattr: _lq.cellBrdBlkDbl,
+                   width: 34,
+                   firstsortorder: 'asc',
+                   sorttype: function (cellObj, rowObj) {
+                       var grid = $('#jqGridLog');
+                       var sortColumnName = grid.jqGrid('getGridParam', 'sortname');
+                       var sortOrder = grid.jqGrid('getGridParam', 'sortorder');
+                       if (sortOrder === 'desc') {
+                           return ((cellObj === null || cellObj === '') ? '-1000' : cellObj);
+                       }
+                       else if (sortOrder === 'asc') {
+                           return ((cellObj === null || cellObj === '') ? 'zzz50000' : cellObj);
+                       }
+                   },
+                   title: false,
+
+                   resizable: false
+               },
+                {
+                    label: 'Freq',
+                    name: 'F2',
+                    width: 16,
+                    cellattr: _lq.cellBrdBrn,
+                    align: 'left',
+                    firstsortorder: 'asc',
+                    title: false,
+                    resizable: false
+                },
+                {
+                    label: 'C',
+                    name: 'C2',
+                    width: 7,
+                    formatter: _lq.formatTF,
+                    cellattr: _lq.cellTF,
+                    align: 'center',
+                    firstsortorder: 'desc',
+                    title: false,
+                    resizable: false
+                },
+                 {
+                     label: _lq.PZLabel2,
+                     name: _lq.PZName2,
+                     width: 7,
+                     formatter: _lq.formatTF,
+                     cellattr: _lq.cellTF,
+                     align: 'center',
+                     firstsortorder: 'desc',
+                     title: false,
+                     resizable: false
+                 },
+                 {
+                     label: 'R',
+                     name: 'R2',
+                     width: 7,
+                     formatter: _lq.formatR,
+                     cellattr: _lq.cellR,
+                     align: 'center',
+                     firstsortorder: 'desc',
+                     title: false,
+                     resizable: false
+                 },
+                 {
+                     label: 'Stn',
+                     name: 'S2',
+                     width: 14,
+                     formatter: _lq.formatS,
+                     cellattr: _lq.cellS,
+                     align: 'left',
+                     firstsortorder: 'desc',
+                     title: false,
+                     resizable: false
+                 },
+
+                {
+                    label: 'Call',
+                    name: 'I3',
+                    formatter: _lq.formatCall,
+                    cellattr: _lq.cellBrdBlkDbl,
+                    width: 34,
+                    firstsortorder: 'asc',
+                    sorttype: function (cellObj, rowObj) {
+                        var grid = $('#jqGridLog');
+                        var sortColumnName = grid.jqGrid('getGridParam', 'sortname');
+                        var sortOrder = grid.jqGrid('getGridParam', 'sortorder');
+                        if (sortOrder === 'desc') {
+                            return ((cellObj === null || cellObj === '') ? '-1000' : cellObj);
+                        }
+                        else if (sortOrder === 'asc') {
+                            return ((cellObj === null || cellObj === '') ? 'zzz50000' : cellObj);
+                        }
+                    },
+                    title: false,
+
+                    resizable: false
+                },
+                {
+                    label: 'Freq',
+                    name: 'F3',
+                    width: 16,
+                    cellattr: _lq.cellBrdBrn,
+                    align: 'left',
+                    firstsortorder: 'asc',
+                    title: false,
+                    resizable: false
+                },
+                {
+                    label: 'C',
+                    name: 'C3',
+                    width: 7,
+                    formatter: _lq.formatTF,
+                    cellattr: _lq.cellTF,
+                    align: 'center',
+                    firstsortorder: 'desc',
+                    title: false,
+                    resizable: false
+                },
+                 {
+                     label: _lq.PZLabel3,
+                     name: _lq.PZName3,
+                     width: 7,
+                     formatter: _lq.formatTF,
+                     cellattr: _lq.cellTF,
+                     align: 'center',
+                     firstsortorder: 'desc',
+                     title: false,
+                     resizable: false
+                 },
+                 {
+                     label: 'R',
+                     name: 'R3',
+                     width: 7,
+                     formatter: _lq.formatR,
+                     cellattr: _lq.cellR,
+                     align: 'center',
+                     firstsortorder: 'desc',
+                     title: false,
+                     resizable: false
+                 },
+                 {
+                     label: 'Stn',
+                     name: 'S3',
+                     width: 14,
+                     formatter: _lq.formatS,
+                     cellattr: _lq.cellS,
+                     align: 'left',
+                     firstsortorder: 'desc',
+                     title: false,
+                     resizable: false
+                 },
+
+            ],
+
+            viewrecords: false, // show the current page, data rang and total records on the toolbar
+            scroll: 'true',
+            scrollrows: true,
+            //scroll: 1,
+            width: '100%',
+            height: 388,
+            //height: 'auto',
+            rowNum: 19,
+            datatype: 'local',
+            //data:_lq.mydata,
+            pager: "#jqGridPager",
+            pgtext: null
+            //pgbuttons: true,
+            //pginput: true,
+            //autowidth: true,
+            //height: "auto",
+            //caption: "Load live data from stackoverflow"
+        });
+        //_lq.LogPageInfo.page = 1;
+        //_lq.LogPageInfo.
+
+        grid.jqGrid('setLabel', 'W', '', { 'text-align': 'center' },
+               { 'title': '1st or 2nd day of contest' });
+        grid.jqGrid('setLabel', 'T', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'I1', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'I2', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'I3', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'F1', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'F2', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'F3', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'C1', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'C2', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'C3', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', _lq.PZName1, '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', _lq.PZName2, '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', _lq.PZName3, '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'R1', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'R2', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'R3', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'S1', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'S2', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'S3', '', { 'text-align': 'center' });
+
+        grid.setGroupHeaders(
+               {
+                   useColSpanStyle: true,
+
+                   groupHeaders: [
+                       { "numberOfColumns": 2, "titleText": "Date", "startColumnName": "W" },
+                       { "numberOfColumns": 6, "titleText": "Call1", "startColumnName": "I1" },
+                       { "numberOfColumns": 6, "titleText": "Call2", "startColumnName": "I2" },
+                       { "numberOfColumns": 6, "titleText": "Call3", "startColumnName": "I3" }]
+               });
+
+        $('.jqg-second-row-header th[colspan=6]')
+           .each(function (indexInArray, valueOfElement) {
+               switch (indexInArray) {
+                   case 0:
+                       $(this).css(
+                       {
+                           "background": "blue",
+                           "color": "white"
+                       });
+                       break;
+                   case 1:
+                       $(this).css(
+                       {
+                           "background": "#ff6a00",
+                           "color": "white"
+                       });
+                       break;
+                   case 2:
+                       $(this).css(
+                       {
+                           "background": "green",
+                           "color": "white"
+                       });
+                       break;
+                   default:
+
+               }
+           });
+
+
+        $(".ui-jqgrid-bdiv").each(function () {
+            $(this).css( //chrome
+                 { "overflow-x": "hidden" });
+        });
+
+        grid.closest(".ui-jqgrid-bdiv").scroll(function (e) {
+            //e.preventDefault();;
+            if (_lq.LogScrollUpdateReqd == true) {
+                _lq.LogScrollPosition = grid.closest(".ui-jqgrid-bdiv").scrollTop();
+                window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
+            }
+        });
+    }
+
+  
+ //Highlight
     _lq.time = '59:59';
     _lq.shade = 'rowchangedOdd';
 
-    _lq.gridHighlight = function (time) {
+    _lq.gridHighlight = function (view) {
+        var grid;
+        if ( view == 'Log') {
+            grid = $("#jqGridLog tbody tr td[aria-describedby='jqGridLog_T']")
+        } else if (view == 'UBN') {
+            grid = $("#jqGridUBN tbody tr td[aria-describedby='jqGridUBN_T']")
+        }
 
-        $("#jqGridLog tbody tr td[aria-describedby='jqGridLog_T']").
-            each(function (indexInArray, valueOfElement) {
-                if (valueOfElement.innerText != _lq.time) {
-                    _lq.time = valueOfElement.innerText;
-                    if (_lq.shade == 'rowchangedEven') {
-                        _lq.shade = 'rowchangedOdd';
-                    } else {
-                        _lq.shade = 'rowchangedEven';
-                    }
-                    time = valueOfElement.innerText;
+        
+        $.each(grid, function (indexInArray, valueOfElement) {
+            if (valueOfElement.innerText != _lq.time) {
+                _lq.time = valueOfElement.innerText;
+                if (_lq.shade == 'rowchangedEven') {
+                    _lq.shade = 'rowchangedOdd';
+                } else {
+                    _lq.shade = 'rowchangedEven';
                 }
-                $(this).parent("tr").addClass(_lq.shade)
+                time = valueOfElement.innerText;
+            }
+            $(this).parent("tr").addClass(_lq.shade)
 
-            })
+        })
         _lq.time = '59:59';
         _lq.shade = 'rowchangedOdd';
 
@@ -1650,74 +2388,15 @@ $(function () {
 
     _lq.LogViewDraw2 = function (data) {
 
-        var grid = $("#jqGridLog");
-        //var gridArrayData = [];
-        //gridArrayData = data.records;
-        //for (var i = 0; i < _lq.mydata.length; i++) {
-        //    var item = _lq.mydata[i];
-        //for (var i = 0; i < data.records.length; i++) {
-        //    var item = data.records[i];
-
-        //    gridArrayData.push({
-        //        W: item.W,
-        //        T: item.T,
-        //        I1: item.I1,
-        //        F1: item.F1,
-        //        C1: item.C1,
-        //        Z1: item.Z1,
-        //        U1: item.U1,
-        //        B1: item.B1,
-        //        N1: item.N1,
-        //        I2: item.I2,
-        //        F2: item.F2,
-        //        C2: item.C2,
-        //        Z2: item.Z2,
-        //        U2: item.U2,
-        //        B2: item.B2,
-        //        N2: item.N2,
-        //        I3: item.I3,
-        //        F3: item.F3,
-        //        C3: item.C3,
-        //        Z3: item.Z3,
-        //        U3: item.U3,
-        //        B3: item.B3,
-        //        N3: item.N3
-        //    });
-        //}
-
-        //for (var i = 0; i < _lq.mydata2.length; i++) {
-        //    var item = _lq.mydata2[i];
-        //    gridArrayData.push({
-        //        W: item.W,
-        //        T: item.T,
-        //        I1: item.I1,
-        //        F1: item.F1,
-        //        C1: item.C1,
-        //        Z1: item.Z1,
-        //        U1: item.U1,
-        //        B1: item.B1,
-        //        N1: item.N1,
-        //        I2: item.I2,
-        //        F2: item.F2,
-        //        C2: item.C2,
-        //        Z2: item.Z2,
-        //        U2: item.U2,
-        //        B2: item.B2,
-        //        N2: item.N2,
-        //        I3: item.I3,
-        //        F3: item.F3,
-        //        C3: item.C3,
-        //        Z3: item.Z3,
-        //        U3: item.U3,
-        //        B3: item.B3,
-        //        N3: item.N3
-        //    });
-    //}
+        var grid = $("#jqGridUBN");
+        var gridLog = $('#jqGridLog');
 
         grid.jqGrid("clearGridData");
+        gridLog.jqGrid("clearGridData");
 
         var reInit = false;
         var test1 = $("button[id='Contest1']  span.ui-button-text ")[0].innerText;
+
         if (test1.indexOf('wpx') > 0) {
             //prefix column
             if (_lq.PZLabel1 == 'Z') {
@@ -1760,29 +2439,49 @@ $(function () {
 
         if (reInit == true) {
             //grid.jqGrid('destroyGroupHeader');
-            grid.jqGrid("GridUnload");
-            var y = grid.height(0);
+            gridLog.jqGrid("GridUnload");
             //grid.jqGrid("GridDestroy");
+            //grid.jqGrid('destroyGroupHeader');
             _lq.LogUpdateReqd = true;
-            _lq.LogScrollUpdateReqd = true;
-            _lq.LogScrollPosition = 0;
+            _lq.LogScrollPosition = window.sessionStorage.getItem('_lq.LogScrollPosition');
+            if (_lq.LogScrollPosition != null) {
+                _lq.LogScrollUpdateReqd = false; //restored pos on refresh
+            } else {
+                _lq.LogScrollUpdateReqd = true;
+                _lq.LogScrollPosition = 0;
+            }
+
 
             _lq.LogViewInit();
-            _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs);
+            _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs, 'Log');
+            var mq = window.matchMedia("(min-width:" + _lq.minWidth + " )");
+            WidthChange(mq);  //set grid height after reload
 
-            grid = $("#jqGridLog");
-            //grid.jqGrid('destroyGroupHeader');
+            //grid = $("#jqGridUBN");
+            //disable zone filter if any wpx
+            _lq.AdjustControlFiltersSettings(_lq.ControlFiltersSettingsDto);
+        } else
+        {
+            if (_lq.LogScrollUpdateReqd != false) {
+                //reset scroll position if it is not a page refresh
+                _lq.LogScrollPosition = 0;
+                window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
+                _lq.LogScrollUpdateReqd = false;
+            }
         }
 
         // set the new data
         grid.jqGrid('setGridParam', { data: data.records });
-
-
-
-        // hide the show message
-        //grid[0].grid.endReq();
         //refresh the grid
         grid.trigger('reloadGrid');
+        _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs, 'UBN');
+
+
+        //_lq.LogScrollUpdateReqd == false; //use saved
+        gridLog.jqGrid('setGridParam', { data: data.records });
+        gridLog.trigger('reloadGrid');
+        _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs, 'Log');
+
 
         //grid.trigger('reloadGrid', [{current:true}]); 
         _lq.I1Cnt = data.I1Cnt;
@@ -1791,6 +2490,11 @@ $(function () {
         var C1Cnt = 0, C2Cnt = 0, C3Cnt = 0;
         var PZ1Cnt = 0, PZ2Cnt = 0, PZ3Cnt = 0;
         var PZ1Lbl = 'Zn', PZ2Lbl ='Zn', PZ3Lbl='Zn';
+        var U1Cnt = 0, U2Cnt = 0, U3Cnt = 0;
+        var B1Cnt = 0, B2Cnt = 0, B3Cnt = 0;
+        var N1Cnt = 0, N2Cnt = 0, N3Cnt = 0;
+        var D1Cnt = 0, D2Cnt = 0, D3Cnt = 0;
+        var X1Cnt = 0, X2Cnt = 0, X3Cnt = 0;
         for (var i = 0; i < data.records.length; i++) {
             var item = data.records[i];
             if (item.C1 == true) {
@@ -1838,17 +2542,96 @@ $(function () {
                     PZ3Lbl = 'Pre';
                 }
             }
+
+            if (item.U1 == true) {
+                U1Cnt++;
+            }
+            if (item.U2 == true) {
+                U2Cnt++;
+            }
+            if (item.U3 == true) {
+                U3Cnt++;
+            }
+            if (item.B1 == true) {
+                B1Cnt++;
+            }
+            if (item.B2 == true) {
+                B2Cnt++;
+            }
+            if (item.B3 == true) {
+                B3Cnt++;
+            }
+            if (item.N1 == true) {
+                N1Cnt++;
+            }
+            if (item.N2 == true) {
+                N2Cnt++;
+            }
+            if (item.N3 == true) {
+                N3Cnt++;
+            }
+            if (item.D1 == true) {
+                D1Cnt++;
+            }
+            if (item.D2 == true) {
+                D2Cnt++;
+            }
+            if (item.D3 == true) {
+                D3Cnt++;
+            }
+            if (item.X1 == true) {
+                X1Cnt++;
+            }
+            if (item.X2 == true) {
+                X2Cnt++;
+            }
+            if (item.X3 == true) {
+                X3Cnt++;
+            }
+
         }
 
 
         //_lq.gridHighlight();
-        var tt = $('#jqGridPager table.ui-pg-table td[id^=jqGridPager_]').
+        $('#jqGridUBNPager table.ui-pg-table td[id^=jqGridUBNPager_]').
+           each(function (indexInArray, valueOfElement) {
+               switch (valueOfElement.id) {
+                   case 'jqGridUBNPager_left':
+                       valueOfElement.innerHTML = '<span style="float: left;padding-left:30%;color:blue;font-size:.785em">' +
+                           /*_lq.DataCallInfoDTOs[0].SelectedCall +*/ 'U:' + U1Cnt.toString() +
+                               '&nbsp;&nbsp;B:' + B1Cnt.toString() +
+                               '&nbsp;&nbsp;N:' + N1Cnt.toString() +
+                               '&nbsp;&nbsp;X:' + X1Cnt.toString() +
+                               '&nbsp;&nbsp;&nbsp;D:' + D1Cnt.toString() + ' </span>';
+                       break;
+                   case 'jqGridUBNPager_center':
+                       valueOfElement.innerHTML = '<span style="float: left;padding-left:20%;color:#ff6a00;font-size:.785em">' +
+                          /* _lq.DataCallInfoDTOs[1].SelectedCall +*/ 'U:' + U2Cnt.toString() +
+                               '&nbsp;&nbsp;B:' + B2Cnt.toString() +
+                               '&nbsp;&nbsp;N:' + N2Cnt.toString() +
+                               '&nbsp;&nbsp;X:' + X2Cnt.toString() +
+                               '&nbsp;&nbsp;&nbsp;D:' + D2Cnt.toString() + ' </span>';
+                       break;
+                   case 'jqGridUBNPager_right':
+                       valueOfElement.innerHTML = '<span style="float: left;padding-left:10%;color:green;font-size:.785em">' +
+                               /*_lq.DataCallInfoDTOs[2].SelectedCall +*/ 'U:' + U3Cnt.toString() +
+                               '&nbsp;&nbsp;B:' + B3Cnt.toString() +
+                               '&nbsp;&nbsp;N:' + N3Cnt.toString() +
+                               '&nbsp;&nbsp;X:' + X3Cnt.toString() +
+                               '&nbsp;&nbsp;&nbsp;D:' + D3Cnt.toString() + ' </span>';
+
+                       break;
+                   default:
+
+               };
+           })
+        $('#jqGridPager table.ui-pg-table td[id^=jqGridPager_]').
             each(function (indexInArray, valueOfElement) {
                 switch (valueOfElement.id) {
                     case 'jqGridPager_left':
                         valueOfElement.innerHTML = '<span style="float: left;padding-left:30%;color:blue;font-size:.785em">' +
                             /*_lq.DataCallInfoDTOs[0].SelectedCall +*/ 'Qso:' + _lq.I1Cnt.toString() +
-                                '&nbsp;&nbsp;Cty:' + +C1Cnt.toString() +
+                                '&nbsp;&nbsp;Cty:' + C1Cnt.toString() +
                                 '&nbsp;&nbsp;' + PZ1Lbl + ':' + PZ1Cnt.toString() + ' </span>';
                         break;
                     case 'jqGridPager_center':
@@ -1875,13 +2658,56 @@ $(function () {
 
 
     }
+
+    //Formatters
+    _lq.formatCall = function (cellValue, options, rowObject) {
+        if (cellValue != null) {
+            cellValue = "<span style= 'font-family: ArialSlashZero, Fallback, Arial; '>" + cellValue + "</span>";
+        } else {
+        cellValue = "<span style= 'font-family: ArialSlashZero, Fallback, Arial; '>" + cellValue + "</span>";
+            cellValue = "";
+        }
+        return cellValue;
+
+    }
+
     _lq.formatTF = function (cellValue, options, rowObject) {
         if (cellValue == 1) {
             cellValue = "\u2295";
-           // cellValue = "<span style='background: #cff3c1; '></span>"; //+ "<input type ='radio'  checked /></span>";
+            // cellValue = "<span style='background: #cff3c1; '></span>"; //+ "<input type ='radio'  checked /></span>";
 
             //$("#jqGridLog").setCell(options.rowId, options.colModel.Name, '', { 'background': '#ff0000' });
         } else {
+            cellValue = "";
+        }
+        return cellValue;
+    };
+    _lq.formatR = function (cellValue, options, rowObject) {
+        switch (cellValue) {
+            case 'Run':
+                cellValue = "R";
+                break;
+            case 'Mult':
+                cellValue = "M";
+                break;
+            case "R1":
+                cellValue = "R1";
+                break;
+            case "R2":
+                cellValue = "R2";
+                break;
+            case "S_P":
+                cellValue = "S_P";
+                break;
+            default:
+                cellValue = "";
+                break;
+        }
+        return cellValue;
+    };
+
+    _lq.formatS = function (cellValue, options, rowObject) {
+        if (cellValue == null) {
             cellValue = "";
         }
         return cellValue;
@@ -1909,6 +2735,7 @@ $(function () {
     };
 
     _lq.cellTF = function (rowid, val, rawObject, cm, rdata) {
+        var cellValue;
         var name = cm.name;
         var val = 0;
         switch (cm.name) {
@@ -1951,18 +2778,22 @@ $(function () {
     };
 
     _lq.cellBrdBlkDbl = function (rowid, val, rawObject, cm, rdata) {
+        var cellValue;
         return cellValue = ' class="lq-LogVBrdDbl" ';
     }
 
     _lq.cellBrdBlk = function (rowid, val, rawObject, cm, rdata) {
+        var cellValue;
         return cellValue = ' class="lq-LogBrdBlk" ';
     }
 
     _lq.cellBrdBrn = function (rowid, val, rawObject, cm, rdata) {
+        var cellValue;
         return cellValue = ' class="lq-LogBrdBrn" ';
     }
 
     _lq.cellU = function (rowid, val, rawObject, cm, rdata) {
+        var cellValue;
         var name = cm.name;
         var val = 0;
         switch (cm.name) {
@@ -1981,24 +2812,29 @@ $(function () {
         if (val == 1) {
             cellValue = ' class="lq-LogBrdRed"' +  'style="background:#fef90d;"';
         } else {
-            cellValue = ' class="lq-LogBrdRed " ';;
+            cellValue = ' class="lq-LogBrdRed " ';
         }
         return cellValue;
 
     }
 
     _lq.cellBN = function (rowid, val, rawObject, cm, rdata) {
+        var cellValue;
         var name = cm.name;
         var val = 0;
+        var Title = null;
         switch (cm.name) {
             case 'B1':
                 val = rdata.B1;
+                Title = rawObject.BC1;
                 break;
             case 'B2':
                 val = rdata.B2;
+                Title = rawObject.BC2;
                 break;
             case 'B3':
                 val = rdata.B3;
+                Title = rawObject.BC3;
                 break;
             case 'N1':
                 val = rdata.N1;
@@ -2009,63 +2845,153 @@ $(function () {
             case 'N3':
                 val = rdata.N3;
                 break;
+            case 'D1':
+                val = rdata.D1;
+                break;
+            case 'D2':
+                val = rdata.D2;
+                break;
+            case 'D3':
+                val = rdata.D3;
+                break;
+            case 'X1':
+                val = rdata.X1;
+                Title = rawObject.XC1;
+                break;
+            case 'X2':
+                val = rdata.X2;
+                Title = rawObject.XC2;
+                break;
+            case 'X3':
+                val = rdata.X3;
+                Title = rawObject.XC3;
+                break;
             default:
 
         }
         if (val == 1) {
-            cellValue = ' class=" lq-LogBrdRed " ' + 'style="background:lightcoral;"';
+            if (Title != null) {
+                cellValue = 'title= "' + Title +'" class=" lq-LogBrdRed " ' + 'style="background:lightcoral;"';
+            } else {
+                cellValue = 'title= "" class=" lq-LogBrdRed " ' + 'style="background:lightcoral;"';
+            }
         } else {
-            cellValue = ' class="lq-LogBrdRed " ';;
+            cellValue = 'title= "" class="lq-LogBrdRed " ';
         }
         return cellValue;
 
     }
 
+    _lq.cellR = function (rowid, val, rawObject, cm, rdata) {
+        var name = cm.name;
+        var cellValue = ' class="lq-LogBrdRed " ';
+        if (cm.label == 'R') {
+            switch (name) {
+                case "R1":
+                    switch(rdata.R1) {
+                        case 'Run':
+                            cellValue += 'style="background:#fcae77;font-size:.643em;"';
+                            break;
+                        case 'Mult':
+                            cellValue += 'style="background:#b18989;font-size:.643em;"';
+                            break;
+                        case "R1":
+                            cellValue += 'style="background:#afd3f7;font-size:.643em;"';
+                            break;
+                        case "R2":
+                            cellValue += 'style="background:#e29efe;font-size:.643em;"';
+                            break;
+                        case "S_P":
+                            cellValue += 'style="background:#fbfb9b;font-size:.643em;"';
+                            break;
+                        default:
+                    }
+                    break;
+                case "R2":
+                    switch (rdata.R2) {
+                        case 'Run':
+                            cellValue += 'style="background:#fcae77;font-size:.643em;"';
+                            break;
+                        case 'Mult':
+                            cellValue += 'style="background:#b18989;font-size:.643em;"';
+                            break;
+                        case "R1":
+                            cellValue += 'style="background:#afd3f7;font-size:.643em;"';
+                            break;
+                        case "R2":
+                            cellValue += 'style="background:#e29efe;font-size:.643em;"';
+                            break;
+                        case "S_P":
+                            cellValue += 'style="background:#fbfb9b;font-size:.643em;"';
+                            break;
+                        default:
+                    }
+                    break;
+                case "R3":
+                    switch (rdata.R3) {
+                        case 'Run':
+                            cellValue += 'style="background:#fcae77;font-size:.643em;"';
+                            break;
+                        case 'Mult':
+                            cellValue += 'style="background:#b18989;font-size:.643em;"';
+                            break;
+                        case "R1":
+                            cellValue += 'style="background:#afd3f7;font-size:.643em;"';
+                            break;
+                        case "R2":
+                            cellValue += 'style="background:#e29efe;font-size:.643em;"';
+                            break;
+                        case "S_P":
+                            cellValue += 'style="background:#fbfb9b;font-size:.643em;"';
+                            break;
+                        default:
+                    }
+                    break;
+                default:
+            }
+        }
+        return cellValue;
 
-    //_lq.LogViewInit = function() {
-    //    $("#jqGridLog").jqGrid({
-    //        colModel: [
-    //            {
-    //                label: 'Title',
-    //                name: 'Title',
-    //                width: 130,
-    //                formatter: _lq.formatTitle
-    //            },
-    //            {
-    //                label: 'Link',
-    //                name: 'Link',
-    //                width: 80,
-    //                formatter: _lq.formatLink
-    //            },
-    //            {
-    //                label: 'View Count',
-    //                name: 'ViewCount',
-    //                width: 35,
-    //                sorttype:'integer',
-    //                formatter: 'number',
-    //                align: 'right'
-    //            },
-    //            {
-    //                label: 'Answer Count',
-    //                name: 'AnswerCount',
-    //                width: 45
-    //            }
-    //        ],
+    }
 
-    //        viewrecords: true, // show the current page, data rang and total records on the toolbar
-    //        //scroll: 'true',
-    //        width: '100%',
-    //        height: 370,
-    //        rowNum: 12,
-    //        datatype: 'local',
-    //        pager: "#jqGridPager",
-    //        pgbuttons: true,
-    //        pginput: true,
-    //        //autowidth: true,
-    //        //height: "auto",
-    //        //caption: "Load live data from stackoverflow"
-    //    });
-    //}
+    _lq.cellS = function (rowid, val, rawObject, cm, rdata) {
+        var cellValue = ' class="lq-LogBrdRed " ';
+        switch (cm.name) {
+            case "S1":
+                cellValue += 'style="font-size:.643em;"';
+                break;
+            case "S2":
+                cellValue += 'style="font-size:.643em;"';
+                break;
+            case "S3":
+                cellValue += 'style="font-size:.643em;"';
+                break;
+            default:
+        }
+        return cellValue;
+
+    }
+
+    _lq.SortUBNDXTF = function (cellObj, rowObj) {
+        var grid = $('#jqGridLog');
+        ///var sortColumnName = grid.jqGrid('getGridParam', 'sortname');
+        var sortOrder = grid.jqGrid('getGridParam', 'sortorder');
+        if (sortOrder === 'asc') {
+            if (cellObj == true) {
+                cellObj = false;
+            } else {
+                cellObj = true;
+            }
+        } else {
+            if (cellObj == false) {
+                cellObj = true;
+            } else {
+                cellObj = true;
+            }
+        }
+        return cellObj;
+    }
+
 
 
     _lq.LogViewDraw = function () {
@@ -2108,9 +3034,15 @@ $(function () {
         return "<a href='" + cellValue + "'>" + cellValue.substring(0, 25) + "..." + "</a>";
     };
 
+
+
+
+
+
+
 // CONTROL
     _lq.getAllControls = function() {
-        _lq.ajaxHelper(_lq.controlUri + "/GetControlNames", 'GET', 'json', true, null, getAllControlsLoad);
+        _lq.ajaxHelper(_lq.controlUri + "/GetControlNames", 'GET', 'json', true,'application/json', null, getAllControlsLoad);
 
         function getAllControlsLoad(data) {
             //console.log(data.ControlCategoryDto.CatOperator);
@@ -2287,7 +3219,7 @@ $(function () {
     }
 
     _lq.GetControlSelections = function () {
-        _lq.ajaxHelper(_lq.controlUri + "/GetControlSelections", 'GET', 'json', true, null, GetControlSelectionsLoad);
+        _lq.ajaxHelper(_lq.controlUri + "/GetControlSelections", 'GET', 'json', true, 'application/json', null, GetControlSelectionsLoad);
         function GetControlSelectionsLoad(data) {
             _lq.SetControlCategorySettings(data.ControlCategorySettingsDto, false);
             _lq.SetControlFiltersSettings(data.ControlFiltersSettingsDto, false);
@@ -2425,9 +3357,16 @@ $(function () {
         _lq.LogUpdateReqd = true;
 
         if (bUpdated) {
+            //scroll to top
+            if (_lq.LogScrollUpdateReqd == true) {
+                _lq.LogScrollPosition = 0;
+                window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
+                _lq.LogScrollUpdateReqd = false;  //force stored position
+            }
+
             _lq.SessionSaveControlSettings();
             _lq.UpdateChartData(false);
-            if (_lq.ActiveView == "1") {
+            if (_lq.ActiveView == 'Log' || _lq.ActiveView == 'UBN') {
                 if (_lq.LogUpdateReqd == true) {
                     _lq.GetContestLogs();
                 }
@@ -2463,6 +3402,17 @@ $(function () {
     }
 
     _lq.AdjustControlFiltersSettings = function (ControlFiltersSettingsDto) {
+        var NoZone = false;
+        //if WPX contest no zone sort
+        $("button[id^='Contest']  span.ui-button-text ").each(
+           function (indexInArray, valueOfElement) {
+               if (valueOfElement.innerText.indexOf('wpx') > 0) {
+                   NoZone = true;
+                   return false;
+               }
+           }
+        );
+
         if (ControlFiltersSettingsDto.Disabled == false) {
             _lq.SelectMenuState("#FiltBand, #FiltContinent, #FiltCountry, #FiltCQZone", "enable");
             if (ControlFiltersSettingsDto.FiltContinent != 'ALL') {
@@ -2471,8 +3421,12 @@ $(function () {
             if (ControlFiltersSettingsDto.FiltCountryInnerHTML.value.indexOf("ALL&") == -1) {
                 _lq.SelectMenuState("#FiltContinent,#FiltCQZone", "disable");
             }
-            if (ControlFiltersSettingsDto.FiltCQZone != 'ALL') {
-                _lq.SelectMenuState("#FiltCountry, #FiltContinent", "disable");
+            if (NoZone == true) {
+                _lq.SelectMenuState("#FiltCQZone", "disable");
+            }else {
+                if (ControlFiltersSettingsDto.FiltCQZone != 'ALL') {
+                    _lq.SelectMenuState("#FiltCountry, #FiltContinent", "disable");
+                }
             }
         }
     }
@@ -2697,7 +3651,7 @@ $(function () {
     //        ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
     //    };
 
-    //    _lq.ajaxHelper(_lq.controlUri + "/SendControlSelections", 'POST','json', true, dataObj, UpdateControlsLoad);
+    //    _lq.ajaxHelper(_lq.controlUri + "/SendControlSelections", 'POST','json', true, 'application/json', dataObj, UpdateControlsLoad);
     //    function UpdateControlsLoad() {
     //        //update controls and graph
     //    };
@@ -2726,7 +3680,7 @@ $(function () {
             _lq.DataCallInfoDTOs = JSON.parse(dataobj);
             _lq.SetCallInfoObjDataSettings(_lq.DataCallInfoDTOs);
         } else {
-            _lq.ajaxHelper(_lq.dataUri + "/GetDataCallInfoSelections", 'GET', 'json', true, null, _lq.SetCallInfoObjDataSettings);
+            _lq.ajaxHelper(_lq.dataUri + "/GetDataCallInfoSelections", 'GET', 'json', true, 'application/json', null, _lq.SetCallInfoObjDataSettings);
         }
 
     }
@@ -2758,6 +3712,7 @@ $(function () {
 
                 }
             }
+
         }
         //SetDataSettingsDefaults(data);
         _lq.SessionSaveDataSettings();
@@ -2813,13 +3768,15 @@ $(function () {
     }
 
     _lq.SetDataCallInfoDTO = function (DataCallInfoObj) {
-        i = DataCallInfoObj.CallGroup - 1;
-        _lq.DataCallInfoDTOs[i].CallGroup = DataCallInfoObj.CallGroup;
-        _lq.DataCallInfoDTOs[i].SelectedContestName = DataCallInfoObj.SelectedContestName;
-        _lq.DataCallInfoDTOs[i].SelectedCall = DataCallInfoObj.SelectedCall;
-        _lq.DataCallInfoDTOs[i].QsoRadioType = DataCallInfoObj.QsoRadioType;
-        _lq.DataCallInfoDTOs[i].Disabled = DataCallInfoObj.Disabled;
-        _lq.DataCallInfoDTOs[i].LogId = DataCallInfoObj.LogId;
+        if (DataCallInfoObj.CallGroup != 4) { //not upload, not cacbed in LQ
+            i = DataCallInfoObj.CallGroup - 1;
+            _lq.DataCallInfoDTOs[i].CallGroup = DataCallInfoObj.CallGroup;
+            _lq.DataCallInfoDTOs[i].SelectedContestName = DataCallInfoObj.SelectedContestName;
+            _lq.DataCallInfoDTOs[i].SelectedCall = DataCallInfoObj.SelectedCall;
+            _lq.DataCallInfoDTOs[i].QsoRadioType = DataCallInfoObj.QsoRadioType;
+            _lq.DataCallInfoDTOs[i].Disabled = DataCallInfoObj.Disabled;
+            _lq.DataCallInfoDTOs[i].LogId = DataCallInfoObj.LogId;
+        } 
 
         _lq.ChartUpdateReqd = false;
         switch (DataCallInfoObj.CallGroup) {
@@ -2923,6 +3880,11 @@ $(function () {
                     $select = $('#Radio3').val("ALL").selectmenu("refresh");
                 }
                 break;
+            case 4:
+                //http://stackoverflow.com/questions/5580616/jquery-change-button-text
+                $("button[id='Call4'] ").text(DataCallInfoObj.SelectedCall);
+                $("button[id='Contest4'] span").text(DataCallInfoObj.SelectedContestName);
+                break;
             default:
 
         }
@@ -2959,6 +3921,12 @@ $(function () {
                     tabNo = 'tabs3';
                     //actDiv = 'CTab' + $('button[id=Call3]')[0].innerText[0];
                     break;
+                case "Contest4":
+                    _lq.DataCallInfoDto4.SelectedContestName = SelectedValue;
+                    DataCallInfoDto1 = _lq.DataCallInfoDto4;
+                    tabNo = 'tabs4';
+                    $("#Call4").button( "enable" );
+                    break;
                 case "Call1":
                     _lq.DataCallInfoDTOs[0].SelectedCall = SelectedValue;
                     DataCallInfoDto1 = _lq.DataCallInfoDTOs[0];
@@ -2978,6 +3946,15 @@ $(function () {
                     tabNo = 'tabs3';
                     //actDiv = 'CTab' + $('button[id=Call3]')[0].innerText[0];
                     break;
+                case "Call4":
+                    _lq.DataCallInfoDto4.SelectedCall = SelectedValue;
+                    DataCallInfoDto1 = _lq.DataCallInfoDto4;
+                    tabNo = 'tabs4';
+                    var File = $("#FileInputWT");
+                    $("#FileInputWT").prop('disabled', false);
+
+                    //actDiv = 'CTab' + $('button[id=Call3]')[0].innerText[0];
+                    break;
                 default:
                     break;
             }
@@ -2986,13 +3963,14 @@ $(function () {
             _lq.LogUpdateReqd = true;
 
 
-            _lq.ajaxHelper(_lq.dataUri + "/GetUpdatedContestCall", 'POST', 'json', false, dataObj, _lq.UpdateContestCall);
+            _lq.ajaxHelper(_lq.dataUri + "/GetUpdatedContestCall", 'POST', 'json', false, 'application/json', dataObj, _lq.UpdateContestCall);
 
             _lq.removeTabData(tabNo);
         }
     }
 
     _lq.UpdateContestCall = function (DataCallInfoDto) {
+        var bUpdateChart = true;
         switch (DataCallInfoDto.CallGroup) {
             case 1:
                 _lq.SetCallinfo(1, DataCallInfoDto);
@@ -3006,21 +3984,32 @@ $(function () {
                 _lq.SetCallinfo(3, DataCallInfoDto);
                 _lq.SetDataCallInfoDTO(DataCallInfoDto);
                 break;
+            case 4:
+                _lq.DataCallInfoDto4 = DataCallInfoDto;
+                _lq.SetDataCallInfoDTO(DataCallInfoDto);
+                window.sessionStorage.removeItem('_lq.DataCallInfoDto4');
+                window.sessionStorage.setItem('_lq.DataCallInfoDto4', JSON.stringify(_lq.DataCallInfoDto4));
+                bUpdateChart = false;
+                break;
             default:
 
         }
-        //SetDataSettingsDefaults(data);
-        _lq.SessionSaveDataSettings();
+        if (bUpdateChart == true) {
 
-        //now update graph
-        _lq.UpdateChartData(false);
-        if (_lq.ActiveView == "1") {
-            if (_lq.LogUpdateReqd == true) {
-                _lq.GetContestLogs();
-            } else {
-                _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs);
+            //SetDataSettingsDefaults(data);
+            _lq.SessionSaveDataSettings();
+
+            //now update graph
+            _lq.UpdateChartData(false);
+            if (_lq.ActiveView == "UBN" || (_lq.ActiveView == "Log") ) {
+                if (_lq.LogUpdateReqd == true) {
+                    _lq.GetContestLogs();
+                } else {
+                    _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs, _lq.ActiveView);
+                }
             }
         }
+
 
     }
 
@@ -3070,8 +4059,14 @@ $(function () {
                 if (_lq.CallReload2 == true) {
                     ReloadCalltab = true;
                 }
+                break;
             case 'Call3':
                 if (_lq.CallReload3 == true) {
+                    ReloadCalltab = true;
+                }
+                break;
+            case 'Call4':
+                if (_lq.CallReload4 == true) {
                     ReloadCalltab = true;
                 }
                 break;
@@ -3195,7 +4190,7 @@ $(function () {
         if (bUpdated) {
             _lq.SessionSaveDataSettings();
             _lq.UpdateChartData(false);
-            if (_lq.ActiveView == "1") {
+            if (_lq.ActiveView == "Log" || _lq.ActiveView == "UBN") {
                 if (_lq.LogUpdateReqd == true) {
                     _lq.GetContestLogs();
                 }
@@ -3232,7 +4227,7 @@ $(function () {
                 ControlYaxisSettingsDto: _lq.ControlYaxisSettingsDto
             }
         };
-        _lq.ajaxHelper(_lq.dataUri + "/UpdateChart", 'POST', 'binary', false, dataObj, _lq.UpdateChartLoad);
+        _lq.ajaxHelper(_lq.dataUri + "/UpdateChart", 'POST', 'binary', false, 'application/json', dataObj, _lq.UpdateChartLoad);
     }
 
     _lq.UpdateChartLoad = function (data) {
@@ -3286,16 +4281,35 @@ $(function () {
                 CallIndex = 2;
                 _lq.CallReload3 = false;
                 break;
+            case 'Call4':
+                CallIndex = 3;
+                _lq.CallReload4 = false;
+                break;
             default:
 
         }
-        var DataCallInfoDto0 = _lq.DataCallInfoDTOs[CallIndex];
-        if (SelectedTabName == null) {
-            if (DataCallInfoDto0.SelectedCall == "") {
-                SelectedTabName = "1";
-            } else {
-                SelectedTabName = DataCallInfoDto0.SelectedCall;
+
+        var DataCallInfoDto0;
+        if (CallIndex != 3) {
+
+            DataCallInfoDto0 = _lq.DataCallInfoDTOs[CallIndex];
+            if (SelectedTabName == null) {
+                if (DataCallInfoDto0.SelectedCall == "") {
+                    SelectedTabName = "1";
+                } else {
+                    SelectedTabName = DataCallInfoDto0.SelectedCall;
+                }
             }
+        } else { //for upload tab
+            DataCallInfoDto0 = _lq.DataCallInfoDto4;
+            if (SelectedTabName == null) {
+                if (DataCallInfoDto0.SelectedCall == "") {
+                    SelectedTabName = "1";
+                } else {
+                    SelectedTabName = DataCallInfoDto0.SelectedCall;
+                }
+            }
+
         }
 
         var dataObj = {
@@ -3304,9 +4318,9 @@ $(function () {
             CallTab: SelectedTabName
         }
 
-        //_lq.ajaxHelper(_lq.dataUri + '/PostCallsRequest', 'POST', 'json', false, _lq.ControlCategorySettingsDto, _lq.UpdateCallTab);
-        //_lq.ajaxHelper(_lq.dataUri + '/PostDataCallsRequest', 'POST', 'json', false, _lq.DataCallInfoDTOs[CallIndex], _lq.UpdateCallTab);
-        _lq.ajaxHelper(_lq.dataUri + '/CallsRequest', 'POST', 'json', false, dataObj, _lq.UpdateCallTab);
+        //_lq.ajaxHelper(_lq.dataUri + '/PostCallsRequest', 'POST', 'json', false, 'application/json', _lq.ControlCategorySettingsDto, _lq.UpdateCallTab);
+        //_lq.ajaxHelper(_lq.dataUri + '/PostDataCallsRequest', 'POST', 'json', false, 'application/json', _lq.DataCallInfoDTOs[CallIndex], _lq.UpdateCallTab);
+        _lq.ajaxHelper(_lq.dataUri + '/CallsRequest', 'POST', 'json', false, 'application/json', dataObj, _lq.UpdateCallTab);
 
     };
 
@@ -3321,6 +4335,9 @@ $(function () {
                 break;
             case 3:
                 tabNo = 'tabs3';
+                break;
+            case 4:
+                tabNo = 'tabs4';
                 break;
             default:
 

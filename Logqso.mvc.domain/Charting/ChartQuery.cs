@@ -506,7 +506,7 @@ namespace Logqso.mvc.domain.Charting
 
 
 
-        public QSOLogFilter GetQSOFilter( ControlFiltersSettingsDto ControlFiltersSettingsDto)
+        public QSOLogFilter GetQSOFilter(ControlFiltersSettingsDto ControlFiltersSettingsDto, DataCallInfoDto[] DataCallInfoDtos)
         {
             QSOLogFilter Qfilter = new QSOLogFilter();
             Qfilter.Filter = string.Empty;
@@ -514,6 +514,16 @@ namespace Logqso.mvc.domain.Charting
 
             if (!Qfilter.QsoCB)
             {
+                var NoZone = false;
+                //check for WPX contest ==> no zone qualifier
+                foreach (var item in DataCallInfoDtos)
+                {
+                    if ( item.SelectedContestName.Contains("wpx") == true)
+                    {
+                        NoZone = true;
+                        break;
+                    }
+                }
                 //rules
                 if (ControlFiltersSettingsDto.FiltContinent != "ALL")
                 {
@@ -525,10 +535,17 @@ namespace Logqso.mvc.domain.Charting
                     ControlFiltersSettingsDto.FiltContinent = "ALL";
                     ControlFiltersSettingsDto.FiltCQZone = "ALL";
                 }
-                if (ControlFiltersSettingsDto.FiltCQZone != "ALL")
+                if (NoZone == true)
                 {
-                    ControlFiltersSettingsDto.FiltCountryInnerHTML.value = "ALL&";
-                    ControlFiltersSettingsDto.FiltContinent = "ALL";
+                    ControlFiltersSettingsDto.FiltCQZone = "ALL";
+                }
+                else
+                {
+                    if (ControlFiltersSettingsDto.FiltCQZone != "ALL")
+                    {
+                        ControlFiltersSettingsDto.FiltCountryInnerHTML.value = "ALL&";
+                        ControlFiltersSettingsDto.FiltContinent = "ALL";
+                    }
                 }
             }
 
