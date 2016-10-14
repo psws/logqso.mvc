@@ -38,7 +38,7 @@ namespace Logqso.WebApi
         public DataController(
             ILogUnitOfWorkAsync unitOfWorkAsync,
             ILogService LogService)
-        {
+       {
             _unitOfWorkAsync = unitOfWorkAsync;
             _LogService = LogService;
         }
@@ -281,7 +281,7 @@ namespace Logqso.WebApi
             {
                 Directory.CreateDirectory(tempPath);
             }
-
+            Task<bool> UpLoadTask = Task.FromResult(false);
             var streamProvider = new MultipartFormDataStreamProvider(tempPath);
             var readResult = await Request.Content.ReadAsMultipartAsync(streamProvider);
 
@@ -299,7 +299,7 @@ namespace Logqso.WebApi
                 // Validate that everything else is fine with this command
                 //var DataCallInfoDto = JsonConvert.DeserializeObject<IEnumerable<DataCallInfoDto>>(readResult.FormData["UploadInfo"]).ToList();
                 var DataCallInfoDto = JsonConvert.DeserializeObject<DataCallInfoDto>(readResult.FormData["UploadInfo"]);
-                bool result = false;
+                bool result;
                 var FileData = readResult.FileData.FirstOrDefault();
                 string UploadFile = FileData.LocalFileName;
                 //foreach (var tempFile in readResult.FileData)
@@ -307,7 +307,7 @@ namespace Logqso.WebApi
                 var originalFileName = FileData.Headers.ContentDisposition.FileName.Replace("\"", string.Empty);
 
                 //check if 1st 2 qsos match DB.
-                result = await _LogService.ValiadateWintestStnUpload(DataCallInfoDto, originalFileName, UploadFile);
+                result  =  await _LogService.ValiadateWintestStnUpload(DataCallInfoDto, originalFileName, UploadFile);
                 //}
                 if (result == true)
                 {
@@ -327,8 +327,12 @@ namespace Logqso.WebApi
 
                     File.Delete(UploadFile);
 
-                    //start background thread
-                     _LogService.ProcessWintestStnUpload(DataCallInfoDto.LogId, SavePath);
+                    //start background thread, same proces so we need to wait. 
+                    // or the _BackgroundLogService will be disposed since it is owned  by the data Controller
+                    //var Taskupload = _BackgroundLogService.ProcessWintestStnUpload(DataCallInfoDto.LogId, SavePath).ConfigureAwait(false);
+                    //await Taskupload;
+                    UpLoadTask = _LogService.ProcessWintestStnUpload(DataCallInfoDto.LogId, SavePath);
+
                 }
                 else
                 {
@@ -371,6 +375,7 @@ namespace Logqso.WebApi
             }
             else
             {
+                await UpLoadTask;
                 return ResponseMessage(HttpResponseMessage);
                 //return Ok(HttpResponseMessage);
                 //return Ok();

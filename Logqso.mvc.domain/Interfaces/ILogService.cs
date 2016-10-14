@@ -7,6 +7,7 @@ using Service.Pattern;
 using Logqso.mvc.Entities.LogDataEntity;
 using Logqso.mvc.Dto.LogData;
 using System.IO;
+using Repository.Pattern.Repositories;
 
 
 namespace Logqso.mvc.domain.Interfaces
@@ -25,7 +26,7 @@ namespace Logqso.mvc.domain.Interfaces
             Task<DataCallInfoDto> GetUpdatedContestCall(DataCallInfoDto dataCallObjDTO, string Username);
             Task<LogPageDTO> GetContestLogs(LogCtlDataSettingsDto LogCtlDataSettingsDto, string Username);
             Task<bool> ValiadateWintestStnUpload(DataCallInfoDto DataCallInfoDto, string originalFileName, string Filepath);
-            Task<bool> ProcessWintestStnUpload(int LogId, string Filepath);
+            Task<bool> ProcessWintestStnUpload(int LogId, string UpLoadedFile);
             
 #if false
             Task<ContestControlEntity> GetContestControlNames();

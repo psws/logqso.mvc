@@ -46,6 +46,8 @@ namespace Logqso.mvc.domain
              };
 
             registerComponent.RegisterTypeWithInjectionTypes<ILogService, LogService>(ParmsLog, false);
+
+
         }
     }
 

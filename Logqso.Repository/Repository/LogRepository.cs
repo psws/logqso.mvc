@@ -1238,7 +1238,7 @@ namespace Logqso.Repository.Repository
                                 if (CGroupCur == 1)
                                 {
                                     LogPageRecordDTO.I1 = LogPageRecord.Call;
-                                    LogPageRecordDTO.F1 = (LogPageRecord.Freq == 0) ? string.Empty : ((short)LogPageRecord.Freq).ToString();
+                                    LogPageRecordDTO.F1 = (LogPageRecord.Freq == 0) ? string.Empty : LogPageRecord.Freq.ToString("0.#");
                                     LogPageRecordDTO.C1 = LogPageRecord.C;
                                     LogPageRecordDTO.Z1 = LogPageRecord.Z;
                                     LogPageRecordDTO.P1 = LogPageRecord.P;
@@ -1263,7 +1263,7 @@ namespace Logqso.Repository.Repository
                                         LogPageRecords2Index = (LogPageRecords2Index == -1) ? 0 : LogPageRecords2Index;
                                         LogPageRecord2 = LogPageRecords2.ElementAt(LogPageRecords2Index);
                                         LogPageRecordDTO.I2 = LogPageRecord2.Call;
-                                        LogPageRecordDTO.F2 = (LogPageRecord2.Freq == 0) ? string.Empty : ((short)LogPageRecord2.Freq).ToString();
+                                        LogPageRecordDTO.F2 = (LogPageRecord2.Freq == 0) ? string.Empty : LogPageRecord2.Freq.ToString("0.#");
                                         LogPageRecordDTO.C2 = LogPageRecord2.C;
                                         LogPageRecordDTO.Z2 = LogPageRecord2.Z;
                                         LogPageRecordDTO.P2 = LogPageRecord2.P;
@@ -1287,7 +1287,7 @@ namespace Logqso.Repository.Repository
                                         LogPageRecords3Index = (LogPageRecords3Index == -1) ? 0 : LogPageRecords3Index;
                                         LogPageRecord3 = LogPageRecords3.ElementAt(LogPageRecords3Index);
                                         LogPageRecordDTO.I3 = LogPageRecord3.Call;
-                                        LogPageRecordDTO.F3 = (LogPageRecord3.Freq == 0) ? string.Empty : ((short)LogPageRecord3.Freq).ToString();
+                                        LogPageRecordDTO.F3 = (LogPageRecord3.Freq == 0) ? string.Empty : LogPageRecord3.Freq.ToString("0.#");
                                         LogPageRecordDTO.C3 = LogPageRecord3.C;
                                         LogPageRecordDTO.Z3 = LogPageRecord3.Z;
                                         LogPageRecordDTO.P3 = LogPageRecord3.P;
@@ -1309,7 +1309,7 @@ namespace Logqso.Repository.Repository
                                 else if (CGroupCur == 2)
                                 {
                                     LogPageRecordDTO.I2 = LogPageRecord.Call;
-                                    LogPageRecordDTO.F2 = (LogPageRecord.Freq == 0) ? string.Empty : ((short)LogPageRecord.Freq).ToString();
+                                    LogPageRecordDTO.F2 = (LogPageRecord.Freq == 0) ? string.Empty : LogPageRecord.Freq.ToString("0.#");
                                     LogPageRecords2Index = (LogPageRecords2Index == -1) ? 0 : LogPageRecords2Index;
                                     LogPageRecordDTO.C2 = LogPageRecord.C;
                                     LogPageRecordDTO.Z2 = LogPageRecord.Z;
@@ -1332,7 +1332,7 @@ namespace Logqso.Repository.Repository
                                         LogPageRecords3Index = (LogPageRecords3Index == -1) ? 0 : LogPageRecords3Index;
                                         LogPageRecord3 = LogPageRecords3.ElementAt(LogPageRecords3Index);
                                         LogPageRecordDTO.I3 = LogPageRecord3.Call;
-                                        LogPageRecordDTO.F3 = (LogPageRecord3.Freq == 0) ? string.Empty : ((short)LogPageRecord3.Freq).ToString();
+                                        LogPageRecordDTO.F3 = (LogPageRecord3.Freq == 0) ? string.Empty : LogPageRecord3.Freq.ToString("0.#");
                                         LogPageRecordDTO.C3 = LogPageRecord3.C;
                                         LogPageRecordDTO.Z3 = LogPageRecord3.Z;
                                         LogPageRecordDTO.P3 = LogPageRecord3.P;
@@ -1354,7 +1354,7 @@ namespace Logqso.Repository.Repository
                                 else if (CGroupCur == 3)
                                 {
                                     LogPageRecordDTO.I3 = LogPageRecord.Call;
-                                    LogPageRecordDTO.F3 = (LogPageRecord.Freq == 0) ? string.Empty : ((short)LogPageRecord.Freq).ToString();
+                                    LogPageRecordDTO.F3 = (LogPageRecord.Freq == 0) ? string.Empty : LogPageRecord.Freq.ToString("0.#");
                                     LogPageRecords3Index = (LogPageRecords3Index == -1) ? 0 : LogPageRecords3Index;
                                     LogPageRecordDTO.U3 = LogPageRecord.U;
                                     LogPageRecordDTO.C3 = LogPageRecord.C;
@@ -1679,11 +1679,11 @@ namespace Logqso.Repository.Repository
              return Task.FromResult(QsoResults);
         }
 
-        public static async Task<bool> UpdateQsoStationsAsync(this IRepositoryAsync<Log> _LogRepository, QsoUpdateStationNamesDTOCollextion QsoUpdateStationNamesDTOCollextion)
+        public static async Task<bool> UpdateQsoStationsAsync(this IRepositoryAsync<Log> _LogRepository, QsoUpdateStationNamesDTOCollection QsoUpdateStationNamesDTOCollection)
         {
-            return await UpdateQsoStations(_LogRepository, QsoUpdateStationNamesDTOCollextion);
+            return await UpdateQsoStations(_LogRepository, QsoUpdateStationNamesDTOCollection);
         }
-        public static Task<bool> UpdateQsoStations(this IRepositoryAsync<Log> _LogRepository, QsoUpdateStationNamesDTOCollextion QsoUpdateStationNamesDTOCollextion)
+        public static Task<bool> UpdateQsoStations(this IRepositoryAsync<Log> _LogRepository, QsoUpdateStationNamesDTOCollection QsoUpdateStationNamesDTOCollection)
         {
             bool results = true;
             DbContext DbContext = _LogRepository.GetDbContext() as DbContext;
@@ -1691,15 +1691,15 @@ namespace Logqso.Repository.Repository
             // .Net will call QDUpdateInImsQuoteCollection.GetEnumerator() for each record.
             try 
 	        {
-                using (DbContext)
-                {
+                //using (DbContext)
+                //{
                     var sqp = new SqlParameter("sqp", SqlDbType.Structured);
-                    sqp.Value = QsoUpdateStationNamesDTOCollextion;
+                    sqp.Value = QsoUpdateStationNamesDTOCollection;
                     sqp.TypeName = "udt_QsoStationNames";
 
-                    string command = "EXEC " + "CQD_sp_QsoUpdatePointsMults" + " @sqp";
+                    string command = "EXEC " + "CQD_sp_QsoUpdateStationNames" + " @sqp";
                     DbContext.Database.ExecuteSqlCommand(command, sqp);
-                }
+                //}
             }
 	        catch (Exception ex)
 	        {
@@ -1707,7 +1707,7 @@ namespace Logqso.Repository.Repository
 	        }
             finally
             {
-                DbContext.Dispose();
+                //DbContext.Dispose();
             }
             return Task.FromResult(results);
         }
@@ -1742,15 +1742,28 @@ namespace Logqso.Repository.Repository
                 var QsosWithStatioName = (from lq in QsoQ
                           where lq.LogId == Logid &&
                           lq.StationName == item.StationName
-                          select lq
+                            select new QsoUpdateStationNamesDTO
+                            {
+                                LogId = lq.LogId,
+                                QsoNo = lq.QsoNo,
+                                StationName = lq.StationName,
+                                Frequency = lq.Frequency
+                            }
                             ).ToList();
+                QsoUpdateStationNamesDTOCollection QsoUpdateStationNamesDTOCollectionRestore = new QsoUpdateStationNamesDTOCollection();
                 foreach (var Qso in QsosWithStatioName)
 	            {
-		            Qso.StationName = string.Empty;
-                    _QsoRepository.Update(Qso);
+		            Qso.StationName = null;
+                    Qso.Frequency = Math.Truncate(Qso.Frequency); //no decimal in cabrillo
+                    QsoUpdateStationNamesDTOCollectionRestore.Add(Qso);
 	            }
+                if (QsoUpdateStationNamesDTOCollectionRestore.Count > 0)
+                {
+                    //use sp to restore values
+                    _LogRepository.UpdateQsoStations(QsoUpdateStationNamesDTOCollectionRestore);
+                }
+
                 var _context = _QsoRepository.GetDbContext();
-                _context.SaveChanges();
                 //now delete the stationName
                 _StationRepository.Delete(item);
                 _contextStation.SaveChanges();

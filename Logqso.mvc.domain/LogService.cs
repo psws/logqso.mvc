@@ -209,9 +209,9 @@ namespace Logqso.mvc.domain
                                         }
                                         decimal freq;
                                         //no decimalin cabrillo
-                                        if (decimal.TryParse(qsocolumns[columnFreq].Substring(0, qsocolumns[columnFreq].Length - 2), out freq) == true)
+                                        if (decimal.TryParse(qsocolumns[columnFreq], out freq) == true)
                                         {
-                                            if (freq != item.Frequency)
+                                            if (Math.Truncate(freq) != Math.Truncate(item.Frequency) )
                                             {
                                                 result = false;
                                                 break;
@@ -249,41 +249,54 @@ namespace Logqso.mvc.domain
             return result;
         }
 
-        public  Task<bool> ProcessWintestStnUpload(int LogId, string Filepath)
+        public async Task<bool> ProcessWintestStnUpload( int LogId, string UpLoadedFile)
         {
             bool results = true;
-             try
-             {
-                    ProcessStations ProcessStationsobj = new ProcessStations(_repository, LogId, Filepath );
-                    //http://stackoverflow.com/questions/5483565/how-to-use-wpf-background-worker
-                    BackgroundWorker worker = new BackgroundWorker();
-                    worker.WorkerReportsProgress = false;
-                    worker.DoWork += worker_DoWorkCall;
-                    //worker.ProgressChanged += worker_ProgressChanged;
-                    //worker.RunWorkerCompleted += worker_RunWorkerCompleted;	
-	                worker.RunWorkerAsync(ProcessStationsobj);
-
-             }
-             catch (Exception ex)
-             {
-                 results = false;
-             }
-
-            //gather The station names into hash
-
-            return Task.FromResult(results);
-        }
-
-        private void worker_DoWorkCall(object sender, DoWorkEventArgs e)
-        {
-            // run all background tasks here
-            //Get the BackgroundWorker that raised this event.
-            BackgroundWorker worker = sender as BackgroundWorker;
-
-            ProcessStations ProcessLogsobj = e.Argument as ProcessStations;
-            ProcessLogsobj.StationsToDatabase(worker);
+           ProcessStations ProcessStationobj = new ProcessStations( _repository);
+            ProcessStationobj.LogId = LogId;
+            ProcessStationobj.UpLoadedFile = UpLoadedFile;
+           results = await ProcessStationobj.StationsToDatabase();
+           return results;
 
         }
+
+        //public Task<bool> ProcessWintestStnUploadWorker(IRepositoryAsync<Log> _repository, int LogId, string UpLoadedFile)
+        //{
+        //    bool results = true;
+        //    try
+        //    {
+        //        ProcessStations ProcessStationsobj = new ProcessStations(_repository);
+        //        ProcessStationsobj.LogId = LogId;
+        //        ProcessStationsobj.UpLoadedFile = UpLoadedFile;
+        //        //http://stackoverflow.com/questions/5483565/how-to-use-wpf-background-worker
+        //        BackgroundWorker worker = new BackgroundWorker();
+        //        worker.WorkerReportsProgress = false;
+        //        worker.DoWork += worker_DoWorkCall;
+        //        //worker.ProgressChanged += worker_ProgressChanged;
+        //        //worker.RunWorkerCompleted += worker_RunWorkerCompleted;	
+        //        worker.RunWorkerAsync(ProcessStationsobj);
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        results = false;
+        //    }
+
+        //    //gather The station names into hash
+
+        //    return Task.FromResult(results);
+        //}
+
+        //private void worker_DoWorkCall(object sender, DoWorkEventArgs e)
+        //{
+        //    // run all background tasks here
+        //    //Get the BackgroundWorker that raised this event.
+        //    BackgroundWorker worker = sender as BackgroundWorker;
+
+        //    ProcessStations ProcessLogsobj = e.Argument as ProcessStations;
+        //    ProcessLogsobj.StationsToDatabase(worker);
+
+        //}
 
 
 

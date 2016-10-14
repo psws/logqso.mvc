@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Data;
+using Logqso.mvc.domain.Interfaces;
+
 using System.Threading.Tasks;
 using Logqso.mvc.Entities.LogDataEntity;
 using Logqso.Repository.Repository;
@@ -17,19 +19,21 @@ namespace Logqso.mvc.domain
 {
     class ProcessStations
     {
-        string UpLoadedFile {get; set;}
-        int LogId { get; set; }
-        IRepositoryAsync<Log> _LogRepository { get; set; }
+        public string UpLoadedFile {get; set;}
+        public int LogId { get; set; }
+        //IRepositoryAsync<Log> _LogRepository { get; set; }
+        private readonly IRepositoryAsync<Log> _LogRepository;
 
-        public  ProcessStations(IRepositoryAsync<Log> _LogRepositor, int LogId, string UploadedFile)
+        public ProcessStations( IRepositoryAsync<Log> LogRepository)
         {
-            this._LogRepository = _LogRepositor;
-            this.LogId = LogId;
-            this.UpLoadedFile = UploadedFile;
+            this._LogRepository = LogRepository;
+            //this.LogId = LogId;
+            //this.UpLoadedFile = UpLoadedFile;
         }
 
-        public void StationsToDatabase(BackgroundWorker worker)
+        public async Task<bool> StationsToDatabase()
         {
+            bool results = true;   
             StreamReader TxtStream = new StreamReader(UpLoadedFile);
             List<string> Stations = new List<string>();
             if (TxtStream != null)
@@ -42,7 +46,8 @@ namespace Logqso.mvc.domain
                     {
                         // QSO number
                         int columnQsoNo = rowcolumns.FindIndex(x => x == "QSO number");
-                        QsoUpdateStationNamesDTOCollextion QsoUpdateStationNamesDTOCollextion = new QsoUpdateStationNamesDTOCollextion();
+                        int columnFreq = rowcolumns.FindIndex(x => x == "Frequency (kHz)");
+                        QsoUpdateStationNamesDTOCollection QsoUpdateStationNamesDTOCollection = new QsoUpdateStationNamesDTOCollection();
 
                         while (TxtStream.Peek() >= 0)
                         {
@@ -79,9 +84,10 @@ namespace Logqso.mvc.domain
                             {
                                 LogId = LogId,
                                 QsoNo = short.Parse(rowcolumns[columnQsoNo]),
-                                StationName = station
+                                StationName = station,
+                                Frequency = decimal.Parse(rowcolumns[columnFreq])
                             };
-                            QsoUpdateStationNamesDTOCollextion.Add(QsoUpdateStationNamesDTO);
+                            QsoUpdateStationNamesDTOCollection.Add(QsoUpdateStationNamesDTO);
                         }
                         if (Stations.Count != 0)
                         {//store Stations
@@ -98,14 +104,19 @@ namespace Logqso.mvc.domain
                             //add to db
                             _LogRepository.SetStationList(LogId, LogStations);
                         }
-                        if (QsoUpdateStationNamesDTOCollextion.Count != 0)
+                        if (QsoUpdateStationNamesDTOCollection.Count != 0)
                         {
-                            _LogRepository.UpdateQsoStationsAsync(QsoUpdateStationNamesDTOCollextion);
+                            _LogRepository.UpdateQsoStationsAsync(QsoUpdateStationNamesDTOCollection);
 
                         }
                     }
                 }
             }
+            else
+            {
+                results = false;
+            }
+            return results;
         }
 
     }

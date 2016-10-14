@@ -356,5 +356,6 @@ namespace Repository.Pattern.Ef6
                     SyncObjectGraph(item);
             }
         }
+
     }
 }
