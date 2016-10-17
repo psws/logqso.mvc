@@ -713,6 +713,9 @@ $(function () {
                 $("#FileBlkWT").css({
                     'display': 'inline-block'
                 });
+                $("#FileStskWT").css({
+                    'display': 'none'
+                });
 
             }
             else {
@@ -760,6 +763,7 @@ $(function () {
             alert(responseData);
             $('#FileLabelWT')[0].innerHTML = "File Upload Error";
         }
+        $("#FileInputWT").prop('disabled', false);
 
     };
 

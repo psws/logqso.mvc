@@ -231,13 +231,21 @@ namespace Logqso.mvc.domain
 
                                 }
                             }
+                            else
+                            {
+                                result = false;
+                            }
                         }
                         else
                         {
-
+                            result = false;
                         } 
 
                     }
+                }
+                else
+                {
+                    result = false;
                 }
             }
             catch (Exception ex)
