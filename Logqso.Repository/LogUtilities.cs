@@ -47,13 +47,19 @@ namespace Logqso.Repository
                             break;
                         case CatBandEnum._10M:
                             FreqLow = 28000.0m;
-                            FreqHigh = 28700.0m;
+                            FreqHigh = 29700.0m;
                             break;
                         default:
                             break;
                     }
                 }
             }
+            //else
+            //{
+            //    bHasRange = true;
+            //    FreqLow = 1800.0m;
+            //    FreqHigh = 29700.0m;
+            //}
             return bHasRange;
         }
 

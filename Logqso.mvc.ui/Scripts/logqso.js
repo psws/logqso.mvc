@@ -1506,23 +1506,22 @@ $(function () {
             onSortCol: function (index, columnIndex, sortOrder) {
                 var grid = $('#jqGridUBN');
                 //http://stackoverflow.com/questions/25801755/multiple-column-sorting-jqgrid
-                var arr = [ "U1", "U2", "U3", "B1", "B2", "B3", "N1", "N2", "N3", "D1", "D2", "D3", "X1", "X2", "U3"];
+                var arr = [ "U1", "U2", "U3", "B1", "B2", "B3", "N1", "N2", "N3", "D1", "D2", "D3", "X1", "X2", "X3"];
                 if ($.inArray(index, arr) != -1) {
-                    setSorting.call(grid[0], index, "asc");
-                    setSorting.call(grid[0], "W", "asc");
-                    setSorting.call(grid[0], "T", "asc");
+                    setSorting.call(grid, index, "asc");
+                    setSorting.call(grid, "W", "asc");
+                    setSorting.call(grid, "T", "asc");
                     grid.jqGrid("setGridParam", {
-                        multiSort: true,
-                        sortorder: 'asc',
-                        sortname: index +' asc, W asc, T'
+                        multiSort: true//,
+                        //sortorder: 'asc'//,
+                        //sortname: index //+' asc, W asc, T'
                     }).trigger("reloadGrid");
                     //return 'stop';
                 } else {
-                    var grid = $('#jqGridUBN');
                     grid.jqGrid('setGridParam', {
-                        multiSort: false
+                        multiSort: false//,
                         //sortorder: 'asc',
-                        //sortname: 'U1 asc, W asc, T'
+                        //sortname: index //'U1 asc, W asc, T'
                     }).trigger('reloadGrid');
                     //return 'stop';
                 }
@@ -1599,6 +1598,7 @@ $(function () {
                     width: 16,
                     cellattr: _lq.cellBrdBrn,
                     align: 'left',
+                    sorttype: 'number',
                     firstsortorder: 'asc',
                     title: false,
                     resizable: false
@@ -1692,6 +1692,7 @@ $(function () {
                     //formatter: 'number',
                     //formatoptions: { decimalSeparator: ".", thousandsSeparator: "", decimalPlaces: 1, },
                     align: 'left',
+                    sorttype: 'number',
                     firstsortorder: 'asc',
                     title: false,
                     resizable: false
@@ -1783,6 +1784,7 @@ $(function () {
                     width: 16,
                     cellattr: _lq.cellBrdBrn,
                     align: 'left',
+                    sorttype: 'number',
                     firstsortorder: 'asc',
                     title: false,
                     resizable: false
@@ -1963,8 +1965,27 @@ $(function () {
             //    grid.jqGrid('setSelection', rowid, false);
             //},
             onSortCol: function (index, columnIndex, sortOrder) {
-                //_lq.GetContestLogs();
-                //return 'stop';
+                var grid = $('#jqGridLog');
+                //http://stackoverflow.com/questions/25801755/multiple-column-sorting-jqgrid
+                var arr = ['C1', 'C2', 'C3', 'Z1', 'Z2', 'Z3' ,'P1', 'P2', 'P3'];
+                if ($.inArray(index, arr) != -1) {
+                    setSorting.call(grid, index, "desc");
+                    setSorting.call(grid, "W", "asc");
+                    setSorting.call(grid, "T", "asc");
+                    grid.jqGrid("setGridParam", {
+                        multiSort: true//,
+                        //sortorder: 'desc'//,
+                        //sortname: index //+' asc, W asc, T'
+                    }).trigger("reloadGrid");
+                    //return 'stop';
+                } else {
+                    grid.jqGrid('setGridParam', {
+                        multiSort: false//,
+                        //sortorder: 'asc',
+                        //sortname: index //'U1 asc, W asc, T'
+                    }).trigger('reloadGrid');
+                    //return 'stop';
+                }
             },
             onPaging: function (pgButton) {
                 _lq.GetContestLogs();
@@ -1986,7 +2007,6 @@ $(function () {
                         _lq.LogScrollUpdateReqd = true;
                     }
                 }
-
                 //return 'stop';
             },
 
@@ -2040,6 +2060,7 @@ $(function () {
                     //formatter:'number',
                     //formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 1 },
                     align: 'left',
+                    sorttype: 'number',
                     firstsortorder: 'asc',
                     title: false,
                     resizable: false
@@ -2116,6 +2137,7 @@ $(function () {
                     width: 16,
                     cellattr: _lq.cellBrdBrn,
                     align: 'left',
+                    sorttype: 'number',
                     firstsortorder: 'asc',
                     title: false,
                     resizable: false
@@ -2193,6 +2215,7 @@ $(function () {
                     width: 16,
                     cellattr: _lq.cellBrdBrn,
                     align: 'left',
+                    sorttype: 'number',
                     firstsortorder: 'asc',
                     title: false,
                     resizable: false
@@ -2758,6 +2781,7 @@ $(function () {
                 break;
             case 'Z1':
                 val = rdata.Z1;
+                //Title = rawObject.XC1;
                 break;
             case 'Z2':
                 val = rdata.Z2;
