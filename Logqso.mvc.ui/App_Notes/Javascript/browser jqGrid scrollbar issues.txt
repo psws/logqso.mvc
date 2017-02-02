@@ -1,0 +1,63 @@
+﻿jgGrid maps the scroll of bdiv to scrollGrid().
+This function popukates the jqGridLog table with visible elements
+this buil-in scroll is handled first. The logqso scroll function is called after the table rows are added by scrollGrid
+logqso:
+       grid.closest(".ui-jqgrid-bdiv").scroll(function (e) {
+            //e.preventDefault();;
+            //console.log("_lq.LogViewInit scroll");
+            if (_lq.LogScrollUpdateReqd == true) {
+                _lq.LogScrollPosition = grid.closest(".ui-jqgrid-bdiv").scrollTop();
+                window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
+            }
+        });
+The scrolltop is the new scrolltop.
+This logqso scroll captuers the current top for F5 refreshes
+++++++++++++++++++++++++
+
+
+
+
+
+_lq.LogViewDraw2() gets the new grid data from server and populates Log and UBN jqgrid
+		if the tab is not displayed, Chrome and Firefox do not generate a scrollbar.
+		The grid is loaded but there is no scroll abar on the tab that is not displayed.
+		The Solution is:
+		----------------------------
+		var save = _lq.ActiveView;
+        if (save == 'Log') { //required for non IE
+            //chrome firefox do not add scrollbar in trigger('reloadGrid') if jquery-ui is not display:block
+            var tab = $("#TabViewUBN")
+            tab.css({
+                display: 'block',
+            });
+            //var block = tab.css("display");
+            //console.log('_lq.LogViewDraw2 UBN: block style ' + block);
+            //console.log('_lq.LogViewDraw2 UBN: visible style ' + tab.css("visibility") );
+        }
+
+        grid.jqGrid('setGridParam', { data: data.records });
+        //refresh the grid
+        grid.trigger('reloadGrid');
+
+        if (save == 'Log' ) {
+            var tab = $("#TabViewUBN")
+            tab.css({ display: 'none' });
+        }
+		----------------------------------
+		This code checks if the Tab is hidden and then sets the display:block, for theat tab during the call to
+		reloadGrid. Afternthe grid is populated, the Tab displayed state is restored.
+
+
+
+
+
+
+I tried this code in loadComplete and gridComplete and gridcomplete but it does bot work because padding-right is not set when this is invoked
+                    //var rowcnt = grid.jqGrid("getGridParam", "records");
+                    //var reccount = grid.jqGrid("getGridParam", "reccount");
+                    //if (rowcnt > reccount) {
+                    //    var bDiv = this.grid.bDiv, hDiv = this.grid.hDiv, $hbox = $(hDiv).find(">div");
+                    //    $hbox.css({ "padding-right": "15px" });
+                    //    var scrollbarWidth = $hbox.css("padding-right");
+                    //    console.log('_lq.LogViewInit gridComplete padding-right: ' + scrollbarWidth);
+                    //}

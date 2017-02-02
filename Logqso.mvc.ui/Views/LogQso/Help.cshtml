@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "ContestQso Help System Introduction";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<p>
+The Help system consists of a series of short videos that focus on the ContestQso functional blocks and tabs.
+Click on the 'Start Help Introduction Video' button to play the first video.  
+    After the video starts, you can move your Mouse(for PC or Mac) or Fimger(for phones and tablets)to the bottom of the video. A popup
+    video controller will appear to allow you to stop/start, advance the video....
+<p>
+    You can click the <span style="font-size:24px;background-color:black;color:white;">&otimes;</span>
+    button, on the right of the screen, to close the video.
+</p>
+    <p> 
+    After the video is closed, use the 'Return to Home Page' Button,
+   or your browser back button or click on ContestQso on the menu
+        to return to the home page
+</p>
+<button id="Vid_Intro"  data-modal-id="puVidIntro" style ="float:left;height:25px;" class=" btn-group-xs btn-default  lq-help" >
+    Start Help Introduction Video
+</button>
+<button id="back" style="float:left;height:25px;" class=" btn-group-xs btn-default  lq-help" onclick="window.location.href = '../';">
+    Return to Home Page
+</button>
+
+<div id="puVidIntro" class="VidDiv" >
+    <div id="VideoCont">
+        <video id="VIntroId" controls="controls" src="~/video/introduction.mp4" type="video/mp4"></video>
+    </div>
+</div>

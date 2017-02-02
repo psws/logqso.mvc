@@ -1,0 +1,18 @@
+﻿The Log tab can sort pn countries, zones and Prefixes.
+Youo need to click on header to sort.
+After sorting these columns you must restore by a second click to restore order.
+Only visiblr and sorted rows are loaded into the rable.
+The originsl order must be restored for movinmg to the UBN tasb
+
+The UBN ubndx columns can be sorted.
+sort order restoration is not required before returning to the Log tab,.
+When sorting the first UBNDX column you need to click the header twice for the next UBNDX column.
+
+Tablets have a webkit scroll bar, which is mainly for indication.
+In some phones and tablets you can tap on scroll bar to scroll
+If you tap on a call, a popup shows all CZP and UBNDX info.
+On PC's with mouse you can hover over the red 'B'  to see the correct callsign. 
+You can also hover over the red 'X' to see the correct exchange.
+
+On UBN amd Log tab it is best to look at 4-12 hours interval via x axis setting.
+This will allow scroll thumb dragging.

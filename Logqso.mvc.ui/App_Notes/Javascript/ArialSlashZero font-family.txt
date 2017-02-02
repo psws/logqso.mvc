@@ -1,0 +1,29 @@
+﻿I want slashed zero font for the log and ubn tabs.
+ie11 does not load my fontface.
+	css:
+		@font-face {
+		 font-family: ArialSlashZero;
+		  src: url(../fonts/slash_0.ttf) format('truetype'),  /* for android browser*/*/
+			   url(../fonts/slash_0-webfont.woff) format('woff');  /*for chrome IE11*/
+                                                             
+	}
+
+MS has crippled IE11 in win 10.the ttf file requires DRM. Edge browser loads ArialSlashZero font OK.
+	http://www.html5report.com/topics/html5/articles/360938-internet-explorer-11-windows-7-drops-some-html5.htm
+I tried .eot and woff2. They also do not work in ie11.
+
+My solution sets _lq.ie11 for detecting browser vesion
+	http://codepen.io/gapcode/pen/vEJNZN
+
+The _lq.formatCall funtion sets the font-family to use Consolas; font-size:1.1em;  for ie11.
+Chrome and Firefox use slash_0.ttf with no problems.
+	The code:
+		_lq.formatCall = function (cellValue, options, rowObject) {
+				if (cellValue != null) {
+					if (_lq.ie11 > 0) {
+						//ie11 doesnot load ArialSlashZero fontface 
+						cellValue = "<span style= 'font-family: ArialSlashZero,  Consolas; font-size:1.1em;' >" + cellValue + "</span>";
+					} else {
+						cellValue = "<span style= 'font-family: ArialSlashZero;' >" + cellValue + "</span>";
+						//cellValue = "<span style= 'font-family: ArialSlashZero,  Consolas; font-size:1.0em;' >" + cellValue + "</span>";
+					} 

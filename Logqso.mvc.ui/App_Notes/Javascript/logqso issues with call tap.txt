@@ -1,0 +1,33 @@
+﻿       THIS IS FOR THE jqGridQso POPUP ON CALLTAP
+	   //CONCLUSION
+        // IF YOU HIDE Z OR P COLUMN ON NOTE2 CHROME, SCRREN JUMPS ON 1st TAP OF CALL
+        //on chrome note 2 the screen jumps to the top when you touch a call
+        // thus happens with hidecols here followed by a QsoInit()
+
+		//by not calling the qsoinit below note2 only jumps on first call callgroup tap
+        //  after you scroll down, the screen does not jump, if you tap another call in the same callgroup
+        // or all call groups point to the sam contest
+            // in addition, if you do not hide colums and only call QsiInit() on line 50
+            // the phone does not jump on first touch
+
+        if (_lq.PZName == 'P') {
+            $("#jqGridQso").jqGrid('hideCol',["Z"]);
+            $("#jqGridQso").jqGrid('showCol', ["P"]);
+        } else {
+            $("#jqGridQso").jqGrid('hideCol', ["P"]);
+            $("#jqGridQso").jqGrid('showCol', ["Z"]);
+        }
+
+        //$("#jqGridQso").jqGrid("GridUnload");
+
+        //_lq.QsoInit();
+
+
+		I am using hide columns for the P an Z columns.
+		I tried to use the variable _lq.PZName and _lq.PZLabel but this forces a  QsoInit.
+		The QsoInit causes jumpin issues with the Note 2 chrome and generic browsers.
+
+		Had to add this for chrome pc. without, there is a horizontal scollbar covering the qso popup info if you do not call
+		        //$("#jqGridQso").jqGrid("GridUnload");
+
+				 //_lq.QsoInit();

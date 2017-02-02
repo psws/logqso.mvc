@@ -1,0 +1,161 @@
+﻿My origonal approach for the popup videos was to use the modal-box
+This works in Chrome anf Firefox, but not in IE11 or edge
+The modal-box is a jquery-Ui decorated control.
+When youn make it draggale, the Html5 <video. objects controls do not generate clik events.
+    $(".modal-box").draggable();
+Clicking on any of the Play, slider... buttons do notgenerate clcik events. The css works OK
+
+The FIX was to not use my modal-box and use a free js library as a templare.
+This js/css lib is from Neteria.  videopopup.js.
+	https://netteria.net/html5-video-popup-jquery/105/
+I have many videos to play and I could not use this lib cua of its hardcided opener parameter option.
+	https://webdevdoor.com/html-5/changing-html5-video-javascript-jquery
+It turns out that each video needs its own specific video file target.
+I tried to load the source, but all of these methods to load the >video> src did not work.
+The file needed to be loaded in the html bot in the javascript.
+
+Many web hits shw multipe format videos
+	<div id="player-overlay">
+	  <video controls>
+		<source src="http://techslides.com/demos/sample-videos/small.webm" type="video/webm">
+		<source src="http://techslides.com/demos/sample-videos/small.ogv"  type="video/ogg">
+		<source src="http://techslides.com/demos/sample-videos/small.mp4"  type="video/mp4">
+		<source src="http://techslides.com/demos/sample-videos/small.3gp"  type="video/3gp">
+	  </video>
+	</div>
+
+Now the .mp4 file plays in all browsers.
+
+MY SOLUTION:
+Each video has a help button. The Help buttom ids begin with Vid_
+Each video has an HTML5 puVidxxxxx data-modal-id.
+The VidCont container id can be used for all httml
+The <video> id needs to be unique for each puVidxxxxx target
+The dimmed VideoBkgnd and the closer_video button are only added  once to each puVidxxxxx VidCont.
+There is only one closer_video click function, which needs the modal <video> id to stop and close the video.
+	HTML code:
+		<div id="puVidCategory" class="VidDiv">
+			<div id="VideoCont" >
+				<video id="VCatId" controls="controls" src="~/video/introduction.mp4" type="video/mp4">
+				</video>
+			</div>
+		</div>
+
+		<div id="puVidFilter" class="VidDiv">
+			<div id="VideoCont">
+				<video id="VFiltId" controls="controls" src="~/video/test.mp4" type="video/mp4">
+				</video>
+			</div>
+		</div>
+
+		<div id="puVidYaxis" class="VidDiv">
+			<div id="VideoCont">
+				<video id="VYaxisId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+			</div>
+		</div>
+
+		<div id="puVidXaxis" class="VidDiv">
+			<div id="VideoCont">
+				<video id="VXaxisId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+			</div>
+		</div>
+
+		<div id="puVidCall1" class="VidDiv">
+			<div id="VideoCont">
+				<video id="VCall1Id" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+			</div>
+		</div>
+
+		<div id="puVidChart" class="VidDiv">
+			<div id="VideoCont">
+				<video id="VChartId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+			</div>
+		</div>
+
+		<div id="puVidLog" class="VidDiv">
+			<div id="VideoCont">
+				<video id="VLogId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+			</div>
+		</div>
+
+		<div id="puVidUbn" class="VidDiv">
+			<div id="VideoCont">
+				<video id="VUbnId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+			</div>
+		</div>
+
+		<div id="puVidUp" class="VidDiv">
+			<div id="VideoCont">
+				<video id="VUpId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+			</div>
+		</div>
+
+	JS codr:
+	    $("button[id^= 'Vid']").click(function (e) {
+        var modalBox = $(this).attr('data-modal-id');
+        var popup = $('#' + modalBox);
+        var VidTd;
+        switch (this.id) {
+            case "Vid_Category":
+                VidTd = "VCatId";
+                break;
+            case "Vid_Filter":
+                VidTd = "VFiltId";
+                break;
+            case "Vid_YAxis":
+                VidTd = "VYaxisId";
+                break;
+            case "Vid_XAxis":
+                VidTd = "VXaxisId";
+                break;
+            case "Vid_Call1":
+                VidTd = "VCall1Id";
+                break;
+            case "Vid_Chart":
+                VidTd = "VChartId";
+                break;
+            case "Vid_Log":
+                VidTd = "VLogId";
+                break;
+            case "Vid_Ubn":
+                VidTd = "VUbnId";
+                break;
+            case "Vid_Up":
+                VidTd = "VUpId";
+                break;
+            default:
+        }
+        var container = $('#' + modalBox + " div[id=VideoCont]");
+        if ($('#' + modalBox + ' div[id=VideoBkgnd').length == 0) { //only add once
+
+            popup.append('<div id="VideoBkgnd"></div>');
+            $('#' + modalBox + ' div[id=VideoBkgnd').css("background", "#17212a");
+
+            popup.append('<div id="closer_video">&otimes;</div>');
+        }
+
+        var vid = $('#' + modalBox + " video[id=" + VidTd + "]");
+
+        $('#' + modalBox + " div[id=closer_video]").on('click', function () {
+            if (vid.paused == true) {
+                vid.trigger('pause');
+            } else {
+                vid.trigger('pause');
+                vid.currentTime = 0;
+            }
+            //$("div[id=closer_video]").off('click');
+            popup.hide();
+        });
+
+
+
+        _lq.parent_modal_box_id = e.currentTarget.id;
+        var modalBox = $(this).attr('data-modal-id');
+        var popup = $('#' + modalBox)
+
+        popup.show();
+        vid.trigger('play');
+
+
+    });
+

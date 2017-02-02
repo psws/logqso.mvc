@@ -1,0 +1,100 @@
+﻿ when sorting LOG tab C or P you need to restore to unsorted by click to get UBN ubndx to work
+The opposite is not true. sorting on ubndx does not effect theLpg c?,z?,p? 
+
+THE NEXT ISSUE SEEMS TO BE OK ON pc CHROME, BUT NOT ON OTHERS
+After the grid is sorted, a trigger("reloadGrid", [{ current: true }]);  is needed to reload rows.
+This triggers two sequences of a pair of evebts,loadComplete: event followed by a gridComplete: event
+The first sequence has a scrolltop of 0 for loadComplete but gridConplete gas a scrolltop of 380
+	The is always the case no matter what grid rows are visible when you click the ubndx sort colimn
+The second sequnce has a scrollTop of  380 for both evebts and the sortes view is down 1 page from the top
+                _lq.LogScrollPosition = 0;
+                window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
+                grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.LogScrollPosition);
+                return 'stop';
+
+
+
+     _lq.UBNViewInit = function () {
+        var grid = $('#jqGridUBN');
+
+        grid.jqGrid({
+            //onSelectRow: function (rowid, status, e) {
+            //    grid.jqGrid('setSelection', rowid, false);
+            //},
+            onSortCol: function (index, columnIndex, sortOrder) {
+                // when sorting log C or P you need to restore by click to get ubm ubndx to work
+
+                var grid = $('#jqGridUBN');
+                //http://stackoverflow.com/questions/25801755/multiple-column-sorting-jqgrid
+                var arr = [ "U1", "U2", "U3", "B1", "B2", "B3", "N1", "N2", "N3", "D1", "D2", "D3", "X1", "X2", "X3"];
+                if ($.inArray(index, arr) != -1) {
+                    setSorting.call(grid, index, "asc");
+                    setSorting.call(grid, "W", "asc");
+                    setSorting.call(grid, "T", "asc");
+
+
+                    grid.jqGrid("setGridParam", {
+                        multiSort: true//,
+                        //sortorder: 'asc'//,
+                        //sortname: index //+' asc, W asc, T'
+                    }).trigger("reloadGrid", [{ current: true }]);
+                    //return 'stop';
+                } else {
+
+                    grid.jqGrid('setGridParam', {
+                        multiSort: false//,
+                        //sortorder: 'asc',
+                        //sortname: index //'U1 asc, W asc, T'
+                    }).trigger('reloadGrid', [{ current: true }]);
+                    //return 'stop';//needed to block scroll to top
+                }
+                
+//http://stackoverflow.com/questions/5706703/how-to-reload-jquery-grid-keeping-scroll-position-and-collapse-elements-open
+                //this code is needed because jgqrid always wants to return the grid to the prevoius scroled position
+                //every sort click will goto top of grid. The stop  is needed
+                _lq.LogScrollPosition = 0;
+                window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
+                grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.LogScrollPosition);
+                return 'stop';
+            },
+
+
+    _lq.LogViewInit = function () {
+        var grid = $('#jqGridLog');
+
+        grid.jqGrid({
+            //onSelectRow: function (rowid, status, e) {
+            //    grid.jqGrid('setSelection', rowid, false);
+            //},
+           onSortCol: function (index, columnIndex, sortOrder) {
+                // when sorting log C or P you need torestore by click to get ubm ubndx to work
+
+                var grid = $('#jqGridLog');
+                //http://stackoverflow.com/questions/25801755/multiple-column-sorting-jqgrid
+                var arr = ['C1', 'C2', 'C3', 'Z1', 'Z2', 'Z3' ,'P1', 'P2', 'P3'];
+                if ($.inArray(index, arr) != -1) {
+                    setSorting.call(grid, index, "desc");
+                    setSorting.call(grid, "W", "asc");
+                    setSorting.call(grid, "T", "asc");
+                    grid.jqGrid("setGridParam", {
+                        multiSort: true//,
+                        //sortorder: 'desc'//,
+                        //sortname: index //+' asc, W asc, T'
+                    }).trigger("reloadGrid");
+                    //return 'stop';
+                } else {
+                    grid.jqGrid('setGridParam', {
+                        multiSort: false//,
+                        //sortorder: 'asc',
+                        //sortname: index //'U1 asc, W asc, T'
+                    }).trigger('reloadGrid');
+                    //return 'stop';
+                }
+                //this code is needed because jgqrid always wants to return the grid to the prevoius scroled position
+                //every sort click will goto top of grid. The stop  is needed
+                _lq.LogScrollPosition = 0;
+                window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
+                // _lq.LogScrollUpdateReqd == true;
+                grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.LogScrollPosition);
+                return 'stop';  //needed to block jqgtid
+            },

@@ -1,0 +1,69 @@
+﻿I tried to use a '?' for the help video 'click'
+The issue is with bootstrap responsivenessd
+this code:
+            <div  style="float:right;display:inline">
+                <span id="Vid_Filter" data-modal-id="puVidFilter" class="lq-help" style="display:inline;"title="Help with Filter Selection"> ? </span>
+            </div>
+moves the '?' all over the selecton box. At certain screen sizes it wikkmove the question mark to a new row.
+
+Solution:
+Place a button on the top row of each selector block
+this code:
+            <div class="panel-heading " id="hdgPnl1">
+                <label class="panel-title lq-inline">
+                    Contest Call Category Selection
+                </label>
+                <span id="enb_dis1">
+                    <label for="filtercatchk" class="lq-inline">Disable </label>
+                    <input type="checkbox" id="filtercatchk" aria-label="..." />
+                </span>
+                <button id="CatDft" class=" btn-group-xs btn-default">
+                    Defaults
+                </button>
+                <button id="Vid_Category" data-modal-id="puVidCategory" class=" btn-group-xs btn-default  lq-help" title="Help for Filter Selection">
+                    help
+                </button>
+            </div>
+The Vid_Category is the button to trigger the puVidCategory video
+The trick is is to reverse the order if the 3 right objects on the panel-heading
+1. enb_dis1 checkbox is float: right (all the way to right side inline)
+	Achieved by this css:
+		span[id^='enb_dis'] {
+		font-size: inherit;
+		font-weight: lighter;
+		float: right;
+		color: #a4a3a3;
+	}
+	Label Disable is display in-line(same row) with built-in 4px spacing from checkbox
+		Since it is a 'label for' with 'display:in-line' the Disable text is on the same row and leftv of "for" object.
+		Its on the left because the 'label for'' is before the checkbox.  Reversing order places label on right.
+	checkbox input has a jquery 4 px margin-right from selection edge
+		Achieved by this JQuery:
+				$("span[id^='enb_dis'] input[id^='filter']").
+					each(function (indexInArray, valueOfElement) {
+						$(this).css('margin-right', '4px');
+
+    });
+
+
+2.CatDft button is floated to the right with a 5px margin-right
+	Achieved by this css:
+		.lq-button {
+			font-size: 60%;
+			height: 18px;
+			margin-right: 5px;
+			float: right;
+		}
+3.The help button is  floated to the right with a 5px margin-right
+	Achieved by this css:
+.lq-help {
+    color: blue;
+    background-color: yellow;
+    cursor: help;
+    font-size: 80%;
+    font-variant: small-caps;
+    font-weight: bold;
+    height: 20px;
+    margin-right: 5px;
+    float: right;
+}

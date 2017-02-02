@@ -1,0 +1,73 @@
+﻿
+S2 Iternet app scrollbar tracks but cannot thumb
+S2 Chrome app scrollbar tracks and tap thumbs at low hours
+PC Chrome app scrollbar tracks and mouse thumbs at all hours
+PC IE11  std app scrollbar,not wekit,  tracks and mouse thumbs at all hours
+PC firefox std app scrollbar,not wekit,  tracks and mouse thumbs at all hours
+Note2 Chrome app scrollbar tracks and tap thumbs at low hours, jumpy posiioning. first call tap jumps to the top, aftersame callgroup is ok
+Note2 Internet, built-in app scrollbar tracks but cannot thumb jumpy
+Note2 firefox no scrollbar, stroke table to scroll, not webkit browser
+The code in css is 
+==========================================
+/*http://cssdeck.com/labs/css3-webkit-vertical-scrollbars/*/
+.scrollbar
+{
+	overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:vertical {
+    width: 15px;
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 12px;
+    /*forchrome pc qso popup*/
+    display:none;
+}
+
+::-webkit-scrollbar-thumb {
+border-radius: 13px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #000000;;
+}}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;  
+    background-color: #ffffff; 
+}
+
+
+
+The code in logqso.cshtml
+++++++++++++++++++++++++=
+<div id="TabViews">
+                    <ul style="margin-left: 5px;">
+                        <li><a href="#TabViewChart">Chart</a></li>
+                        <li><a href="#TabViewLog">Log</a></li>
+                        <li><a href="#TabViewUBN">UBN</a></li>
+                        <li><a href="#TabViewStats">Stats</a></li>
+                        <li><a href="#TabViewUp">Upload </a></li>
+                    </ul>
+                    <div id="TabViewChart">
+                        <img id="ChartRate" class="img-responsive lq-graph" alt="Standby">
+                    </div>
+                    <div id="TabViewLog">
+
+                        <table id="jqGridLog" class="scrollbar"></table>
+                        <div id="jqGridPager"></div>
+                    </div>
+                    <div id="TabViewUBN">
+
+                        <table id="jqGridUBN" class="scrollbar"></table>
+                        <div id="jqGridUBNPager"></div>
+                    </div>
+                    <div id="TabViewStats">
+
+                        <table id="jqGridStats"></table>
+                        <div id="jqGridStatsPager"></div>
+                    </div>
+                    <div id="TabViewUp">
