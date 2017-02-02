@@ -25,7 +25,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
     public class IntegrationDataLogServiceTests
     {
        // private readonly string CatOprName = "Hello Test";
-        private IRepositoryAsync<Logqso.mvc.Entities.LogDataEntity.Log> _logRepository;
+       // private IRepositoryAsync<Logqso.mvc.Entities.LogDataEntity.Log> _logRepository;
         //private Guid guid;
         int LogId = 1;
 
@@ -312,6 +312,80 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
 
             }
         }
+
+
+       [TestMethod]
+       public async Task Integration_LogDataContext_LogService_Log_await_GetQsoInfoRequestDtoAsync_Return_QsoInfoDto()
+       {
+           bool caught = false;
+           // context object LogDataContext matches the same name used for LogqsoData DB
+           using (IDataContextAsync context = new ContestqsoDataContext())
+           //IUnitOfWorkDataAsync and UnitOfWorkData are used in order for Dependency Injection to inject the DataDB
+           using (IUnitOfWorkAsync unitOfWork = new UnitOfWork(context))
+           {
+
+               IRepositoryAsync<Log> _logRepository = new Repository<Log>(context, unitOfWork);
+               QsoInfoDto QsoInfoDto = null;
+               string SelectedCall = "CN2R";
+
+               var logService = new LogService(_logRepository);
+               try
+               {
+
+
+                   QsoInfoRequestDto QsoInfoRequestDto = new Dto.LogData.QsoInfoRequestDto()
+                   {
+                       DataCallInfoDto = new DataCallInfoDto()
+                       {
+                           CallGroup = CallGroupEnum.CALL1,
+                           SelectedCall = SelectedCall,
+                           SelectedContestName = "Cqww Ssb 2002",
+                           LogId = 1,
+                       },
+                       QsoInfoRequest = new QsoInfoRequest
+                       {
+                           Call = "CN3A",
+                           Day = 1,
+                           Frequency = 14208.0m,
+                           //Time = DateTime.Parse("2002-10-26 00:00:01.000")
+                           Time = DateTime.Parse("2002-10-26 00:00:01.000").ToString("HH:mm")
+
+                       }
+                   };
+
+                   QsoInfoDto = await logService.GetQsoInfoRequest(QsoInfoRequestDto, "default");
+                   //GetCategorizedCallsAsync() is  async method of Logservice.
+                   //awaut on logService.GetCategorizedCallsAsync() runs asynchronously
+                   //converts return type Task<DataCalls> to DataCalls
+                   //it will return a DataCalls
+
+                   Assert.IsNotNull(QsoInfoDto);
+                   Assert.IsInstanceOfType(QsoInfoDto, typeof(QsoInfoDto));
+                   Assert.AreEqual(QsoInfoDto.I, QsoInfoRequestDto.QsoInfoRequest.Call);
+                   Assert.AreEqual(QsoInfoDto.W, QsoInfoRequestDto.QsoInfoRequest.Day);
+                   Assert.AreEqual(QsoInfoDto.F, QsoInfoRequestDto.QsoInfoRequest.Frequency);
+                   Assert.AreEqual(QsoInfoDto.T, QsoInfoRequestDto.QsoInfoRequest.Time);
+                   Assert.AreEqual(QsoInfoDto.C, true);
+                   Assert.AreEqual(QsoInfoDto.Z, true);
+                   Assert.AreEqual(QsoInfoDto.P, true);
+                   Assert.AreEqual(QsoInfoDto.XR, 33);
+                   Assert.AreEqual(QsoInfoDto.U, true);
+                   Assert.AreEqual(QsoInfoDto.B, false);
+                   Assert.AreEqual(QsoInfoDto.BC, null);
+                   Assert.AreEqual(QsoInfoDto.N, false);
+                   Assert.AreEqual(QsoInfoDto.D, false);
+                   Assert.AreEqual(QsoInfoDto.X, false);
+                   Assert.AreEqual(QsoInfoDto.XC, null);
+               }
+               catch (Exception ex)
+               {
+                   TestContext.WriteLine(string.Format("Integration_LogDataContext_LogService_Log_await_GetDataCallInfoSelectionsAsync_Return_DataCalls exception {0}", ex.Message));
+                   caught = true;
+               }
+               Assert.IsFalse(caught);  //exception
+
+           }
+       }
 
 
     }

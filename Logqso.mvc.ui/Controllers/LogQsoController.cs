@@ -65,6 +65,11 @@ namespace Logqso.mvc.ui.Controllers
             return View();
         }
 
+        public ActionResult Help()
+        {
+            return View();
+        }
+
     }
 
 }

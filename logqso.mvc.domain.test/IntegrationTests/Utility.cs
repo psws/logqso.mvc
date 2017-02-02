@@ -4,6 +4,7 @@ using System;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.IO;
+using System.Diagnostics;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -34,6 +35,7 @@ namespace   Logqso.mvc.domain.test.IntegrationTests
                 }
                 catch (Exception ex)
                 {
+                    Debug.WriteLine(string.Format("UpdateQsoStations() exception {0}", ex.Message)); 
                     connection.Dispose();
                     throw;
                 }

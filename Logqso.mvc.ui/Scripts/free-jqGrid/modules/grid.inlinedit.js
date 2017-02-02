@@ -8,7 +8,7 @@
 **/
 
 /*jslint browser: true, eqeq: true, nomen: true, vars: true, devel: true, unparam: true, plusplus: true, white: true, todo: true */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 (function (factory) {
 	"use strict";
 	if (typeof define === "function" && define.amd) {
@@ -177,7 +177,7 @@
 							if (p.frozenColumns) {
 								$ind = $ind.add($t.grid.fbRows[ind.rowIndex]);
 							}
-							$ind.bind("keydown", function (e) {
+							$ind.on("keydown", function (e) {
 								if (e.keyCode === 27) {
 									$self.jqGrid("restoreRow", rowid, o.afterrestorefunc);
 									return false;
@@ -233,7 +233,7 @@
 			// End compatible
 			// TODO: add return this.each(function(){....}
 			var tmp = {}, tmp2 = {}, postData = {}, editable, k, fr, resp, cv, ind = $self.jqGrid("getInd", rowid, true), $tr = $(ind),
-				opers = p.prmNames, errcap = getRes("errors.errcap"), bClose = getRes("edit.bClose"), isRemoteSave;
+				opers = p.prmNames, errcap = getRes("errors.errcap"), bClose = getRes("edit.bClose"), isRemoteSave, isError;
 
 			if (ind === false) { return; }
 
@@ -260,6 +260,17 @@
 								newValue: v,
 								oldRowData: savedRow }));
 					if (cv != null && cv[0] === false) {
+						isError = true;
+						try {
+							var relativeRect = jgrid.getRelativeRect.call($t, options.td);
+
+							infoDialog.call($t, errcap, cv[1], bClose, {
+								top: relativeRect.top,
+								left: relativeRect.left + $($t).closest(".ui-jqgrid").offset().left
+							});
+						} catch (e) {
+							fatalErrorFunction(cv[1]);
+						}
 						return false;
 					}
 					if (formatter === "date" && formatoptions.sendFormatted !== true) {
@@ -275,13 +286,7 @@
 					tmp[cm.name] = v;
 				});
 
-				if (cv != null && cv[0] === false) {
-					try {
-						var tr = $self.jqGrid("getGridRowById", rowid), positions = jgrid.findPos(tr);
-						infoDialog.call($t, errcap, cv[1], bClose, { left: positions[0], top: positions[1] + $(tr).outerHeight() });
-					} catch (e) {
-						fatalErrorFunction(cv[1]);
-					}
+				if (isError) {
 					return;
 				}
 				var idname, oldRowId = rowid;
@@ -332,7 +337,7 @@
 					}
 					if (fr >= 0) { p.savedRow.splice(fr, 1); }
 					fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, resp, tmp, o);
-					$tr.removeClass("jqgrid-new-row").unbind("keydown");
+					$tr.removeClass("jqgrid-new-row").off("keydown");
 				} else {
 					$self.jqGrid("progressBar", { method: "show", loadtype: o.saveui, htmlcontent: o.savetext });
 					postData = $.extend({}, tmp, postData);
@@ -353,7 +358,7 @@
 								postData),
 						type: isFunction(o.mtype) ? o.mtype.call($t, editOrAdd, o, postData[idname], postData) : o.mtype,
 						complete: function (jqXHR, textStatus) {
-							$self.jqGrid("progressBar", { method: "hide", loadtype: o.saveui, htmlcontent: o.savetext });
+							$self.jqGrid("progressBar", { method: "hide", loadtype: o.saveui });
 							// textStatus can be "abort", "timeout", "error", "parsererror" or some text from text part of HTTP error occurs
 							// see the answer http://stackoverflow.com/a/3617710/315935 about xhr.readyState === 4 && xhr.status === 0
 							if ((jqXHR.status < 300 || jqXHR.status === 304) && (jqXHR.status !== 0 || jqXHR.readyState !== 4)) {
@@ -382,7 +387,7 @@
 									}
 									if (fr >= 0) { p.savedRow.splice(fr, 1); }
 									fullBoolFeedback.call($t, o.aftersavefunc, "jqGridInlineAfterSaveRow", rowid, jqXHR, tmp, o);
-									$tr.removeClass("jqgrid-new-row").unbind("keydown");
+									$tr.removeClass("jqgrid-new-row").off("keydown");
 								} else {
 									fullBoolFeedback.call($t, o.errorfunc, "jqGridInlineErrorSaveRow", rowid, jqXHR, textStatus, null, o);
 									if (o.restoreAfterError === true) {
@@ -392,7 +397,6 @@
 							}
 						},
 						error: function (res, stat, err) {
-							$("#lui_" + jgrid.jqID(p.id)).hide();
 							$self.triggerHandler("jqGridInlineErrorSaveRow", [rowid, res, stat, err, o]);
 							if (isFunction(o.errorfunc)) {
 								o.errorfunc.call($t, rowid, res, stat, err);
@@ -460,7 +464,7 @@
 						}
 					});
 					$self.jqGrid("setRowData", rowid, ares);
-					$(ind).attr("editable", "0").unbind("keydown");
+					$(ind).attr("editable", "0").off("keydown");
 					p.savedRow.splice(fr, 1);
 					if ($("#" + jgrid.jqID(rowid), $t).hasClass("jqgrid-new-row")) {
 						setTimeout(function () {
@@ -704,7 +708,7 @@
 					$(gID + "_ilcancel").addClass(disabledClass);
 				}
 				if (o.restoreAfterSelect === true) {
-					$self.bind("jqGridSelectRow", function (e, rowid) {
+					$self.on("jqGridSelectRow", function (e, rowid) {
 						if (p.savedRow.length > 0 && p._inlinenav === true) {
 							var editingRowId = p.savedRow[0].id;
 							if (rowid !== editingRowId && typeof editingRowId !== "number") {
@@ -713,10 +717,10 @@
 						}
 					});
 				}
-				$self.bind("jqGridInlineAfterRestoreRow jqGridInlineAfterSaveRow", function () {
+				$self.on("jqGridInlineAfterRestoreRow jqGridInlineAfterSaveRow", function () {
 					$self.jqGrid("showAddEditButtons", false);
 				});
-				$self.bind("jqGridInlineEditRow", function (e, rowid) {
+				$self.on("jqGridInlineEditRow", function (e, rowid) {
 					$self.jqGrid("showAddEditButtons", true, rowid);
 				});
 			});

@@ -10,7 +10,7 @@ namespace Logqso.mvc.Dto.LogControl
 {
     public class ContestControlSettingsDto 
     {
-        bool force;
+        //bool force{ get; set; }
         public ControlCategorySettingsDto ControlCategorySettingsDto;
         public ControlFiltersSettingsDto ControlFiltersSettingsDto;
         public ControlXaxisSettingsDto ControlXaxisSettingsDto;

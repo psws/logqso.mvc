@@ -8,7 +8,7 @@
 **/
 
 /*jshint eqeqeq:false */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 /*jslint eqeq: true, nomen: true, plusplus: true, unparam: true, white: true */
 (function (factory) {
 	"use strict";
@@ -78,7 +78,7 @@
 				hasSubgrid = $.isFunction(subGridOptions.hasSubgrid) ?
 					subGridOptions.hasSubgrid.call(self, { rowid: rowid, iRow: iRow, iCol: pos, data: item }) :
 					true;
-			return self == null || self.p == null || subGridOptions == null ? "" :
+			return self.p == null ? "" :
 					"<td role='gridcell' class='" + base.getGuiStyles.call(this, "subgrid.tdStart", hasSubgrid ? "ui-sgcollapsed sgcollapsed" : "") + "' " +
 					self.formatCol(pos, iRow) + ">" +
 					(hasSubgrid ? "<div class='" + base.getGuiStyles.call(this, "subgrid.buttonDiv", "sgbutton-div") +
@@ -156,6 +156,9 @@
 								(subgridTableClasses ? " style='width:1px' role='presentation' class='" + subgridTableClasses + "'" : "") +
 								"><thead></thead><tbody></tbody></table>"),
 							$tr = $("<tr></tr>");
+
+						ts.grid.endReq.call(ts);
+
 						for (i = 0; i < cm.name.length; i++) {
 							$th = $("<th class='" + thSubgridClasses + "'></th>")
 									.html(cm.name[i])
@@ -165,8 +168,6 @@
 						$tr.appendTo($table[0].tHead);
 						fullBody(sjxml, $($table[0].tBodies[0]));
 						$("#" + jqID(p.id + "_" + sbid)).append($table);
-						ts.grid.hDiv.loading = false;
-						$("#load_" + jqID(p.id)).hide();
 						return false;
 					},
 					populatesubgrid = function (rd) {
@@ -184,8 +185,7 @@
 							}
 						}
 						if (!ts.grid.hDiv.loading) {
-							ts.grid.hDiv.loading = true;
-							$("#load_" + jqID(p.id)).show();
+							ts.grid.beginReq.call(ts);
 							if (!p.subgridtype) {
 								p.subgridtype = p.datatype;
 							}
@@ -204,7 +204,6 @@
 										context: sid,
 										data: jgrid.serializeFeedback.call(ts, p.serializeSubGridData, "jqGridSerializeSubGridData", dp),
 										success: function (data) {
-											$(ts.grid.eDiv).hide();
 											subGridXmlOrJson(
 												data,
 												this,
@@ -215,6 +214,8 @@
 											var loadError = p.loadSubgridError === undefined ?
 													p.loadError :
 													p.loadSubgridError;
+
+											ts.grid.endReq.call(ts);
 											if ($.isFunction(loadError)) {
 												loadError.call(ts, jqXHR, textStatus, errorThrown);
 											}
@@ -225,9 +226,6 @@
 													this,
 													p.subgridtype === "xml" ? fillXmlBody : fillJsonBody
 												);
-											} else {
-												ts.grid.hDiv.loading = false;
-												$("#load_" + jqID(p.id)).hide();
 											}
 										}
 									}, jgrid.ajaxOptions, p.ajaxSubgridOptions || {}));
@@ -315,9 +313,9 @@
 						$td1 = $(tr1.cells[pos]);
 						if ($td1.hasClass("ui-sgcollapsed")) {
 							if (p.scroll) {
-								$td1.unbind("click");
+								$td1.off("click");
 							}
-							$td1.bind("click", onClick);
+							$td1.on("click", onClick);
 						}
 					}
 					iRow++;

@@ -4,6 +4,8 @@ using System.Linq;
 using LinqKit;
 using System.Collections;
 using System.Data.Entity;
+using System.Diagnostics;
+using Logqso.mvc.Exceptions;
 
 using System.Text;
 using System.Threading.Tasks;
@@ -192,7 +194,7 @@ namespace Logqso.Repository.Repository
             }
             catch (Exception ex)
             {
-                Console.WriteLine(string.Format("GetDataCallInfoSelections exception {0}", ex.Message));
+                Debug.WriteLine(string.Format("GetDataCallInfoSelections exception {0}", ex.Message));
                 throw;
             }
 
@@ -301,7 +303,7 @@ namespace Logqso.Repository.Repository
             {
                 Predicate = Predicate.And(p => p.CatOperatorEnum == LogCategory.CatOperatorEnum);
             }
-            if (LogCategory.CatOperatorOverlayEnum != null && LogCategory.CatOperatorOverlayEnum != (int)CatOperatorOverlayEnum.NONE)
+            if ( LogCategory.CatOperatorOverlayEnum != (int)CatOperatorOverlayEnum.NONE)
             {
                 Predicate = Predicate.And(p => p.CatOperatorOverlayEnum == LogCategory.CatOperatorOverlayEnum);
             }
@@ -376,7 +378,8 @@ namespace Logqso.Repository.Repository
             catch (Exception ex)
             {
 
-                // throw;
+                FunctionException e = new FunctionException("GetCategorizedCallsAsync", ex.InnerException);
+                throw e;
             }
 
             DataCalls.CallGroup = CallGroup;
@@ -493,7 +496,7 @@ namespace Logqso.Repository.Repository
             {
                 LogCategoryPredicate = string.Format("{0} AND CatOperatorEnum = {1} ", LogCategoryPredicate, LogCategory.CatOperatorEnum);
             }
-            if (LogCategory.CatOperatorOverlayEnum != null && LogCategory.CatOperatorOverlayEnum != (int)CatOperatorOverlayEnum.NONE)
+            if (LogCategory.CatOperatorOverlayEnum != (int)CatOperatorOverlayEnum.NONE)
             {
                 LogCategoryPredicate = string.Format("{0} AND CatOperatorOverlayEnum = {1} ", LogCategoryPredicate, LogCategory.CatOperatorOverlayEnum);
             }
@@ -548,8 +551,8 @@ namespace Logqso.Repository.Repository
             }
             catch (Exception ex)
             {
-
-                // throw;
+                FunctionException e = new FunctionException("GetCategorizedCalls2()", ex.InnerException);
+                throw e;
             }
 
 #if false
@@ -753,6 +756,7 @@ namespace Logqso.Repository.Repository
             IEnumerable<ChartQsoRateDTO> ChartQsoRateDTO;
             var QsoRepository = _LogRepository.GetRepository<Qso>();
             // var QsoRates = QsoRepository.GetSqlQueryResults<ChartQsoRateDTO>(ContestViewParmsDTO.sQSOQuery);
+
             try
             {
                 DbContext DbContext = QsoRepository.GetDbContext() as DbContext;
@@ -760,8 +764,19 @@ namespace Logqso.Repository.Repository
             }
             catch (Exception ex)
             {
+                ChartException e = new ChartException()
+                {
+                    sChartFunction = ContestViewParmsDTO.sChartFunction,
+                    sIntvTime = ContestViewParmsDTO.sIntvTime,
+                    sQSOQuery = ContestViewParmsDTO.sQSOQuery,
+                    sTitle = ContestViewParmsDTO.sTitle,
+                    sYAxis = ContestViewParmsDTO.sYAxis,
+                    bSum = ContestViewParmsDTO.bSum,
+                    MessageTxt = ex.Message,
+                    Function = "GetChartDataTableAsync(this IRepositoryAsync<Log> _LogRepository, ContestViewParmsDTO ContestViewParmsDTO, string Username)"
 
-                throw;
+                };
+                throw e;
             }
 
             //IQueryFluent<Qso> Qsoss = QsoRepository.Query();
@@ -924,7 +939,8 @@ namespace Logqso.Repository.Repository
             catch (Exception ex)
             {
 
-                throw;
+                FunctionException e = new FunctionException("GetUpdatedDataCallInfoDto()", ex.InnerException);
+                throw e;
             }
 
             return Task.FromResult(DataCallInfoDtoResult);
@@ -1090,8 +1106,8 @@ namespace Logqso.Repository.Repository
             }
             catch (Exception ex)
             {
-                
-                throw;
+                FunctionException e = new FunctionException("GetContestLogs()", ex.InnerException);
+                throw e;
             } 
 
 
@@ -1200,7 +1216,7 @@ namespace Logqso.Repository.Repository
                                 .ToList();
                             index += LogPageRecordsCur.Count;
                             DayIndex += LogPageRecordsCur.Count;
-                            LogPageRecord LogPageRecord1;
+                           // LogPageRecord LogPageRecord1;
                             LogPageRecord LogPageRecord2;
                             LogPageRecord LogPageRecord3;
 
@@ -1385,8 +1401,9 @@ namespace Logqso.Repository.Repository
             }
             catch (Exception ex)
             {
-                    
-                throw;
+
+                FunctionException e = new FunctionException("GetContestLogs()_2", ex.InnerException);
+                throw e;
             }
             finally
             {
@@ -1679,6 +1696,129 @@ namespace Logqso.Repository.Repository
              return Task.FromResult(QsoResults);
         }
 
+        public static async Task<QsoInfoDto> GetQsoInfoAsync(this IRepositoryAsync<Log> LogRepository, QsoInfoRequestDto QsoInfoRequestDto, string username)
+        {
+            return await GetQsoInfo(LogRepository, QsoInfoRequestDto, username);
+        }
+
+        public static Task<QsoInfoDto> GetQsoInfo(this IRepositoryAsync<Log> _LogRepository, QsoInfoRequestDto QsoInfoRequestDto, string username)
+        {
+            QsoInfoDto QsoInfoDtoResult = null;
+            var LogRepository = _LogRepository.GetRepository<Log>();
+            IQueryFluent<Log> Logs = LogRepository.Query();
+            var LogQ = Logs.SelectQueryable(true);
+
+            var CallSignRepository = LogRepository.GetRepository<CallSign>();
+            IQueryFluent<CallSign> CallSigns = CallSignRepository.Query();
+            var CallSignQ = CallSigns.SelectQueryable(true);
+
+            var ContestRepository = LogRepository.GetRepository<Contest>();
+            IQueryFluent<Contest> Contests = ContestRepository.Query();
+            var ContestQ = Contests.SelectQueryable(true);
+
+            var QsoRepository = LogRepository.GetRepository<Qso>();
+            IQueryFluent<Qso> Qsos = QsoRepository.Query();
+            var QsoQ = Qsos.SelectQueryable(true);
+
+            var UniqueRepository = LogRepository.GetRepository<UbnUnique>();
+            IQueryFluent<UbnUnique> Uniques = UniqueRepository.Query();
+            var UniquesQ = Uniques.SelectQueryable(true);
+
+            var BadRepository = LogRepository.GetRepository<UbnIncorrectCall>(); //not in log
+            IQueryFluent<UbnIncorrectCall> Bads = BadRepository.Query();
+            var BadQ = Bads.SelectQueryable(true);
+
+            var NilRepository = LogRepository.GetRepository<UbnNotInLog>(); //not in log
+            IQueryFluent<UbnNotInLog> Nils = NilRepository.Query();
+            var NilQ = Nils.SelectQueryable(true);
+
+            var DupeRepository = LogRepository.GetRepository<UbnDupe>();
+            IQueryFluent<UbnDupe> Dupes = DupeRepository.Query();
+            var DupesQ = Dupes.SelectQueryable(true);
+
+            var XchgRepository = LogRepository.GetRepository<UbnIncorrectExchange>();
+            IQueryFluent<UbnIncorrectExchange> Xchngs = XchgRepository.Query();
+            var XchgsQ = Xchngs.SelectQueryable(true);
+
+
+            var Contest = (from lt in ContestQ
+                           where lt.ContestName == QsoInfoRequestDto.DataCallInfoDto.SelectedContestName
+                           select lt
+                           ).FirstOrDefault();
+
+            int  Day = QsoInfoRequestDto.QsoInfoRequest.Day - 1;
+            //string y = QsoInfoRequestDto.QsoInfoRequest.Time.ToString("HH:mm");
+            TimeSpan ts = TimeSpan.Parse(QsoInfoRequestDto.QsoInfoRequest.Time);
+            TimeSpan tsDay = new TimeSpan(Day,0,0,0);
+            ts  += tsDay;
+            //DateTime df = DateTime.Parse("2002-10-26 00:00:01.000");
+            TimeSpan tsEnd = new TimeSpan(0,0,0,59,999);
+
+            DateTime startdt = Contest.StartDateTime + ts;
+            DateTime enddt = Contest.StartDateTime + ts.Add(tsEnd);
+
+
+            //TimeSpan ts = TimeSpan.Parse(QsoInfoRequestDto.QsoInfoRequest.Time.ToString("HH:mm"));
+
+            try
+            {
+
+                QsoInfoDtoResult = (from lq in QsoQ
+                                    join lc in CallSignQ on lq.CallsignId equals lc.CallSignId
+                                join ll in LogQ on lq.LogId equals ll.LogId
+                                join lt in ContestQ on ll.ContestId equals lt.ContestId
+                                    where lc.Call == QsoInfoRequestDto.QsoInfoRequest.Call
+                                        && lq.QsoDateTime >= startdt && lq.QsoDateTime <= enddt
+                                        && lq.LogId == QsoInfoRequestDto.DataCallInfoDto.LogId
+                                    select new QsoInfoDto
+                                    {
+                                        W = QsoInfoRequestDto.QsoInfoRequest.Day,
+                                        T = QsoInfoRequestDto.QsoInfoRequest.Time,
+                                        I = lc.Call,
+                                        F = lq.Frequency,
+                                        XR = (short)lq.QsoExchangeNumber,
+                                        C = lq.QCtyMult,
+                                        Z = lq.QZoneMult,
+                                        P = lq.QPrefixMult,
+                                        R = lq.QsoRadioType.QsoRadioTypeName,
+                                        S = lq.StationName,
+                                        U = (from cu in UniquesQ
+                                                        where(lq.QsoNo == cu.QsoNo && lq.LogId == cu.LogId)
+                                                        select cu).Any(),
+                                        B = (from cu in BadQ
+                                                        where(lq.QsoNo == cu.QsoNo && lq.LogId == cu.LogId)
+                                                        select cu).Any(),
+                                    BC = (from cu in BadQ
+                                                        where(lq.QsoNo == cu.QsoNo && lq.LogId == cu.LogId)
+                                                        select cu.CorrectCall).FirstOrDefault(),
+                                    N = (from cu in NilQ
+                                                        where(lq.QsoNo == cu.QsoNo && lq.LogId == cu.LogId)
+                                                        select cu).Any(),
+                                    D = (from cu in DupesQ
+                                                        where(lq.QsoNo == cu.QsoNo && lq.LogId == cu.LogId)
+                                                        select cu).Any(),
+                                    X = (from cu in XchgsQ
+                                                        where(lq.QsoNo == cu.QsoNo && lq.LogId == cu.LogId)
+                                                        select cu).Any(),
+
+                                    XC = (from cu in XchgsQ
+                                                        where(lq.QsoNo == cu.QsoNo && lq.LogId == cu.LogId)
+                                                        select cu.CorrectExchange).FirstOrDefault(),
+                                }).FirstOrDefault();
+            }
+            catch (Exception ex )
+            {
+
+                FunctionException e = new FunctionException("GetQsoInfo()", ex.InnerException);
+                throw e;
+            }
+            //fixup time
+            return Task.FromResult(QsoInfoDtoResult);
+
+
+        }
+
+
         public static async Task<bool> UpdateQsoStationsAsync(this IRepositoryAsync<Log> _LogRepository, QsoUpdateStationNamesDTOCollection QsoUpdateStationNamesDTOCollection)
         {
             return await UpdateQsoStations(_LogRepository, QsoUpdateStationNamesDTOCollection);
@@ -1703,7 +1843,8 @@ namespace Logqso.Repository.Repository
             }
 	        catch (Exception ex)
 	        {
-		        results = false;
+                Debug.WriteLine(string.Format("UpdateQsoStations() exception {0}", ex.Message));
+                results = false;
 	        }
             finally
             {
@@ -1719,6 +1860,8 @@ namespace Logqso.Repository.Repository
         public static Task<bool> SetStationList(this IRepositoryAsync<Log> _LogRepository, int Logid, List<Station> LogStations)
         {
             bool Results = true;
+            List<CallInfo> CallInfosWithStationNames = null;
+            List<CallInfo> CallInfosWithStationNamesRestore = new List<CallInfo>(); 
 
             IRepository<Qso> _QsoRepository = _LogRepository.GetRepository<Qso>();
             IQueryFluent<Qso> Qsos = _QsoRepository.Query();
@@ -1728,6 +1871,12 @@ namespace Logqso.Repository.Repository
             IQueryFluent<Station> Stations = _StationRepository.Query();
             var StationsQ = Stations.SelectQueryable(true);
 
+            IRepository<CallInfo> _CallInfoRepository = _LogRepository.GetRepository<CallInfo>();
+            IQueryFluent<CallInfo> CallInfos = _CallInfoRepository.Query();
+            //non-tracking is no good if the Callinfo is updated and then restored with another update
+            //var CallInfoQ = CallInfos.SelectQueryable(true);
+            var CallInfoQTrack = CallInfos.SelectQueryable(false);
+
 
             var StationsCurrent = (from ls in StationsQ
                           where ls.LogId == Logid 
@@ -1735,55 +1884,153 @@ namespace Logqso.Repository.Repository
                             ).ToList();
             //if current sation is being used, we need to remove all Qsos withthis StationName
             var _contextStation = _StationRepository.GetDbContext();
+            using (_contextStation)
+            {
 
-            foreach (var item in StationsCurrent)
-	        {
-                //get all Qs with this stationName
-                var QsosWithStatioName = (from lq in QsoQ
-                          where lq.LogId == Logid &&
-                          lq.StationName == item.StationName
-                            select new QsoUpdateStationNamesDTO
-                            {
-                                LogId = lq.LogId,
-                                QsoNo = lq.QsoNo,
-                                StationName = lq.StationName,
-                                Frequency = lq.Frequency
-                            }
-                            ).ToList();
-                QsoUpdateStationNamesDTOCollection QsoUpdateStationNamesDTOCollectionRestore = new QsoUpdateStationNamesDTOCollection();
-                foreach (var Qso in QsosWithStatioName)
-	            {
-		            Qso.StationName = null;
-                    Qso.Frequency = Math.Truncate(Qso.Frequency); //no decimal in cabrillo
-                    QsoUpdateStationNamesDTOCollectionRestore.Add(Qso);
-	            }
-                if (QsoUpdateStationNamesDTOCollectionRestore.Count > 0)
+                //remove the old stationnames from Qsos before deleting old stationnames
+                foreach (var item in StationsCurrent)
                 {
-                    //use sp to restore values
-                    _LogRepository.UpdateQsoStations(QsoUpdateStationNamesDTOCollectionRestore);
+                    //get all Qs with this stationName
+                    var QsosWithStatioName = (from lq in QsoQ
+                                              where lq.LogId == Logid &&
+                                              lq.StationName == item.StationName
+                                              select new QsoUpdateStationNamesDTO
+                                              {
+                                                  LogId = lq.LogId,
+                                                  QsoNo = lq.QsoNo,
+                                                  StationName = lq.StationName,
+                                                  Frequency = lq.Frequency
+                                              }
+                                ).ToList();
+                    QsoUpdateStationNamesDTOCollection QsoUpdateStationNamesDTOCollectionRestore = new QsoUpdateStationNamesDTOCollection();
+                    foreach (var Qso in QsosWithStatioName)
+                    {
+                        Qso.StationName = null;
+                        Qso.Frequency = Math.Truncate(Qso.Frequency); //no decimal in cabrillo
+                        QsoUpdateStationNamesDTOCollectionRestore.Add(Qso);
+                    }
+                    if (QsoUpdateStationNamesDTOCollectionRestore.Count > 0)
+                    {
+                        //use sp to restore values
+                        _LogRepository.UpdateQsoStations(QsoUpdateStationNamesDTOCollectionRestore);
+                    }
+
+                    //Now temporarily set stationname to NULL for all CallInfo records with this station name
+                    //get all Qs with this stationName
+                    CallInfosWithStationNames = (from lc in CallInfoQTrack
+                                                 where lc.LogId == Logid &&
+                                                 lc.StationName == item.StationName
+                                                 select lc
+                                ).ToList();
+
+                    if (CallInfosWithStationNames.Count > 0)
+                    {
+
+                        foreach (var CallInfo in CallInfosWithStationNames)
+                        {
+                            CallInfo CallInfoCopy = new mvc.Entities.LogDataEntity.CallInfo()
+                            {
+                                CallGroup = CallInfo.CallGroup,
+                                CallInfoId = CallInfo.CallInfoId,
+                                CallsignId = CallInfo.CallsignId,
+                                ContestId = CallInfo.ContestId,
+                                Disabled = CallInfo.Disabled,
+                                LogId = CallInfo.LogId,
+                                QsoRadioTypeEnum = CallInfo.QsoRadioTypeEnum,
+                                SessionName = CallInfo.SessionName,
+                                StationName = CallInfo.StationName,
+                                UserName = CallInfo.UserName
+                            };
+                            //save old entries
+                            CallInfosWithStationNamesRestore.Add(CallInfoCopy);
+                            CallInfo.StationName = null;
+                            _CallInfoRepository.Update(CallInfo);
+                        }
+                    }
+
+
+                    // var _context = _QsoRepository.GetDbContext();
+                    //now delete the stationName from stationname table
+                    _StationRepository.Delete(item);
                 }
 
-                var _context = _QsoRepository.GetDbContext();
-                //now delete the stationName
-                _StationRepository.Delete(item);
+                try
+                {
+                    _contextStation.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(string.Format("SetStationList() exception {0}", ex.Message));
+                    Results = false;
+                    Task.FromResult(Results);
+                    //throw;
+                }
+
+
+                //insert new staytionnames
+                foreach (var item in LogStations)
+                {
+                    _StationRepository.Insert(item);
+                }
+
+                if (CallInfosWithStationNamesRestore.Count != 0)
+                {
+                    foreach (var item in CallInfosWithStationNamesRestore)
+                    {
+                        if (LogStations.Where(x => x.StationName == item.StationName).Count() != 0)
+                        {//restore
+                           try
+                            {
+                               //THIS ERROR MESSAGE IS GENERATED IF THE cALLiNFO OBJECT IS NOT TRACKED
+                               //
+                              // Attaching an entity of type 'Logqso.mvc.Entities.LogDataEntity.CallInfo' failed because another entity of the same type
+                             //already has the same primary key value. This can happen when using the 'Attach' method or setting the state of an entity
+                             //to 'Unchanged' or 'Modified' if any entities in the graph have conflicting key values. This may be because some entities
+                             //are new and have not yet received database-generated key values. In this case use the 'Add' method or the 'Added' entity state
+                             //to track the graph and then set the state of non-new entities
+                             //to 'Unchanged' or 'Modified' as appropriate.
+
+                                var CallInfosWithStationName = (from lc in CallInfoQTrack
+                                                                where lc.LogId == Logid &&
+                                                                lc.CallInfoId == item.CallInfoId &&
+                                                                lc.CallGroup == item.CallGroup &&
+                                                                lc.UserName == item.UserName
+                                                                select lc
+                                            ).FirstOrDefault();
+                                if (CallInfosWithStationName != null)
+                                {
+                                    //var val = _CallInfoRepository.GetEntityTrackingState(item);
+                                    //val = _CallInfoRepository.GetEntityTrackingState(CallInfosWithStationName);
+                                    CallInfosWithStationName.StationName = item.StationName;
+                                    //THE UPDATE ENTITY MUST BE TRACKED. tHE QUERY ABOVE DOES THIS
+                                    _CallInfoRepository.Update(CallInfosWithStationName);
+                                }
+
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine(string.Format("SetStationList()_2 exception {0}", ex.Message));
+                                Results = false;
+                                Task.FromResult(Results);
+                                //throw;
+                            }
+                        }
+
+                    }
+                }
+
                 _contextStation.SaveChanges();
             }
-            foreach (var item in LogStations)
-            {
-                _StationRepository.Insert(item);
-            }
-            _contextStation.SaveChanges();
-
             return Task.FromResult(Results);
         }
 
     }
 
 
-    public class test9
-    {
-        string key;
-        string value;
-    };
+    //public class test9
+    //{
+    //    string key;
+    //    string value;
+    //};
 
 }

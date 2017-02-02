@@ -74,7 +74,8 @@ namespace Logqso.mvc.DataModel.LogData
 
             //<ContestLogInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><Call>EF8R</Call><ContestInfo><startTime>2011-10-29T00:00:00</startTime><endTime>2011-10-30T23:59:59</endTime><basedstartTime>1990-01-01T00:00:00</basedstartTime><basedendTime>1990-01-02T23:59:59</basedendTime><ContestType>CQ-WW-SSB</ContestType><ContestName>Cqww Ssb 2011</ContestName><ContestID>CQWWSSB2011</ContestID><ContestTblName>CqwwQsos</ContestTblName><EntryTblName>CqwwEntry</EntryTblName><DBName>CqwwSsb2011Contest.mdb</DBName></ContestInfo><CatLogInfo><LogCatOprID>1</LogCatOprID><LogCatPwrID>1</LogCatPwrID><LogCatAstID>2</LogCatAstID><LogCatBndID>1</LogCatBndID><LogCatTxID>1</LogCatTxID><LogDBName>ef8r.mdb</LogDBName><LogCallID>0</LogCallID><LogCtyID>104</LogCtyID><LogCalcZones>150</LogCalcZones><LogCalcCountries>476</LogCalcCountries><LogCalcScore>18147740</LogCalcScore><LogEntryClass>SOAB</LogEntryClass></CatLogInfo><CatOprID>0</CatOprID><CatPwrID>0</CatPwrID><CatAstID>0</CatAstID><CatBndID>0</CatBndID><CatTxID>0</CatTxID><CategoryCBID>false</CategoryCBID><CBCall>false</CBCall></ContestLogInfo>
 
-              //these are OK
+#if false
+            //these are OK
             string CatXML = @"<XaxisDefault xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" " +
                   @"xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">" +
                   @"<UserName>default</UserName><XaxisDurationTime>40</XaxisDurationTime><XaxisStrtTime>00:00z  Day1</XaxisStrtTime></XaxisDefault>";
@@ -84,7 +85,7 @@ namespace Logqso.mvc.DataModel.LogData
               string YaxisXML = @"<YaxisDefault xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" " +
                   @"xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">" +
                   @"<UserName>default</UserName><YaxisFuncName>QSO  Rate</YaxisFuncName><YaxisIntvVal>60</YaxisIntvVal><YaxisViewTypeName>Column</YaxisViewTypeName></YaxisDefault>";
-
+#endif
             context.Session.AddOrUpdate(
             p => p.SessionName,
                 new Session {

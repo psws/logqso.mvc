@@ -39,7 +39,7 @@ namespace Logqso.mvc.domain
     {
         private readonly IRepositoryAsync<Log> _repository;
 
-        private static AutoMapper.IMappingExpression<Logqso.mvc.Entities.LogDataEntity.CallInfo, Logqso.mvc.Dto.LogData.DataCallInfoDto> MapperCallInfoDatToCallInfoDto = null; 
+       // private static AutoMapper.IMappingExpression<Logqso.mvc.Entities.LogDataEntity.CallInfo, Logqso.mvc.Dto.LogData.DataCallInfoDto> MapperCallInfoDatToCallInfoDto = null; 
  
         public LogService(IRepositoryAsync<Log> repository)
             : base(repository)
@@ -81,6 +81,7 @@ namespace Logqso.mvc.domain
             MemoryStream MemoryStream = null;
 #if true
             Chart RateChart = new Chart();
+
             MemoryStream = await RateChart.LoadQSORateChart(ChartCtlDataSettingsDto, this._repository, username);
             
             
@@ -133,6 +134,12 @@ namespace Logqso.mvc.domain
 
             return LogPageDTO;
 
+        }
+
+        public async Task<QsoInfoDto>  GetQsoInfoRequest(QsoInfoRequestDto QsoInfoRequestDto, string Username)
+        {
+            QsoInfoDto QsoInfoDto = await _repository.GetQsoInfoAsync(QsoInfoRequestDto, Username);
+            return QsoInfoDto;
         }
 
         
@@ -250,6 +257,7 @@ namespace Logqso.mvc.domain
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(string.Format("ValiadateWintestStnUpload() exception {0}", ex.Message));
                 result = false;
             }
 
@@ -459,7 +467,7 @@ namespace Logqso.mvc.domain
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(string.Format(" Problem in ControlCategorySettingsDto"));
+                Debug.WriteLine(string.Format("SetLogCategory() exception {0}", ex.Message));
                 throw;
             }
 

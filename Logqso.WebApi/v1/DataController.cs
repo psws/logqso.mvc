@@ -9,6 +9,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.Results;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Logqso.mvc.domain.Interfaces;
 using Repository.Pattern.UnitOfWork;
 using Logqso.mvc.Dto.LogData;
@@ -89,6 +90,7 @@ namespace Logqso.WebApi
 
         }
 
+#if false
         [HttpPost]
         [ResponseType(typeof(HttpResponseMessage))]
         [Route("PostCallsRequest")]
@@ -120,7 +122,7 @@ namespace Logqso.WebApi
                 return Ok(DataCalls);
             }
         }
-
+#endif
 
         [HttpPost]
         [ResponseType(typeof(HttpResponseMessage))]
@@ -167,7 +169,7 @@ namespace Logqso.WebApi
             HttpResponseMessage HttpResponseMessage;
             try
             {
-                _unitOfWorkAsync.BeginTransaction();
+                //_unitOfWorkAsync.BeginTransaction();
 
                 MemoryStream = await _LogService.UpdateChartSettingsAsync(ChartCtlDataSettingsDto, Username);
 
@@ -183,12 +185,13 @@ namespace Logqso.WebApi
                 //HttpResponseMessage.Content = new StreamContent(MemoryStream);
 
                 HttpResponseMessage.Content = new ByteArrayContent(MemoryStream.ToArray());
+                //HttpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpq");
                 HttpResponseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("image/png");
                 // save
-                var saveChangesAsync = _unitOfWorkAsync.SaveChanges();
+                //var saveChangesAsync = _unitOfWorkAsync.SaveChanges();
 
 
-                _unitOfWorkAsync.Commit();
+                //_unitOfWorkAsync.Commit();
                 if (MemoryStream == null )
                 {
                     return NotFound();
@@ -200,8 +203,9 @@ namespace Logqso.WebApi
 
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                Debug.WriteLine(string.Format("UpdateChartSettings() exception {0}", ex.Message)); 
                 _unitOfWorkAsync.Rollback();
                 return Ok(false);
 
@@ -235,6 +239,35 @@ namespace Logqso.WebApi
 
         }
 
+        [HttpPost]
+        [ResponseType(typeof(HttpResponseMessage))]
+        [Route("GetQsoInfoRequest")]
+        public async Task<IHttpActionResult> GetQsoInfoRequest(QsoInfoRequestDto QsoInfoRequestDto)
+        {
+            string Username = Logqso.mvc.common.definitions.Username;
+            bool val1 = (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.User != null) && System.Web.HttpContext.Current.User.Identity.IsAuthenticated;
+            if (val1)
+            {
+                Username = System.Web.HttpContext.Current.User.Identity.Name;
+            }
+
+            QsoInfoDto QsoInfoDto = new mvc.Dto.LogData.QsoInfoDto();
+            //{
+            //    Call = "CN3A"
+            //};
+            QsoInfoDto = await _LogService.GetQsoInfoRequest(QsoInfoRequestDto, Username);
+
+
+            if (QsoInfoDto == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(QsoInfoDto);
+            }
+
+        }
 
         [HttpPost]
         [ResponseType(typeof(HttpResponseMessage))]
@@ -282,6 +315,7 @@ namespace Logqso.WebApi
                 Directory.CreateDirectory(tempPath);
             }
             Task<bool> UpLoadTask = Task.FromResult(false);
+            bool result = false;
             var streamProvider = new MultipartFormDataStreamProvider(tempPath);
             var readResult = await Request.Content.ReadAsMultipartAsync(streamProvider);
 
@@ -299,7 +333,7 @@ namespace Logqso.WebApi
                 // Validate that everything else is fine with this command
                 //var DataCallInfoDto = JsonConvert.DeserializeObject<IEnumerable<DataCallInfoDto>>(readResult.FormData["UploadInfo"]).ToList();
                 var DataCallInfoDto = JsonConvert.DeserializeObject<DataCallInfoDto>(readResult.FormData["UploadInfo"]);
-                bool result;
+
                 var FileData = readResult.FileData.FirstOrDefault();
                 string UploadFile = FileData.LocalFileName;
                 //foreach (var tempFile in readResult.FileData)
@@ -307,7 +341,7 @@ namespace Logqso.WebApi
                 var originalFileName = FileData.Headers.ContentDisposition.FileName.Replace("\"", string.Empty);
 
                 //check if 1st 2 qsos match DB.
-                result  =  await _LogService.ValiadateWintestStnUpload(DataCallInfoDto, originalFileName, UploadFile);
+                result = await _LogService.ValiadateWintestStnUpload(DataCallInfoDto, originalFileName, UploadFile);
                 //}
                 if (result == true)
                 {
@@ -336,7 +370,7 @@ namespace Logqso.WebApi
                 }
                 else
                 {
-                    HttpResponseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, 
+                    HttpResponseMessage = Request.CreateResponse(HttpStatusCode.Conflict, 
                         "The Uploaded file does not match the submitted log. The file upload has failed");
                 }
             }

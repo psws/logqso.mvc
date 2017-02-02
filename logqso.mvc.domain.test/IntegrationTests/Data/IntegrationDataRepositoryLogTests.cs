@@ -25,9 +25,9 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
     public class IntegrationDataRepositoryLogTests
     {
         // private readonly string CatOprName = "Hello Test";
-        private IRepositoryAsync<Logqso.mvc.Entities.LogDataEntity.Log> _logRepository;
+        //private IRepositoryAsync<Logqso.mvc.Entities.LogDataEntity.Log> _logRepository;
         //private Guid guid;
-        int LogId = 1;
+        //int LogId = 1;
 
         public TestContext TestContext { get; set; }  //for trace debuggibg
 

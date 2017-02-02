@@ -76,7 +76,11 @@ namespace Logqso.mvc.DataModel.LogData
                                     ContestName = "Cqww Ssb 2015", StartDateTime = DateTime.Parse("10/24/2015 00:00:00"), EndDateTime = DateTime.Parse("10/25/2015 11:59:59 PM") },
                 new Contest { ContestId = "CQWWCW2015", QsoModeTypeEnum =  QsoModeTypeEnum.CW, ContestTypeEnum = ContestTypeEnum.CQWW, 
                                     ContestName = "Cqww Cw 2015", StartDateTime = DateTime.Parse("11/28/2015 00:00:00"), EndDateTime = DateTime.Parse("11/29/2015 11:59:59 PM") },
-                //WPX             
+                new Contest { ContestId = "CQWWSSB2016", QsoModeTypeEnum =  QsoModeTypeEnum.SSB, ContestTypeEnum = ContestTypeEnum.CQWW, 
+                                    ContestName = "Cqww Ssb 2016", StartDateTime = DateTime.Parse("10/292016 00:00:00"), EndDateTime = DateTime.Parse("10/30/2016 11:59:59 PM") },
+                new Contest { ContestId = "CQWWCW2016", QsoModeTypeEnum =  QsoModeTypeEnum.CW, ContestTypeEnum = ContestTypeEnum.CQWW, 
+                                    ContestName = "Cqww Cw 2016", StartDateTime = DateTime.Parse("11/26/2016 00:00:00"), EndDateTime = DateTime.Parse("11/27/2016 11:59:59 PM") },
+               //WPX             
                 new Contest { ContestId = "CQWPXSSB2001", QsoModeTypeEnum =  QsoModeTypeEnum.SSB, ContestTypeEnum = ContestTypeEnum.CQWPX, 
                                     ContestName = "Cqwpx Ssb 2001", StartDateTime = DateTime.Parse("03/24/2001 00:00:00"), EndDateTime = DateTime.Parse("03/25/2001 11:59:59 PM") },
                 new Contest { ContestId = "CQWPXSSB2002", QsoModeTypeEnum =  QsoModeTypeEnum.SSB, ContestTypeEnum = ContestTypeEnum.CQWPX, 

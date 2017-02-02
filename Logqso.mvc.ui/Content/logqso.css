@@ -8,6 +8,26 @@ a.navbar-brand {
     color:yellow !important;
     background-color:red;
 }
+a.help-intro {
+      float: left;
+  height: 20px;
+  padding: 0px 10px 0px 10px;
+  margin-top:14px;
+  font-size: 14px;
+  line-height: 22px;
+    color:blue !important;
+    background-color:yellow;
+    margin-left:20px;
+    font-variant:small-caps
+}
+a.help-intro:hover{
+text-decoration: none;
+
+}
+a.help-intro:active{
+text-decoration: none;
+
+}
 
 /*.overflow-contest-select {
     height:200px;
@@ -17,7 +37,7 @@ a.navbar-brand {
 
 label {
     display:block;
-    margin: 30px,0,0,0;
+    margin: 0px 0px 0px 0px;
 }
 div.row{
     margin-top:5px;
@@ -216,6 +236,32 @@ span[id^='enb_dis']{
     display: inline-block;
 }
 
+.lq-help {
+    color: blue;
+    background-color:yellow;
+    cursor:help;
+    font-size:80%;
+    font-variant:small-caps;
+    font-weight:bold;
+   height:20px;
+   margin-right:5px;
+    float:right;
+}
+.lq-helpTab{
+    top: 0;
+    position: absolute;
+    right: 0;
+}
+
+.lq-help:hover {
+  color: red;
+  -webkit-transition: color .5s ease;
+  -moz-transition: color .5s ease;
+  transition: color .5s ease;
+
+}
+
+
 .lq-top-margin{
     margin-top: 5px;
 }
@@ -308,9 +354,9 @@ span[id^='enb_dis']{
 /*conversion http://stackoverflow.com/questions/15744026/font-face-not-displaying-correctly-in-ie*/
 @font-face {
      font-family: ArialSlashZero;
-      src: url(../fonts/slash_0-webfont.woff2) format('woff2'),  
-           url(../fonts/slash_0-webfont.woff) format('woff'),  /*for chrome IE11*/
-           url(../fonts/slash_0.ttf) format('truetype');  /* for android browser*/
+      src: url(../fonts/slash_0.ttf) format('truetype'),  /* for android browser*/*/
+           url(../fonts/slash_0-webfont.woff) format('woff');  /*for chrome IE11*/
+                                                             
 }
 
 /*div[id^= 'gview_jqGrid']{
@@ -324,11 +370,54 @@ span[id^='enb_dis']{
     font-size: .871em;
 }
 
+#jqGridQso {
+    font-size: .821em;
+    line-height: 12px;
+    /*min-height:18px;*/
+}
+#gbox_jqGridQso {
+    font-size: .821em;
+    line-height: 12px;
+}
+
+/*http://cssdeck.com/labs/css3-webkit-vertical-scrollbars/*/
+.scrollbar
+{
+	overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:vertical {
+    width: 15px;
+
+}
+
+::-webkit-scrollbar:horizontal {
+    height: 12px;
+    /*for chriome pc qso popup h bar blocking*/
+    display:none;
+}
+
+::-webkit-scrollbar-thumb {
+border-radius: 13px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #000000;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;  
+    background-color: #ffffff; 
+}
 @media only screen and (max-width: 640px) {
  #jqGridLog { font-size: .500em; }
  #gbox_jqGridLog { font-size: .500em; }
  #jqGridUBN { font-size: .500em; }
  #gbox_jqGridUBN { font-size: .500em; }
+ /*#jqGridQso { font-size: .500em; }
+ #gbox_jqGridQso { font-size: .500em; }*/
  }
 
 @media only screen and (max-width: 760px) {
@@ -336,6 +425,8 @@ span[id^='enb_dis']{
  #gbox_jqGridLog { font-size: .571em; }
  #jqGridUBN { font-size: .571em; }
  #gbox_jqGridUBN { font-size: .571em; }
+ /*#jqGridQso { font-size: .571em; }
+ #gbox_jqGridQso { font-size: .571em; }*/
 }
 
 @media only screen and (max-width: 992px) {
@@ -343,7 +434,10 @@ span[id^='enb_dis']{
  #gbox_jqGridLog { font-size: .821em; }
  #jqGridUBN { font-size: .821em; }
  #gbox_jqGridUBN { font-size: .821em; }
+ /*#jqGridQso { font-size: .821em; }
+ #gbox_jqGridQso { font-size: .821em; }*/
  }
+
 
 /*@media only screen and (max-width: 1280px) {
  #jqGridLog { font-size: .785em; }
@@ -555,6 +649,14 @@ span[id^='enb_dis']{
 
 }
 
+.gridQsoView {
+    font-size: .87em;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    /*text-align: center;*/
+    line-height: 12px;
+    /*padding:1px 1px 1px 1px;*/
+}
 
 /*modal support*/
 .modal-box {

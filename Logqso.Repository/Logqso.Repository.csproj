@@ -166,6 +166,10 @@
       <Project>{c6e19eb6-8334-4d08-811a-2742701628e7}</Project>
       <Name>Logqso.mvc.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Logqso.mvc.Exceptions\Logqso.mvc.Exceptions.csproj">
+      <Project>{02def490-76f3-445d-bd43-85ac13d0e9d9}</Project>
+      <Name>Logqso.mvc.Exceptions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Repositary.Pattern.Extenions\Repository.Pattern.Extensions.csproj">
       <Project>{413b4310-d3bc-4239-ad69-3048497426d4}</Project>
       <Name>Repository.Pattern.Extensions</Name>
@@ -198,7 +202,6 @@
     <Content Include="App_Notes\Logging EF6 SQL access.txt" />
     <Content Include="App_Notes\URF DataContext Initialization Flow.txt" />
     <Content Include="SQL\Contestqso SQL 2014 to 2012script.sql" />
-    <Content Include="SQL\ContestqsoData SQL 2014 to 2012script Data No Qso.sql" />
     <Content Include="SQL\ContestqsoData SQL 2014 to 2012script Shema.sql" />
     <Content Include="SQL\CQD_GetContestLogsUBN.sql" />
     <Content Include="SQL\CQD_GetContestLogsUnion.sql" />

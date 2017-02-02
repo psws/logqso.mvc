@@ -95,6 +95,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CallNotFoundException.cs" />
+    <Compile Include="ChartExceptioon.cs" />
+    <Compile Include="FunctionException.cs" />
     <Compile Include="LogNotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

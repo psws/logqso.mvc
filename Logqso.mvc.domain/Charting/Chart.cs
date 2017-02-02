@@ -4,6 +4,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
+using Logqso.mvc.Exceptions;
+
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Web.UI.DataVisualization.Charting;
@@ -29,7 +32,7 @@ namespace Logqso.mvc.domain.Charting
         {
         }
 
-        public async Task<MemoryStream>  LoadQSORateChart(ChartCtlDataSettingsDto ChartCtlDataSettingsDto, IRepositoryAsync<Log> LogRepository, string username)
+        public  Task<MemoryStream>  LoadQSORateChart(ChartCtlDataSettingsDto ChartCtlDataSettingsDto, IRepositoryAsync<Log> LogRepository, string username)
         {
             MemoryStream MemoryStream = null; 
             bool bOK = true;
@@ -260,6 +263,7 @@ namespace Logqso.mvc.domain.Charting
 
 
             string YaxisFunction = ChartCtlDataSettingsDto.ControlSettingsDto.ControlYaxisSettingsDto.YaxisFunction;
+
             QSOLogFilter QSOFilter;
             QSOFilter = ChartQuery.GetQSOFilter(ChartCtlDataSettingsDto.ControlSettingsDto.ControlFiltersSettingsDto,
                                                 ChartCtlDataSettingsDto.DataCallInfoDto);
@@ -582,15 +586,17 @@ namespace Logqso.mvc.domain.Charting
                 //image.Save(memoryStream, ImageFormat.Png);
 
                 MemoryStream = new MemoryStream();
+                //QSORateChart.SaveImage(MemoryStream, ChartImageFormat.Jpeg);
+
                 QSORateChart.SaveImage(MemoryStream, ChartImageFormat.Png);
             }
             catch (Exception ex)
             {
-                
-                throw;
-            }
 
-            return MemoryStream;
+                FunctionException e = new FunctionException("LoadQSORateChart()", ex.InnerException);
+                throw e;            }
+
+            return Task.FromResult(MemoryStream);
 
         }
 

@@ -12,7 +12,7 @@ namespace Logqso.mvc.domain.test.UnitTests.Automap
         public void CallInfo_MapsToDataCallInfoDto_ConfigurationIsValid()
         {
             AutoMapper.IMappingExpression<Logqso.mvc.Entities.LogDataEntity.CallInfo, Logqso.mvc.Dto.LogData.DataCallInfoDto> MapperCallInfoDatToCallInfoDto = null;
-            AutoMapper.IMappingExpression<Logqso.mvc.Entities.LogDataEntity.Log, Logqso.mvc.Dto.LogData.DataCallInfoDto> MapperLogDatToCallInfoDto = null;
+            //AutoMapper.IMappingExpression<Logqso.mvc.Entities.LogDataEntity.Log, Logqso.mvc.Dto.LogData.DataCallInfoDto> MapperLogDatToCallInfoDto = null;
             //Arrange
             MapperCallInfoDatToCallInfoDto = AutoMapper.Mapper.CreateMap<Logqso.mvc.Entities.LogDataEntity.CallInfo, Logqso.mvc.Dto.LogData.DataCallInfoDto>().
                  ForMember(m => m.SelectedContestName, c => c.MapFrom(s => s.ContestId));

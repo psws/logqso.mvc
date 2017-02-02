@@ -7,7 +7,7 @@ An alternate scheme uses SQL scripts and import from SSMS.
 For the Control library you can just use a script that includes all Data tables.
 1) In SQL2014 select right click on Logqso DB ->Tasks->Generate scripts
 2) Select Entire Database then Next
-3) Set filepath to generate Contestqso SQL2014 to 2012script.sql
+3) Set filepath to generate D:\vwd projects mvc\Logqso.mvc\Logqso.Repository\SQL\Contestqso SQL2014 to 2012script.sql
 4) select advanced button
 5)		script for SQL version => SQL2012
 6) Type of data to script =>schema and data
@@ -15,33 +15,49 @@ For the Control library you can just use a script that includes all Data tables.
 8)got to Finish
 SQL2014 indexes all FKs. This makes the DB very huge.
 Goto SQL 2012,
-Create the Contesqso daabase.
-run the logqso2012script.sql script against the Contestqso DB..
+//Create the Contesqso daabase.
+edit the script: change the FILENAME part 'MSSQL12.SQL2014' to 'MSSQL11.SQL2012'
+run the Contestqso SQL2014 to 2012script.sql script against the Contestqso DB..
 --------
 For the Data library you can use a script that includes all schema..
 1) In SQL2014 select right click on ContestqsoData DB ->Tasks->Generate scripts
 2) Select All Database tables then Next
 3) Set filepath to generate D:\vwd projects mvc\Logqso.mvc\Logqso.Repository\SQL\ContestqsoData SQL 2014 to 2012script Shema.sql
 4) select advanced button
-		Schema only
 5)		script for SQL version => SQL2012
-6) Type of data to script =>schema and data
+6) Type of data to script =>schema only
 7)		Script Check Constraints => false
-8)got to Finish
+8)		Script Indexes=> False
+9)got to Finish
+Goto SQL 2012,
+SQL2014 indexes all FKs. This makes the DB very huge.
+delete  the previous ContesqsoData database.
+edit the script: change the FILENAME part 'MSSQL12.SQL2014' to 'MSSQL11.SQL2012' 
+run the ContestqsoData SQL 2014 to 2012script Shema.sql  script against the ContestqsoData DB.
+	It takes several minutest to run
 
 For the Data library you can use a script that includes all Data except the huge QSO table..
 1) In SQL2014 select right click on ContestqsoData DB ->Tasks->Generate scripts
 2) Select All Database tables except for the QSO table then Next
-3) Set filepath to generate ContestqsoData2012script.sql
+3) Set filepath to generate ContestqsoData SQL 2014 to 2012script Data No Qso.sql
 4) select advanced button
 5)		script for SQL version => SQL2012
-6) Type of data to script =>schema and data
+6) Type of data to script =>data
 7)		Script Check Constraints => false
 8)got to Finish
-SQL2014 indexes all FKs. This makes the DB very huge.
 Goto SQL 2012,
-Create the ContesqsoData database.
-run the logqsoData2012script.sql script against the ContestqsoData DB.
+run in admin dos
+https://msdn.microsoft.com/en-us/library/ms170572.aspx?f=255&MSPPError=-2147217396
+
+http://zarez.net/?p=551
+turn off constraints on a QsoExchangeNumber by adding to top of below sql file
+GO
+ ALTER TABLE [dbo].[QsoExchangeNumber]
+ NOCHECK CONSTRAINT ALL
+GO
+sqlcmd -S PSS60\SQL2012 -i "D:\vwd projects mvc\Logqso.mvc\Logqso.Repository\SQL\ContestqsoData SQL 2014 to 2012script Data No Qso.sql"
+sqlcmd -S PSS60\SQL2012 -i "D:\vwd projects mvc\Logqso.mvc\Logqso.Repository\SQL\ContestqsoData SQL 2014 to 2012script Data No Qso.sql" -o C:\EmpAdds.txt
+//run the ContestqsoData SQL 2014 to 2012script Data No Qso.sql script against the ContestqsoData DB.
 
 Next import QSO data
 1) right click on the SQL2012 ContestQqsoData. db
@@ -56,10 +72,14 @@ Next import QSO data
 10) select only the Qso table then Next
 11) finally finish
 
-After the data is copied add indexes to the Call and Log tables
+in SSMS goto QsoExchangeNumber.Keys.FK_dbo.QsoExchangeNumber_dbo.Qso_QsoNo_LogId 
+		right ckick Modify and set enforce foreign key constraints Check  => yes
+After the data is copied add indexes to the Callsign table index
 	IX_Call index Callsign.Call unique and non-clustered
+	 and Log table index
 	IX_Callsignid index Log.callsignid non-unique and no clustered.
 Right click on each of thes indexes and select Rebuild
+Change the Callinfo table to CQWWSSB2015 and Logid to 14001, 14002 - STN1 t0 NULL and 14000
 
 To test the results, selecting a Call in Call1, call2 orcall3 should return the list of calls quickly in the tab
 
@@ -72,13 +92,15 @@ To transfer to Hostinfest via a 2012 backup:
 	4) Login: jims9m8r
 	5) schema; dbo
 
-Create .bak backup files for bith Contestqso and CortestqsoData DBs
-go to Hostingfest cp for logqsp.com
+Create .bak backup files for both Contestqso and CortestqsoData DBs
+go to Hostingfest cp for Contestqso.com
 Navigate to databases
 Looks like the big ContestqsoData.bak file needs to be uploaded to the contesstqsoData/dsta directory
 	The file appears to be to big if you try to do the backup via file upload.
 	Filezilla takes 5 minutet to upoad this dil.
 Select database and restore with .bak files.
+
+Build ContestQsoDebug or ContestQsoRelease and update Hostfest Contestqso website via filezilla
 
 
 

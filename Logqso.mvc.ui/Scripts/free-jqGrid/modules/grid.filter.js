@@ -27,7 +27,7 @@
 */
 /*jshint eqeqeq:false, eqnull:true, devel:true */
 /*jslint browser: true, devel: true, eqeq: true, plusplus: true, vars: true, white: true */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 
 (function (factory) {
 	"use strict";
@@ -237,7 +237,7 @@
 					}
 
 					groupOpSelect.append(str)
-						.bind("change", function () {
+						.on("change", function () {
 							group.groupOp = $(groupOpSelect).val();
 							that.onchange(); // signals that the filter has changed
 						});
@@ -247,7 +247,7 @@
 				if (p.groupButton) {
 					inputAddSubgroup = $("<input type='button' value='+ {}' title='" + getRes("addGroupTitle") + "' class='" +
 						getGuiStyles("searchDialog.addGroupButton", "add-group") + "'/>");
-					inputAddSubgroup.bind("click", function () {
+					inputAddSubgroup.on("click", function () {
 						if (group.groups === undefined) {
 							group.groups = [];
 						}
@@ -269,7 +269,7 @@
 					// button for adding a new rule
 					var inputAddRule = $("<input type='button' value='+' title='" + getRes("addRuleTitle") + "' class='" +
 							getGuiStyles("searchDialog.addRuleButton", "add-rule ui-add") + "'/>"), cm;
-					inputAddRule.bind("click", function () {
+					inputAddRule.on("click", function () {
 						var searchable, hidden, ignoreHiding;
 						//if(!group) { group = {};}
 						if (group.rules === undefined) {
@@ -316,7 +316,7 @@
 					var inputDeleteGroup = $("<input type='button' value='-' title='" + getRes("deleteGroupTitle") + "' class='" +
 							getGuiStyles("searchDialog.deleteGroupButton", "delete-group") + "'/>");
 					th.append(inputDeleteGroup);
-					inputDeleteGroup.bind("click", function () {
+					inputDeleteGroup.on("click", function () {
 						// remove group from parent
 						for (i = 0; i < parentgroup.groups.length; i++) {
 							if (parentgroup.groups[i] === group) {
@@ -382,7 +382,7 @@
 				var ruleFieldSelect = $("<select class='" + getGuiStyles("searchDialog.label", "selectLabel") +
 						"'></select>"), ina, aoprs = [];
 				ruleFieldTd.append(ruleFieldSelect);
-				ruleFieldSelect.bind("change", function () {
+				ruleFieldSelect.on("change", function () {
 					rule.field = $(ruleFieldSelect).val();
 
 					var trpar = $(this).parents("tr:first"), columns, k; // define LOCAL variables
@@ -403,6 +403,7 @@
 							getCmInfo(columns.cmName),
 							{ id: jgrid.randId(), name: columns.name, mode: "search" }
 						);
+					searchoptions.column = columns; // add reference to that.p.columns[k];
 					if (isIE && columns.inputtype === "text") {
 						if (!searchoptions.size) {
 							searchoptions.size = 10;
@@ -454,10 +455,15 @@
 					// data
 					$(".data", trpar).empty().append(elm);
 					jgrid.bindEv.call($t, elm, searchoptions);
-					$(".input-elm", trpar).bind("change", function (e) {
+					$(".input-elm", trpar).on("change", function (e) {
 						var elem = e.target;
 						rule.data = elem.nodeName.toUpperCase() === "SPAN" && searchoptions && isFunction(searchoptions.custom_value) ?
-								searchoptions.custom_value.call($t, $(elem).children(".customelement:first"), "get") : elem.value;
+								searchoptions.custom_value.call($t, $(elem).children(".customelement:first"), "get") :
+								elem.value;
+						if ($(elem).is("input[type=checkbox]") && !$(elem).is(":checked")) {
+							// value of checkbox contains checked value
+							rule.data = $(elem).data("offval");
+						}
 						that.onchange(); // signals that the filter has changed
 					});
 					setTimeout(function () { //IE, Opera, Chrome
@@ -499,8 +505,9 @@
 				var editoptions = $.extend({}, cm.editoptions || {});
 				delete editoptions.readonly;
 				delete editoptions.disabled;
-				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype,
-						$.extend({}, editoptions, cm.searchoptions || {}, getCmInfo(cm.cmName), { id: jgrid.randId(), name: cm.name }),
+				var searchoptions = $.extend({}, editoptions, cm.searchoptions || {}, getCmInfo(cm.cmName), { id: jgrid.randId(), name: cm.name });
+				searchoptions.column = cm;
+				var ruleDataInput = jgrid.createEl.call($t, cm.inputtype, searchoptions,
 						rule.data, true, that.p.ajaxSelectOptions || {}, true);
 				if (rule.op === "nu" || rule.op === "nn") {
 					$(ruleDataInput).attr("readonly", "true");
@@ -509,7 +516,7 @@
 				// dropdown for: choosing operator
 				var ruleOperatorSelect = $("<select class='" + getGuiStyles("searchDialog.operator", "selectopts") + "'></select>");
 				ruleOperatorTd.append(ruleOperatorSelect);
-				ruleOperatorSelect.bind("change", function () {
+				ruleOperatorSelect.on("change", function () {
 					rule.op = $(ruleOperatorSelect).val();
 					var trpar = $(this).parents("tr:first"),
 						rd = $(".input-elm", trpar)[0];
@@ -566,8 +573,12 @@
 				ruleDataTd.append(ruleDataInput);
 				jgrid.bindEv.call($t, ruleDataInput, cm.searchoptions);
 				$(ruleDataInput).addClass(getGuiStyles("searchDialog.elem", "input-elm"))
-					.bind("change", function () {
+					.on("change", function () {
 						rule.data = cm.inputtype === "custom" ? cm.searchoptions.custom_value.call($t, $(this).children(".customelement:first"), "get") : $(this).val();
+						if ($(this).is("input[type=checkbox]") && !$(this).is(":checked")) {
+							// value of checkbox contains checked value
+							rule.data = $(this).data("offval");
+						}
 						that.onchange(); // signals that the filter has changed
 					});
 
@@ -581,7 +592,7 @@
 							getGuiStyles("searchDialog.deleteRuleButton", "delete-rule ui-del") + "'/>");
 					ruleDeleteTd.append(ruleDeleteInput);
 					//$(ruleDeleteInput).html("").height(20).width(30).button({icons: {  primary: "ui-icon-minus", text:false}});
-					ruleDeleteInput.bind("click", function () {
+					ruleDeleteInput.on("click", function () {
 						// remove rule from group
 						for (i = 0; i < group.rules.length; i++) {
 							if (group.rules[i] === rule) {

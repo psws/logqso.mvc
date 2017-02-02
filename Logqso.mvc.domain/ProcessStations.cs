@@ -102,11 +102,11 @@ namespace Logqso.mvc.domain
                                 LogStations.Add(LogStation);
                             }
                             //add to db
-                            _LogRepository.SetStationList(LogId, LogStations);
+                            await _LogRepository.SetStationList(LogId, LogStations);
                         }
                         if (QsoUpdateStationNamesDTOCollection.Count != 0)
                         {
-                            _LogRepository.UpdateQsoStationsAsync(QsoUpdateStationNamesDTOCollection);
+                            await _LogRepository.UpdateQsoStationsAsync(QsoUpdateStationNamesDTOCollection);
 
                         }
                     }

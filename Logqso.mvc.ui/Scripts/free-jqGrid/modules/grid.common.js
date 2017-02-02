@@ -8,7 +8,7 @@
 */
 
 /*jshint eqeqeq:false */
-/*global jQuery, define, HTMLElement */
+/*global jQuery, define, HTMLElement, exports, require */
 /*jslint browser: true, eqeq: true, plusplus: true, unparam: true, white: true, vars: true */
 (function (factory) {
 	"use strict";
@@ -79,18 +79,6 @@
 			}
 		},
 		//Helper functions
-		findPos: function (obj) {
-			var curleft = 0, curtop = 0;
-			if (obj.offsetParent) {
-				do {
-					curleft += obj.offsetLeft;
-					curtop += obj.offsetTop;
-					obj = obj.offsetParent;
-				} while (obj);
-				//do not change obj == obj.offsetParent
-			}
-			return [curleft, curtop];
-		},
 		createModal: function (aIDs, content, o, insertSelector, posSelector, appendsel, css) {
 			var jqID = jgrid.jqID, p = this.p, gridjqModal = p != null ? p.jqModal || {} : {};
 			o = $.extend(true, {
@@ -145,10 +133,9 @@
 			var coord = {};
 			if ($.fn.jqm && o.jqModal === true) {
 				if (o.left === 0 && o.top === 0 && o.overlay) {
-					var pos = [];
-					pos = jgrid.findPos(posSelector);
-					o.left = pos[0] + 4;
-					o.top = pos[1] + 4;
+					o = $(posSelector).offset();
+					o.left += 4;
+					o.top += 4;
 				}
 				coord.top = o.top + "px";
 				coord.left = o.left;
@@ -320,7 +307,7 @@
 			// attach onclick after inserting into the dom
 			if (buttstr) {
 				$.each(mopt.buttons, function (j) {
-					$("#" + jgrid.jqID($t.id), "#info_id").bind("click", function () { mopt.buttons[j].onClick.call($("#info_dialog")); return false; });
+					$("#" + jgrid.jqID($t.id), "#info_id").on("click", function () { mopt.buttons[j].onClick.call($("#info_dialog")); return false; });
 				});
 			}
 			$("#closedialog", "#info_id").click(function () {
@@ -355,9 +342,9 @@
 			if (opt.dataEvents) {
 				$.each(opt.dataEvents, function () {
 					if (this.data !== undefined) {
-						$(el).bind(this.type, this.data, this.fn);
+						$(el).on(this.type, this.data, this.fn);
 					} else {
-						$(el).bind(this.type, this.fn);
+						$(el).on(this.type, this.fn);
 					}
 				});
 			}
@@ -381,6 +368,7 @@
 						"custom_value",
 						"selectFilled",
 						"rowId",
+						"column",
 						"mode",
 						"cm",
 						"iCol"
@@ -439,7 +427,8 @@
 					break;
 				case "select":
 					elem = document.createElement("select");
-					var msl, ovm = [], isSelected, rowid = null;
+					//var msl, ovm = [], isSelected, rowid = null;
+					var msl, ovm = [], rowid = null;
 
 					if (options.multiple === true) {
 						msl = true;
@@ -509,7 +498,7 @@
 												}
 											});
 										}
-										$(elem1).change();
+										//$(elem1).change();
 										jgrid.fullBoolFeedback.call($t, options1.selectFilled, "jqGridSelectFilled", {
 											elem: elem1,
 											options: options1,
@@ -524,79 +513,14 @@
 							}
 						}, ajaxso || {}));
 					} else if (options.value) {
-						if (typeof options.value === "function") { options.value = options.value(); }
-						var i, so, sv, ov, optionInfos = [], optionInfo,
-							sep = options.separator === undefined ? ":" : options.separator,
-							delim = options.delimiter === undefined ? ";" : options.delimiter,
-							mapFunc = function (n, ii) { if (ii > 0) { return n; } };
-						if (typeof options.value === "string") {
-							so = options.value.split(delim);
-							for (i = 0; i < so.length; i++) {
-								sv = so[i].split(sep);
-								if (sv.length > 2) {
-									sv[1] = $.map(sv, mapFunc).join(sep);
-								}
-								optionInfos.push({
-									value: sv[0],
-									innerHtml: sv[1],
-									selectValue: $.trim(sv[0]),
-									selectText: $.trim(sv[1]),
-									selected: false
-								});
-							}
-						} else if (typeof options.value === "object") {
-							var oSv = options.value, key;
-							for (key in oSv) {
-								if (oSv.hasOwnProperty(key)) {
-									optionInfos.push({
-										value: key,
-										innerHtml: oSv[key],
-										selectValue: $.trim(key),
-										selectText: $.trim(oSv[key]),
-										selected: false
-									});
-								}
-							}
-						}
-
-						// mark selection
-						// 1) first by value
-						for (i = 0; i < optionInfos.length; i++) {
-							optionInfo = optionInfos[i];
-							if (!msl && optionInfo.selectValue === $.trim(vl)) {
-								optionInfo.selected = true;
-								isSelected = true;
-							}
-							if (msl && $.inArray(optionInfo.selectValue, ovm) > -1) {
-								optionInfo.selected = true;
-								isSelected = true;
-							}
-						}
-
-						// 2) when no selection by value, then by text
-						if (!isSelected) {
-							for (i = 0; i < optionInfos.length; i++) {
-								optionInfo = optionInfos[i];
-								if (!msl && optionInfo.selectText === $.trim(vl)) {
-									optionInfo.selected = true;
-								}
-								if (msl && $.inArray(optionInfo.selectText, ovm) > -1) {
-									optionInfo.selected = true;
-								}
-							}
-						}
-
-						//$(elem).empty();
-						for (i = 0; i < optionInfos.length; i++) {
-							optionInfo = optionInfos[i];
-							ov = document.createElement("option");
-							ov.value = optionInfo.value;
-							ov.innerHTML = optionInfo.innerHtml;
-							if (optionInfo.selected) {
-								ov.selected = true;
-							}
-							elem.appendChild(ov);
-						}
+						jgrid.fillSelectOptions(
+							elem,
+							options.value,
+							options.separator === undefined ? ":" : options.separator,
+							options.delimiter === undefined ? ";" : options.delimiter,
+							msl,
+							vl
+						);
 
 						setAttributes(elem, options, ["value"]);
 						jgrid.fullBoolFeedback.call($t, options.selectFilled, "jqGridSelectFilled", {

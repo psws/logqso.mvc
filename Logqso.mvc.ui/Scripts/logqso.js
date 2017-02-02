@@ -4,6 +4,8 @@ $(function () {
     _lq.parent_modal_box_id = undefined;
     _lq.SessionSaveControlSelections = "SessionSaveControlSettings";
     var btn = $.fn.button.noConflict();
+    //var isIE = /*@cc_on!@*/false || !!document.documentMode;
+    _lq.ie11 = window.navigator.userAgent.indexOf('Trident/');
 
 
     // Fetch the initial data.
@@ -40,18 +42,20 @@ $(function () {
         _lq.LogScrollUpdateReqd = true;
     }
 
-    _lq.LogScrollPosition = window.sessionStorage.getItem('_lq.LogScrollPosition');
-    if (_lq.LogScrollPosition != null) {
-        _lq.LogScrollUpdateReqd = false; //restored pos on refresh
+    _lq.UbnScrollPosition = window.sessionStorage.getItem('_lq.UbnScrollPosition');
+    if (_lq.UbnScrollPosition != null) {
+        _lq.UbnScrollUpdateReqd = false; //restored pos on refresh
     } else {
-        _lq.LogScrollUpdateReqd = true;
+        _lq.UbnScrollUpdateReqd = true;
     }
+
 
 
 
 
     _lq.UBNViewInit();
     _lq.LogViewInit();
+    _lq.QsoInit();
 
 
     _lq.LoadCallPopupTabs('All');
@@ -420,8 +424,11 @@ $(function () {
             //    _lq.ChartUpdateReqd == true
             //});
             $(this).on("selectmenuselect", function (event, ui) {
+                //FOR SOME REASON ID[0].VALUE DOES not WORK IN CHROME OR FIREFOX for the Yaxisfunction  Menu dropdown values
+                //MAYBE IT DOES NOT EXIST, BUT SERVER SIDE DEBUGGING SHOWS "QSO  Rate"
                 id = $("#" + ui.item.element[0].parentElement.name + " option:selected");
-                if (_lq.ChartUpdateReqd == true && event.key != 'F5') {//wierd bug async called when F5 pushed
+                if (_lq.ChartUpdateReqd == true && event.key != 'F5') {
+                    //wierd bug async called when F5 pushed
                     _lq.ControlUpdated(ui.item.element[0].parentElement.name, id[0].innerHTML, id[0].value);
                 }
             })
@@ -446,9 +453,87 @@ $(function () {
 
 
 
-    //Modal support
 
-    var appendthis = ("<div class='modal-overlay js-modal-close'></div>");
+
+    $("button[id^= 'Vid']").on( "click", VidClick );
+
+    function VidClick(e) {
+        var modalBox = $(this).attr('data-modal-id');
+        var popup = $('#' + modalBox);
+        var VidTd;
+        switch (this.id) {
+            case "Vid_Intro":
+                VidTd = "VIntroId";
+                break;
+            case "Vid_Category":
+                VidTd = "VCatId";
+                break;
+            case "Vid_Filter":
+                VidTd = "VFiltId";
+                break;
+            case "Vid_YAxis":
+                VidTd = "VYaxisId";
+                break;
+            case "Vid_XAxis":
+                VidTd = "VXaxisId";
+                break;
+            case "Vid_Call1":
+                VidTd = "VCall1Id";
+                break;
+            case "Vid_Chart":
+                VidTd = "VChartId";
+                break;
+            case "Vid_Log":
+                VidTd = "VLogId";
+                break;
+            case "Vid_Ubn":
+                VidTd = "VUbnId";
+                break;
+            case "Vid_Up":
+                VidTd = "VUpId";
+                break;
+            default:
+                VidTd = "VIntroId";
+                break;
+        }
+        var container = $('#' + modalBox + " div[id=VideoCont]");
+        if ($('#' + modalBox + ' div[id=VideoBkgnd').length == 0) { //only add once
+
+            popup.append('<div id="VideoBkgnd"></div>');
+            $('#' + modalBox + ' div[id=VideoBkgnd').css("background", "#17212a");
+
+            popup.append('<div id="closer_video">&otimes;</div>');
+        }
+
+        var vid = $('#' + modalBox + " video[id=" + VidTd + "]");
+
+        $('#' + modalBox + " div[id=closer_video]").on('click', function () {
+            if (vid.paused == true) {
+                vid.trigger('pause');
+            } else {
+                vid.trigger('pause');
+                vid.currentTime = 0;
+            }
+            //$("div[id=closer_video]").off('click');
+            popup.hide();
+            if (modalBox == "puVidIntro") {
+
+            }
+        });
+
+
+
+        _lq.parent_modal_box_id = e.currentTarget.id;
+        var modalBox = $(this).attr('data-modal-id');
+        var popup = $('#' + modalBox)
+
+        popup.show();
+        vid.trigger('play');
+
+
+    };
+
+
 
 
     //$('a[data-modal-id]').click(function (e) {
@@ -469,7 +554,7 @@ $(function () {
             top: $("button[id=" + _lq.parent_modal_box_id + "]").offset().top + 20,
             left: newleft
         }).css('width', puwidth + 'px');;
-        $("body").append(appendthis);
+        $("body").append(_lq_appendthis);
 
         $(".modal-overlay").fadeTo(500, 0.7);
 
@@ -496,7 +581,7 @@ $(function () {
         e.preventDefault();
 
         _lq.parent_modal_box_id = e.currentTarget.id;
-        puwidth = 570;
+        puwidth = 580;
         var bodywidth = $('#body')[0].clientWidth;
         if (puwidth + 10 > bodywidth) {
             puwidth = bodywidth - 10;
@@ -570,7 +655,7 @@ $(function () {
             top: $("button[id=" + _lq.parent_modal_box_id + "]").offset().top + 20,
             left: newleft
         }).css('width', puwidth + 'px');
-        $("body").append(appendthis);
+        $("body").append(_lq_appendthis);
 
         $(".modal-overlay").fadeTo(500, 0.7);
 
@@ -649,7 +734,7 @@ $(function () {
 
     //$('button[data-modal-id]').click(function (e) {
     //    e.preventDefault();
-    //    $("body").append(appendthis);
+    //    $("body").append( _lq_appendthis);
     //    $(".modal-overlay").fadeTo(500, 0.7);
     //    //$(".js-modalbox").fadeIn(500);
     //    var modalBox = $(this).attr('data-modal-id');
@@ -733,12 +818,12 @@ $(function () {
         formData.append("UploadInfo", JSON.stringify(_lq.DataCallInfoDto4));
         formData.append("UploadedFile", _lq.FiletoUpload[0]);
 
-        _lq.ajaxHelperNoJsonData(_lq.dataUri + '/UploadWintestFile', 'POST', 'json', false, false, formData, FileUploaded);
+        _lq.ajaxHelperNoJsonData(_lq.dataUri + '/UploadWintestFile', 'POST', 'json', false, false, formData, FileUploaded, FileUploadedError);
 
-    // Firefox bug fix
-    //$input
-	//.on('focus', function () { $input.addClass('has-focus'); })
-	//.on('blur', function () { $input.removeClass('has-focus'); });
+        // Firefox bug fix
+        //$input
+        //.on('focus', function () { $input.addClass('has-focus'); })
+        //.on('blur', function () { $input.removeClass('has-focus'); });
     });
 
     FileUploaded = function (responseData, textStatus, jqXHR) {
@@ -766,7 +851,12 @@ $(function () {
         $("#FileInputWT").prop('disabled', false);
 
     };
-
+    FileUploadedError = function (responseData, textStatus, errorThrown) {
+        if (textStatus == 'error') {
+            alert(responseData.responseJSON);
+            $('#FileLabelWT')[0].innerHTML = "File Upload Error";
+        }
+    };
 
     $(".modal-box").draggable();
 
@@ -776,7 +866,7 @@ $(function () {
             $(".modal-overlay").remove();
         });
         e.preventDefault(); //keeps window from scrolling to the top
-
+        _lq.parent_modal_box_id = undefined;
         //return false;  //keeps window from scrolling to the top
 
     });
@@ -785,20 +875,24 @@ $(function () {
     $(window).resize(function () {
         var curWidth = $(window).width(); //store the window's current width
 
-        if (_lq.parent_modal_box_id !== undefined) {
+        if (_lq.parent_modal_box_id !== undefined && _lq.parent_modal_box_di != null) {
+            if (_lq.parent_modal_box_id.indexOf('jqGrid') < 0) {
 
-            parent = $("button[id=" + _lq.parent_modal_box_id + "]");
-            var newleft = $("button[id=" + _lq.parent_modal_box_id + "]").offset().left - $(".modal-box").width() / 2
-            newleft = (newleft < 0) ? 0 : newleft;
+                parent = $("button[id=" + _lq.parent_modal_box_id + "]");
+                if (parent !== undefined && parent !== null) {
+                    var newleft = $("button[id=" + _lq.parent_modal_box_id + "]").offset().left - $(".modal-box").width() / 2
+                    newleft = (newleft < 0) ? 0 : newleft;
 
-            $(".modal-box").offset({
-                //top: $(".modal-box").offset().top,
-                //left: $(".modal-box").offset().left + deltaX
-                //top: _lq.parent_modal_box_id.clientY + 5,
-                top: $("button[id=" + _lq.parent_modal_box_id + "]").offset().top + 20,
-                left: newleft
+                    $(".modal-box").offset({
+                        //top: $(".modal-box").offset().top,
+                        //left: $(".modal-box").offset().left + deltaX
+                        //top: _lq.parent_modal_box_id.clientY + 5,
+                        top: $("button[id=" + _lq.parent_modal_box_id + "]").offset().top + 20,
+                        left: newleft
 
-            });
+                    });
+                }
+            }
 
         }
 
@@ -848,9 +942,9 @@ $(function () {
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, 'application/json', null, SetControlXaxisSettingsDtoLoad);
                 function SetControlXaxisSettingsDtoLoad(ControlXaxisSettingsDto) {
                     _lq.SetControlXaxisSettings(ControlXaxisSettingsDto, true);
-                     _lq.LogUpdateReqd = true;
+                    _lq.LogUpdateReqd = true;
                     _lq.GetContestLogs();
-               };
+                };
                 break;
             default:
 
@@ -890,7 +984,9 @@ $(function () {
 (function (_lq, $, undefined) {
     _lq.controlUri = '/v1/Control';
     _lq.dataUri = '/v1/Data';
+    _lq_appendthis = ("<div class='modal-overlay js-modal-close'></div>");
 
+    _lq.ie11 = 0;
     _lq.parent_modal_box_id;
     _lq.CallReload1 = true;
     _lq.CallReload2 = true;
@@ -910,23 +1006,22 @@ $(function () {
     _lq.LogUpdateReqd = true;
     _lq.LogScrollUpdateReqd = true;
     _lq.LogScrollPosition = 0;
+    _lq.UbnScrollUpdateReqd = true;
+    _lq.UbnScrollPosition = 0;
+
 
     _lq.I1Cnt;
     _lq.I2Cnt;
     _lq.I3Cnt;
     //for Zone/prefix switching
+    _lq.PZLabel = 'Z';
+    _lq.PZName = 'Z';
     _lq.PZLabel1 = 'Z';
     _lq.PZName1 = 'Z1';
     _lq.PZLabel2 = 'Z';
     _lq.PZName2 = 'Z2';
     _lq.PZLabel3 = 'Z';
     _lq.PZName3 = 'Z3';
-    //_lq.PZLabel1 = 'P';
-    //_lq.PZName1 = 'P1';
-    //_lq.PZLabel2 = 'P';
-    //_lq.PZName2 = 'P2';
-    //_lq.PZLabel3 = 'P';
-    //_lq.PZName3 = 'P3';
 
 
     _lq.SessionSaveControlSelections;
@@ -951,12 +1046,12 @@ $(function () {
     _lq.ControlXaxisSettingsDto = {
         XaxisDuration: '',
         XaxisStarttime: '',
-        XaxisStarttimeIndex: ''
+        XaxisStarttimeIndex: 1
     };
 
     _lq.ControlYaxisSettingsDto = {
         YaxisFunction: '',
-        YaxisFunctionIndex: '',
+        YaxisFunctionIndex: 1,
         YaxisInterval: '',
         YaxisViewType: ''
     };
@@ -1060,6 +1155,13 @@ $(function () {
 
     }
 
+    _lq.QsoInfoRequest = {
+        call: '',
+        freq: '',
+        day: '',
+        time: '',
+    }
+
     // use this transport for "binary" data type
     //http://www.henryalgus.com/reading-binary-files-using-jquery-ajax/
     $.ajaxTransport("+binary", function (options, originalOptions, jqXHR) {
@@ -1132,7 +1234,7 @@ $(function () {
     }
 
 
-    _lq.ajaxHelperNoJsonData = function (uri, method, datatype, processdata, contentType, data, Function) {
+    _lq.ajaxHelperNoJsonData = function (uri, method, datatype, processdata, contentType, data, Function, FunctionError) {
         $.ajax({
             type: method,
             url: uri,
@@ -1150,12 +1252,13 @@ $(function () {
                 }
             },
 
-            data: data ,
+            data: data,
         })
        .done(Function)
-       .fail(function (jqXHR, textStatus, errorThrown) {
-           console.log(errorThrown);
-       });
+        .error(FunctionError)
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            console.log(errorThrown);
+        });
 
     }
 
@@ -1230,7 +1333,7 @@ $(function () {
             $(this).css({
                 //'margin-top': '-20px',
                 'padding': '0px',
-                'background': '#aed7ff'
+                'background': '#aed7ff',
             });
         })
 
@@ -1277,11 +1380,11 @@ $(function () {
         _lq.ActiveView = ui.newTab[0].textContent;
         window.sessionStorage.setItem('_lq.ActiveView', _lq.ActiveView);
         if (ui.newTab[0].textContent == 'Chart') {
- 
+
             //ui.newPanel[0].innerText = text;
         }
         else {
-    
+
             //$.jgrid.defaults.width = 900;
 
             //set to current call
@@ -1303,6 +1406,7 @@ $(function () {
                 //var active = tdiv.tabs('option', 'active');
                 if (ui.oldTab[0].textContent != 'Log') {
                     if (_lq.LogUpdateReqd == true) {
+                        //console.log('_lq.LoadViewTab Log _lq.GetContestLogs() ');
                         _lq.GetContestLogs();
                     } else {
                         //_lq.LogScrollPosition = window.sessionStorage.getItem('_lq.LogScrollPosition');
@@ -1323,13 +1427,25 @@ $(function () {
                 //var active = tdiv.tabs('option', 'active');
                 if (ui.oldTab[0].textContent != 'UBN') {
                     if (_lq.LogUpdateReqd == true) {
+                        //console.log('_lq.LoadViewTab Ubn _lq.GetContestLogs() ');
                         _lq.GetContestLogs();
                     } else {
                         //_lq.LogScrollPosition = window.sessionStorage.getItem('_lq.LogScrollPosition');
                         //if (_lq.LogScrollPosition == null) {
                         //    _lq.LogScrollPosition = 0;
                         //}
-                        grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.LogScrollPosition);
+                        //$('.ui-jqgrid .ui-jqgrid-bdiv').css({ 'overflow-y': 'scroll' });
+
+                        //_lq.UBNViewInit();
+                        //_lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs, 'UBN');
+                        //var mq = window.matchMedia("(min-width:" + _lq.minWidth + " )");
+                        //WidthChange(mq);  //set grid height after reload
+                        //grid.trigger('reloadGrid');
+
+                        //_lq.UBNViewInit();
+                        //grid.trigger('reloadGrid');
+                        grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.UbnScrollPosition);
+
                         //grid.trigger("reloadGrid", [{ page: 49 }]);
                     }
                 }
@@ -1350,7 +1466,7 @@ $(function () {
         var tdiv = $('div[id=TabViews]');
         //var index = $('#TabViews a:contains("' + _lq.ActiveView + '") ').parent().index();
         var index = $('#TabViews a[href$="' + _lq.ActiveView + '"] ').parent().index();
-        tdiv.tabs("option", "active", index.toString() );
+        tdiv.tabs("option", "active", index.toString());
     }
 
 
@@ -1358,17 +1474,18 @@ $(function () {
         var grid;
         if (_lq.ActiveView == 'Log') {
             grid = $("#jqGridLog");
-        } else if (_lq.ActiveView == 'UBN')
-        {
+        } else if (_lq.ActiveView == 'UBN') {
             grid = $("#jqGridUBN");
         }
 
-        var postDataValues = grid.jqGrid('getGridParam', 'postData');
-        _lq.LogPageRequestDTO.page = postDataValues.page;
-        _lq.LogPageRequestDTO.sidx = postDataValues.sidx;
-        _lq.LogPageRequestDTO.sord = postDataValues.sord;
-        _lq.LogPageRequestDTO.rows = postDataValues.rows;
-        _lq.LogPageRequestDTO._search = postDataValues._search;
+        if (grid != undefined) {
+            var postDataValues = grid.jqGrid('getGridParam', 'postData');
+            _lq.LogPageRequestDTO.page = postDataValues.page;
+            _lq.LogPageRequestDTO.sidx = postDataValues.sidx;
+            _lq.LogPageRequestDTO.sord = postDataValues.sord;
+            _lq.LogPageRequestDTO.rows = postDataValues.rows;
+            _lq.LogPageRequestDTO._search = postDataValues._search;
+        }
 
         var dataObj = {
             DataCallInfoDtos: _lq.DataCallInfoDTOs,
@@ -1382,7 +1499,7 @@ $(function () {
 
         }
 
-        _lq.ajaxHelper(_lq.dataUri + '/GetContestLogs', 'POST', 'json', false,'application/json', dataObj, _lq.LogViewDraw2);
+        _lq.ajaxHelper(_lq.dataUri + '/GetContestLogs', 'POST', 'json', false, 'application/json', dataObj, _lq.LogViewDraw2);
 
     }
 
@@ -1391,12 +1508,12 @@ $(function () {
     if (matchMedia) {
         var mq = window.matchMedia("(min-width:" + _lq.minWidth + " )");
         mq.addListener(WidthChange);
-        WidthChange(mq );
+        WidthChange(mq);
     }
 
     // media query change
     function WidthChange(mq) {
-        if ( _lq.ActiveView == 'Log' || _lq.ActiveView == 'UBN') {
+        if (_lq.ActiveView == 'Log' || _lq.ActiveView == 'UBN') {
             var grid;
             if (_lq.ActiveView == 'Log') {
                 grid = $("#jqGridLog");
@@ -1504,27 +1621,39 @@ $(function () {
             //    grid.jqGrid('setSelection', rowid, false);
             //},
             onSortCol: function (index, columnIndex, sortOrder) {
+                // when sorting log C or P you need to restore by click to get ubm ubndx to work
+
                 var grid = $('#jqGridUBN');
                 //http://stackoverflow.com/questions/25801755/multiple-column-sorting-jqgrid
-                var arr = [ "U1", "U2", "U3", "B1", "B2", "B3", "N1", "N2", "N3", "D1", "D2", "D3", "X1", "X2", "X3"];
+                var arr = ["U1", "U2", "U3", "B1", "B2", "B3", "N1", "N2", "N3", "D1", "D2", "D3", "X1", "X2", "X3"];
                 if ($.inArray(index, arr) != -1) {
                     setSorting.call(grid, index, "asc");
                     setSorting.call(grid, "W", "asc");
                     setSorting.call(grid, "T", "asc");
+
                     grid.jqGrid("setGridParam", {
                         multiSort: true//,
                         //sortorder: 'asc'//,
                         //sortname: index //+' asc, W asc, T'
-                    }).trigger("reloadGrid");
+                    }).trigger("reloadGrid", [{ current: true }]);
                     //return 'stop';
                 } else {
+
                     grid.jqGrid('setGridParam', {
                         multiSort: false//,
                         //sortorder: 'asc',
                         //sortname: index //'U1 asc, W asc, T'
-                    }).trigger('reloadGrid');
-                    //return 'stop';
+                    }).trigger('reloadGrid', [{ current: true }]);
+                    //return 'stop';//needed to block scroll to top
                 }
+
+                //http://stackoverflow.com/questions/5706703/how-to-reload-jquery-grid-keeping-scroll-position-and-collapse-elements-open               //this code is needed because jgqrid always wants to return the grid to the prevoius scroled position
+                //every sort click will goto top of grid. The stop  is needed
+                _lq.UbnScrollPosition = 0;
+                window.sessionStorage.setItem('_lq.UbnScrollPosition', _lq.UbnScrollPosition);
+                // _lq.UbnScrollUpdateReqd == true;
+                grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.UbnScrollPosition);
+                return 'stop';
             },
             onPaging: function (pgButton) {
                 _lq.GetContestLogs();
@@ -1533,24 +1662,30 @@ $(function () {
             loadComplete: function () {
                 if (grid[0].textContent != "") {
                     _lq.gridHighlight('UBN');
+                    var tmp = grid.closest(".ui-jqgrid-bdiv").scrollTop();
                 }
+
             },
             gridComplete: function () {
                 if (grid[0].textContent != "") {
-                    if (_lq.LogScrollUpdateReqd == true) {
-                        _lq.LogScrollPosition = grid.closest(".ui-jqgrid-bdiv").scrollTop();
-                        window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
+                    var tmp = grid.closest(".ui-jqgrid-bdiv").scrollTop();
+                    if (_lq.UbnScrollUpdateReqd == true) {
+                        _lq.UbnScrollPosition = grid.closest(".ui-jqgrid-bdiv").scrollTop();
+                        window.sessionStorage.setItem('_lq.UbnScrollPosition', _lq.UbnScrollPosition);
                     } else {
-                        _lq.LogScrollPosition = window.sessionStorage.getItem('_lq.LogScrollPosition');
-                        grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.LogScrollPosition);
-                        //_lq.LogScrollUpdateReqd = true;
+                        _lq.UbnScrollPosition = window.sessionStorage.getItem('_lq.UbnScrollPosition');
+                        grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.UbnScrollPosition);
+                        _lq.UbnScrollUpdateReqd = true;
 
                     }
                 }
 
                 //return 'stop';
             },
-            
+            onCellSelect: function (rowId, iCol, content, event) {
+                _lq.CellSelect($(this), rowId, iCol, content, event);
+            },
+
 
             colModel: [
                   {
@@ -1559,7 +1694,7 @@ $(function () {
                       width: 6,
                       align: 'center',
                       title: false,
-                      resizable:false  //required for IE11 multiple calls to this init()
+                      resizable: false  //required for IE11 multiple calls to this init()
                   },
 
                 {
@@ -1596,8 +1731,9 @@ $(function () {
                     label: 'Freq',
                     name: 'F1',
                     width: 16,
+                    formatter: _lq.formatFreq,
                     cellattr: _lq.cellBrdBrn,
-                    align: 'left',
+                    align: 'right',
                     sorttype: 'number',
                     firstsortorder: 'asc',
                     title: false,
@@ -1628,17 +1764,17 @@ $(function () {
                  },
 
                 {
-                     label: 'N',
-                     name: 'N1',
-                     width: 7,
-                     formatter: _lq.formatBNTF,
-                     cellattr: _lq.cellBN,
-                     align: 'center',
-                     firstsortorder: 'asc',
-                     sorttype: _lq.SortUBNDXTF,
-                     title: false,
-                     resizable: false
-                 },
+                    label: 'N',
+                    name: 'N1',
+                    width: 7,
+                    formatter: _lq.formatBNTF,
+                    cellattr: _lq.cellBN,
+                    align: 'center',
+                    firstsortorder: 'asc',
+                    sorttype: _lq.SortUBNDXTF,
+                    title: false,
+                    resizable: false
+                },
                  {
                      label: 'D',
                      name: 'D1',
@@ -1688,10 +1824,11 @@ $(function () {
                     label: 'Freq',
                     name: 'F2',
                     width: 16,
+                    formatter: _lq.formatFreq,
                     cellattr: _lq.cellBrdBrn,
                     //formatter: 'number',
                     //formatoptions: { decimalSeparator: ".", thousandsSeparator: "", decimalPlaces: 1, },
-                    align: 'left',
+                    align: 'right',
                     sorttype: 'number',
                     firstsortorder: 'asc',
                     title: false,
@@ -1757,33 +1894,34 @@ $(function () {
                       resizable: false
                   },
                   {
-                    label: 'Call',
-                    name: 'I3',
-                    formatter: _lq.formatCall,
-                    cellattr: _lq.cellBrdBlkDbl,
-                    width: 34,
-                    firstsortorder: 'asc',
-                    sorttype: function (cellObj, rowObj) {
-                        var grid = $('#jqGridUBN');
-                        var sortColumnName = grid.jqGrid('getGridParam', 'sortname');
-                        var sortOrder = grid.jqGrid('getGridParam', 'sortorder');
-                        if (sortOrder === 'desc') {
-                            return ((cellObj === null || cellObj === '') ? '-1000' : cellObj);
-                        }
-                        else if (sortOrder === 'asc') {
-                            return ((cellObj === null || cellObj === '') ? 'zzz50000' : cellObj);
-                        }
-                    },
-                    title: false,
+                      label: 'Call',
+                      name: 'I3',
+                      formatter: _lq.formatCall,
+                      cellattr: _lq.cellBrdBlkDbl,
+                      width: 34,
+                      firstsortorder: 'asc',
+                      sorttype: function (cellObj, rowObj) {
+                          var grid = $('#jqGridUBN');
+                          var sortColumnName = grid.jqGrid('getGridParam', 'sortname');
+                          var sortOrder = grid.jqGrid('getGridParam', 'sortorder');
+                          if (sortOrder === 'desc') {
+                              return ((cellObj === null || cellObj === '') ? '-1000' : cellObj);
+                          }
+                          else if (sortOrder === 'asc') {
+                              return ((cellObj === null || cellObj === '') ? 'zzz50000' : cellObj);
+                          }
+                      },
+                      title: false,
 
-                    resizable: false
-                },
+                      resizable: false
+                  },
                 {
                     label: 'Freq',
                     name: 'F3',
                     width: 16,
+                    formatter: _lq.formatFreq,
                     cellattr: _lq.cellBrdBrn,
-                    align: 'left',
+                    align: 'right',
                     sorttype: 'number',
                     firstsortorder: 'asc',
                     title: false,
@@ -1852,13 +1990,15 @@ $(function () {
             ],
 
             viewrecords: false, // show the current page, data rang and total records on the toolbar
-            scroll: 'true',
-            scrollrows : true,
+            scroll: true,
+            scrollrows: true,
             //scroll: 1,
+            //shrinkToFit: true,
             sortorder: 'asc',
             width: '100%',
             height: 388,
             //height: 'auto',
+            //loadonce: true,
             rowNum: 19,
             datatype: 'local',
             //data:_lq.mydata,
@@ -1909,7 +2049,7 @@ $(function () {
                        { "numberOfColumns": 7, "titleText": "Call1", "startColumnName": "I1" },
                        { "numberOfColumns": 7, "titleText": "Call2", "startColumnName": "I2" },
                        { "numberOfColumns": 7, "titleText": "Call3", "startColumnName": "I3" }]
-         });
+               });
 
         $('.jqg-second-row-header th[colspan=7]')
            .each(function (indexInArray, valueOfElement) {
@@ -1943,15 +2083,16 @@ $(function () {
 
         $(".ui-jqgrid-bdiv").each(function () {
             $(this).css( //chrome
-                 { "overflow-x": "hidden" }); 
+                 { "overflow-x": "hidden" });
         });
 
         grid.closest(".ui-jqgrid-bdiv").scroll(function (e) {
-            if (_lq.LogScrollUpdateReqd == true) {
-                _lq.LogScrollPosition = grid.closest(".ui-jqgrid-bdiv").scrollTop();
-                window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
+            if (_lq.UbnScrollUpdateReqd == true) {
+                _lq.UbnScrollPosition = grid.closest(".ui-jqgrid-bdiv").scrollTop();
+                window.sessionStorage.setItem('_lq.UbnScrollPosition', _lq.UbnScrollPosition);
             }
         });
+
     }
 
 
@@ -1965,9 +2106,11 @@ $(function () {
             //    grid.jqGrid('setSelection', rowid, false);
             //},
             onSortCol: function (index, columnIndex, sortOrder) {
+                // when sorting log C or P you need torestore by click to get ubm ubndx to work
+
                 var grid = $('#jqGridLog');
                 //http://stackoverflow.com/questions/25801755/multiple-column-sorting-jqgrid
-                var arr = ['C1', 'C2', 'C3', 'Z1', 'Z2', 'Z3' ,'P1', 'P2', 'P3'];
+                var arr = ['C1', 'C2', 'C3', 'Z1', 'Z2', 'Z3', 'P1', 'P2', 'P3'];
                 if ($.inArray(index, arr) != -1) {
                     setSorting.call(grid, index, "desc");
                     setSorting.call(grid, "W", "asc");
@@ -1986,6 +2129,13 @@ $(function () {
                     }).trigger('reloadGrid');
                     //return 'stop';
                 }
+                http://stackoverflow.com/questions/5706703/how-to-reload-jquery-grid-keeping-scroll-position-and-collapse-elements-open                //this code is needed because jgqrid always wants to return the grid to the prevoius scroled position
+                //every sort click will goto top of grid. The stop  is needed
+                    _lq.LogScrollPosition = 0;
+                window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
+                // _lq.LogScrollUpdateReqd == true;
+                grid.closest(".ui-jqgrid-bdiv").scrollTop(_lq.LogScrollPosition);
+                return 'stop';  //needed to block scroll to top
             },
             onPaging: function (pgButton) {
                 _lq.GetContestLogs();
@@ -1993,6 +2143,7 @@ $(function () {
             },
             loadComplete: function () {
                 if (grid[0].textContent != "") {
+
                     _lq.gridHighlight('Log');
                 }
             },
@@ -2009,6 +2160,10 @@ $(function () {
                 }
                 //return 'stop';
             },
+            onCellSelect: function (rowId, iCol, content, event) {
+                _lq.CellSelect($(this), rowId, iCol, content, event);
+            },
+
 
 
             colModel: [
@@ -2056,10 +2211,11 @@ $(function () {
                     label: 'Freq',
                     name: 'F1',
                     width: 16,
+                    formatter: _lq.formatFreq,
                     cellattr: _lq.cellBrdBrn,
                     //formatter:'number',
                     //formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 1 },
-                    align: 'left',
+                    align: 'right',
                     sorttype: 'number',
                     firstsortorder: 'asc',
                     title: false,
@@ -2135,8 +2291,9 @@ $(function () {
                     label: 'Freq',
                     name: 'F2',
                     width: 16,
+                    formatter: _lq.formatFreq,
                     cellattr: _lq.cellBrdBrn,
-                    align: 'left',
+                    align: 'right',
                     sorttype: 'number',
                     firstsortorder: 'asc',
                     title: false,
@@ -2213,8 +2370,9 @@ $(function () {
                     label: 'Freq',
                     name: 'F3',
                     width: 16,
+                    formatter: _lq.formatFreq,
                     cellattr: _lq.cellBrdBrn,
-                    align: 'left',
+                    align: 'right',
                     sorttype: 'number',
                     firstsortorder: 'asc',
                     title: false,
@@ -2268,8 +2426,12 @@ $(function () {
             ],
 
             viewrecords: false, // show the current page, data rang and total records on the toolbar
-            scroll: 'true',
+            scroll: true,
             scrollrows: true,
+            //scrollTimeout: 100,
+            //gridview: true,
+            //shrinkToFit: false,
+            //loadonce: true,
             //scroll: 1,
             width: '100%',
             height: 388,
@@ -2300,9 +2462,15 @@ $(function () {
         grid.jqGrid('setLabel', 'C1', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'C2', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'C3', '', { 'text-align': 'center' });
-        grid.jqGrid('setLabel', _lq.PZName1, '', { 'text-align': 'center' });
-        grid.jqGrid('setLabel', _lq.PZName2, '', { 'text-align': 'center' });
-        grid.jqGrid('setLabel', _lq.PZName3, '', { 'text-align': 'center' });
+        //grid.jqGrid('setLabel', _lq.PZName1, '', { 'text-align': 'center' });
+        //grid.jqGrid('setLabel', _lq.PZName2, '', { 'text-align': 'center' });
+        //grid.jqGrid('setLabel', _lq.PZName3, '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'Z1', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'Z2', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'Z3', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'P1', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'P2', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'P3', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'R1', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'R2', '', { 'text-align': 'center' });
         grid.jqGrid('setLabel', 'R3', '', { 'text-align': 'center' });
@@ -2358,27 +2526,38 @@ $(function () {
 
         grid.closest(".ui-jqgrid-bdiv").scroll(function (e) {
             //e.preventDefault();;
+            //console.log("_lq.LogViewInit scroll");
             if (_lq.LogScrollUpdateReqd == true) {
                 _lq.LogScrollPosition = grid.closest(".ui-jqgrid-bdiv").scrollTop();
                 window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
             }
         });
+
+        //uses lodash.js
+        //https://css-tricks.com/debouncing-throttling-explained-examples/
+        //grid.closest(".ui-jqgrid-bdiv").scroll(function (e) { _.throttle(function () {
+        //    if (_lq.LogScrollUpdateReqd == true) {
+        //        _lq.LogScrollPosition = grid.closest(".ui-jqgrid-bdiv").scrollTop();
+        //        window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
+        //    }
+        //}, 10)});
+
     }
 
-  
- //Highlight
+
+    //Highlight
     _lq.time = '59:59';
     _lq.shade = 'rowchangedOdd';
 
     _lq.gridHighlight = function (view) {
         var grid;
-        if ( view == 'Log') {
+        if (view == 'Log') {
             grid = $("#jqGridLog tbody tr td[aria-describedby='jqGridLog_T']")
         } else if (view == 'UBN') {
             grid = $("#jqGridUBN tbody tr td[aria-describedby='jqGridUBN_T']")
         }
 
-        
+
         $.each(grid, function (indexInArray, valueOfElement) {
             if (valueOfElement.innerText != _lq.time) {
                 _lq.time = valueOfElement.innerText;
@@ -2398,7 +2577,294 @@ $(function () {
     }
 
 
+    _lq.QsoInit = function () {
+        var grid = $('#jqGridQso');
 
+        grid.jqGrid({
+            //onSelectRow: function (rowid, status, e) {
+            //    grid.jqGrid('setSelection', rowid, false);
+            //},
+            colModel: [
+                        {
+                            label: 'D',
+                            name: 'W',
+                            width: 20,
+                            align: 'center',
+                            title: false,
+                            resizable: false  //required for IE11 multiple calls to this init()
+                        },
+
+                        {
+                            label: 'Time',
+                            name: 'T',
+                            width: 48,
+                            cellattr: _lq.cellBrdBlk,
+                            align: 'center',
+                            title: false,
+                            resizable: false
+                        },
+                        {
+                            label: 'Call',
+                            name: 'I',
+                            formatter: _lq.formatCall,
+                            cellattr: _lq.cellBrdBlkDbl,
+                            width: 93,
+                            firstsortorder: 'asc',
+                            title: false,
+                            resizable: false
+                        },
+                        {
+                            label: 'Freq',
+                            name: 'F',
+                            width: 48,
+                            formatter: _lq.formatFreq,
+                            cellattr: _lq.cellBrdBrn,
+                            //formatter:'number',
+                            //formatoptions: { decimalSeparator: ".", thousandsSeparator: " ", decimalPlaces: 1 },
+                            align: 'right',
+                            sorttype: 'number',
+                            firstsortorder: 'asc',
+                            title: false,
+                            resizable: false
+                        },
+                        {
+                            label: 'Xchg',
+                            name: 'XR',
+                            width: 38,
+                            cellattr: _lq.cellLogBrdRed,
+                            title: false,
+                            align: 'right',
+                            resizable: false
+                        },
+                       {
+                           label: 'C',
+                           name: 'C',
+                           width: 20,
+                           formatter: _lq.formatTF,
+                           cellattr: _lq.cellTF,
+                           align: 'center',
+                           firstsortorder: 'desc',
+                           title: false,
+                           resizable: false
+                       },
+                        //{
+                        //    label: _lq.PZLabel,
+                        //    name: _lq.PZName,
+                        //    width: 20,
+                        //    formatter: _lq.formatTF,
+                        //    cellattr: _lq.cellTF,
+                        //    title: false,
+                        //    align: 'center',
+                        //    resizable: false
+                        //},
+
+                        {
+                            label: 'Z',
+                            name: 'Z',
+                            width: 20,
+                            formatter: _lq.formatTF,
+                            cellattr: _lq.cellTF,
+                            title: false,
+                            align: 'center',
+                            resizable: false
+                        },
+                         {
+                             label: 'P',
+                             name: 'P',
+                             width: 20,
+                             formatter: _lq.formatTF,
+                             cellattr: _lq.cellTF,
+                             title: false,
+                             align: 'center',
+                             resizable: false
+                         },
+                      {
+                          label: 'R',
+                          name: 'R',
+                          width: 24,
+                          formatter: _lq.formatR,
+                          cellattr: _lq.cellR,
+                          align: 'center',
+                          firstsortorder: 'desc',
+                          title: false,
+                          resizable: false
+                      },
+                        {
+                            label: 'Stn',
+                            name: 'S',
+                            width: 64,
+                            formatter: _lq.formatS,
+                            cellattr: _lq.cellS,
+                            align: 'left',
+                            firstsortorder: 'desc',
+                            title: false,
+                            resizable: false
+                        },
+                        {
+                            label: 'U',
+                            name: 'U',
+                            width: 20,
+                            formatter: _lq.formatBNTF,
+                            cellattr: _lq.cellU,
+                            align: 'center',
+                            firstsortorder: 'asc', //no good with multiSort
+                            sorttype: _lq.SortUBNDXTF,
+                            title: false,
+                            resizable: false
+                        },
+                         {
+                             label: 'B',
+                             name: 'B',
+                             width: 20,
+                             formatter: _lq.formatBNTF,
+                             cellattr: _lq.cellBN,
+                             align: 'center',
+                             firstsortorder: 'asc',
+                             sorttype: _lq.SortUBNDXTF,
+                             resizable: false
+                         },
+                        {
+                            label: 'Correct Call',
+                            name: 'BC',
+                            formatter: _lq.formatCall,
+                            cellattr: _lq.cellBrdBlkDbl,
+                            width: 93,
+                            firstsortorder: 'asc',
+                            align: 'left',
+                            title: false,
+                            resizable: false
+                        },
+
+                        {
+                            label: 'N',
+                            name: 'N',
+                            width: 20,
+                            formatter: _lq.formatBNTF,
+                            cellattr: _lq.cellBN,
+                            align: 'center',
+                            firstsortorder: 'asc',
+                            sorttype: _lq.SortUBNDXTF,
+                            title: false,
+                            resizable: false
+                        },
+                         {
+                             label: 'D',
+                             name: 'D',
+                             width: 20,
+                             formatter: _lq.formatBNTF,
+                             cellattr: _lq.cellBN,
+                             align: 'center',
+                             firstsortorder: 'asc',
+                             sorttype: _lq.SortUBNDXTF,
+                             title: false,
+                             resizable: false
+                         },
+                          {
+                              label: 'X',
+                              name: 'X',
+                              width: 20,
+                              formatter: _lq.formatBNTF,
+                              cellattr: _lq.cellBN,
+                              align: 'center',
+                              firstsortorder: 'asc',
+                              sorttype: _lq.SortUBNDXTF,
+                              resizable: false
+                          },
+                        {
+                            label: 'XC',
+                            name: 'XC',
+                            width: 38,
+                            cellattr: _lq.cellLogBrdRed,
+                            title: 'Correct Zone',
+                            align: 'right',
+                            title: false,
+                            resizable: false
+                        },
+
+            ],
+
+            viewrecords: false, // show the current page, data rang and total records on the toolbar
+            scroll: 'false',
+            scrollrows: false,
+            //scroll: 1,
+            width: '592px',
+            height: 18,
+            //height: 'auto',
+            rowNum: 1,
+            datatype: 'local',
+            //data:_lq.mydata,
+            pager: "#jqGridQsoPager",
+            pgtext: null
+            //pgbuttons: true,
+            //pginput: true,
+            //autowidth: true,
+            //height: "auto",
+            //caption: "Load live data from stackoverflow"
+        });
+        //_lq.LogPageInfo.page = 1;
+        //_lq.LogPageInfo.
+
+        grid.jqGrid('setLabel', 'W', '', { 'text-align': 'center' },
+               { 'title': '1st or 2nd day of contest' });
+        grid.jqGrid('setLabel', 'T', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'I', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'F', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'XR', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'C', '', { 'text-align': 'center' });
+        //grid.jqGrid('setLabel', _lq.PZName, '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'Z', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'p', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'R', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'S', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'U', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'B', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'BC', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'N', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'D', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'X', '', { 'text-align': 'center' });
+        grid.jqGrid('setLabel', 'XC', '', { 'text-align': 'center' },
+               { 'title': 'Correct Zone' });
+
+        //var defaultData = [
+        //     {
+        //         W: 2, T: "02:28", I: "DL0SQ", F: 14170.1, XR: 1005, C: 1, Z: 0, P: 0, R: "R2", S: "STN2", U: 1, B: 1, BC: "DL0HQ", N: 1, D: 0, X: 1, XC: 1004,
+        //     },
+        //];
+
+
+        //var gridArrayData = [];
+        //var item = defaultData;
+        //gridArrayData.push({
+        //    W: item.W,
+        //    T: item.T,
+        //    I: item.I,
+        //    F: item.F,
+        //    XR: item.XR,
+        //    C: item.C,
+        //    Z: item.Z,
+        //    P: item.P,
+        //    R: item.R,
+        //    S: item.S,
+        //    U: item.U,
+        //    B: item.B,
+        //    BC: item.BC,
+        //    N: item.N,
+        //    D: item.D,
+        //    X: item.X,
+        //    XC: item.XC,
+        //});
+        ////}
+
+        //// set the default data
+        //grid.jqGrid('setGridParam', { data: gridArrayData });
+
+        $(".ui-jqgrid-bdiv").each(function () {
+            $(this).css( //chrome
+                 { "overflow-x": "hidden" });
+        });
+
+
+    }
 
 
     // _lq.gridHighlight = function () {
@@ -2470,6 +2936,8 @@ $(function () {
 
         if (reInit == true) {
             //grid.jqGrid('destroyGroupHeader');
+            // needed for switching P and Z column
+            //console.log('_lq.LogViewDraw2 Log reInit ');
             gridLog.jqGrid("GridUnload");
             //grid.jqGrid("GridDestroy");
             //grid.jqGrid('destroyGroupHeader');
@@ -2482,7 +2950,9 @@ $(function () {
                 _lq.LogScrollPosition = 0;
             }
 
-
+            //selects P or Z column
+            //cannot use grideCik becauise of 2 level header
+            //console.log('_lq.LogViewDraw2 Log reInit LogViewInit()');
             _lq.LogViewInit();
             _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs, 'Log');
             var mq = window.matchMedia("(min-width:" + _lq.minWidth + " )");
@@ -2491,8 +2961,8 @@ $(function () {
             //grid = $("#jqGridUBN");
             //disable zone filter if any wpx
             _lq.AdjustControlFiltersSettings(_lq.ControlFiltersSettingsDto);
-        } else
-        {
+
+        } else {
             if (_lq.LogScrollUpdateReqd != false) {
                 //reset scroll position if it is not a page refresh
                 _lq.LogScrollPosition = 0;
@@ -2501,16 +2971,54 @@ $(function () {
             }
         }
 
+
         // set the new data
+        var save = _lq.ActiveView;
+        if (save == 'Log') { //required for non IE
+            //chrome firefox do not add scrollbar in trigger('reloadGrid') if jquery-ui is not display:block
+            var tab = $("#TabViewUBN")
+            tab.css({
+                display: 'block',
+            });
+            //var block = tab.css("display");
+            //console.log('_lq.LogViewDraw2 UBN: block style ' + block);
+            //console.log('_lq.LogViewDraw2 UBN: visible style ' + tab.css("visibility") );
+        }
+
         grid.jqGrid('setGridParam', { data: data.records });
         //refresh the grid
         grid.trigger('reloadGrid');
+
+        if (save == 'Log') {
+            var tab = $("#TabViewUBN")
+            tab.css({ display: 'none' });
+        }
+
         _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs, 'UBN');
 
 
         //_lq.LogScrollUpdateReqd == false; //use saved
+
+
+        if (save == 'UBN') {//required for non IE
+            var tab = $("#TabViewLog")
+            tab.css({
+                display: 'block',
+            });
+        }
         gridLog.jqGrid('setGridParam', { data: data.records });
         gridLog.trigger('reloadGrid');
+        //gridLog.jqGrid("gridResize");
+
+        if (save == 'UBN') {
+            var tab = $("#TabViewLog")
+            tab.css({ display: 'none' });
+        }
+
+        //console.log('_lq.LogViewDraw2 Log reload grid');
+        //var rowcnt = gridLog.jqGrid("getGridParam", "records");
+        //console.log('_lq.LogViewDraw2 Log records ' + rowcnt);
+
         _lq.SetLogCallGroupdCalls(_lq.DataCallInfoDTOs, 'Log');
 
 
@@ -2520,7 +3028,7 @@ $(function () {
         _lq.I3Cnt = data.I3Cnt;
         var C1Cnt = 0, C2Cnt = 0, C3Cnt = 0;
         var PZ1Cnt = 0, PZ2Cnt = 0, PZ3Cnt = 0;
-        var PZ1Lbl = 'Zn', PZ2Lbl ='Zn', PZ3Lbl='Zn';
+        var PZ1Lbl = 'Zn', PZ2Lbl = 'Zn', PZ3Lbl = 'Zn';
         var U1Cnt = 0, U2Cnt = 0, U3Cnt = 0;
         var B1Cnt = 0, B2Cnt = 0, B3Cnt = 0;
         var N1Cnt = 0, N2Cnt = 0, N3Cnt = 0;
@@ -2543,7 +3051,7 @@ $(function () {
                     PZ1Cnt++;
                     PZ1Lbl = 'Zn';
                 }
-            }else {
+            } else {
                 if (item.P1 == true) {
                     PZ1Cnt++;
                     PZ1Lbl = 'Pre';
@@ -2555,13 +3063,13 @@ $(function () {
                     PZ2Cnt++;
                     PZ2Lbl = 'Zn';
                 }
-            }else {
+            } else {
                 if (item.P2 == true) {
                     PZ2Cnt++;
                     PZ2Lbl = 'Pre';
                 }
             }
-  
+
             if (_lq.PZLabel3 == 'Z') {
                 if (item.Z3 == true) {
                     PZ3Cnt++;
@@ -2667,7 +3175,7 @@ $(function () {
                         break;
                     case 'jqGridPager_center':
                         valueOfElement.innerHTML = '<span style="float: left;padding-left:20%;color:#ff6a00;font-size:.785em">' +
-                           /* _lq.DataCallInfoDTOs[1].SelectedCall +*/ 'Qso:' + _lq.I2Cnt.toString() + 
+                           /* _lq.DataCallInfoDTOs[1].SelectedCall +*/ 'Qso:' + _lq.I2Cnt.toString() +
                                 '&nbsp;&nbsp;Cty:' + C2Cnt.toString() +
                                 '&nbsp;&nbsp;' + PZ2Lbl + ':' + PZ2Cnt.toString() + ' </span>';
                         break;
@@ -2681,7 +3189,7 @@ $(function () {
                     default:
 
                 };
-        })    
+            })
 
         $(window).resize();
 
@@ -2693,14 +3201,32 @@ $(function () {
     //Formatters
     _lq.formatCall = function (cellValue, options, rowObject) {
         if (cellValue != null) {
-            cellValue = "<span style= 'font-family: ArialSlashZero, Fallback, Arial; '>" + cellValue + "</span>";
+            if (_lq.ie11 > 0) {
+                //ie11 doesnot load ArialSlashZero fontface 
+                //see ArialSlashZero font-family.txt
+                cellValue = "<span style= 'font-family: ArialSlashZero,  Consolas; font-size:1.1em;' >" + cellValue + "</span>";
+            } else {
+                cellValue = "<span style= 'font-family: ArialSlashZero;' >" + cellValue + "</span>";
+                //cellValue = "<span style= 'font-family: ArialSlashZero,  Consolas; font-size:1.0em;' >" + cellValue + "</span>";
+            }
         } else {
-        cellValue = "<span style= 'font-family: ArialSlashZero, Fallback, Arial; '>" + cellValue + "</span>";
+            //cellValue = "<span style= 'font-family: ArialSlashZero,  Arial; '>" + cellValue + "</span>";
             cellValue = "";
         }
         return cellValue;
 
     }
+
+    _lq.formatFreq = function (cellValue, options, rowObject) {
+        if (cellValue != null) {
+            cellValue = Math.round(cellValue);
+        } else {
+            cellValue = "";
+        }
+        return cellValue;
+
+    }
+
 
     _lq.formatTF = function (cellValue, options, rowObject) {
         if (cellValue == 1) {
@@ -2798,6 +3324,16 @@ $(function () {
             case 'P3':
                 val = rdata.P3;
                 break;
+            case 'C':
+                val = rdata.C;
+                break;
+            case 'Z':
+                val = rdata.Z;
+                break;
+            case 'P':
+                val = rdata.P;
+                break;
+
             default:
 
         }
@@ -2808,6 +3344,11 @@ $(function () {
         }
         return cellValue;
     };
+
+    _lq.cellLogBrdRed = function (rowid, val, rawObject, cm, rdata) {
+        var cellValue;
+        return cellValue = ' class="lq-LogBrdRed" ';
+    }
 
     _lq.cellBrdBlkDbl = function (rowid, val, rawObject, cm, rdata) {
         var cellValue;
@@ -2838,11 +3379,14 @@ $(function () {
             case 'U3':
                 val = rdata.U3;
                 break;
+            case 'U':
+                val = rdata.U;
+                break;
             default:
 
         }
         if (val == 1) {
-            cellValue = ' class="lq-LogBrdRed"' +  'style="background:#fef90d;"';
+            cellValue = ' class="lq-LogBrdRed"' + 'style="background:#fef90d;"';
         } else {
             cellValue = ' class="lq-LogBrdRed " ';
         }
@@ -2868,6 +3412,10 @@ $(function () {
                 val = rdata.B3;
                 Title = rawObject.BC3;
                 break;
+            case 'B':
+                val = rdata.B;
+                Title = rawObject.BC;
+                break;
             case 'N1':
                 val = rdata.N1;
                 break;
@@ -2877,6 +3425,9 @@ $(function () {
             case 'N3':
                 val = rdata.N3;
                 break;
+            case 'N':
+                val = rdata.N;
+                break;
             case 'D1':
                 val = rdata.D1;
                 break;
@@ -2885,6 +3436,9 @@ $(function () {
                 break;
             case 'D3':
                 val = rdata.D3;
+                break;
+            case 'D':
+                val = rdata.D;
                 break;
             case 'X1':
                 val = rdata.X1;
@@ -2898,12 +3452,16 @@ $(function () {
                 val = rdata.X3;
                 Title = rawObject.XC3;
                 break;
+            case 'X':
+                val = rdata.X;
+                Title = '';
+                break;
             default:
 
         }
         if (val == 1) {
             if (Title != null) {
-                cellValue = 'title= "' + Title +'" class=" lq-LogBrdRed " ' + 'style="background:lightcoral;"';
+                cellValue = 'title= "' + Title + '" class=" lq-LogBrdRed " ' + 'style="background:lightcoral;"';
             } else {
                 cellValue = 'title= "" class=" lq-LogBrdRed " ' + 'style="background:lightcoral;"';
             }
@@ -2920,7 +3478,7 @@ $(function () {
         if (cm.label == 'R') {
             switch (name) {
                 case "R1":
-                    switch(rdata.R1) {
+                    switch (rdata.R1) {
                         case 'Run':
                             cellValue += 'style="background:#fcae77;font-size:.643em;"';
                             break;
@@ -3024,6 +3582,44 @@ $(function () {
         return cellObj;
     }
 
+    _lq.CellSelect = function (obj, rowId, iCol, content, event) {
+        //http://stackoverflow.com/questions/27633524/jqgrid-how-to-write-cell-click-event
+        var $self = obj, colModel = $self.jqGrid("getGridParam", "colModel");
+        //var rowcnt = $self.jqGrid("getGridParam", "reccount");
+        var rowData = $self.jqGrid("getRowData", rowId);
+        if (content != '') {
+            var call = jQuery.parseHTML(content)[0].innerText;
+
+            if (colModel[iCol].label === "Call") {
+                _lq.QsoInfoRequest = {
+                    call: call,
+                    freq: '',
+                    day: rowData.W,
+                    time: rowData.T,
+                }
+
+                switch (colModel[iCol].name) {
+                    case 'I1':
+                        //var test = _lq.DataCallInfoDTOs[0].SelectedContestName;
+                        //alert("OK on " + test + ": " + call);
+                        _lq.QsoInfoRequest.freq = rowData.F1;
+                        _lq.ShowCallQsoPopup(call, 'Call1', _lq.QsoInfoRequest, rowId, iCol, event);
+                        break;
+                    case 'I2':
+                        _lq.QsoInfoRequest.freq = rowData.F2;
+                        _lq.ShowCallQsoPopup(call, 'Call2', _lq.QsoInfoRequest, rowId, iCol, event);
+                        break;
+                    case 'I3':
+                        _lq.QsoInfoRequest.freq = rowData.F3;
+                        _lq.ShowCallQsoPopup(call, 'Call3', _lq.QsoInfoRequest, rowId, iCol, event);
+                        break;
+
+                    default:
+                }
+
+            }
+        }
+    };
 
 
     _lq.LogViewDraw = function () {
@@ -3072,9 +3668,9 @@ $(function () {
 
 
 
-// CONTROL
-    _lq.getAllControls = function() {
-        _lq.ajaxHelper(_lq.controlUri + "/GetControlNames", 'GET', 'json', true,'application/json', null, getAllControlsLoad);
+    // CONTROL
+    _lq.getAllControls = function () {
+        _lq.ajaxHelper(_lq.controlUri + "/GetControlNames", 'GET', 'json', true, 'application/json', null, getAllControlsLoad);
 
         function getAllControlsLoad(data) {
             //console.log(data.ControlCategoryDto.CatOperator);
@@ -3366,7 +3962,8 @@ $(function () {
         } else if (Controlid.indexOf("Yaxis") >= 0) {
             switch (Controlid) {
                 case "YaxisFunction":
-                    _lq.ControlYaxisSettingsDto.YaxisFunction = value;
+                    var val = SelectedValue.replace("&nbsp;&nbsp;", "  ");
+                    _lq.ControlYaxisSettingsDto.YaxisFunction = val;
                     _lq.ControlYaxisSettingsDto.YaxisFunctionIndex = $('#YaxisFunction').prop("selectedIndex");
                     break;
                 case "YaxisInterval":
@@ -3394,6 +3991,13 @@ $(function () {
                 _lq.LogScrollPosition = 0;
                 window.sessionStorage.setItem('_lq.LogScrollPosition', _lq.LogScrollPosition);
                 _lq.LogScrollUpdateReqd = false;  //force stored position
+            }
+
+            //scroll Ubn to top
+            if (_lq.UbnScrollUpdateReqd == true) {
+                _lq.UbnScrollPosition = 0;
+                window.sessionStorage.setItem('_lq.UbnScrollPosition', _lq.UbnScrollPosition);
+                _lq.UbnScrollUpdateReqd = false;  //force stored position
             }
 
             _lq.SessionSaveControlSettings();
@@ -3455,7 +4059,7 @@ $(function () {
             }
             if (NoZone == true) {
                 _lq.SelectMenuState("#FiltCQZone", "disable");
-            }else {
+            } else {
                 if (ControlFiltersSettingsDto.FiltCQZone != 'ALL') {
                     _lq.SelectMenuState("#FiltCountry, #FiltContinent", "disable");
                 }
@@ -3705,7 +4309,7 @@ $(function () {
 
     //DATA
 
-    _lq.getAllData = function() {
+    _lq.getAllData = function () {
         //check if cached
         dataobj = window.sessionStorage.getItem(_lq.DataCallInfoDTOs);
         if (dataobj != null) {
@@ -3717,7 +4321,7 @@ $(function () {
 
     }
 
-    _lq.SetCallInfoObjDataSettings = function(data) {
+    _lq.SetCallInfoObjDataSettings = function (data) {
         if (data.length > 3) {
             //popup dialog selection box, to select whivh saved session
             //noy implemented yet
@@ -3758,7 +4362,7 @@ $(function () {
 
     }
 
-    _lq.SetContestinfo = function(index, data) {
+    _lq.SetContestinfo = function (index, data) {
         var olWWs = $("div[id= WWssblist] ol.two-col-list")
         var olWWc = $("div[id= WWcwlist] ol.two-col-list")
         var olWPX = $("div[id= WPXlist] ol.two-col-list")
@@ -3791,7 +4395,7 @@ $(function () {
         $.each(data.RadioNames, function (key, val) {
             if (val.disabled == false) {
                 $select.append('<option value = ' + val.value + '>' + val.value + '</option>');
-                
+
             } else {
                 $select.append('<option value = ' + val.value + ' disabled >' + val.value + '</option>');
 
@@ -3808,7 +4412,7 @@ $(function () {
             _lq.DataCallInfoDTOs[i].QsoRadioType = DataCallInfoObj.QsoRadioType;
             _lq.DataCallInfoDTOs[i].Disabled = DataCallInfoObj.Disabled;
             _lq.DataCallInfoDTOs[i].LogId = DataCallInfoObj.LogId;
-        } 
+        }
 
         _lq.ChartUpdateReqd = false;
         switch (DataCallInfoObj.CallGroup) {
@@ -3957,7 +4561,7 @@ $(function () {
                     _lq.DataCallInfoDto4.SelectedContestName = SelectedValue;
                     DataCallInfoDto1 = _lq.DataCallInfoDto4;
                     tabNo = 'tabs4';
-                    $("#Call4").button( "enable" );
+                    $("#Call4").button("enable");
                     break;
                 case "Call1":
                     _lq.DataCallInfoDTOs[0].SelectedCall = SelectedValue;
@@ -4033,7 +4637,7 @@ $(function () {
 
             //now update graph
             _lq.UpdateChartData(false);
-            if (_lq.ActiveView == "UBN" || (_lq.ActiveView == "Log") ) {
+            if (_lq.ActiveView == "UBN" || (_lq.ActiveView == "Log")) {
                 if (_lq.LogUpdateReqd == true) {
                     _lq.GetContestLogs();
                 } else {
@@ -4045,7 +4649,7 @@ $(function () {
 
     }
 
-    _lq. LoadInitialCallTab= function(event, ui) {
+    _lq.LoadInitialCallTab = function (event, ui) {
         //function LoadCallTab(actDiv, Callgroup) {
         var actDiv = ui.panel[0].id;
         var tabNo = event.target.id;
@@ -4072,7 +4676,7 @@ $(function () {
 
     }
 
-    _lq.LoadCallTab = function(event, ui) {
+    _lq.LoadCallTab = function (event, ui) {
         //function _lq.LoadCallTab(actDiv, Callgroup) {
         var actDiv = ui.newPanel[0].id;
         var tabNo = event.target.id;
@@ -4253,6 +4857,7 @@ $(function () {
         var dataObj = {
             DataCallInfoDto: _lq.DataCallInfoDTOs,
             ControlSettingsDto: _lq.ControlSettingsDto = {
+                force: false,
                 ControlCategorySettingsDto: _lq.ControlCategorySettingsDto,
                 ControlFiltersSettingsDto: _lq.ControlFiltersSettingsDto,
                 ControlXaxisSettingsDto: _lq.ControlXaxisSettingsDto,
@@ -4381,11 +4986,11 @@ $(function () {
         if (c > 48 && c <= 57) {
             actDiv = 'CTab1'
         } else {
-            actDiv = 'CTab' + data.SelectedCall.substring(0, 1); 
+            actDiv = 'CTab' + data.SelectedCall.substring(0, 1);
         }
 
 
-        
+
         var Tabdiv = $('div[id =' + tabNo + '] div[id=' + actDiv + ']')
         Tabdiv.addClass('TabDivLiCol');
         var list = "list" + actDiv;
@@ -4458,6 +5063,214 @@ $(function () {
         }
 
     };
+
+    //get calls
+    _lq.GetQsoData = function (QsoInfo, CallGroup) {
+        var CallIndex;
+        switch (CallGroup) {
+            case 'Call1':
+                CallIndex = 0;
+                break;
+            case 'Call2':
+                CallIndex = 1;
+                break;
+            case 'Call3':
+                CallIndex = 2;
+                break;
+            default:
+
+        }
+
+        var DataCallInfoDto0 = _lq.DataCallInfoDTOs[CallIndex];
+        if (_lq.DataCallInfoDTOs[CallIndex].SelectedContestName.indexOf('wpx') > 0) {
+            //prefix column
+            if (_lq.PZLabel == 'Z') {
+                _lq.PZLabel = 'P'; _lq.PZName = 'P';
+            }
+        } else {
+            // Zone column
+            if (_lq.PZLabel == 'P') {
+                _lq.PZLabel = 'Z'; _lq.PZName = 'Z';
+            }
+        }
+
+        var dataObj = {
+            DataCallInfoDto: DataCallInfoDto0,
+            //ControlSettingsDto: _lq.ControlSettingsDto,
+            QsoInfoRequest: QsoInfo
+        }
+
+
+        _lq.ajaxHelper(_lq.dataUri + '/GetQsoInfoRequest', 'POST', 'json', false, 'application/json', dataObj, _lq.UpdateQsoGrid);
+        return _lq.DataCallInfoDTOs[CallIndex].SelectedCall;
+    };
+
+    //TEST DATA
+    _lq.mydata = [
+         {
+             W: 2, T: "02:28", I: "DL0SQ", F: 14170.1, XR: 1005, C: 1, Z: 0, P: 0, R: "R2", S: "STN2", U: 1, B: 1, BC: "DL0HQ", N: 1, D: 0, X: 1, XC: 1004,
+         },
+         //{
+         //    D: "1", Time: "00:00", Call1: "F6ARC", Freq1: "14171", C1: "0", Z1: "1",
+         //},
+
+    ];
+
+    _lq.UpdateQsoGrid = function (dataobj) {
+        var gridArrayData = [];
+        var grid = $("#jqGridQso");
+        ////for (var i = 0; i < dataobj.length; i++) {
+        var item = dataobj;
+        gridArrayData.push({
+            W: item.W,
+            T: item.T,
+            I: item.I,
+            F: item.F,
+            XR: item.XR,
+            C: item.C,
+            Z: item.Z,
+            P: item.P,
+            R: item.R,
+            S: item.S,
+            U: item.U,
+            B: item.B,
+            BC: item.BC,
+            N: item.N,
+            D: item.D,
+            X: item.X,
+            XC: item.XC,
+        });
+        //}
+
+        // set the new data
+        grid.jqGrid('setGridParam', { data: gridArrayData });
+
+        //grid.jqGrid('setGridParam', { data: dataobj });
+        // hide the show message
+        //grid[0].grid.endReq();
+        //refresh the grid
+
+        grid.trigger('reloadGrid');
+
+
+    }
+
+
+
+
+    _lq.ShowCallQsoPopup = function (Call, CallGroup, QsoInfo, rowId, iCol, e) {
+        e.preventDefault();
+
+        _lq.parent_modal_box_id = e.currentTarget.id;
+        puwidth = 608;
+        var SelectedCall = _lq.GetQsoData(QsoInfo, CallGroup);
+        //$("#jqGridQso").jqGrid("clearGridData");
+
+        //CONCLUSION
+        // IF YOU HIDE Z OR P COLUMN ON NOTE2 CHROME, SCRREN JUMPS ON 1st TAP OF CALL
+        //on chrome note 2 the screen jumps to the top when you touch a call
+        // thus happens with hidecols here followed by a QsoInit()
+        //  after you scroll down, the screen does not jump, if you tap another call in the same callgroup
+        // or all call groups point to the sam contest
+        // in addition, if you do not hide colums and only call QsiInit() on line 50
+        // the phone does not jump on first touch
+
+        if (_lq.PZName == 'P') {
+            $("#jqGridQso").jqGrid('hideCol', ["Z"]);
+            $("#jqGridQso").jqGrid('showCol', ["P"]);
+        } else {
+            $("#jqGridQso").jqGrid('hideCol', ["P"]);
+            $("#jqGridQso").jqGrid('showCol', ["Z"]);
+        }
+
+        //$("#jqGridQso").jqGrid("GridUnload");
+
+        //_lq.QsoInit();
+        var bodywidth = $('#body')[0].clientWidth;
+        if (puwidth + 10 > bodywidth) {
+            puwidth = bodywidth - 10;
+        }
+        var cell = $("table[id=" + _lq.parent_modal_box_id + "]" + " tr[id=" + rowId + "]");
+        //http://stackoverflow.com/questions/9945454/edit-cell-properties-in-jqgrid/9946955#9946955
+        //var $dest = $(e.target), td = $dest.closest('td');
+        //var hdr = $("div[id= jqgh_jqGridUBN_W]");
+
+        var table = $("table[id=" + _lq.parent_modal_box_id + "]");
+        var Offsets = table.offset();
+        //var rects = table[0].getClientRects();
+        //var newleft = e.clientX - puwidth;
+        //newleft = (newleft < 0) ? Offsets.left : newleft;
+
+        //var newTop = e.clientY + 20;
+        //newTop = (newTop > (table[0].clientHeight - 100) ? e.clientY - 80 : newTop);
+        //newleft = Offsets.left;
+        //newTop = Offsets.top;
+
+
+        //var r = hdr[0].getBoundingClientRect();
+        //newleft = r.left;
+        //newTop = r.top;
+
+        /       ///This works
+        ////var pageX = e.pageX;
+        ////var pageY = e.pageY;
+        ////if (pageX === undefined) {
+        ////    pageX = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+        ////    pageY = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        ////}
+        ////newleft = pageX - puwidth;
+        ////newleft = (newleft < 0) ? Offsets.left : newleft;
+        ////newTop = pageY + cell[0].clientHeight;
+
+        //http://www.jacklmoore.com/notes/mouse-position/
+        e = jQuery.event.fix(e);
+
+
+        newleft = e.pageX - puwidth;
+        newleft = (newleft < 0) ? Offsets.left : newleft;
+        newTop = e.pageY + cell[0].clientHeight;
+        //newTop = (newTop > (cell[0].clientHeight * 18) ? newTop - 40 : newTop);
+
+
+        var Qdiv = $('div[id=gridQso]');
+        var popupNo = 'popupQso';
+
+        $('#' + popupNo).css({
+            position: "absolute",
+            top: newTop + "px",
+            left: newleft + "px"
+
+            //top: newTop,
+            //left: newleft,
+        }).css('width', puwidth + 'px');
+        $("body").append(_lq_appendthis);
+
+        $('#' + popupNo + ' div.ui-jqgrid-hdiv').css('width', puwidth - 10 + 'px');
+        $('#' + popupNo + ' div[id=gbox_jqGridQso').css('width', puwidth - 10 + 'px');
+
+        $(".modal-overlay").fadeTo(500, 0.7);
+
+        //style popup
+        var modalBox = $('#' + popupNo + '');
+        var popup = $('#' + popupNo + ' h5');
+
+
+        popup.html(SelectedCall + " Qso \u27af   " + Call);
+        popup.addClass('lq-popup-hdr');
+
+        //var msg = $('#' + popupNo + ' h5');
+        //msg.html("Offsets.left/Top: " + Offsets.left + " / " + Math.round(Offsets.top) + "--- " + 'clientX/Y: ' + e.clientX + " / " + e.clientY
+        //    + "--- " + 'PageX/Y: ' + e.pageX + " / " + e.pageY  );
+
+
+        $('#' + popupNo).fadeIn($(this).data());
+        //$('#' + popupNo).css(
+        //    'display', "inline-block"
+        //    );
+    };
+
+
+
 
 
 }(window._lq = window._lq || {}, jQuery));

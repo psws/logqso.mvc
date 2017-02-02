@@ -39,7 +39,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
     public class IntegrationDataRepositoryTests
     {
        // private readonly string CatOprName = "Hello Test";
-        private IRepositoryAsync<Logqso.mvc.Entities.LogDataEntity.Log> _logRepository;
+        //private IRepositoryAsync<Logqso.mvc.Entities.LogDataEntity.Log> _logRepository;
         //private Guid guid;
         int LogId = 1;
 

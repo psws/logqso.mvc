@@ -33,11 +33,11 @@ namespace Logqso.mvc.ui.Helpers
             var value = HtmlHelper.ViewContext.HttpContext.Request.QueryString.Get("View");
             if (value == null)
             {
-                value = "UBN";
+                value = "Chart";
             }
             switch (value)
             {
-                case "Chaet":
+                case "Chart":
                     TabView = "Chart";
                     break;
                 case "Log":

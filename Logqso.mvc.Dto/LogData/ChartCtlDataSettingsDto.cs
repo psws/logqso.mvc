@@ -15,7 +15,7 @@ namespace Logqso.mvc.Dto.LogData
 
     public class ControlSettingsDto
     {
-        bool force;
+        bool force { get; set; }
         public ControlCategorySettingsDto ControlCategorySettingsDto { get; set; }
         public ControlFiltersSettingsDto ControlFiltersSettingsDto { get; set; }
         public ControlXaxisSettingsDto ControlXaxisSettingsDto { get; set; }

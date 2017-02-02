@@ -41,12 +41,14 @@ namespace Logqso.mvc.ui
 
             //issues with Postdata
            bundles.Add(new ScriptBundle("~/bundles/jqgrid").Include(
-                        "~/Scripts/free-jqGrid/i18n/grid.locale-en.js",
+                         //"~/Scripts/lodash.js",
+                       "~/Scripts/free-jqGrid/i18n/grid.locale-en.js",
                        "~/Scripts/free-jqGrid/jquery.jqgrid.src.js"));
            
             
             bundles.Add(new ScriptBundle("~/bundles/logqso").Include(
-                        "~/Scripts/jqxcore.js",
+                         //"~/Scripts/Neteria/videopopup.js",
+                       "~/Scripts/jqxcore.js",
                         //"~/Scripts/jqxtabs.js",
                         "~/Scripts/logqso.js"));
 
@@ -68,6 +70,7 @@ namespace Logqso.mvc.ui
                     "~/Content/Themes/Stock/jquery-ui.css",
                      "~/Content/site.css",
                      "~/Content/jquery.jqGrid/ui.jqgrid-bootstrap.css",
+                      "~/Content/videopopup.css",
                        "~/Content/themes/jqx.base.css",
                       "~/Content/themes/jqx.energyblue.css",
                         "~/Content/logqso.css"));
@@ -91,7 +94,8 @@ namespace Logqso.mvc.ui
                                stylePath,
                       "~/Content/jquery.jqGrid/ui.jqgrid-bootstrap.css",
                              "~/Content/site.css",
-                            "~/Content/themes/jqx.base.css",
+                       "~/Content/videopopup.css",
+                           "~/Content/themes/jqx.base.css",
                             "~/Content/themes/jqx.energyblue.css",
                               "~/Content/logqso.css"));
                    break;
@@ -103,7 +107,8 @@ namespace Logqso.mvc.ui
                                 "~/Content/themes/Stock/jquery-ui.css",
                               stylePath,
                        "~/Content/jquery.jqGrid/ui.jqgrid-bootstrap.css",
-                            "~/Content/site.css",
+                       "~/Content/videopopup.css",
+                           "~/Content/site.css",
                              "~/Content/themes/jqx.base.css",
                              "~/Content/themes/jqx.energyblue.css",
                             "~/Content/logqso.css"));
@@ -117,6 +122,7 @@ namespace Logqso.mvc.ui
                            stylePath,
                     "~/Content/jquery.jqGrid/ui.jqgrid-bootstrap.css",
                          "~/Content/site.css",
+                      "~/Content/videopopup.css",
                           "~/Content/themes/jqx.base.css",
                           "~/Content/themes/jqx.energyblue.css",
                          "~/Content/logqso.css"));

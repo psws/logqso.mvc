@@ -24,6 +24,7 @@ namespace Logqso.mvc.domain.Interfaces
             Task<MemoryStream> UpdateChartSettingsAsync(ChartCtlDataSettingsDto ChartCtlDataSettingsDto, string username);
             Task<DataCalls> GetCategorizedCallsAsync(dataCallObjDTO dataCallObjDTO, string Username);
             Task<DataCallInfoDto> GetUpdatedContestCall(DataCallInfoDto dataCallObjDTO, string Username);
+            Task<QsoInfoDto> GetQsoInfoRequest(QsoInfoRequestDto QsoInfoRequestDto, string Username);
             Task<LogPageDTO> GetContestLogs(LogCtlDataSettingsDto LogCtlDataSettingsDto, string Username);
             Task<bool> ValiadateWintestStnUpload(DataCallInfoDto DataCallInfoDto, string originalFileName, string Filepath);
             Task<bool> ProcessWintestStnUpload(int LogId, string UpLoadedFile);

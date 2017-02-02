@@ -20,7 +20,7 @@
             <div class="panel panel-default" id="Pnl1">
                 <div class="panel-heading " id="hdgPnl1">
                     <label class="panel-title lq-inline">
-                        Contest Call Category Selection
+                        Contest Call Category Filtering
                     </label>
                     <span id="enb_dis1">
                         <label for="filtercatchk" class="lq-inline">Disable </label>
@@ -29,7 +29,9 @@
                     <button id="CatDft" class=" btn-group-xs btn-default">
                         Defaults
                     </button>
-
+                    <button id="Vid_Category" data-modal-id="puVidCategory" class=" btn-group-xs btn-default  lq-help" title="Help for Call Category Filtering Selection">
+                        help
+                    </button>
                 </div>
                 <div class="panel-body " id="bdyPnlSell1">
                     <fieldset>
@@ -53,7 +55,6 @@
                             <label for="CatTX"># of TX</label>
                             <select name="CatTX" id="CatTX"></select>
                         </div>
-
                     </fieldset>
                 </div>
             </div>
@@ -69,6 +70,9 @@
                     </span>
                     <button id="QsoDft" class=" btn-group-xs btn-default">
                         Defaults
+                    </button>
+                    <button id="Vid_Filter" data-modal-id="puVidFilter" class=" btn-group-xs btn-default  lq-help" title="Help for Qso Filter Selection">
+                        help
                     </button>
 
                 </div>
@@ -90,8 +94,7 @@
                             <label for="FiltCQZone">CQ Zone</label>
                             <select name="FiltCQZone" id="FiltCQZone"></select>
                         </div>
-
-                    </fieldset>
+                  </fieldset>
                 </div>
             </div>
 
@@ -105,13 +108,16 @@
                     <h3 class=" panel-title ">
                         Call1
                     </h3>
-                </div>
+               </div>
                 <div id="bdyPnl3" class="panel-body">
                     <fieldset>
-                        <label for=" contest1" id="test2">
+                        <label for=" contest1" id="test2" class="lq-inline">
                             Contest
                         </label>
-                        <div>
+                        <button id="Vid_Call1" data-modal-id="puVidCall1" class=" btn-group-xs btn-default  lq-help" title="Help for Call1, Call2, Call3 Selection">
+                            help
+                        </button>
+                       <div>
                             <button id="Contest1" data-modal-id="popup"></button>
                         </div>
                         <label class="lq-inline" for="Call1">Call</label>
@@ -210,19 +216,27 @@
                     </ul>
                     <div id="TabViewChart">
                         <img id="ChartRate" class="img-responsive lq-graph" alt="Standby">
-                    </div>
+                        <button id="Vid_Chart" data-modal-id="puVidChart" style="font-size:80%;" class=" btn-group-xs btn-default lq-help lq-helpTab" title="Help for Chart Tab">
+                            help
+                        </button>
+                   </div>
                     <div id="TabViewLog">
 
-                        <table id="jqGridLog"></table>
+                        <table id="jqGridLog" class="scrollbar"></table>
                         <div id="jqGridPager"></div>
-                    </div>
+                        <button id="Vid_Log" data-modal-id="puVidLog" style="font-size:80%;" class=" btn-group-xs btn-default lq-help lq-helpTab" title="Help for viewing Log Multipliers">
+                            help
+                        </button>
+                   </div>
                     <div id="TabViewUBN">
 
-                        <table id="jqGridUBN"></table>
+                        <table id="jqGridUBN" class="scrollbar"></table>
                         <div id="jqGridUBNPager"></div>
-                    </div>
+                        <button id="Vid_Ubn" data-modal-id="puVidUbn" style="font-size:80%;" class=" btn-group-xs btn-default lq-help lq-helpTab" title="Help for viewing the generated Ubn">
+                            help
+                        </button>
+                   </div>
                     <div id="TabViewStats">
-
                         <table id="jqGridStats"></table>
                         <div id="jqGridStatsPager"></div>
                     </div>
@@ -242,10 +256,10 @@
                                         <button id="Call4" name='Call4' data-modal-id="popupCall4" disabled></button>
                                     </div>
                                     <div class="lq-inline-block" style="height:25px;margin-top:20px;">
-                                        <label >File</label>
+                                        <label>File</label>
                                         <input type="file" id="FileInputWT" name="FileInputWT" class="lq-FileInput ui-state-default" accept=".csv" disabled />
-                                        <label for="FileInputWT" >&nbsp;Select File to Upload&nbsp;</label>
-                                   </div>
+                                        <label for="FileInputWT">&nbsp;Select File to Upload&nbsp;</label>
+                                    </div>
                                     <br />
                                     <div class="lq-inline">
                                         <div id="FileBlkWT" name="FileBlkWT" style="display:none;">
@@ -257,20 +271,23 @@
                                         <br />
                                         <input type="button" id="UploadWintest" name="UploadWintest" class="lq-button-big " disabled value="UPLOAD" />
                                     </div>
-                               </fieldset>
+                                </fieldset>
                                 <div id="FileStskWT" name="FileStskWT" style="display:none;">
                                     <p>
                                         The File has been sucessfuly uploaded to ContestQso.com. It will be
                                         processed and stored in the Database. Please retunr to the 'Log' tab,
-                                        after 5-10 minutes.  Your Call Selection( orange or blue or green) box, on the Log tab, will  allow you to filter 
-                                       Qsos by Station name. The station choices will match the names you use at your station.
-                                        If the station name is more than 7 characters, it will be shortened. 
+                                        after 5-10 minutes.  Your Call Selection( orange or blue or green) box, on the Log tab, will  allow you to filter
+                                        Qsos by Station name. The station choices will match the names you use at your station.
+                                        If the station name is more than 7 characters, it will be shortened.
 
                                     </p>
 
                                 </div>
                             </div>
                         </div>
+                        <button id="Vid_Up" data-modal-id="puVidUp" style="font-size:80%;" class=" btn-group-xs btn-default lq-help lq-helpTab" title="Help for Uploading Wintest file">
+                            help
+                        </button>
                     </div>
                 </div>
             </div>
@@ -289,6 +306,9 @@
 
                         <button id="AxisDft" class=" btn-group-xs btn-default">
                             Defaults
+                        </button>
+                        <button id="Vid_YAxis" data-modal-id="puVidYaxis" class=" btn-group-xs btn-default  lq-help" title="Help for View Axis Selection">
+                            help
                         </button>
 
                     </div>
@@ -318,9 +338,11 @@
                         <label class="panel-title lq-inline">
                             Time Scale Selection
                         </label>
-
                         <button id="XAxisDft" class=" btn-group-xs btn-default">
                             Defaults
+                        </button>
+                        <button id="Vid_XAxis" data-modal-id="puVidXaxis" class=" btn-group-xs btn-default  lq-help" title="Help for Time Scale Selection">
+                            help
                         </button>
 
                     </div>
@@ -378,6 +400,25 @@
             CQ Wpx
         </h5>
         <ol class="two-col-list"></ol>
+    </div>
+    @*<footer>
+            <a href="#" class="js-modal-close">Close Button</a>
+        </footer>*@
+</div>
+
+<div id="popupQso" class="modal-box  clear ">
+    <header>
+        <a href="#" class="js-modal-close close" title="Cancel selection">X</a>
+        <h5 class="gridQsoView"> Title</h5>
+    </header>
+    <div id="Qsolist" class=" modal-body">
+        @*<h5 class="lq-popup-subhdr">
+            </h5>*@
+        <div id='gridQso'>
+            <table id="jqGridQso"></table>
+            @*<div id="jqGridQsoPager"></div>*@
+        </div>
+
     </div>
     @*<footer>
             <a href="#" class="js-modal-close">Close Button</a>
@@ -460,6 +501,72 @@
         </div>
     </div>
 </div>
+
+
+
+<div id="puVidCategory" class="VidDiv">
+    <div id="VideoCont" >
+        <video id="VCatId" controls="controls" src="~/video/introduction.mp4" type="video/mp4">
+        </video>
+    </div>
+</div>
+
+<div id="puVidFilter" class="VidDiv">
+    <div id="VideoCont">
+        <video id="VFiltId" controls="controls" src="~/video/test.mp4" type="video/mp4">
+        </video>
+    </div>
+</div>
+
+<div id="puVidYaxis" class="VidDiv">
+    <div id="VideoCont">
+        <video id="VYaxisId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+    </div>
+</div>
+
+<div id="puVidXaxis" class="VidDiv">
+    <div id="VideoCont">
+        <video id="VXaxisId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+    </div>
+</div>
+
+<div id="puVidCall1" class="VidDiv">
+    <div id="VideoCont">
+        <video id="VCall1Id" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+    </div>
+</div>
+
+<div id="puVidChart" class="VidDiv">
+    <div id="VideoCont">
+        <video id="VChartId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+    </div>
+</div>
+
+<div id="puVidLog" class="VidDiv">
+    <div id="VideoCont">
+        <video id="VLogId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+    </div>
+</div>
+
+<div id="puVidUbn" class="VidDiv">
+    <div id="VideoCont">
+        <video id="VUbnId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+    </div>
+</div>
+
+<div id="puVidUp" class="VidDiv">
+    <div id="VideoCont">
+        <video id="VUpId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
+    </div>
+</div>
+<div id="puVidIntro" class="VidDiv">
+    <div id="VideoCont">
+        <video id="VIntroId" controls="controls" src="~/video/introduction.mp4" type="video/mp4"></video>
+    </div>
+</div>
+
+
+
 
 
 

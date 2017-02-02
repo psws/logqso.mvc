@@ -258,7 +258,7 @@ namespace Repository.Pattern.Ef6
             int? pageSize = null)
         {
 
-            return Select(filter, orderBy, includes, true);
+            return Select(filter, orderBy, includes, tracking);
         }
 
 

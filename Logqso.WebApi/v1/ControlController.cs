@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.Results;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Logqso.mvc.domain.Interfaces;
 using Repository.Pattern.UnitOfWork;
 using Logqso.mvc.Dto.LogControl;
@@ -174,8 +175,9 @@ namespace Logqso.WebApi
                     //return Ok(ContestControlEntity);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                Debug.WriteLine(string.Format("SendControlSelections() exception {0}", ex.Message)); 
                 _unitOfWorkAsync.Rollback();
                 return Ok(false);
 
@@ -227,8 +229,9 @@ namespace Logqso.WebApi
 
                     _unitOfWorkAsync.Commit();
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
+                    Debug.WriteLine(string.Format("Post() exception {0}", ex.Message));
                     _unitOfWorkAsync.Rollback();
                 }
         }

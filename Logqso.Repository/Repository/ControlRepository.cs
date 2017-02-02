@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Logqso.mvc.Exceptions;
+
 using System.Threading.Tasks;
 using Logqso.mvc.Entities.LogControlEntity;
 using Repository.Pattern.Ef6;
@@ -52,9 +54,10 @@ namespace Logqso.Repository
             }
             catch (Exception ex)
             {
-                
-                throw;
+                FunctionException e = new FunctionException("GetContestCategoryNames()", ex.InnerException);
+                throw e;
             }
+
         }
 #if false
         public static List<CatOperator> GetContestCategorys(this IRepository<CatOperator> repository)

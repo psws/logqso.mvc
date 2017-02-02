@@ -16,7 +16,7 @@
 /*jslint
     browser, devel, for, multivar, this, white
 */
-/*global jQuery, define */
+/*global jQuery, define, exports, require */
 
 (function (factory) {
 	"use strict";
@@ -93,14 +93,14 @@
 			};
 		},
 		// http://jsperf.com/regex-vs-indexof-vs-in/12
-		/*YesObject = Object.create(null, {
+		/*yesObject = Object.create(null, {
 			1: { value: 1 },
 			x: { value: 1 },
 			"true": { value: 1 },
 			yes: { value: 1 },
 			on: { value: 1 }
 		}),
-		NoObject = Object.create(null, {
+		noObject = Object.create(null, {
 			0: { value: 1 },
 			"false": { value: 1 },
 			no: { value: 1 },
@@ -109,8 +109,8 @@
 		// one can use typeof Object.create != "function" and use either
 		// Object.create or simple object firm, but the performance differences
 		// are so low, that the compatibility to IE8 is more important
-		YesObject = { 1: 1, x: 1, "true": 1, yes: 1, on: 1 },
-		NoObject = { 0: 1, "false": 1, no: 1, off: 1 };
+		yesObject = { 1: 1, x: 1, "true": 1, yes: 1, on: 1 },
+		noObject = { 0: 1, "false": 1, no: 1, off: 1 };
 	$.extend(true, jgrid, {
 		formatter: { // setting common formatter settings, which are independent from the language and locale
 			date: {
@@ -163,14 +163,14 @@
 						checkboxOptions = parseCheckboxOptions.call(this, options),
 						lowerCaseNewData = String(newValue).toLowerCase();
 
-					if (YesObject[lowerCaseNewData] || lowerCaseNewData === checkboxOptions.yes.toLowerCase()) {
+					if (yesObject[lowerCaseNewData] || lowerCaseNewData === checkboxOptions.yes.toLowerCase()) {
 						newValue = true;
-					} else if (NoObject[lowerCaseNewData] || lowerCaseNewData === checkboxOptions.no.toLowerCase()) {
+					} else if (noObject[lowerCaseNewData] || lowerCaseNewData === checkboxOptions.no.toLowerCase()) {
 						newValue = false;
 					}
 					return newValue;
 				},
-				stype: "select", searchoptions: { sopt: ["eq", "ne"], value: "true:Yes;false:No", noFilterText: "Any" }
+				stype: "checkbox", searchoptions: { sopt: ["eq"], value: "true:false" }
 			},
 			// TODO: add cmTemplate for currency and date
 			actions: function () {
@@ -298,13 +298,13 @@
 			if (cellValue === undefined || fmatter.isEmpty(cellValue)) {
 				var defaultValue = getOptionByName(colModel, "defaultValue");
 				if (defaultValue === undefined) {
-					cellValue = checkboxOptions.no;
+					defaultValue = checkboxOptions.no;
 				}
 				cellValue = defaultValue;
 			}
 			// see http://jsperf.com/regex-vs-indexof-vs-in/12
 			cellValue = String(cellValue).toLowerCase();
-			return YesObject[cellValue] || cellValue === checkboxOptions.yes.toLowerCase() ?
+			return yesObject[cellValue] || cellValue === checkboxOptions.yes.toLowerCase() ?
 					checkboxOptions.checked :
 					checkboxOptions.unchecked;
 		};
@@ -485,7 +485,7 @@
 						td = td.firstChild;
 					}
 					if (td != null) {
-						$(td.firstChild).bind("click", onClick);
+						$(td.firstChild).on("click", onClick);
 					}
 				}
 			}
@@ -669,13 +669,7 @@
 		var $tr = $(this).closest("tr.jqgrow"), rid = $tr.attr("id"),
 			$id = $(this).closest("table.ui-jqgrid-btable").attr("id").replace(/_frozen([^_]*)$/, "$1"),
 			$grid = $("#" + jgrid.jqID($id)), $t = $grid[0], p = $t.p, i, n, customAction, actop,
-			getTop = function () {
-				var tr = $tr[0], gbox = $grid.closest(".ui-jqgrid")[0];
-				if (tr.getBoundingClientRect != null && gbox.getBoundingClientRect != null) {
-					return tr.getBoundingClientRect().top + $tr.outerHeight() - gbox.getBoundingClientRect().top;
-				}
-				return $tr.offset().top + $tr.outerHeight() - $(gbox).offset().top;
-			},
+			relativeTop = jgrid.getRelativeRect.call($t, $tr).top,
 			cm = p.colModel[jgrid.getCellIndex(this)],
 			op = $.extend(true, { extraparam: {} }, jgrid.actionsNav || {},	p.actionsNavOptions || {}, cm.formatoptions || {});
 
@@ -719,14 +713,14 @@
 			case "del":
 				op.delOptions = op.delOptions || {};
 				if (op.delOptions.top === undefined) {
-					op.delOptions.top = getTop();
+					op.delOptions.top = relativeTop;
 				}
 				$grid.jqGrid("delGridRow", rid, op.delOptions);
 				break;
 			case "formedit":
 				op.editOptions = op.editOptions || {};
 				if (op.editOptions.top === undefined) {
-					op.editOptions.top = getTop();
+					op.editOptions.top = relativeTop;
 					op.editOptions.recreateForm = true;
 				}
 				$grid.jqGrid("editGridRow", rid, op.editOptions);
@@ -855,10 +849,10 @@
 			};
 		if (cm.formatoptions == null || !cm.formatoptions.editformbutton) {
 			// we use unbind to be sure that we don't register the same events multiple times
-			$self.unbind("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
-			$self.bind("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
-			$self.unbind("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
-			$self.bind("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
+			$self.off("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
+			$self.on("jqGridInlineAfterRestoreRow.jqGridFormatter jqGridInlineAfterSaveRow.jqGridFormatter", showEditDelete);
+			$self.off("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
+			$self.on("jqGridInlineEditRow.jqGridFormatter", hideEditDelete);
 		}
 	};
 	$.unformat = function (cellval, options, pos, cnt) {
