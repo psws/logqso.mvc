@@ -246,7 +246,7 @@ $(function () {
                     _lq.removeTabData('tabs1');
                     _lq.removeTabData('tabs2');
                     _lq.removeTabData('tabs3');
-                    ControlUpdated = true;
+                    ControlUpdated = false;
                     break;
                 case 'filterQsochk':
                     _lq.PropertyColorState("#filterQsochk", "checked", true, "#a4a3a3");
@@ -286,7 +286,7 @@ $(function () {
                     _lq.removeTabData('tabs2');
                     _lq.removeTabData('tabs3');
                     _lq.AdjustControlCategorySettings(_lq.ControlCategorySettingsDto);
-                    ControlUpdated = true;
+                    ControlUpdated = false;
                     break;
                 case 'filterQsochk':
                     _lq.SelectMenuState("Select[id^='Filt']", "enable");
@@ -915,8 +915,13 @@ $(function () {
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, 'application/json', null, ControlCategorySettingsDtoLoad);
                 function ControlCategorySettingsDtoLoad(ControlCategorySettingsDto) {
                     _lq.SetControlCategorySettings(ControlCategorySettingsDto, true);
-                    _lq.LogUpdateReqd = true;
-                    _lq.GetContestLogs();
+                    _lq.removeTabData('tabs1');
+                    _lq.removeTabData('tabs2');
+                    _lq.removeTabData('tabs3');
+                    _lq.SessionSaveControlSettings();
+                    _lq.LogUpdateReqd = false;
+                    //_lq.GetContestLogs();
+
                 };
                 break;
             case "QsoDft":
@@ -924,6 +929,7 @@ $(function () {
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, 'application/json', null, SetControlFiltersSettingsDtoLoad);
                 function SetControlFiltersSettingsDtoLoad(ControlFiltersSettingsDto) {
                     _lq.SetControlFiltersSettings(ControlFiltersSettingsDto, true);
+                    _lq.SessionSaveControlSettings();
                     _lq.LogUpdateReqd = true;
                     _lq.GetContestLogs();
                 };
@@ -933,6 +939,7 @@ $(function () {
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, 'application/json', null, ControlYaxisSettingsDtoLoad);
                 function ControlYaxisSettingsDtoLoad(ControlYaxisSettingsDto) {
                     _lq.SetControlYaxisSettings(ControlYaxisSettingsDto, true);
+                    _lq.SessionSaveControlSettings();
                     _lq.LogUpdateReqd = true;
                     _lq.GetContestLogs();
                 };
@@ -942,6 +949,7 @@ $(function () {
                 _lq.ajaxHelper(_lq.controlUri + ReqUri, 'GET', 'json', true, 'application/json', null, SetControlXaxisSettingsDtoLoad);
                 function SetControlXaxisSettingsDtoLoad(ControlXaxisSettingsDto) {
                     _lq.SetControlXaxisSettings(ControlXaxisSettingsDto, true);
+                    _lq.SessionSaveControlSettings();
                     _lq.LogUpdateReqd = true;
                     _lq.GetContestLogs();
                 };
@@ -950,7 +958,6 @@ $(function () {
 
         }
         _lq.SessionSaveControlSettings();
-
 
     })
 
@@ -1067,9 +1074,9 @@ $(function () {
         QsoRadioType: '',
         LogId: '',
         Disabled: 0,
-        StationNames: '',
-        ContestNames: '',
-        RadioNames: '',
+        StationNames: [],
+        ContestNames: [],
+        RadioNames: [],
     };
     _lq.DataCallInfoDto2 = {
         CallGroup: '',
@@ -1079,9 +1086,9 @@ $(function () {
         QsoRadioType: '',
         LogId: '',
         Disabled: 0,
-        StationNames: '',
-        ContestNames: '',
-        RadioNames: '',
+        StationNames: [],
+        ContestNames: [],
+        RadioNames: [],
     };
     _lq.DataCallInfoDto3 = {
         CallGroup: '',
@@ -1091,9 +1098,9 @@ $(function () {
         QsoRadioType: '',
         LogId: '',
         Disabled: 0,
-        StationNames: '',
-        ContestNames: '',
-        RadioNames: '',
+        StationNames: [],
+        ContestNames: [],
+        RadioNames: [],
     };
 
 
@@ -1388,7 +1395,7 @@ $(function () {
             //$.jgrid.defaults.width = 900;
 
             //set to current call
-            var dataobj = window.sessionStorage.getItem(_lq.DataCallInfoDTOs);
+            var dataobj = window.sessionStorage.getItem('_lq.DataCallInfoDTOs');
             if (dataobj != null) {
                 _lq.DataCallInfoDTOs = JSON.parse(dataobj);
             }
@@ -4311,7 +4318,7 @@ $(function () {
 
     _lq.getAllData = function () {
         //check if cached
-        dataobj = window.sessionStorage.getItem(_lq.DataCallInfoDTOs);
+        dataobj = window.sessionStorage.getItem('_lq.DataCallInfoDTOs');
         if (dataobj != null) {
             _lq.DataCallInfoDTOs = JSON.parse(dataobj);
             _lq.SetCallInfoObjDataSettings(_lq.DataCallInfoDTOs);
@@ -4326,11 +4333,20 @@ $(function () {
             //popup dialog selection box, to select whivh saved session
             //noy implemented yet
         } else {
-            _lq.SetContestinfo(1, data[0]); //only once
+            _lq.SetContestinfo(1, data[0]); //only once for one popup
             for (var i = 0; i < data.length; i++) {
-                _lq.DataCallInfoDTOs[i].ContestNames = data[i].ContestNames;
-                _lq.DataCallInfoDTOs[i].StationNames = data[i].StationNames;
-                _lq.DataCallInfoDTOs[i].RadioNames = data[i].RadioNames;
+
+                var CGroup = data[i].CallGroup -1;
+
+                for (var j = 0; j < data[CGroup].ContestNames.length; j++) {
+                    _lq.DataCallInfoDTOs[CGroup].ContestNames[j] = data[CGroup].ContestNames[j];
+                }
+                for (var l = 0; l < data[CGroup].RadioNames.length; l++) {
+                    _lq.DataCallInfoDTOs[CGroup].RadioNames[l] = data[CGroup].RadioNames[l];
+                }
+                for (var k = 0; k < data[CGroup].StationNames.length; k++) {
+                    _lq.DataCallInfoDTOs[CGroup].StationNames[k] = data[CGroup].StationNames[k];
+                }
                 switch (data[i].CallGroup) {
                     case 1:
                         _lq.SetCallinfo(1, data[i]);
@@ -4410,6 +4426,7 @@ $(function () {
             _lq.DataCallInfoDTOs[i].SelectedContestName = DataCallInfoObj.SelectedContestName;
             _lq.DataCallInfoDTOs[i].SelectedCall = DataCallInfoObj.SelectedCall;
             _lq.DataCallInfoDTOs[i].QsoRadioType = DataCallInfoObj.QsoRadioType;
+            //_lq.DataCallInfoDTOs[i].SelectedStationName = DataCallInfoObj.SelectedStationName;
             _lq.DataCallInfoDTOs[i].Disabled = DataCallInfoObj.Disabled;
             _lq.DataCallInfoDTOs[i].LogId = DataCallInfoObj.LogId;
         }
@@ -4607,6 +4624,17 @@ $(function () {
 
     _lq.UpdateContestCall = function (DataCallInfoDto) {
         var bUpdateChart = true;
+        var CGroup = DataCallInfoDto.CallGroup - 1;
+        for (var j = 0; j < DataCallInfoDto.ContestNames.length; j++) {
+            _lq.DataCallInfoDTOs[CGroup].ContestNames[j] = DataCallInfoDto.ContestNames[j];
+        }
+        for (var l = 0; l < DataCallInfoDto.RadioNames.length; l++) {
+            _lq.DataCallInfoDTOs[CGroup].RadioNames[l] = DataCallInfoDto.RadioNames[l];
+        }
+        for (var k = 0; k < DataCallInfoDto.StationNames.length; k++) {
+            _lq.DataCallInfoDTOs[CGroup].StationNames[k] = DataCallInfoDto.StationNames[k];
+        }
+
         switch (DataCallInfoDto.CallGroup) {
             case 1:
                 _lq.SetCallinfo(1, DataCallInfoDto);
@@ -4875,8 +4903,8 @@ $(function () {
 
     _lq.SessionSaveDataSettings = function () {
         var dataObj = _lq.DataCallInfoDTOs;
-        window.sessionStorage.removeItem(_lq.DataCallInfoDTOs);
-        window.sessionStorage.setItem(_lq.DataCallInfoDTOs, JSON.stringify(dataObj));
+        window.sessionStorage.removeItem('_lq.DataCallInfoDTOs');
+        window.sessionStorage.setItem('_lq.DataCallInfoDTOs', JSON.stringify(dataObj));
 
     }
 

@@ -151,7 +151,7 @@ namespace Logqso.Repository.Repository
                                                       }).ToList(),
 
                                         Disabled = lc.Disabled
-                                    }).ToList();
+                                    }).OrderBy(x=>x.CallGroup).ToList();
 
                 //add ALL default to Stations
                 StationNamestype StationNamestype = new StationNamestype(0, "ALL");
