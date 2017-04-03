@@ -354,7 +354,7 @@ span[id^='enb_dis']{
 /*conversion http://stackoverflow.com/questions/15744026/font-face-not-displaying-correctly-in-ie*/
 @font-face {
      font-family: ArialSlashZero;
-      src: url(../fonts/slash_0.ttf) format('truetype'),  /* for android browser*/*/
+      src: url(../fonts/slash_0.ttf) format('truetype'),  /* for android browser*/
            url(../fonts/slash_0-webfont.woff) format('woff');  /*for chrome IE11*/
                                                              
 }
