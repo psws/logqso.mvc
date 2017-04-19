@@ -42,6 +42,7 @@ namespace Logqso.mvc.DataModel.LogControl
         //Xaxis
         public DbSet<Logqso.mvc.DataModel.LogControl.XaxisModels.XaxisStartTime> XaxisStartTime { get; set; }
         public DbSet<Logqso.mvc.DataModel.LogControl.XaxisModels.XaxisDuration> XaxisDuration { get; set; }
+        public DbSet<Logqso.mvc.DataModel.LogControl.XaxisModels.XaxisDay> XaxisDay { get; set; }
 
         //Defaults
         public DbSet<Logqso.mvc.DataModel.LogControl.CategoryModels.CatDefault> CatDefault { get; set; }

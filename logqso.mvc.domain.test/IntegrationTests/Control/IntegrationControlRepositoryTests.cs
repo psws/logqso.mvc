@@ -158,6 +158,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Control
 
                 Assert.IsTrue(ContestControl.ControlXaxisDto.XaxisDuration.Count > 1);
                 Assert.IsTrue(ContestControl.ControlXaxisDto.XaxisStarttime.Count > 1);
+                Assert.IsTrue(ContestControl.ControlXaxisDto.XaxisDay.Count > 1);
 
                 Assert.IsTrue(ContestControl.ControlYaxisDto.YaxisFunction.Count > 1);
                 Assert.IsTrue(ContestControl.ControlYaxisDto.YaxisInterval.Count > 1);

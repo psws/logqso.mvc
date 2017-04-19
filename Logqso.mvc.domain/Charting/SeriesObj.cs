@@ -88,7 +88,7 @@ namespace Logqso.mvc.domain.Charting
                 double FudgeInterval; //Shifts column bars to the right for axis alignment
                 if (this.ChartType == SeriesChartType.Column)
                 {
-                    FudgeInterval = ChartAreaDto.ChartPointtInterval * -.25;
+                    FudgeInterval = ChartAreaDto.ChartPointtInterval * -.285; //shifts 3 bars before xaxis hour tick
                 }
                 else
                 {

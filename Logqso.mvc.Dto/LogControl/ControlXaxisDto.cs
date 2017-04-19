@@ -10,5 +10,6 @@ namespace Logqso.mvc.Dto.LogControl
     {
         public List<string> XaxisDuration { get; set; }
         public List<string> XaxisStarttime { get; set; }
+        public List<int> XaxisDay { get; set; }
     }
 }

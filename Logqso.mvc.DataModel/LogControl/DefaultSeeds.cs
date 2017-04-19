@@ -51,7 +51,8 @@ namespace Logqso.mvc.DataModel.LogControl
               {
                   UserName = "default",
                   XaxisDurationTime = "48",
-                  XaxisStrtTime = "00:00z  Day1",
+                  XaxisStrtTime = "00:00z",
+                  Xaxisday = 1
               }
             );
 

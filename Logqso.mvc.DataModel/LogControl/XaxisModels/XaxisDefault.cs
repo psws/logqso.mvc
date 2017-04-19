@@ -26,7 +26,10 @@ namespace Logqso.mvc.DataModel.LogControl.XaxisModels
         [MaxLength(20)]
         [Required]
         public string XaxisStrtTime { get; set; }
+        public int Xaxisday { get; set; }
+
         public virtual XaxisDuration XaxisDuration { get; set; }
         public virtual XaxisStartTime XaxisStartTime { get; set; }
+        public virtual XaxisDay XaxisDay { get; set; }
     }
 }

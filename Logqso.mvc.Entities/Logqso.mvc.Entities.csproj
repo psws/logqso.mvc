@@ -106,6 +106,7 @@
     <Compile Include="LogControlEntity\FiltCQZone.cs" />
     <Compile Include="LogControlEntity\FiltDefaullt.cs" />
     <Compile Include="LogControlEntity\FiltPrefix.cs" />
+    <Compile Include="LogControlEntity\XaxisDay.cs" />
     <Compile Include="LogControlEntity\XaxisDefault.cs" />
     <Compile Include="LogControlEntity\XaxisDuration.cs" />
     <Compile Include="LogControlEntity\XaxisStartTime.cs" />

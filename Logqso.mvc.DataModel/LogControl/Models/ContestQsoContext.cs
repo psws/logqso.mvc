@@ -42,6 +42,7 @@ namespace Logqso.mvc.DataModel.LogControl.Models
         public DbSet<XaxisDefault> XaxisDefaults { get; set; }
         public DbSet<XaxisDuration> XaxisDurations { get; set; }
         public DbSet<XaxisStartTime> XaxisStartTimes { get; set; }
+        public DbSet<XaxisDay> XaxisDays { get; set; }
         public DbSet<YaxisDefault> YaxisDefaults { get; set; }
         public DbSet<YaxisFunction> YaxisFunctions { get; set; }
         public DbSet<YaxisInterval> YaxisIntervals { get; set; }
@@ -63,6 +64,7 @@ namespace Logqso.mvc.DataModel.LogControl.Models
             modelBuilder.Configurations.Add(new XaxisDefaultMap());
             modelBuilder.Configurations.Add(new XaxisDurationMap());
             modelBuilder.Configurations.Add(new XaxisStartTimeMap());
+            modelBuilder.Configurations.Add(new XaxisDayMap());
             modelBuilder.Configurations.Add(new YaxisDefaultMap());
             modelBuilder.Configurations.Add(new YaxisFunctionMap());
             modelBuilder.Configurations.Add(new YaxisIntervalMap());

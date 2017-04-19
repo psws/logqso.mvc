@@ -20,30 +20,30 @@ namespace Logqso.mvc.DataModel.LogControl
 
             context.XaxisStartTime.AddOrUpdate(
             p => p.XaxisStrtTime,
-                new XaxisStartTime { XaxisStrtTime = "00:00z  Day1", Index = 1 },
-                new XaxisStartTime { XaxisStrtTime = "02:00z  Day1", Index = 2 },
-                new XaxisStartTime { XaxisStrtTime = "04:00z  Day1", Index = 3 },
-                new XaxisStartTime { XaxisStrtTime = "06:00z  Day1", Index = 4 },
-                new XaxisStartTime { XaxisStrtTime = "08:00z  Day1", Index = 5 },
-                new XaxisStartTime { XaxisStrtTime = "10:00z  Day1", Index = 6 },
-                new XaxisStartTime { XaxisStrtTime = "12:00z  Day1", Index = 7 },
-                new XaxisStartTime { XaxisStrtTime = "14:00z  Day1", Index = 8 },
-                new XaxisStartTime { XaxisStrtTime = "16:00z  Day1", Index = 9 },
-                new XaxisStartTime { XaxisStrtTime = "18:00z  Day1", Index = 10 },
-                new XaxisStartTime { XaxisStrtTime = "20:00z  Day1", Index = 11 },
-                new XaxisStartTime { XaxisStrtTime = "22:00z  Day1", Index = 12 },
-                new XaxisStartTime { XaxisStrtTime = "00:00z  Day2", Index = 13 },
-                new XaxisStartTime { XaxisStrtTime = "02:00z  Day2", Index = 14 },
-                new XaxisStartTime { XaxisStrtTime = "04:00z  Day2", Index = 15 },
-                new XaxisStartTime { XaxisStrtTime = "06:00z  Day2", Index = 16 },
-                new XaxisStartTime { XaxisStrtTime = "08:00z  Day2", Index = 17 },
-                new XaxisStartTime { XaxisStrtTime = "10:00z  Day2", Index = 18 },
-                new XaxisStartTime { XaxisStrtTime = "12:00z  Day2", Index = 19 },
-                new XaxisStartTime { XaxisStrtTime = "14:00z  Day2", Index = 20 },
-                new XaxisStartTime { XaxisStrtTime = "16:00z  Day2", Index = 21 },
-                new XaxisStartTime { XaxisStrtTime = "18:00z  Day2", Index = 22 },
-                new XaxisStartTime { XaxisStrtTime = "20:00z  Day2", Index = 23 },
-                new XaxisStartTime { XaxisStrtTime = "22:00z  Day2", Index = 24 }
+                new XaxisStartTime { XaxisStrtTime = "00:00z", Index = 1 },
+                new XaxisStartTime { XaxisStrtTime = "01:00z", Index = 2 },
+                new XaxisStartTime { XaxisStrtTime = "02:00z", Index = 3 },
+                new XaxisStartTime { XaxisStrtTime = "03:00z", Index = 4 },
+                new XaxisStartTime { XaxisStrtTime = "04:00z", Index = 5 },
+                new XaxisStartTime { XaxisStrtTime = "05:00z", Index = 6 },
+                new XaxisStartTime { XaxisStrtTime = "06:00z", Index = 7 },
+                new XaxisStartTime { XaxisStrtTime = "07:00z", Index = 8 },
+                new XaxisStartTime { XaxisStrtTime = "08:00z", Index = 9 },
+                new XaxisStartTime { XaxisStrtTime = "09:00z", Index = 10 },
+                new XaxisStartTime { XaxisStrtTime = "10:00z", Index = 11 },
+                new XaxisStartTime { XaxisStrtTime = "11:00z", Index = 12 },
+                new XaxisStartTime { XaxisStrtTime = "12:00z", Index = 13 },
+                new XaxisStartTime { XaxisStrtTime = "13:00z", Index = 14 },
+                new XaxisStartTime { XaxisStrtTime = "14:00z", Index = 15 },
+                new XaxisStartTime { XaxisStrtTime = "15:00z", Index = 16 },
+                new XaxisStartTime { XaxisStrtTime = "16:00z", Index = 17 },
+                new XaxisStartTime { XaxisStrtTime = "17:00z", Index = 18 },
+                new XaxisStartTime { XaxisStrtTime = "18:00z", Index = 19 },
+                new XaxisStartTime { XaxisStrtTime = "19:00z", Index = 20 },
+                new XaxisStartTime { XaxisStrtTime = "20:00z", Index = 21 },
+                new XaxisStartTime { XaxisStrtTime = "21:00z", Index = 22 },
+                new XaxisStartTime { XaxisStrtTime = "22:00z", Index = 23 },
+                new XaxisStartTime { XaxisStrtTime = "23:00z", Index = 24 }
           );
 
             context.XaxisDuration.AddOrUpdate(
@@ -57,6 +57,12 @@ namespace Logqso.mvc.DataModel.LogControl
                 new XaxisDuration { XaxisDurationTime = "16", Index = 7 },
                 new XaxisDuration { XaxisDurationTime = "20", Index = 8 },
                 new XaxisDuration { XaxisDurationTime = "24", Index = 9 }
+            );
+
+            context.XaxisDay.AddOrUpdate(
+                p => p.Xaxisday,
+                new XaxisDay {Xaxisday = 1,Index = 1},
+                new XaxisDay {Xaxisday = 2,Index = 2}
             );
 
         }

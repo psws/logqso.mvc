@@ -87,6 +87,8 @@ namespace Logqso.mvc.domain
             ContestControlDto.ControlXaxisDto.XaxisDuration = XaxisDurations.GetXaxisDurationeVals() as List<string>;
             var XaxisStartTimes = _repository.GetRepository<XaxisStartTime>();
             ContestControlDto.ControlXaxisDto.XaxisStarttime = XaxisStartTimes.GetXaxisStartTimeNames() as List<string>;
+            var XaxisDays = _repository.GetRepository<XaxisDay>();
+            ContestControlDto.ControlXaxisDto.XaxisDay = XaxisDays.GetXaxisDays() as List<int>;
 
             ContestControlDto.ControlYaxisDto = new ControlYaxisDto();
             var YaxisFunctions = _repository.GetRepository<YaxisFunction>();

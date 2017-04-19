@@ -79,7 +79,7 @@ namespace Logqso.mvc.domain.test.IntegrationTests.Data
                              ControlXaxisSettingsDto = new Dto.LogControl.ControlXaxisSettingsDto()
                              {
                                  XaxisDuration = "48",
-                                 XaxisStarttime = "00:00z  Day1",
+                                 XaxisStarttime = "00:00z",
                                  XaxisStarttimeIndex = 0
                              },
                              ControlYaxisSettingsDto = new Dto.LogControl.ControlYaxisSettingsDto()

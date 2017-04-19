@@ -52,7 +52,8 @@ namespace Logqso.mvc.DataModel.LogData
                 Id = 1,
                 UserName = "default",
                 XaxisDurationTime = "48",
-                XaxisStrtTime = "00:00z  Day1"
+                XaxisStrtTime = "00:00z",
+                Xaxisday = 1
             };
 
               YaxisDefault YaxisDefault = new YaxisDefault()
@@ -78,10 +79,10 @@ namespace Logqso.mvc.DataModel.LogData
             //these are OK
             string CatXML = @"<XaxisDefault xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" " +
                   @"xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">" +
-                  @"<UserName>default</UserName><XaxisDurationTime>40</XaxisDurationTime><XaxisStrtTime>00:00z  Day1</XaxisStrtTime></XaxisDefault>";
+                  @"<UserName>default</UserName><XaxisDurationTime>40</XaxisDurationTime><XaxisStrtTime>00:00z</XaxisStrtTime></Xaxisday>1</Xaxisday></XaxisDefault>";
               string XAxisXML = @"<XaxisDefault xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" " +
                   @"xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">" +
-                  @"<UserName>default</UserName><XaxisDurationTime>40</XaxisDurationTime><XaxisStrtTime>00:00z  Day1</XaxisStrtTime></XaxisDefault>";
+                  @"<UserName>default</UserName><XaxisDurationTime>40</XaxisDurationTime><XaxisStrtTime>00:00z</XaxisStrtTime></XaxisDefault>";
               string YaxisXML = @"<YaxisDefault xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" " +
                   @"xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">" +
                   @"<UserName>default</UserName><YaxisFuncName>QSO  Rate</YaxisFuncName><YaxisIntvVal>60</YaxisIntvVal><YaxisViewTypeName>Column</YaxisViewTypeName></YaxisDefault>";

@@ -112,6 +112,8 @@
       <DependentUpon>201605210637388_InitialDatabaseCreation.cs</DependentUpon>
     </Compile>
     <Compile Include="LogControl\Migrations\LogControlDB\Configuration.cs" />
+    <Compile Include="LogControl\Models\Mapping\XaxisDayMap.cs" />
+    <Compile Include="LogControl\XaxisModels\XaxisDay.cs" />
     <Compile Include="LogData\CabrilloInfoSeed.cs" />
     <Compile Include="LogData\CallInfoModels\CallInfo.cs" />
     <Compile Include="LogControl\CategoryModels\CatAssisted.cs" />

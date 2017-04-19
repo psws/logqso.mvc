@@ -18,7 +18,8 @@ a.help-intro {
     color:blue !important;
     background-color:yellow;
     margin-left:20px;
-    font-variant:small-caps
+    font-variant:small-caps;
+    cursor:help;
 }
 a.help-intro:hover{
 text-decoration: none;

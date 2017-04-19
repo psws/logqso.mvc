@@ -158,6 +158,16 @@ namespace Logqso.Repository
             //var query = XaxisStartTimes.Select(c => c.XaxisStrtTime).ToList();
             return query;
         }
+        public static IEnumerable<int> GetXaxisDays(this IRepository<XaxisDay> repository)
+        {
+            var XaxisDays = repository.Queryable();
+            var query = (from e in XaxisDays
+                         orderby e.Index
+                         select e.Xaxisday).ToList();
+
+            //var query = XaxisStartTimes.Select(c => c.XaxisStrtTime).ToList();
+            return query;
+        }
 
 
 
@@ -265,6 +275,7 @@ namespace Logqso.Repository
 
             ControlXaxisSettingsDto.XaxisDuration = XaxisDefault.XaxisDurationTime;
             ControlXaxisSettingsDto.XaxisStarttime = XaxisDefault.XaxisStrtTime;
+            ControlXaxisSettingsDto.XaxisDay = XaxisDefault.Xaxisday;
             var XaxisFunctions = repository.GetRepository<XaxisStartTime>().Queryable();
             var query = XaxisFunctions.OrderBy(c => c.Index).Select(c => c.XaxisStrtTime).ToList();
 

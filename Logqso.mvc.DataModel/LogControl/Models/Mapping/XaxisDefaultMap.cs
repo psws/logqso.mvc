@@ -24,12 +24,15 @@ namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
                 .IsRequired()
                 .HasMaxLength(20);
 
+            this.Property(t => t.Xaxisday);
+
             // Table & Column Mappings
             this.ToTable("XaxisDefault");
             this.Property(t => t.Id).HasColumnName("Id");
             this.Property(t => t.UserName).HasColumnName("UserName");
             this.Property(t => t.XaxisDurationTime).HasColumnName("XaxisDurationTime");
             this.Property(t => t.XaxisStrtTime).HasColumnName("XaxisStrtTime");
+            this.Property(t => t.Xaxisday).HasColumnName("Xaxisday");
 
             // Relationships
             this.HasRequired(t => t.XaxisDuration)
@@ -38,6 +41,9 @@ namespace Logqso.mvc.DataModel.LogControl.Models.Mapping
             this.HasRequired(t => t.XaxisStartTime)
                 .WithMany(t => t.XaxisDefaults)
                 .HasForeignKey(d => d.XaxisStrtTime);
+            this.HasRequired(t => t.XaxisDay)
+                .WithMany(t => t.XaxisDefaults)
+                .HasForeignKey(d => d.Xaxisday);
 
         }
     }

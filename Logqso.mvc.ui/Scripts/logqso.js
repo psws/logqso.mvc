@@ -394,8 +394,11 @@ $(function () {
                 case 'YaxisViewType':
                     $(this).selectmenu("option", "width", 130);
                     break;
+                case 'XaxisDay':
+                    $(this).selectmenu("option", "width", 70);
+                    break;
                 case 'XaxisStarttime':
-                    $(this).selectmenu("option", "width", 130);
+                    $(this).selectmenu("option", "width", 90);
                     break;
                 case 'XaxisDuration':
                     $(this).selectmenu("option", "width", 70);
@@ -453,50 +456,65 @@ $(function () {
 
 
 
-
-
+    
+    $("a[id= 'Vid_Intro']").on("click", VidClick);
     $("button[id^= 'Vid']").on( "click", VidClick );
 
     function VidClick(e) {
         var modalBox = $(this).attr('data-modal-id');
         var popup = $('#' + modalBox);
-        var VidTd;
+        var VidTd, vid;
         switch (this.id) {
             case "Vid_Intro":
                 VidTd = "VIntroId";
+                vid = "introduction.mp4";
                 break;
             case "Vid_Category":
                 VidTd = "VCatId";
+                vid ="CallCategory.mp4";
                 break;
             case "Vid_Filter":
                 VidTd = "VFiltId";
+                vid = "QsoFilter.mp4";
                 break;
             case "Vid_YAxis":
                 VidTd = "VYaxisId";
+                vid = "ViewAxis.mp4";
                 break;
             case "Vid_XAxis":
                 VidTd = "VXaxisId";
+                vid = "TimeScale.mp4";
                 break;
             case "Vid_Call1":
                 VidTd = "VCall1Id";
+                vid = "Call.mp4";
                 break;
             case "Vid_Chart":
                 VidTd = "VChartId";
+                vid = "Chart.mp4";
                 break;
             case "Vid_Log":
                 VidTd = "VLogId";
+                vid = "test.mp4";
                 break;
             case "Vid_Ubn":
                 VidTd = "VUbnId";
+                vid = "test.mp4";
                 break;
             case "Vid_Up":
                 VidTd = "VUpId";
+                vid = "test.mp4";
                 break;
             default:
                 VidTd = "VIntroId";
+                vid = "introduction.mp4";
                 break;
         }
         var container = $('#' + modalBox + " div[id=VideoCont]");
+        if ($('#' + modalBox + ' video[id=' + VidTd ).length == 0) { //only add once) {
+            container.append('<video id="' + VidTd + '" controls="controls" src="video/' + vid + '"  type="video/mp4"></video>');
+        }
+
         if ($('#' + modalBox + ' div[id=VideoBkgnd').length == 0) { //only add once
 
             popup.append('<div id="VideoBkgnd"></div>');
@@ -516,9 +534,6 @@ $(function () {
             }
             //$("div[id=closer_video]").off('click');
             popup.hide();
-            if (modalBox == "puVidIntro") {
-
-            }
         });
 
 
@@ -1053,7 +1068,8 @@ $(function () {
     _lq.ControlXaxisSettingsDto = {
         XaxisDuration: '',
         XaxisStarttime: '',
-        XaxisStarttimeIndex: 1
+        XaxisStarttimeIndex: 1,
+        XaxisDay:1
     };
 
     _lq.ControlYaxisSettingsDto = {
@@ -3801,10 +3817,10 @@ $(function () {
             $select.html('');
             var Day2HR = false;
             $.each(data.ControlXaxisDto.XaxisStarttime, function (key, val) {
-                if (Day2HR == false && val.indexOf("Day2") > -1) {
-                    Day2HR = true;
-                    $select.append('<option disabled>______________</option>');
-                }
+                //if (Day2HR == false && val.indexOf("Day2") > -1) {
+                //    Day2HR = true;
+                //    $select.append('<option disabled>______________</option>');
+                //}
                 val = val.replace("  ", "&nbsp;&nbsp;");
                 $select.append('<option >' + val + '</option>');
             })
@@ -3824,6 +3840,18 @@ $(function () {
             $ul = $("ul[id^=XaxisDuration]");
             $ul.css({
                 'margin-top': -((data.ControlXaxisDto.XaxisDuration.length + 1) * (23)) + "px",
+                'line-height': '16px'
+            });
+
+            $select = $('#XaxisDay');
+            $select.html('');
+            $.each(data.ControlXaxisDto.XaxisDay, function (key, val) {
+                $select.append('<option >' + val + '</option>');
+            })
+            //make dropup
+            $ul = $("ul[id^=XaxisDay]");
+            $ul.css({
+                'margin-top': -((data.ControlXaxisDto.XaxisDay.length + 1) * (23)) + "px",
                 'line-height': '16px'
             });
 
@@ -3952,6 +3980,9 @@ $(function () {
             _lq.AdjustControlFiltersSettings(_lq.ControlFiltersSettingsDto);
         } else if (Controlid.indexOf("Xaxis") >= 0) {
             switch (Controlid) {
+                case "XaxisDay":
+                    _lq.ControlXaxisSettingsDto.XaxisDay = SelectedValue
+                    break;
                 case "XaxisStarttime":
                     _lq.ControlXaxisSettingsDto.XaxisStarttime = value
                     _lq.ControlXaxisSettingsDto.XaxisStarttimeIndex = $('#XaxisStarttime').prop("selectedIndex");
@@ -4078,8 +4109,11 @@ $(function () {
         var starttime = ControlXaxisSettingsDto.XaxisStarttime;
         var dur = ControlXaxisSettingsDto.XaxisDuration;
         var val = Number(starttime.substring(0, 2));
-        var day2;
-        if (starttime.indexOf('Day2') != -1) {
+        var day2 = false;
+        //if (starttime.indexOf('Day2') != -1) {
+        //    day2 = true;
+        //}
+        if (ControlXaxisSettingsDto.XaxisDay == 2)  {
             day2 = true;
         }
         if (day2 == true) {
@@ -4112,14 +4146,51 @@ $(function () {
                     dur = '2';
                 }
             }
-            ControlXaxisSettingsDto.XaxisDuration = dur;
-            if (ctlUpdate == true) {
-                $select = $('#XaxisDuration').val(ControlXaxisSettingsDto.XaxisDuration);
-                $select.selectmenu("refresh");
+        }
+        else {
+            if (val == 0) {
+                if (dur > 44) {
+                    dur = '48';
+                }
+            } else if (val > 0 && val < 4) {
+                if (dur > 44) {
+                    dur = '48';
+                }
+            } else if (val >= 4 && val < 8) {
+                if (dur > 44) {
+                    dur = '44';
+                }
+            } else if (val >= 8 && val < 12) {
+                if (dur > 40) {
+                    dur = '40';
+                }
+            } else if (val >= 12 && val < 16) {
+                if (dur > 36) {
+                    dur = '36';
+                }
+
+            } else if (val >= 16 && val < 20) {
+                if (dur > 32) {
+                    dur = '32';
+                }
+            } else if (val >= 20 && val < 22) {
+                if (dur > 28) {
+                    dur = '28';
+                }
+            } else if (val >= 23) {
+                if (dur > 24) {
+                    dur = '24';
+                }
             }
 
-
         }
+        ControlXaxisSettingsDto.XaxisDuration = dur;
+        if (ctlUpdate == true) {
+            $select = $('#XaxisDuration').val(ControlXaxisSettingsDto.XaxisDuration);
+            $select.selectmenu("refresh");
+        }
+
+
     }
 
 
@@ -4238,6 +4309,9 @@ $(function () {
         //$select.selectmenu("refresh");
         $select = $('#XaxisDuration').val(ControlXaxisSettingsDto.XaxisDuration);
         $select.selectmenu("refresh");
+        $select = $('#XaxisDay').val(ControlXaxisSettingsDto.XaxisDay);
+        $select.selectmenu("refresh");
+
         _lq.ControlXaxisSettingsDto = ControlXaxisSettingsDto;
         if (bUpdateChart) {
             _lq.UpdateChartData(false);
@@ -4625,14 +4699,22 @@ $(function () {
     _lq.UpdateContestCall = function (DataCallInfoDto) {
         var bUpdateChart = true;
         var CGroup = DataCallInfoDto.CallGroup - 1;
-        for (var j = 0; j < DataCallInfoDto.ContestNames.length; j++) {
-            _lq.DataCallInfoDTOs[CGroup].ContestNames[j] = DataCallInfoDto.ContestNames[j];
-        }
-        for (var l = 0; l < DataCallInfoDto.RadioNames.length; l++) {
-            _lq.DataCallInfoDTOs[CGroup].RadioNames[l] = DataCallInfoDto.RadioNames[l];
-        }
-        for (var k = 0; k < DataCallInfoDto.StationNames.length; k++) {
-            _lq.DataCallInfoDTOs[CGroup].StationNames[k] = DataCallInfoDto.StationNames[k];
+        if (CGroup != 3) {
+            if (DataCallInfoDto.ContestNames != null) {
+                for (var j = 0; j < DataCallInfoDto.ContestNames.length; j++) {
+                    _lq.DataCallInfoDTOs[CGroup].ContestNames[j] = DataCallInfoDto.ContestNames[j];
+                }
+            }
+            if (DataCallInfoDto.RadioNames != null) {
+                for (var l = 0; l < DataCallInfoDto.RadioNames.length; l++) {
+                    _lq.DataCallInfoDTOs[CGroup].RadioNames[l] = DataCallInfoDto.RadioNames[l];
+                }
+            }
+            if (DataCallInfoDto.StationNames != null) {
+                for (var k = 0; k < DataCallInfoDto.StationNames.length; k++) {
+                    _lq.DataCallInfoDTOs[CGroup].StationNames[k] = DataCallInfoDto.StationNames[k];
+                }
+            }
         }
 
         switch (DataCallInfoDto.CallGroup) {

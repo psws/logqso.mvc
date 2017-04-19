@@ -30,102 +30,122 @@ MY SOLUTION:
 Each video has a help button. The Help buttom ids begin with Vid_
 Each video has an HTML5 puVidxxxxx data-modal-id.
 The VidCont container id can be used for all httml
-The <video> id needs to be unique for each puVidxxxxx target
+The <video> id needs to be unique for each puVidxxxxx target.
+The <video> element is not specified in the VideoCont div to avoid control video download.
+the tag preload="none' is just a gint and it looks like modet browsers ignore it.
 The dimmed VideoBkgnd and the closer_video button are only added  once to each puVidxxxxx VidCont.
 There is only one closer_video click function, which needs the modal <video> id to stop and close the video.
 	HTML code:
 		<div id="puVidCategory" class="VidDiv">
-			<div id="VideoCont" >
-				<video id="VCatId" controls="controls" src="~/video/introduction.mp4" type="video/mp4">
-				</video>
+			<div id="VideoCont">
 			</div>
 		</div>
 
 		<div id="puVidFilter" class="VidDiv">
 			<div id="VideoCont">
-				<video id="VFiltId" controls="controls" src="~/video/test.mp4" type="video/mp4">
-				</video>
 			</div>
 		</div>
 
 		<div id="puVidYaxis" class="VidDiv">
 			<div id="VideoCont">
-				<video id="VYaxisId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
 			</div>
 		</div>
 
 		<div id="puVidXaxis" class="VidDiv">
 			<div id="VideoCont">
-				<video id="VXaxisId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
 			</div>
 		</div>
 
 		<div id="puVidCall1" class="VidDiv">
 			<div id="VideoCont">
-				<video id="VCall1Id" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
 			</div>
 		</div>
 
 		<div id="puVidChart" class="VidDiv">
 			<div id="VideoCont">
-				<video id="VChartId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
 			</div>
 		</div>
 
 		<div id="puVidLog" class="VidDiv">
 			<div id="VideoCont">
-				<video id="VLogId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
 			</div>
 		</div>
 
 		<div id="puVidUbn" class="VidDiv">
 			<div id="VideoCont">
-				<video id="VUbnId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
 			</div>
 		</div>
 
 		<div id="puVidUp" class="VidDiv">
 			<div id="VideoCont">
-				<video id="VUpId" controls="controls" src="~/video/test.mp4" type="video/mp4"></video>
 			</div>
 		</div>
-
+		<div id="puVidIntro" class="VidDiv">
+			<div id="VideoCont">
+			</div>
+		</div>
 	JS codr:
-	    $("button[id^= 'Vid']").click(function (e) {
+	--------------
+	The Vid_Intro <a> is used to map the top menu 'Help Info' yellow button to VidClick().
+	The help.cshtml is deprecated. The 'Help Info' stays on the SPA page
+		$("a[id= 'Vid_Intro']").on("click", VidClick);
+		$("button[id^= 'Vid']").on( "click", VidClick );
+
+    function VidClick(e) {
         var modalBox = $(this).attr('data-modal-id');
         var popup = $('#' + modalBox);
-        var VidTd;
+        var VidTd, vid;
         switch (this.id) {
+            case "Vid_Intro":
+                VidTd = "VIntroId";
+                vid = "introduction.mp4";
+                break;
             case "Vid_Category":
                 VidTd = "VCatId";
+                vid ="CallCategory.mp4";
                 break;
             case "Vid_Filter":
                 VidTd = "VFiltId";
+                vid = "QsoFilter.mp4";
                 break;
             case "Vid_YAxis":
                 VidTd = "VYaxisId";
+                vid = "ViewAxis.mp4";
                 break;
             case "Vid_XAxis":
                 VidTd = "VXaxisId";
+                vid = "TimeScale.mp4";
                 break;
             case "Vid_Call1":
                 VidTd = "VCall1Id";
+                vid = "Call.mp4";
                 break;
             case "Vid_Chart":
                 VidTd = "VChartId";
+                vid = "Chart.mp4";
                 break;
             case "Vid_Log":
                 VidTd = "VLogId";
+                vid = "test.mp4";
                 break;
             case "Vid_Ubn":
                 VidTd = "VUbnId";
+                vid = "test.mp4";
                 break;
             case "Vid_Up":
                 VidTd = "VUpId";
+                vid = "test.mp4";
                 break;
             default:
+                VidTd = "VIntroId";
+                vid = "introduction.mp4";
+                break;
         }
         var container = $('#' + modalBox + " div[id=VideoCont]");
+        if ($('#' + modalBox + ' video[id=' + VidTd ).length == 0) { //only add once) {
+            container.append('<video id="' + VidTd + '" controls="controls" src="video/' + vid + '"  type="video/mp4"></video>');
+        }
+
         if ($('#' + modalBox + ' div[id=VideoBkgnd').length == 0) { //only add once
 
             popup.append('<div id="VideoBkgnd"></div>');

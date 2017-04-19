@@ -23,7 +23,7 @@
 
 </head>
 <body id="body">
-    <div class="navbar navbar-inverse @*navbar-fixed-top*@" style="margin-bottom: 0px;">
+    <div class="navbar navbar-inverse @*navbar-fixed-top*@" style="margin-bottom: 0;">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -32,7 +32,11 @@
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("ContestQso", "logqso", "logqso", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("help info", "Help", "logqso", new { area = "" }, new { @class = "help-intro" })
+                @*@Html.ActionLink("help info", "Help", "logqso", new { area = "" }, new { @class = "help-intro" })*@
+                <a id="Vid_Intro" data-modal-id="puVidIntro"  class=" help-intro">
+                    help info
+                </a>
+
             </div>
    <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

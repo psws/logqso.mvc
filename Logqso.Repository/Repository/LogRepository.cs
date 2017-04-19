@@ -995,9 +995,13 @@ namespace Logqso.Repository.Repository
 
             var time = LogCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisStarttime.Substring(0,5);
             var StartTime = DateTime.Parse("1900-01-01 " + LogCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisStarttime.Substring(0,5) );
-            int StartDay = int.Parse( LogCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisStarttime.Substring(11,1) );
+
+            //int StartDay = int.Parse( LogCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisStarttime.Substring(11,1) );
+            int StartDay = LogCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisDay;
+
             int EndDay = 1;
             var EndTime = DateTime.Parse("1900-01-01 " + StartTime.AddHours(double.Parse(LogCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisDuration)%24).AddMinutes(-1).ToShortTimeString() );
+            
             if (StartDay == 1)
             {
                 var HoursToEndDay1 = 24 - StartTime.Hour;

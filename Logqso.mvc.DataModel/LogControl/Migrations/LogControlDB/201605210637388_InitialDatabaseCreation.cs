@@ -148,13 +148,16 @@ namespace Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB
                         UserName = c.String(nullable: false, maxLength: 256, unicode: false),
                         XaxisDurationTime = c.String(nullable: false, maxLength: 4, unicode: false),
                         XaxisStrtTime = c.String(nullable: false, maxLength: 20, unicode: false),
+                        Xaxisday = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.XaxisDuration", t => t.XaxisDurationTime, cascadeDelete: true)
                 .ForeignKey("dbo.XaxisStartTime", t => t.XaxisStrtTime, cascadeDelete: true)
+                .ForeignKey("dbo.XaxisDay", t => t.Xaxisday, cascadeDelete: true)
                 .Index(t => t.XaxisDurationTime)
-                .Index(t => t.XaxisStrtTime);
-            
+                .Index(t => t.XaxisStrtTime)
+                .Index(t => t.Xaxisday);
+           
             CreateTable(
                 "dbo.XaxisDuration",
                 c => new
@@ -172,6 +175,15 @@ namespace Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB
                         Index = c.Byte(nullable: false),
                     })
                 .PrimaryKey(t => t.XaxisStrtTime);
+
+            CreateTable(
+                "dbo.XaxisDay",
+                c => new
+                {
+                    Xaxisday = c.Int(nullable: false),
+                    Index = c.Byte(nullable: false),
+                })
+                .PrimaryKey(t => t.Xaxisday);
             
             CreateTable(
                 "dbo.YaxisDefault",
@@ -228,6 +240,7 @@ namespace Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB
             DropForeignKey("dbo.YaxisDefault", "YaxisFuncName", "dbo.YaxisFunction");
             DropForeignKey("dbo.XaxisDefault", "XaxisStrtTime", "dbo.XaxisStartTime");
             DropForeignKey("dbo.XaxisDefault", "XaxisDurationTime", "dbo.XaxisDuration");
+            DropForeignKey("dbo.XaxisDefault", "Xaxisday", "dbo.XaxisDay");
             DropForeignKey("dbo.FiltDefaullt", "FiltPref", "dbo.FiltPrefix");
             DropForeignKey("dbo.FiltDefaullt", "FiltCQZoneVal", "dbo.FiltCQZone");
             DropForeignKey("dbo.FiltDefaullt", "FiltCont", "dbo.FiltContinent");
@@ -243,6 +256,7 @@ namespace Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB
             DropIndex("dbo.YaxisDefault", new[] { "YaxisFuncName" });
             DropIndex("dbo.XaxisDefault", new[] { "XaxisStrtTime" });
             DropIndex("dbo.XaxisDefault", new[] { "XaxisDurationTime" });
+            DropIndex("dbo.XaxisDefault", new[] { "Xaxisday" });
             DropIndex("dbo.FiltDefaullt", new[] { "FiltCQZoneVal" });
             DropIndex("dbo.FiltDefaullt", new[] { "FiltPref" });
             DropIndex("dbo.FiltDefaullt", new[] { "FiltCont" });
@@ -258,6 +272,7 @@ namespace Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB
             DropTable("dbo.YaxisDefault");
             DropTable("dbo.XaxisStartTime");
             DropTable("dbo.XaxisDuration");
+            DropTable("dbo.XaxisDay");
             DropTable("dbo.XaxisDefault");
             DropTable("dbo.FiltPrefix");
             DropTable("dbo.FiltDefaullt");

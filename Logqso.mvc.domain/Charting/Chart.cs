@@ -452,7 +452,7 @@ namespace Logqso.mvc.domain.Charting
             }
             else
             {
-                if (ContestInfoDTON != null)
+                if (ContestInfoDTON != null && ContestViewParmsDTO != null)
                 {
                     QSORateChart.Titles["ChartName"].Text = string.Format("{0}  {1}", ContestInfoDTON.ContestID, ContestViewParmsDTO.sTitle);
                 }
@@ -512,21 +512,23 @@ namespace Logqso.mvc.domain.Charting
             //TabContainerCall.Controls.Add(
             ////SCALEVIEW
             int startHour = Convert.ToInt32(ChartCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisStarttime.Substring(0, 2));
-            int Size = Convert.ToInt32(ChartCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisDuration);
+            double Size = Convert.ToDouble(ChartCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisDuration);
 
             if (Size != 48)
             {
-                int Day = 1;
-                if (ChartCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisStarttime.Contains("Day2"))
-                {
-                    Day = 2;
-                }
+                //int Day = 1;
+                //if (ChartCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisStarttime.Contains("Day2"))
+                //{
+                //    Day = 2;
+                //}
+                int Day = ChartCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisDay;
+
                 QSORateChart.ChartAreas["ChartArea1"].AxisX.IsStartedFromZero = true;
                 DateTime pos;
 
                 if (ChartAreaDto.MixedYears)
                 {
-                    pos = new DateTime(1990, 1, Day, startHour, 00, 00);
+                    pos = new DateTime(1990, 1, Day, startHour, 00, 00,0);
                 }
                 else
                 {
@@ -545,16 +547,25 @@ namespace Logqso.mvc.domain.Charting
                         pos = new DateTime(1990, 1, Day, startHour, 00, 00);
 	                }
                 }
+                //fixes bug where too many hours graphed
+                //http://stackoverflow.com/questions/17804933/convert-datetime-to-double
+                QSORateChart.ChartAreas["ChartArea1"].AxisX.Minimum = pos.ToOADate();
+                QSORateChart.ChartAreas["ChartArea1"].AxisX.Maximum = pos.AddHours(Convert.ToDouble(ChartCtlDataSettingsDto.ControlSettingsDto.ControlXaxisSettingsDto.XaxisDuration)).ToOADate(); 
+
                 QSORateChart.ChartAreas["ChartArea1"].AxisX.ScaleView.Position = pos.ToOADate();
-                QSORateChart.ChartAreas["ChartArea1"].AxisX.ScaleView.Size = Size;// count of ScaleView.SizeType
+                QSORateChart.ChartAreas["ChartArea1"].AxisX.ScaleView.Size = Size ;// count of ScaleView.SizeType
                 QSORateChart.ChartAreas["ChartArea1"].AxisX.ScaleView.SizeType = ChartAreaParams.ChartXaxisIntervalType;
+
             }
 
 
             //AXISY
             //QSORateChart.ImageLocation
             QSORateChart.ChartAreas["ChartArea1"].AxisY.TitleFont = fontAxis;
-            QSORateChart.ChartAreas["ChartArea1"].AxisY.Title = ContestViewParmsDTO.sYAxis;
+            if (ContestViewParmsDTO != null)
+            {
+                QSORateChart.ChartAreas["ChartArea1"].AxisY.Title = ContestViewParmsDTO.sYAxis;
+            }
             QSORateChart.ChartAreas["ChartArea1"].AxisY.LabelStyle.Format = "{0:n0}";
             if (ChartCtlDataSettingsDto.ControlSettingsDto.ControlYaxisSettingsDto.YaxisFunction.Contains("Sum"))
             {
