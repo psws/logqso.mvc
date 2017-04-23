@@ -25,6 +25,7 @@ $(function () {
         left: x + "px"
     });
 
+
     _lq.getAllControls();
     //_lq.getAllDat();
     _lq.ActiveView = window.sessionStorage.getItem('_lq.ActiveView');
@@ -495,15 +496,19 @@ $(function () {
                 break;
             case "Vid_Log":
                 VidTd = "VLogId";
-                vid = "test.mp4";
+                vid = "Log.mp4";
                 break;
             case "Vid_Ubn":
                 VidTd = "VUbnId";
-                vid = "test.mp4";
+                vid = "Ubn.mp4";
+                break;
+            case "Vid_Stat":
+                VidTd = "VStatId";
+                vid = "Stat.mp4";
                 break;
             case "Vid_Up":
                 VidTd = "VUpId";
-                vid = "test.mp4";
+                vid = "Upload.mp4";
                 break;
             default:
                 VidTd = "VIntroId";

@@ -26,7 +26,17 @@ you  have to run script ContestqsoTest.sql in ssms once to get rid of vs2013 con
 
 ______
 Open SQLServeerManagementStudio
-Select  database  ContestqsoDataTest->right click tasks-> right click generate scriptsd
+
+Now we need to remove the contests and related data to reduce the size
+Run the following script in SSMS against ContestDataTest
+	CQD_DeleteContestLogandQsos 2014.sql
+	CQD_DeleteContestLogandQsos 2015.sql
+	CQD_DeleteContestLogandQsos 2016.sql
+	CQD_DeleteContestLogandQsos CQWPXSSB2015.sql
+	CQD_DeleteContestLogandQsos CQWPXSSB2016.sql
+delete the indexes for the qso table
+
+Select  database  ContestqsoDataTest->right click tasks-> right click generate scripts
 
 The Generate and publish scripts dialog appears
 click next
@@ -46,8 +56,28 @@ click Next
 clcik Next
 clcik finish
 
+
+Open: D:\vwd projects mvc\Logqso.mvc\logqso.mvc.domain.test\Sql\ContestqsoDataTest.sql file in SSMS
+Next, get rid of most of the Callsigns
+navigate to the insert satements for Callsigns
+Delete all of the inserts except for these
+	SET IDENTITY_INSERT [dbo].[CallSign] ON 
+
+	INSERT [dbo].[CallSign] ([CallSignId], [Call], [Prefix], [ContinentEnum], [Accuracy], [Latitude], [Longitude], [GeoCodeChk]) VALUES (1, N'CN2R', N'CN', 5, -4, NULL, NULL, 0)
+	INSERT [dbo].[CallSign] ([CallSignId], [Call], [Prefix], [ContinentEnum], [Accuracy], [Latitude], [Longitude], [GeoCodeChk]) VALUES (2, N'CN3A', N'CN', 5, -4, NULL, NULL, 0)
+	INSERT [dbo].[CallSign] ([CallSignId], [Call], [Prefix], [ContinentEnum], [Accuracy], [Latitude], [Longitude], [GeoCodeChk]) VALUES (3, N'CN2AA', N'CN', 5, -4, NULL, NULL, 0)
+	INSERT [dbo].[CallSign] ([CallSignId], [Call], [Prefix], [ContinentEnum], [Accuracy], [Latitude], [Longitude], [GeoCodeChk]) VALUES (4, N'DL1AA', N'DL', 3, -4, NULL, NULL, 0)
+	INSERT [dbo].[CallSign] ([CallSignId], [Call], [Prefix], [ContinentEnum], [Accuracy], [Latitude], [Longitude], [GeoCodeChk]) VALUES (5, N'2E0EDL', N'G', 3, -4, NULL, NULL, NULL)
+	INSERT [dbo].[CallSign] ([CallSignId], [Call], [Prefix], [ContinentEnum], [Accuracy], [Latitude], [Longitude], [GeoCodeChk]) VALUES (6, N'OE6Z', N'OE', 3, -4, NULL, NULL, NULL)
+	INSERT [dbo].[CallSign] ([CallSignId], [Call], [Prefix], [ContinentEnum], [Accuracy], [Latitude], [Longitude], [GeoCodeChk]) VALUES (7, N'9A7A', N'9A', 3, -4, NULL, NULL, NULL)
+	INSERT [dbo].[CallSign] ([CallSignId], [Call], [Prefix], [ContinentEnum], [Accuracy], [Latitude], [Longitude], [GeoCodeChk]) VALUES (8, N'CS2C', N'CT', 3, -4, NULL, NULL, NULL)
+These inserts are used by the IntegrTION TESTING
+Save the D:\vwd projects mvc\Logqso.mvc\logqso.mvc.domain.test\Sql\ContestqsoDataTest.sql 
+
+
 delete ContestqsoDataTest DB
 create empty ContestqsoDataTest
+	run D:\vwd projects mvc\Logqso.mvc\logqso.mvc.domain.test\Sql\ContestqsoDataTest.sql 
 you  have to run script ContestqsoDataTest.sql in ssms once to get rid of vs2013 connection
 
 

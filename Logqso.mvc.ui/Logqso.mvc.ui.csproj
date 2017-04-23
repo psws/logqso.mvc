@@ -712,7 +712,6 @@
     <Content Include="Scripts\WebApiTestClient.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Content\logqso.css" />
-    <Content Include="Video\introduction.mp4" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -761,6 +760,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="App_Notes\Css\" />
     <Folder Include="Controllers\WebApi\v1\" />
+    <Folder Include="Video\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
