@@ -760,6 +760,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="App_Notes\Css\" />
     <Folder Include="Controllers\WebApi\v1\" />
+    <Folder Include="Sample Logs\" />
     <Folder Include="Video\" />
   </ItemGroup>
   <ItemGroup>

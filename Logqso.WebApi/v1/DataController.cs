@@ -318,6 +318,7 @@ namespace Logqso.WebApi
             bool result = false;
             var streamProvider = new MultipartFormDataStreamProvider(tempPath);
             var readResult = await Request.Content.ReadAsMultipartAsync(streamProvider);
+            //var strean = await Request.Content.ReadAsStreamAsync();
 
             if (readResult.FormData["UploadInfo"] == null)
             {
