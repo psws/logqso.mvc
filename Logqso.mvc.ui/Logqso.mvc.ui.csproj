@@ -640,6 +640,10 @@
     <Content Include="Scripts\free-jqGrid\i18n\grid.locale-ca.min.map" />
     <Content Include="Scripts\free-jqGrid\i18n\grid.locale-bg.min.map" />
     <Content Include="Scripts\free-jqGrid\i18n\grid.locale-ar.min.map" />
+    <Content Include="Sample Logs\2016.s3db" />
+    <Content Include="Sample Logs\CQWW SSB 2016 W7ZR.adi" />
+    <Content Include="Sample Logs\N7AT-16cqwwcw.adi" />
+    <Content Include="Sample Logs\N7AT-2016cqwwssb.adi" />
     <None Include="Scripts\jquery-2.2.3.intellisense.js" />
     <Content Include="Scripts\i18n\grid.locale-ar.js" />
     <Content Include="Scripts\i18n\grid.locale-bg.js" />
@@ -760,7 +764,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="App_Notes\Css\" />
     <Folder Include="Controllers\WebApi\v1\" />
-    <Folder Include="Sample Logs\" />
     <Folder Include="Video\" />
   </ItemGroup>
   <ItemGroup>
