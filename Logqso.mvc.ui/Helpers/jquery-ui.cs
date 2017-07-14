@@ -14,12 +14,14 @@ namespace Logqso.mvc.ui.Helpers
         {
             public const string Stock = "base";
             public const string Flick = "Flick";
+            public const string Cupertino = "Cupertino";
         }
 
         public static HashSet<string> Themes = new HashSet<string>
         {
             Theme.Stock,
             Theme.Flick,
+            Theme.Cupertino,
         };
         public enum eTheme
         {

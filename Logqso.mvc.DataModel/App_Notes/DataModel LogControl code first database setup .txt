@@ -103,8 +103,7 @@ Go to generated configuration.cs model and add the Control Seed methods
 PM>Update-Database -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB.Configuration -Verbose -ConnectionStringName "LogControlDB"
 
 Package Model Console output
-PM> Update-Database -ProjectName Logqso.mvc.DataModel -StartupProjectName Logqso.mvc.ui -ConfigurationTypeName Logqso.mvc.DataModel.LogControl.Migrations.LogControlDB.Configuration -Verbose -ConnectionStringName "LogControlDB"
-Using StartUp project 'Logqso.mvc.ui'.
+PM>c
 Specify the '-Verbose' flag to view the SQL statements being applied to the target database.
 Target database is: 'Logqso' (DataSource: PSS60\SQL2014, Provider: System.Data.SqlClient, Origin: Explicit).
 Applying explicit migrations: [201507270650382_InitialDatabaseCreation].

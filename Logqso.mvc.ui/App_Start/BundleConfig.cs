@@ -75,12 +75,21 @@ namespace Logqso.mvc.ui
                       "~/Content/themes/jqx.energyblue.css",
                         "~/Content/logqso.css"));
 
+#if false
 
+            bundles.Add(new StyleBundle("~/Cupertono").Include(
+                    "~/Content/bootstrap.css",
+                    "~/Content/themes/Stock/jquery-ui.css",
+                    "~/Content/themes/Cupertino/jquery-ui.cupertino.css",
+                    "~/Content/jquery.jqGrid/ui.jqgrid-bootstrap.css",
+                    "~/Content/site.css",
+                    "~/Content/videopopup.css",
+                    "~/Content/themes/jqx.base.css",
+                    "~/Content/themes/jqx.energyblue.css",
+                    "~/Content/logqso.css"));
 
-            //turns off bundle minimzations when webconfig compilation debug="false"
-            //some bug hoses UI if minimizatios occur on css and js files
-            BundleTable.EnableOptimizations = false;
           
+#else
             var theme =  Themes.CurrentTheme;
             JQueryUI.eTheme eTheme;
             string  stylePath;
@@ -131,6 +140,11 @@ namespace Logqso.mvc.ui
                      stylePath = string.Format("~/Content/Themes/{0}/jquery-ui.css", theme);
                    break;
             }
+#endif
+            //turns off bundle minimzations when webconfig compilation debug="false"
+            //some bug hoses UI if minimizatios occur on css and js files
+            BundleTable.EnableOptimizations = false;
+
         }
     }
 }

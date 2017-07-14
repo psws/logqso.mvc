@@ -7,14 +7,24 @@
     @*@Styles.Render("~/Content")*@
     @{
         var theme = Themes.CurrentTheme;
-       }
+    }
 
-    @Styles.Render(Logqso.mvc.ui.Helpers.JQueryUI.Bundle(theme))
+    @{
+        if (true)
+        {
+            @Styles.Render(Logqso.mvc.ui.Helpers.JQueryUI.Bundle(theme))
+        }
+        else
+        {
+            // does not work with BundleTable.EnableOptimizations = true
+            @Styles.Render("~/Cupertono")
+        }
+}
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqgrid")
     @Scripts.Render("~/bundles/jqueryval")
-   @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/logqso")
 
 
@@ -33,12 +43,12 @@
                 </button>
                 @Html.ActionLink("ContestQso", "logqso", "logqso", new { area = "" }, new { @class = "navbar-brand" })
                 @*@Html.ActionLink("help info", "Help", "logqso", new { area = "" }, new { @class = "help-intro" })*@
-                <a id="Vid_Intro" data-modal-id="puVidIntro"  class=" help-intro">
+                <a id="Vid_Intro" data-modal-id="puVidIntro" class=" help-intro">
                     help info
                 </a>
 
             </div>
-   <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
                     @*<li>@Html.ActionLink("About", "About", "Home")</li>*@
@@ -60,13 +70,13 @@
     <div class="container body-content">
         @RenderBody()
         @*<hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>*@
+            <footer>
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>*@
     </div>
 
     @*@Scripts.Render("~/bundles/jquery")*@
 
-   @RenderSection("scripts", required: false)
+    @RenderSection("scripts", required: false)
 </body>
 </html>
